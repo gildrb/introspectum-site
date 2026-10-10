@@ -1,13 +1,14 @@
 import * as stylex from "@stylexjs/stylex";
+import { Article, Card, Cards, Hero } from "../blocks.tsx";
 import { type Post, posts } from "../content.ts";
 import { day, translators } from "../i18n.ts";
-import { type Assets, Page, Text, Title } from "../layout.tsx";
+import { type Assets, Page } from "../layout.tsx";
 import { href, type Locale, localeInfo } from "../locale.ts";
 import { Markdown } from "../markdown.tsx";
 import { authors, company, origin } from "../site.ts";
-import { space } from "../tokens.stylex.ts";
+import { media, space } from "../tokens.stylex.ts";
 import { richLink, ui } from "../ui.tsx";
-import { NextSteps } from "./home.tsx";
+import { Closing } from "./home.tsx";
 
 type PageProps = {
   assets: Assets;
@@ -36,34 +37,38 @@ export function BlogPage({ assets, locale, path, alternates, shareImage }: PageP
         mono: false,
       }}
     >
-      <Title>{t.text("blog_title")}</Title>
-      <Text lead>{t.text("blog_intro")}</Text>
-      <Text quiet>
-        {t.rich("blog_feed", { link: richLink(`${localeInfo[locale].prefix}/feed.xml`) })}
-      </Text>
-      {list.length === 0 ? (
-        <div {...stylex.props(styles.entries)}>
-          <Text>{t.text("blog_empty")}</Text>
-        </div>
-      ) : (
-        <ul {...stylex.props(styles.entries)}>
-          {list.map((post) => (
-            <li>
-              <p {...stylex.props(ui.text, ui.note)}>
-                <time dateTime={post.date}>{t.text("blog_date", { date: day(post.date) })}</time>
-              </p>
-              <a
-                {...stylex.props(ui.text, ui.entry, ui.onward, ui.focusRing)}
-                href={href(locale, "blog", post.slug)}
-              >
-                {post.title}
-              </a>
-              <Text>{post.description}</Text>
-              <p {...stylex.props(ui.text, ui.note)}>{authors[post.author].name}</p>
-            </li>
-          ))}
-        </ul>
-      )}
+      <Hero title={t.text("blog_title")} lead={t.text("blog_intro")}>
+        <p {...stylex.props(ui.small, ui.label)}>
+          {t.rich("blog_feed", { link: richLink(`${localeInfo[locale].prefix}/feed.xml`) })}
+        </p>
+      </Hero>
+      <div {...stylex.props(ui.container, styles.posts)}>
+        {list.length === 0 ? (
+          <p {...stylex.props(ui.prose, ui.label, styles.empty)}>{t.text("blog_empty")}</p>
+        ) : (
+          <Cards columns={3}>
+            {list.map((post) => (
+              <Card>
+                <p {...stylex.props(ui.small, ui.note)}>
+                  <time dateTime={post.date}>{t.text("blog_date", { date: day(post.date) })}</time>
+                </p>
+                <h2 {...stylex.props(ui.title)}>
+                  <a
+                    {...stylex.props(ui.entry, ui.focusRing)}
+                    href={href(locale, "blog", post.slug)}
+                  >
+                    {post.title}
+                  </a>
+                </h2>
+                <p {...stylex.props(ui.prose)}>{post.description}</p>
+                <p {...stylex.props(ui.small, ui.label, styles.author)}>
+                  {authors[post.author].name}
+                </p>
+              </Card>
+            ))}
+          </Cards>
+        )}
+      </div>
     </Page>
   );
 }
@@ -80,11 +85,7 @@ export function PostPage({ post, ...props }: PageProps & { post: Post }) {
         locale,
         path,
         alternates,
-        title: t.text("page_title_nested", {
-          brand: company.name,
-          section: t.text("blog_title"),
-          page: post.title,
-        }),
+        title: t.text("page_title", { brand: company.name, page: post.title }),
         description: post.description,
         shareImage,
         type: "article",
@@ -116,29 +117,28 @@ export function PostPage({ post, ...props }: PageProps & { post: Post }) {
         ),
       }}
     >
-      <article>
-        <Title
-          note={t.text("blog_post_meta", {
-            date: day(post.date),
-            author: author.name,
-            minutes: post.minutes,
-          })}
-        >
-          {post.title}
-        </Title>
+      <Article
+        title={post.title}
+        note={t.text("blog_post_meta", {
+          date: day(post.date),
+          author: author.name,
+          minutes: post.minutes,
+        })}
+      >
         <Markdown blocks={post.blocks} />
-      </article>
-      <NextSteps locale={locale} />
+      </Article>
+      <Closing locale={locale} />
     </Page>
   );
 }
 
 const styles = stylex.create({
-  entries: {
-    display: "flex",
-    flexDirection: "column",
-    rowGap: space.x3,
-    marginTop: space.x6,
-    listStyle: "none",
+  posts: { paddingBottom: { default: space.x8, [media.desktop]: space.x12 } },
+  empty: {
+    paddingBlock: space.x4,
+    borderTopWidth: "1px",
+    borderTopStyle: "solid",
+    borderTopColor: "currentColor",
   },
+  author: { marginTop: "auto" },
 });

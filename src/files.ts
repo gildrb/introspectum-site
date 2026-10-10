@@ -86,7 +86,7 @@ function llms(): string {
 
 > ${t.text("home_description")}
 
-${t.text("home_why_text")}
+${t.text("home_why_title")} ${t.text("home_why_text")}
 
 ${t.text("home_who_text")}
 

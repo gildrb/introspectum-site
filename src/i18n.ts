@@ -54,6 +54,8 @@ export type Translator = {
   rich(id: MessageId, tags: Readonly<Record<string, Tag>>, values?: Values): ComponentChildren;
   /** The name of a language, written in this one: "German" in English, "Englisch" in German. */
   language(of: Locale): string;
+  /** Items as one list, joined as this language joins them: "A, B and C", "A, B und C". */
+  list(items: readonly string[]): string;
 };
 
 function translator(locale: Locale): Translator {
@@ -80,6 +82,7 @@ function translator(locale: Locale): Translator {
       if (name === undefined) throw new Error(`No ${locale} name for the language ${of}`);
       return name;
     },
+    list: (items) => intl.formatList(items, { type: "conjunction" }),
   };
 }
 

@@ -1,18 +1,8 @@
 {
-  "brand": {
-    "message": "Introspectum",
-    "description": "Company and brand name. Shown in the header, tab titles and link previews.",
-    "translate": false
-  },
   "page_title": {
-    "message": "{brand} → {page}",
-    "description": "Browser tab and link-preview title of a page: brand, arrow, page name. Mirror the arrow for right-to-left scripts.",
+    "message": "{page} | {brand}",
+    "description": "Tab title of every page but the homepage: the page's name, then the company's.",
     "maxLength": 70
-  },
-  "page_title_nested": {
-    "message": "{brand} → {section} → {page}",
-    "description": "Tab title of a page inside a section, such as one product or one blog post.",
-    "maxLength": 90
   },
   "skip_to_content": {
     "message": "Skip to content",
@@ -30,8 +20,8 @@
     "maxLength": 16
   },
   "nav_join": {
-    "message": "Join us",
-    "description": "Main navigation link to the jobs page (founding engineer, internships).",
+    "message": "Careers",
+    "description": "Navigation link to the jobs page.",
     "maxLength": 16
   },
   "nav_blog": {
@@ -44,10 +34,25 @@
     "description": "Main navigation link to the page about the company and team.",
     "maxLength": 16
   },
-  "footer_label": {
-    "message": "Contact and legal",
-    "description": "Accessible name of the footer with the email address and the legal pages.",
-    "maxLength": 40
+  "nav_menu": {
+    "message": "Menu",
+    "description": "Button that opens the navigation on phones.",
+    "maxLength": 16
+  },
+  "nav_contact": {
+    "message": "Contact us",
+    "description": "Button in the header that opens an email to the company.",
+    "maxLength": 20
+  },
+  "footer_company": {
+    "message": "Company",
+    "description": "Footer heading above the links to About, Careers and Blog.",
+    "maxLength": 24
+  },
+  "footer_legal": {
+    "message": "Legal",
+    "description": "Footer heading above the links to the privacy policy and the imprint.",
+    "maxLength": 24
   },
   "footer_privacy": {
     "message": "Privacy",
@@ -59,6 +64,11 @@
     "description": "Footer link to the legal notice required by German law (Impressum).",
     "maxLength": 20
   },
+  "footer_copyright": {
+    "message": "© {year} {company}",
+    "description": "Copyright line at the foot of every page. {year} is the current year, {company} the legal name.",
+    "translate": false
+  },
   "language_switch": {
     "message": "This page in {language}",
     "description": "Accessible name of the link to the same page in another language. {language} is that language's own name, e.g. Deutsch.",
@@ -69,34 +79,60 @@
     "description": "Title of the blog's RSS feed, shown in feed readers.",
     "maxLength": 40
   },
+  "tagline": {
+    "message": "Software that is checked instead of trusted.",
+    "description": "The company's one-line promise: the homepage title, the footer, and the homepage's link-preview image.",
+    "maxLength": 90
+  },
+  "percent": {
+    "message": "{value, number, ::percent}",
+    "description": "A share as a percentage, such as 96%. The same message in every language; the number format follows the locale.",
+    "translate": false
+  },
   "home_description": {
     "message": "Introspectum builds software you can check: a verified software factory, an open-data ERP and CRM, and research in systematic trading.",
     "description": "Meta description of the homepage, shown in search results and link previews.",
     "maxLength": 160
   },
-  "home_share_title": {
-    "message": "Software that is checked instead of trusted.",
-    "description": "Large line on the homepage's link-preview image (LinkedIn, social media).",
+  "home_lead": {
+    "message": "We build tools that trace code to its requirements and prove it correct where it matters, so teams can write code with AI and still stand behind it.",
+    "description": "Paragraph under the homepage title: what the company builds and why it matters.",
+    "maxLength": 240
+  },
+  "home_cta_products": {
+    "message": "See the products",
+    "description": "Homepage button that leads to the product overview.",
+    "maxLength": 32
+  },
+  "home_why_title": {
+    "message": "AI writes code faster than anyone can review it.",
+    "description": "Heading of the homepage section on why the company exists.",
     "maxLength": 90
   },
-  "home_hook": {
-    "message": "{distrust, number, ::percent} of developers do not fully trust AI-generated code. Only {verify, number, ::percent} always check it before they commit.",
-    "description": "Opening line of the homepage, a survey result. {distrust} and {verify} are shares formatted as percentages.",
-    "maxLength": 180
+  "home_why_text": {
+    "message": "We build software that is checked instead of trusted: traced from requirement to code, proven where it matters, and open to the people who answer for it.",
+    "description": "Paragraph under the homepage's 'why' heading, one sentence.",
+    "maxLength": 240
+  },
+  "home_stat_distrust": {
+    "message": "of developers do not fully trust AI-generated code",
+    "description": "Caption under a large percentage on the homepage, read as one sentence with it: '96%' then this text. No final period.",
+    "maxLength": 90
+  },
+  "home_stat_verify": {
+    "message": "always check it before they commit",
+    "description": "Caption under the second percentage: '48%' then this text. 'it' is the AI-generated code of the first caption, shown beside it. No final period.",
+    "maxLength": 90
+  },
+  "home_stat_source": {
+    "message": "Source: <link>{source}</link>",
+    "description": "Names the survey the two percentages come from. {source} is its English title; <link> wraps it and opens the survey's press release.",
+    "maxLength": 80
   },
   "home_hook_source": {
     "message": "Sonar, State of Code Developer Survey 2026",
     "description": "Source of the opening line: publisher and report title. Report titles stay in their original language.",
     "translate": false
-  },
-  "home_why_label": {
-    "message": "Why",
-    "description": "Homepage section label: why the company exists.",
-    "maxLength": 32
-  },
-  "home_why_text": {
-    "message": "AI writes a growing share of all code, faster than anyone can review it. We build software that is checked instead of trusted: traced from requirement to code, proven where it matters, and open to the people who answer for it.",
-    "description": "Homepage mission statement, two sentences."
   },
   "home_what_label": {
     "message": "What we build",
@@ -104,9 +140,14 @@
     "maxLength": 32
   },
   "home_how_label": {
-    "message": "How",
-    "description": "Homepage section label above the methods and principles.",
-    "maxLength": 32
+    "message": "How we work",
+    "description": "Heading of the homepage section on the company's principles and methods.",
+    "maxLength": 40
+  },
+  "home_methods": {
+    "message": "We draw on {methods}.",
+    "description": "Intro of the homepage section 'How we work'. {methods} is the list of methods (method_*), joined the way the language joins lists.",
+    "maxLength": 200
   },
   "home_who_label": {
     "message": "Who we are",
@@ -122,61 +163,64 @@
     "description": "Link from the homepage to the About page.",
     "maxLength": 32
   },
-  "home_next_label": {
-    "message": "Next",
-    "description": "Homepage section label above three calls to action; also closes each blog post.",
-    "maxLength": 32
+  "team_role_fabian": {
+    "message": "Managing Director",
+    "description": "Role of Fabian Klopfer in the homepage's team list.",
+    "maxLength": 40
   },
-  "home_next_waitlist": {
-    "message": "<link>Join a waiting list</link> to test a product before its release.",
-    "description": "Call to action. <link> wraps the words that lead to the product overview."
+  "team_role_marc": {
+    "message": "ERP & CRM and infrastructure",
+    "description": "Role of Marc Gsell in the homepage's team list. 'ERP & CRM' is the product's name.",
+    "maxLength": 40
   },
-  "home_next_consulting": {
-    "message": "<link>Send a consulting inquiry</link> to work with us now.",
-    "description": "Call to action. <link> wraps the words that open an email to the company."
+  "team_role_gil": {
+    "message": "Design and frontend",
+    "description": "Role of Gil Rodrigues in the homepage's team list.",
+    "maxLength": 40
   },
-  "home_next_join": {
-    "message": "<link>Join us</link> as founding engineer or intern.",
-    "description": "Call to action. <link> wraps the words that lead to the jobs page."
+  "cta_title": {
+    "message": "Tell us what you are working on.",
+    "description": "Heading of the closing panel on the homepage and under each blog post.",
+    "maxLength": 60
   },
-  "methods_label": {
-    "message": "Methods",
-    "description": "Label above a list of methods (homepage, product pages).",
-    "maxLength": 32
+  "cta_text": {
+    "message": "Send a consulting inquiry to work with us now, or join a waiting list to test a product before its release.",
+    "description": "Text of the closing panel: the two ways to work with the company.",
+    "maxLength": 200
   },
-  "principles_label": {
-    "message": "Principles",
-    "description": "Label above a list of principles on the homepage.",
+  "cta_waitlist": {
+    "message": "Join a waiting list",
+    "description": "Button in the closing panel that leads to the products and their waiting lists.",
     "maxLength": 32
   },
   "method_formal_methods": {
-    "message": "Formal methods",
-    "description": "Method, one list item: mathematical proof that software meets its specification.",
+    "message": "formal methods",
+    "description": "A method the company works with, as it reads inside the sentence 'We draw on …' (see home_methods): lowercase where the language writes it so, in the case that sentence needs.",
     "maxLength": 48
   },
   "method_compiler_construction": {
-    "message": "Compiler construction",
-    "description": "Method, one list item: the field of building compilers and code analysis.",
+    "message": "compiler construction",
+    "description": "A method the company works with, as it reads inside the sentence 'We draw on …' (see home_methods): lowercase where the language writes it so, in the case that sentence needs.",
     "maxLength": 48
   },
   "method_model_based": {
-    "message": "Model-based software engineering",
-    "description": "Method, one list item: building software from models such as UML and SysML.",
+    "message": "model-based software engineering",
+    "description": "A method the company works with, as it reads inside the sentence 'We draw on …' (see home_methods): lowercase where the language writes it so, in the case that sentence needs.",
     "maxLength": 48
   },
   "method_ai_agents": {
     "message": "AI agents",
-    "description": "Method, one list item: software agents driven by AI models.",
+    "description": "A method the company works with, as it reads inside the sentence 'We draw on …' (see home_methods): lowercase where the language writes it so, in the case that sentence needs.",
     "maxLength": 48
   },
   "method_open_data": {
-    "message": "Open data",
-    "description": "Method, one list item: data kept in open formats, owned by the customer.",
+    "message": "open data",
+    "description": "A method the company works with, as it reads inside the sentence 'We draw on …' (see home_methods): lowercase where the language writes it so, in the case that sentence needs.",
     "maxLength": 48
   },
   "method_reinforcement_learning": {
-    "message": "Reinforcement learning",
-    "description": "Method, one list item: the machine-learning technique.",
+    "message": "reinforcement learning",
+    "description": "A method the company works with, as it reads inside the sentence 'We draw on …' (see home_methods): lowercase where the language writes it so, in the case that sentence needs.",
     "maxLength": 48
   },
   "principle_proof": {
@@ -184,20 +228,40 @@
     "description": "Principle, one list item: we prove software correct rather than trust it.",
     "maxLength": 64
   },
+  "principle_proof_text": {
+    "message": "Formal verification checks each change against your specifications, whoever wrote it.",
+    "description": "One sentence under the principle 'Proof over trust'.",
+    "maxLength": 140
+  },
   "principle_data": {
     "message": "Data that stays yours",
     "description": "Principle, one list item: customers keep ownership of their data.",
     "maxLength": 64
+  },
+  "principle_data_text": {
+    "message": "Each customer gets its own installation, and all data stays in open formats in one place.",
+    "description": "One sentence under the principle 'Data that stays yours'.",
+    "maxLength": 140
   },
   "principle_traceability": {
     "message": "Traceability from requirement to code",
     "description": "Principle, one list item: every line of code traces back to a requirement.",
     "maxLength": 64
   },
+  "principle_traceability_text": {
+    "message": "Requirements, design, tests and bug reports, each linked to the code it concerns.",
+    "description": "One sentence under the principle 'Traceability from requirement to code'.",
+    "maxLength": 140
+  },
   "consulting_name": {
     "message": "Consulting",
-    "description": "Name of the consulting offer, shown like a product name on the homepage and as a section label.",
+    "description": "Name of the consulting offer: a heading in the guide for language models (llms.txt).",
     "maxLength": 32
+  },
+  "consulting_title": {
+    "message": "Work with us now",
+    "description": "Heading of the consulting section: the company works with clients now, before its products ship.",
+    "maxLength": 60
   },
   "consulting_what": {
     "message": "Until our products ship, we help companies bring AI into their software development and set up CRM and ERP.",
@@ -206,6 +270,26 @@
   "consulting_audience": {
     "message": "For companies that want to use AI without losing control of their code or their data.",
     "description": "Who the consulting offer is for, one sentence."
+  },
+  "consulting_ai_title": {
+    "message": "AI in software development",
+    "description": "Title of the first consulting offer.",
+    "maxLength": 48
+  },
+  "consulting_ai_text": {
+    "message": "We help teams bring AI into their software development without losing control of their code.",
+    "description": "One sentence on the first consulting offer.",
+    "maxLength": 160
+  },
+  "consulting_erp_title": {
+    "message": "CRM and ERP",
+    "description": "Title of the second consulting offer.",
+    "maxLength": 48
+  },
+  "consulting_erp_text": {
+    "message": "We set up CRM and ERP systems that keep your data in open formats, in one place.",
+    "description": "One sentence on the second consulting offer.",
+    "maxLength": 160
   },
   "consulting_link": {
     "message": "Send a consulting inquiry",
@@ -232,19 +316,34 @@
     "description": "Opening line of the product overview; also its meta description and link-preview title.",
     "maxLength": 160
   },
+  "product_how_label": {
+    "message": "How it works",
+    "description": "Heading above a product's description on its own page.",
+    "maxLength": 40
+  },
+  "product_waitlist_link": {
+    "message": "Join the waiting list",
+    "description": "Link on a product card and button on a product page that lead to the product's waiting list.",
+    "maxLength": 32
+  },
+  "product_waitlist_link_label": {
+    "message": "Join the waiting list for {product}",
+    "description": "Accessible name of the waiting-list link on a product card, which names the product.",
+    "maxLength": 80
+  },
   "status_prototype": {
     "message": "Prototype",
-    "description": "Product status shown under the product name: a working prototype.",
+    "description": "A product's status, named in the guide for language models (llms.txt): a working prototype.",
     "maxLength": 24
   },
   "status_in_development": {
     "message": "In development",
-    "description": "Product status shown under the product name.",
+    "description": "A product's status, named in the guide for language models (llms.txt).",
     "maxLength": 24
   },
   "status_research": {
     "message": "Research",
-    "description": "Product status shown under the product name: research, not a product yet.",
+    "description": "A product's status, named in the guide for language models (llms.txt): research, not a product yet.",
     "maxLength": 24
   },
   "product_software_factory_name": {
@@ -274,7 +373,7 @@
     "description": "Software Factory page, paragraph 3 of 3: what works now. Prusti and Verus are tool names."
   },
   "product_erp_crm_name": {
-    "message": "ERP\u00a0&\u00a0CRM",
+    "message": "ERP & CRM",
     "description": "Product name. Fixed term in every language (glossary). Contains no-break spaces so it never splits across lines.",
     "translate": false
   },
@@ -421,11 +520,6 @@
   "joined_text": {
     "message": "We will write to you when testing opens.",
     "description": "Text of the sign-up confirmation page."
-  },
-  "join_title": {
-    "message": "Join us",
-    "description": "Title of the jobs page.",
-    "maxLength": 32
   },
   "join_intro": {
     "message": "Introspectum is a small team. There are two ways to join it.",
@@ -609,5 +703,15 @@
     "message": "Go to the homepage",
     "description": "Link from the error page to the homepage.",
     "maxLength": 40
+  },
+  "join_title": {
+    "message": "Careers",
+    "description": "Title of the jobs page.",
+    "maxLength": 32
+  },
+  "role_apply_button": {
+    "message": "Apply by email",
+    "description": "Button on a job card that opens an email to apply.",
+    "maxLength": 32
   }
 }

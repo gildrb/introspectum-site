@@ -98,6 +98,12 @@ function defaultInstance(font: Uint8Array): Buffer {
 
 // Inter with the page's case forms built in, since satori cannot turn features on.
 const inter = decompress(readFileSync("src/fonts/inter-share.woff2")).then(defaultInstance);
+// Newsreader as a static instance at its display size (optical size 72, weight 500), for titles.
+// `decompress` hands back a view into its WebAssembly memory, which its next call reuses: Inter
+// is copied out before this one starts.
+const newsreader = inter
+  .then(() => decompress(readFileSync("src/fonts/newsreader-share.woff2")))
+  .then((font) => Buffer.from(font));
 
 /** The share image's grid: eight units in from every edge, as on the page. */
 const inset = 64;
@@ -105,8 +111,13 @@ const inset = 64;
 function Card({ card, css }: { card: ShareCard; css: string }) {
   const color = (variable: string) => srgb(token(css, variable));
   // Long titles step down a size so three lines still hold them.
-  const titleSize = card.title.length > 56 ? 48 : 64;
-  const small = { fontSize: 32, lineHeight: "40px", color: color(colors.tertiary) };
+  const titleSize = card.title.length > 56 ? 56 : 72;
+  const small = {
+    fontFamily: "Inter",
+    fontSize: 32,
+    lineHeight: "40px",
+    color: color(colors.secondary),
+  };
   return (
     <div
       style={{
@@ -120,26 +131,28 @@ function Card({ card, css }: { card: ShareCard; css: string }) {
         padding: inset,
         backgroundColor: color(colors.bg),
         color: color(colors.primary),
-        fontFamily: "Inter",
-        letterSpacing: "-0.02em",
+        fontFamily: "Newsreader",
       }}
     >
-      <div style={{ display: "flex", fontSize: 40, lineHeight: "48px" }}>{company.name}</div>
+      <div style={{ display: "flex", fontSize: 44, lineHeight: "48px", letterSpacing: "-0.01em" }}>
+        {company.name}
+      </div>
       <div style={{ display: "flex", flexDirection: "column" }}>
         {card.kicker !== undefined && (
-          <div style={{ display: "flex", ...small, marginBottom: 16 }}>{card.kicker}</div>
+          <div style={{ display: "flex", ...small, marginBottom: 24 }}>{card.kicker}</div>
         )}
         <div
           style={{
             display: "flex",
             fontSize: titleSize,
             lineHeight: `${titleSize + 8}px`,
+            letterSpacing: "-0.02em",
           }}
         >
           {card.title}
         </div>
         {card.byline !== undefined && (
-          <div style={{ display: "flex", ...small, marginTop: 24 }}>{card.byline}</div>
+          <div style={{ display: "flex", ...small, marginTop: 32 }}>{card.byline}</div>
         )}
       </div>
     </div>
@@ -151,7 +164,10 @@ export async function shareImage(card: ShareCard, css: string): Promise<Uint8Arr
   const svg = await satori(<Card card={card} css={css} />, {
     width: shareFrame.width,
     height: shareFrame.height,
-    fonts: [{ name: "Inter", data: await inter, weight: 400, style: "normal" }],
+    fonts: [
+      { name: "Inter", data: await inter, weight: 400, style: "normal" },
+      { name: "Newsreader", data: await newsreader, weight: 500, style: "normal" },
+    ],
   });
   return new Resvg(svg, { font: { loadSystemFonts: false } }).render().asPng();
 }

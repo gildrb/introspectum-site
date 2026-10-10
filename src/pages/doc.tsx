@@ -1,11 +1,10 @@
-import * as stylex from "@stylexjs/stylex";
+import { Actions, Article, ButtonLink, Hero } from "../blocks.tsx";
 import type { Doc } from "../content.ts";
 import { translators } from "../i18n.ts";
-import { type Assets, Page, Stack, Text, Title } from "../layout.tsx";
+import { type Assets, Page } from "../layout.tsx";
 import { href, type Locale } from "../locale.ts";
 import { Markdown } from "../markdown.tsx";
 import { company } from "../site.ts";
-import { ui } from "../ui.tsx";
 
 type PageProps = {
   assets: Assets;
@@ -42,8 +41,9 @@ export function DocPage({
         mono: false,
       }}
     >
-      <Title>{doc.title}</Title>
-      <Markdown blocks={doc.blocks} />
+      <Article title={doc.title}>
+        <Markdown blocks={doc.blocks} />
+      </Article>
     </Page>
   );
 }
@@ -67,15 +67,13 @@ export function JoinedPage({ assets, locale, path, alternates, shareImage }: Pag
         mono: false,
       }}
     >
-      <Title>{t.text("joined_title")}</Title>
-      <Stack>
-        <Text>{t.text("joined_text")}</Text>
-        <Text>
-          <a {...stylex.props(ui.link, ui.focusRing)} href={href(locale, "products")}>
+      <Hero title={t.text("joined_title")} lead={t.text("joined_text")}>
+        <Actions>
+          <ButtonLink href={href(locale, "products")} kind="secondary">
             {t.text("back_to_products")}
-          </a>
-        </Text>
-      </Stack>
+          </ButtonLink>
+        </Actions>
+      </Hero>
     </Page>
   );
 }
@@ -101,15 +99,13 @@ export function NotFoundPage({ assets, locale, path, shareImage }: Omit<PageProp
         mono: false,
       }}
     >
-      <Title>{t.text("not_found_title")}</Title>
-      <Stack>
-        <Text>{t.text("not_found_text")}</Text>
-        <Text>
-          <a {...stylex.props(ui.link, ui.focusRing)} href={href(locale, "home")}>
+      <Hero title={t.text("not_found_title")} lead={t.text("not_found_text")}>
+        <Actions>
+          <ButtonLink href={href(locale, "home")} kind="primary">
             {t.text("not_found_home")}
-          </a>
-        </Text>
-      </Stack>
+          </ButtonLink>
+        </Actions>
+      </Hero>
     </Page>
   );
 }

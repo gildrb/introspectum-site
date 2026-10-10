@@ -30,10 +30,11 @@ export const methods: readonly MessageId[] = [
   "method_reinforcement_learning",
 ];
 
-export const principles: readonly MessageId[] = [
-  "principle_proof",
-  "principle_data",
-  "principle_traceability",
+/** The principles, in the order the homepage shows them: a name and one sentence each. */
+export const principles: readonly { name: MessageId; text: MessageId }[] = [
+  { name: "principle_proof", text: "principle_proof_text" },
+  { name: "principle_data", text: "principle_data_text" },
+  { name: "principle_traceability", text: "principle_traceability_text" },
 ];
 
 /** Kept apart from `products` so the browser bundle can check a slug without the rest. */
@@ -48,6 +49,7 @@ export function isProductSlug(value: string): value is ProductSlug {
 export type Product = {
   slug: ProductSlug;
   name: MessageId;
+  /** Where it stands; named for language models in `llms.txt`. */
   status: MessageId;
   /** What it does, in one sentence. */
   what: MessageId;
@@ -55,7 +57,6 @@ export type Product = {
   audience: MessageId;
   /** The product page's text, one paragraph each. */
   details: readonly MessageId[];
-  methods: readonly MessageId[];
 };
 
 export const products: readonly Product[] = [
@@ -70,12 +71,6 @@ export const products: readonly Product[] = [
       "product_software_factory_detail_2",
       "product_software_factory_detail_3",
     ],
-    methods: [
-      "method_formal_methods",
-      "method_compiler_construction",
-      "method_model_based",
-      "method_ai_agents",
-    ],
   },
   {
     slug: "erp-crm",
@@ -84,7 +79,6 @@ export const products: readonly Product[] = [
     what: "product_erp_crm_what",
     audience: "product_erp_crm_audience",
     details: ["product_erp_crm_detail_1", "product_erp_crm_detail_2", "product_erp_crm_detail_3"],
-    methods: ["method_ai_agents", "method_open_data"],
   },
   {
     slug: "trading-platform",
@@ -97,7 +91,6 @@ export const products: readonly Product[] = [
       "product_trading_platform_detail_2",
       "product_trading_platform_detail_3",
     ],
-    methods: ["method_reinforcement_learning"],
   },
 ];
 

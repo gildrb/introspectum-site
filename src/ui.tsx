@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import type { VNode } from "preact";
-import { arrows, colors, fontFeatures, media, space } from "./tokens.stylex.ts";
+import { colors, fontFeatures, media, space } from "./tokens.stylex.ts";
 
 /** Anything `stylex.props` accepts: a style, `false`, `null`, or a nested array of them. */
 export type Style = stylex.StyleXArray<stylex.CompiledStyles | boolean | null | undefined>;
@@ -11,48 +11,98 @@ export type Style = stylex.StyleXArray<stylex.CompiledStyles | boolean | null | 
  */
 export const untranslated: Readonly<Record<string, string>> = { translate: "no" };
 
+/** Interface: navigation, buttons, labels, forms and the footer. */
 const sans = 'Inter, "Inter Fallback", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+/** Headings and running text. Both fallbacks are scaled to Newsreader's metrics (`layout.tsx`). */
+const serif = 'Newsreader, "Newsreader Fallback", "Newsreader Fallback Serif", Georgia, serif';
 
 export const ui = stylex.create({
-  sans: { fontFamily: sans },
-  mono: { fontFamily: '"Ioskeley Mono", "SFMono-Regular", "SF Mono", Menlo, Consolas, monospace' },
+  sans: { fontFamily: sans, fontFeatureSettings: fontFeatures.interface },
+  mono: { fontFamily: '"JetBrains Mono", "SFMono-Regular", "SF Mono", Menlo, Consolas, monospace' },
+  serif: { fontFamily: serif },
   focusRing: {
     outline: { default: null, ":focus-visible": `1px solid ${colors.primary}` },
-    outlineOffset: space.x1,
+    outlineOffset: "4px",
   },
-  /** Interface text: pixel-fixed on phones, `rem`-scaled from tablets up. */
+  /** The page's widest column, centred, with the side margin inside it. */
+  container: {
+    boxSizing: "content-box",
+    maxWidth: space.page,
+    marginInline: "auto",
+    paddingInline: { default: space.x3, [media.desktop]: space.x4 },
+  },
+  /** Interface text: navigation, buttons, form fields. */
   text: {
-    fontSize: { default: "16px", [media.desktop]: "1rem" },
+    fontFamily: sans,
+    fontFeatureSettings: fontFeatures.interface,
+    fontSize: "1rem",
     fontWeight: 400,
-    lineHeight: { default: space.x3, [media.desktop]: "1.5rem" },
+    lineHeight: "1.5rem",
   },
-  /** The one larger style: the site name, page titles and the homepage's opening line. */
-  heading: {
-    fontSize: { default: "19px", [media.desktop]: "1.1875rem" },
+  /** Smaller interface text: badges, the footer, notes beside a heading. */
+  small: {
+    fontFamily: sans,
+    fontFeatureSettings: fontFeatures.interface,
+    fontSize: "0.875rem",
     fontWeight: 400,
+    lineHeight: "1.25rem",
+  },
+  /** A heading at text size: footer columns, the lists in a job card. */
+  strong: { fontWeight: 500, color: colors.primary },
+  /** A page's title. */
+  display: {
+    fontFamily: serif,
+    fontSize: { default: "2.5rem", [media.desktop]: "4rem" },
+    fontWeight: 400,
+    lineHeight: { default: "3rem", [media.desktop]: "4.5rem" },
     letterSpacing: "-0.02em",
-    lineHeight: { default: space.x3, [media.desktop]: "1.5rem" },
     color: colors.primary,
     textWrap: "balance",
   },
-  /** Running text: no line ends on a lone word, and hyphens sit among lowercase letters. */
-  prose: {
-    color: colors.article,
+  /** A section's title. */
+  heading: {
+    fontFamily: serif,
+    fontSize: { default: "2rem", [media.desktop]: "2.75rem" },
+    fontWeight: 400,
+    lineHeight: { default: "2.5rem", [media.desktop]: "3.25rem" },
+    letterSpacing: "-0.015em",
+    color: colors.primary,
+    textWrap: "balance",
+  },
+  /** A card's or a person's name. */
+  title: {
+    fontFamily: serif,
+    fontSize: "1.5rem",
+    fontWeight: 500,
+    lineHeight: "2rem",
+    letterSpacing: "-0.01em",
+    color: colors.primary,
+  },
+  /** The paragraph under a title. */
+  lead: {
+    fontFamily: serif,
+    fontSize: { default: "1.25rem", [media.desktop]: "1.375rem" },
     fontWeight: colors.proseWeight,
-    fontFeatureSettings: fontFeatures.prose,
+    lineHeight: { default: "1.75rem", [media.desktop]: "2rem" },
+    color: colors.secondary,
     textWrap: "pretty",
   },
-  /** Names a section: body size, one step down the gray ladder. */
+  /** Running text. */
+  prose: {
+    fontFamily: serif,
+    fontSize: "1.125rem",
+    fontWeight: colors.proseWeight,
+    lineHeight: "1.75rem",
+    color: colors.article,
+    textWrap: "pretty",
+  },
   label: { color: colors.secondary },
-  /** Quiet text beside prose: dates, statuses, sources. */
+  /** Quiet text beside a heading: dates, sources. Never running text (see `colors`). */
   note: { color: colors.tertiary },
-  /**
-   * Secondary links. Hover (where there is hover) and keyboard focus raise them to full contrast;
-   * a finger's press shows nothing.
-   */
+  /** Navigation and footer links: secondary, full contrast on hover and keyboard focus. */
   quiet: {
     color: {
-      default: colors.tertiary,
+      default: colors.secondary,
       ":hover": { [media.hover]: colors.primary },
       ":focus-visible": colors.primary,
     },
@@ -70,18 +120,54 @@ export const ui = stylex.create({
       ":hover": { [media.hover]: "currentColor" },
     },
   },
-  /** The name of an item in a list (a product, a post): primary, underlined on hover. */
+  /** A card's title link: primary, underlined on hover. */
   entry: {
     color: colors.primary,
     textDecorationLine: { default: "none", ":hover": { [media.hover]: "underline" } },
     textDecorationThickness: "1px",
-    textUnderlineOffset: "0.2em",
-    textDecorationColor: colors.tertiary,
+    textUnderlineOffset: "0.15em",
   },
-  /** A link that leads on within the site. */
-  onward: { "::after": { content: arrows.onward, fontFamily: sans } },
-  /** A link that leaves the site. */
-  outbound: { "::after": { content: arrows.outbound, fontFamily: sans } },
+  /** A link or a control shaped as a button. Six units tall on phones, for a finger; five above. */
+  button: {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    height: { default: space.x6, [media.desktop]: space.x5 },
+    paddingInline: space.x3,
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderRadius: "999px",
+    fontFamily: sans,
+    fontFeatureSettings: fontFeatures.interface,
+    fontSize: "1rem",
+    fontWeight: 500,
+    lineHeight: "1.5rem",
+    textDecoration: "none",
+    whiteSpace: "nowrap",
+    cursor: "pointer",
+    touchAction: "manipulation",
+  },
+  primary: {
+    color: colors.bg,
+    backgroundColor: { default: colors.primary, ":hover": { [media.hover]: colors.secondary } },
+    borderColor: { default: colors.primary, ":hover": { [media.hover]: colors.secondary } },
+  },
+  secondary: {
+    color: colors.primary,
+    backgroundColor: "transparent",
+    borderColor: { default: colors.tertiary, ":hover": { [media.hover]: colors.primary } },
+  },
+  /** On a panel in the text color, the closing call to action: the page's colors swapped. */
+  inverse: {
+    color: colors.primary,
+    backgroundColor: colors.bg,
+    borderColor: colors.bg,
+  },
+  inverseOutline: {
+    color: colors.bg,
+    backgroundColor: "transparent",
+    borderColor: colors.bg,
+  },
   reset: {
     appearance: "none",
     padding: 0,

@@ -3,8 +3,8 @@ import type { ComponentChildren } from "preact";
 import { translators } from "./i18n.ts";
 import { href, type Locale, localeInfo, locales, type Route, sourceLocale } from "./locale.ts";
 import { shareFrame } from "./og.tsx";
-import { company, email, origin } from "./site.ts";
-import { colors, fontFeatures, media, rightToLeft, space } from "./tokens.stylex.ts";
+import { company, email, mailto, origin, products } from "./site.ts";
+import { colors, fontFeatures, media, space } from "./tokens.stylex.ts";
 import { type Style, ui, untranslated } from "./ui.tsx";
 import { versioned } from "./versioned.ts";
 
@@ -36,28 +36,64 @@ export type Meta = {
   head?: ComponentChildren;
 };
 
-// Each face is subset to exactly these ranges, so declare them to the browser. Inter also carries
-// Latin Extended-A (Slovenian, Czech, Polish names); the monospace face does not need it.
-const monoRanges =
-  "U+0020-007E,U+00A0-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2010-205E,U+20AC,U+2122,U+2190-21FF,U+2212,U+2500-257F";
-const interRanges = `${monoRanges},U+0100-017F`;
+// Newsreader and JetBrains Mono come as Google Fonts subsets them: Latin, and Latin Extended for
+// names such as Slovenian, Czech or Polish ones. The browser fetches a subset only for text that
+// needs it.
+const latin =
+  "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD";
+const latinExtended =
+  "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF";
+// Inter is subset to exactly these ranges: Latin-1, Latin Extended-A and punctuation.
+const interRanges =
+  "U+0020-007E,U+00A0-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2010-205E,U+20AC,U+2122,U+2190-21FF,U+2212,U+2500-257F,U+0100-017F";
 
 // One URL per face, shared by its @font-face and its preload so the browser fetches it once.
+const serifUrl = versioned("/fonts/newsreader-latin.woff2");
 const interUrl = versioned("/fonts/inter.woff2");
-const monoUrl = versioned("/fonts/ioskeley-mono.woff2");
+const monoUrl = versioned("/fonts/jetbrains-mono-latin.woff2");
+
+/** Newsreader's four files: upright and italic, each in Latin and Latin Extended. */
+const serifFaces = (
+  [
+    ["normal", serifUrl, latin],
+    ["normal", versioned("/fonts/newsreader-latin-ext.woff2"), latinExtended],
+    ["italic", versioned("/fonts/newsreader-italic-latin.woff2"), latin],
+    ["italic", versioned("/fonts/newsreader-italic-latin-ext.woff2"), latinExtended],
+  ] as const
+).map(
+  ([style, url, ranges]) =>
+    `@font-face{font-family:"Newsreader";font-style:${style};font-weight:200 800;font-display:swap;src:url("${url}") format("woff2");unicode-range:${ranges}}`,
+);
+
+/** JetBrains Mono, upright only, for code. Shown only if it arrives in time: code never reflows. */
+const monoFaces = (
+  [
+    [monoUrl, latin],
+    [versioned("/fonts/jetbrains-mono-latin-ext.woff2"), latinExtended],
+  ] as const
+).map(
+  ([url, ranges]) =>
+    `@font-face{font-family:"JetBrains Mono";font-weight:100 800;font-display:optional;src:url("${url}") format("woff2");unicode-range:${ranges}}`,
+);
 
 /** The few rules StyleX cannot attach to an element, layered beneath StyleX's own layers. */
 const globalCss = [
   "@layer reset;",
+  ...serifFaces,
   `@font-face{font-family:"Inter";font-weight:380 600;font-display:swap;src:url("${interUrl}") format("woff2");unicode-range:${interRanges}}`,
-  `@font-face{font-family:"Ioskeley Mono";font-weight:400;font-display:optional;src:url("${monoUrl}") format("woff2");unicode-range:${monoRanges}}`,
-  // Arial (or metric-identical Liberation Sans) scaled to Inter's metrics, so text laid out
-  // before the web font arrives does not move when it does.
+  ...monoFaces,
+  // Local faces scaled to the web fonts' metrics, so text laid out before a web font arrives does
+  // not move when it does: Arial (or metric-identical Liberation Sans) for Inter; Georgia, else
+  // Times New Roman (or Liberation Serif), for Newsreader at its default optical size.
   '@font-face{font-family:"Inter Fallback";src:local("Arial"),local("Liberation Sans");size-adjust:107.35%;ascent-override:90.24%;descent-override:22.47%;line-gap-override:0%}',
+  '@font-face{font-family:"Newsreader Fallback";src:local("Georgia");size-adjust:91.75%;ascent-override:80.11%;descent-override:28.88%;line-gap-override:0%}',
+  '@font-face{font-family:"Newsreader Fallback Serif";src:local("Times New Roman"),local("Liberation Serif");size-adjust:100.68%;ascent-override:73.01%;descent-override:26.32%;line-gap-override:0%}',
   "@layer reset{*{margin:0;padding:0;box-sizing:border-box}}",
   `::selection{color:${colors.bg};background:${colors.primary}}`,
   // A touch shows nothing: no grey tap flash, and no press state takes its place.
-  "a,button,input{-webkit-tap-highlight-color:transparent}",
+  "a,button,input,summary{-webkit-tap-highlight-color:transparent}",
+  // The phone menu's toggle is a button, without the disclosure triangle.
+  "summary{list-style:none}summary::-webkit-details-marker{display:none}",
   "@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}",
 ].join("\n");
 
@@ -85,9 +121,16 @@ const nav: readonly {
   { route: "about", label: "nav_about" },
 ];
 
+/** `aria-current` for a link to `target` from `path`: the page itself, or a page below it. */
+function currentness(path: string, target: string): "page" | "true" | undefined {
+  if (path === target) return "page";
+  if (target !== "/" && path.startsWith(`${target}/`)) return "true";
+  return undefined;
+}
+
 /**
- * The whole document: head, a sticky sidebar with the name and navigation on desktop (a header on
- * phones), and the page's content.
+ * The whole document: head, a sticky header with the name, the navigation, the other language and
+ * the contact button (behind a menu button on phones), the page's content, and the footer.
  */
 export function Page({
   assets,
@@ -100,14 +143,14 @@ export function Page({
 }) {
   const { locale, path, alternates } = meta;
   const t = translators[locale];
-  const home = href(locale, "home");
   const others = locales.filter((other) => other !== locale);
+  const contact = mailto(t.text("consulting_subject"));
+  const links = nav.map(({ route, label }) => {
+    const target = href(locale, route);
+    return { target, current: currentness(path, target), label: t.text(label) };
+  });
   return (
-    <html
-      lang={locale}
-      dir={localeInfo[locale].dir}
-      {...stylex.props(styles.html, localeInfo[locale].dir === "rtl" && rightToLeft)}
-    >
+    <html lang={locale} dir={localeInfo[locale].dir} {...stylex.props(styles.html)}>
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -150,6 +193,7 @@ export function Page({
           href={`${origin}${localeInfo[locale].prefix}/feed.xml`}
           title={t.text("feed_title", { brand: company.name })}
         />
+        <link rel="preload" href={serifUrl} as="font" type="font/woff2" crossorigin="anonymous" />
         <link rel="preload" href={interUrl} as="font" type="font/woff2" crossorigin="anonymous" />
         {meta.mono && (
           <link rel="preload" href={monoUrl} as="font" type="font/woff2" crossorigin="anonymous" />
@@ -166,286 +210,328 @@ export function Page({
         <a {...stylex.props(ui.text, ui.focusRing, styles.skip)} href="#content">
           {t.text("skip_to_content")}
         </a>
-        <div {...stylex.props(styles.layout)}>
-          <header {...stylex.props(styles.sidebar)}>
-            {path === home ? (
-              <h1 {...stylex.props(ui.heading, styles.name)} {...untranslated}>
-                {company.name}
-              </h1>
-            ) : (
-              <p {...stylex.props(ui.heading, styles.name)}>
-                <a {...stylex.props(styles.home, ui.focusRing)} href={home} {...untranslated}>
-                  {company.name}
-                </a>
-              </p>
-            )}
-            <nav {...stylex.props(ui.text, styles.nav)} aria-label={t.text("nav_label")}>
-              {nav.map(({ route, label }) => {
-                const target = href(locale, route);
-                const current =
-                  path === target ? "page" : path.startsWith(`${target}/`) ? "true" : null;
-                return (
-                  <a
-                    {...stylex.props(
-                      ui.quiet,
-                      ui.focusRing,
-                      styles.tapTarget,
-                      current !== null && styles.current,
-                    )}
-                    href={target}
-                    aria-current={current ?? undefined}
-                  >
-                    {t.text(label)}
-                  </a>
-                );
-              })}
-            </nav>
-            <p {...stylex.props(ui.text, styles.languages)}>
-              {others.map((other) => (
+        <header {...stylex.props(styles.header)}>
+          <div {...stylex.props(ui.container, styles.bar)}>
+            <a
+              {...stylex.props(ui.serif, ui.focusRing, styles.wordmark)}
+              href={href(locale, "home")}
+              aria-current={currentness(path, href(locale, "home")) === "page" ? "page" : undefined}
+              {...untranslated}
+            >
+              {company.name}
+            </a>
+            <nav {...stylex.props(styles.nav)} aria-label={t.text("nav_label")}>
+              {links.map(({ target, current, label }) => (
                 <a
-                  {...stylex.props(ui.quiet, ui.focusRing, styles.tapTarget)}
-                  href={alternates?.[other] ?? href(other, "home")}
-                  hreflang={other}
-                  lang={other}
-                  aria-label={t.text("language_switch", { language: t.language(other) })}
+                  {...stylex.props(
+                    ui.text,
+                    ui.quiet,
+                    ui.focusRing,
+                    current !== undefined && styles.current,
+                  )}
+                  href={target}
+                  aria-current={current}
                 >
-                  {translators[other].language(other)}
+                  {label}
                 </a>
               ))}
-            </p>
-            <Contact style={styles.desktopOnly} locale={locale} path={path} />
-          </header>
-          <main {...stylex.props(styles.content)} id="content" tabIndex={-1}>
-            {children}
-          </main>
-          <Contact style={styles.phoneOnly} locale={locale} path={path} />
-        </div>
+            </nav>
+            <div {...stylex.props(styles.actions)}>
+              <Languages meta={meta} style={ui.text} />
+              <a {...stylex.props(ui.button, ui.primary, ui.focusRing)} href={contact}>
+                {t.text("nav_contact")}
+              </a>
+            </div>
+            <details {...stylex.props(styles.menu)}>
+              <summary {...stylex.props(ui.button, ui.secondary, ui.focusRing, styles.toggle)}>
+                {t.text("nav_menu")}
+              </summary>
+              <div {...stylex.props(styles.panel)}>
+                <nav {...stylex.props(styles.panelNav)} aria-label={t.text("nav_label")}>
+                  {links.map(({ target, current, label }) => (
+                    <a
+                      {...stylex.props(
+                        ui.quiet,
+                        ui.focusRing,
+                        styles.panelLink,
+                        current !== undefined && styles.current,
+                      )}
+                      href={target}
+                      aria-current={current}
+                    >
+                      {label}
+                    </a>
+                  ))}
+                </nav>
+                <div {...stylex.props(styles.panelFoot)}>
+                  <a {...stylex.props(ui.button, ui.primary, ui.focusRing)} href={contact}>
+                    {t.text("nav_contact")}
+                  </a>
+                  <Languages meta={meta} style={[ui.text, styles.panelLanguage]} />
+                </div>
+              </div>
+            </details>
+          </div>
+        </header>
+        <main {...stylex.props(styles.main)} id="content" tabIndex={-1}>
+          {children}
+        </main>
+        <Footer meta={meta} />
       </body>
     </html>
   );
 }
 
-/** The address and the legal pages: at the foot of the sidebar on desktop, of the page on phones. */
-function Contact({ style, locale, path }: { style: Style; locale: Locale; path: string }) {
+/** Links to this page in the other languages, each named in its own language. */
+function Languages({ meta, style }: { meta: Meta; style: Style }) {
+  const t = translators[meta.locale];
+  return (
+    <>
+      {locales
+        .filter((other) => other !== meta.locale)
+        .map((other) => (
+          <a
+            {...stylex.props(ui.quiet, ui.focusRing, style)}
+            href={meta.alternates?.[other] ?? href(other, "home")}
+            hreflang={other}
+            lang={other}
+            aria-label={t.text("language_switch", { language: t.language(other) })}
+          >
+            {translators[other].language(other)}
+          </a>
+        ))}
+    </>
+  );
+}
+
+/** The name and address, every page by group, the legal pages, and the other languages. */
+function Footer({ meta }: { meta: Meta }) {
+  const { locale, path } = meta;
   const t = translators[locale];
-  const legal: readonly { route: Route; label: "footer_privacy" | "footer_imprint" }[] = [
-    { route: "privacy", label: "footer_privacy" },
-    { route: "imprint", label: "footer_imprint" },
+  const page = (route: Route, label: string) => ({ target: href(locale, route), label });
+  const groups = [
+    {
+      title: t.text("nav_products"),
+      links: products.map((product) => ({
+        target: href(locale, "products", product.slug),
+        label: t.text(product.name),
+      })),
+    },
+    {
+      title: t.text("footer_company"),
+      links: [
+        page("about", t.text("nav_about")),
+        page("join", t.text("nav_join")),
+        page("blog", t.text("nav_blog")),
+      ],
+    },
+    {
+      title: t.text("footer_legal"),
+      links: [page("privacy", t.text("footer_privacy")), page("imprint", t.text("footer_imprint"))],
+    },
   ];
   return (
-    <footer {...stylex.props(ui.text, styles.contact, style)} aria-label={t.text("footer_label")}>
-      <a
-        {...stylex.props(ui.quiet, ui.focusRing, styles.email)}
-        href={`mailto:${email}`}
-        {...untranslated}
-      >
-        {email}
-      </a>
-      {legal.map(({ route, label }) => {
-        const target = href(locale, route);
-        return (
+    <footer {...stylex.props(styles.footer)}>
+      <div {...stylex.props(ui.container, styles.footerGrid)}>
+        <div {...stylex.props(styles.footerBrand)}>
+          <p {...stylex.props(ui.serif, styles.wordmark)} {...untranslated}>
+            {company.name}
+          </p>
+          <p {...stylex.props(ui.small, ui.label)}>{t.text("tagline")}</p>
           <a
-            {...stylex.props(ui.quiet, ui.focusRing, path === target && styles.current)}
-            href={target}
-            aria-current={path === target ? "page" : undefined}
+            {...stylex.props(ui.small, ui.quiet, ui.focusRing, styles.email)}
+            href={`mailto:${email}`}
+            {...untranslated}
           >
-            {t.text(label)}
+            {email}
           </a>
-        );
-      })}
+        </div>
+        {groups.map(({ title, links }) => (
+          <div>
+            <h2 {...stylex.props(ui.small, ui.strong)}>{title}</h2>
+            <ul {...stylex.props(styles.footerList)}>
+              {links.map(({ target, label }) => (
+                <li>
+                  <a
+                    {...stylex.props(
+                      ui.small,
+                      ui.quiet,
+                      ui.focusRing,
+                      path === target && styles.current,
+                    )}
+                    href={target}
+                    aria-current={path === target ? "page" : undefined}
+                  >
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <div {...stylex.props(styles.footerBase)}>
+        <div {...stylex.props(ui.container, styles.footerBaseRow)}>
+          <p {...stylex.props(ui.small, ui.note)}>
+            {t.text("footer_copyright", {
+              year: String(new Date().getUTCFullYear()),
+              company: company.legalName,
+            })}
+          </p>
+          <Languages meta={meta} style={ui.small} />
+        </div>
+      </div>
     </footer>
   );
 }
-
-/**
- * A page's title in the heading style, where the homepage's opening line sits. `note` is a quiet
- * line under it: a product's status, a post's date and author.
- */
-export function Title({
-  note,
-  children,
-}: {
-  note?: ComponentChildren;
-  children: ComponentChildren;
-}) {
-  return (
-    <header {...stylex.props(blocks.title)}>
-      <h1 {...stylex.props(ui.heading)}>{children}</h1>
-      {note !== undefined && <p {...stylex.props(ui.text, ui.note)}>{note}</p>}
-    </header>
-  );
-}
-
-/** A labelled part of a page; the label is its heading, set at body size in secondary gray. */
-export function Section({
-  id,
-  label,
-  children,
-}: {
-  id: string;
-  label: string;
-  children: ComponentChildren;
-}) {
-  return (
-    <section {...stylex.props(blocks.section)} aria-labelledby={id}>
-      <h2 {...stylex.props(ui.text, ui.label, blocks.label)} id={id}>
-        {label}
-      </h2>
-      <Stack>{children}</Stack>
-    </section>
-  );
-}
-
-/** Blocks of text one after another, two units apart. */
-export function Stack({ children }: { children: ComponentChildren }) {
-  return <div {...stylex.props(blocks.stack)}>{children}</div>;
-}
-
-/**
- * Running text. `lead` sets it in primary, for the line a page opens with; `quiet` one step down,
- * in secondary. Never tertiary: running text can wrap past two lines, where APCA asks Lc 75.
- */
-export function Text({
-  lead = false,
-  quiet = false,
-  children,
-}: {
-  lead?: boolean;
-  quiet?: boolean;
-  children: ComponentChildren;
-}) {
-  return (
-    <p {...stylex.props(ui.text, ui.prose, lead && blocks.lead, quiet && blocks.quiet)}>
-      {children}
-    </p>
-  );
-}
-
-/** Items one per line, without bullets: methods, principles. */
-export function Lines({ items }: { items: readonly ComponentChildren[] }) {
-  return (
-    <ul {...stylex.props(ui.text, ui.prose, blocks.lines)}>
-      {items.map((item) => (
-        <li>{item}</li>
-      ))}
-    </ul>
-  );
-}
-
-/** The page's side margin on phones. */
-const phoneGutter = space.x2;
 
 const styles = stylex.create({
   html: {
     backgroundColor: colors.bg,
     colorScheme: "light dark",
-    scrollbarGutter: { default: null, [media.desktop]: "stable" },
+    // Anchored sections stop below the sticky header, not under it.
+    scrollPaddingTop: space.bar,
   },
   body: {
+    display: "flex",
+    flexDirection: "column",
     minHeight: "100dvh",
     backgroundColor: colors.bg,
     color: colors.primary,
-    fontFeatureSettings: fontFeatures.interface,
-    fontWeight: 400,
     WebkitFontSmoothing: "antialiased",
     MozOsxFontSmoothing: "grayscale",
     WebkitTextSizeAdjust: "100%",
     textRendering: "optimizeLegibility",
   },
-  /** Hidden until focused, then set over the name in its place. */
+  /** Hidden until focused, then set over the header. */
   skip: {
     position: "absolute",
-    zIndex: 2,
-    top: { default: space.x6, [media.mobile]: space.x3 },
-    insetInlineStart: { default: space.x4, [media.mobile]: phoneGutter },
+    zIndex: 20,
+    top: space.x2,
+    insetInlineStart: space.x2,
+    paddingInline: space.x2,
+    paddingBlock: space.x1,
     color: colors.primary,
     backgroundColor: colors.bg,
-    textDecoration: "none",
     clipPath: { default: "inset(50%)", ":focus-visible": "none" },
   },
-  /** Desktop: sidebar and content columns, centered. Phones: one column. */
-  layout: {
-    display: "grid",
-    gridTemplateColumns: {
-      default: `${space.sidebar} minmax(0, ${space.content})`,
-      [media.mobile]: "minmax(0, 1fr)",
-    },
-    columnGap: space.x6,
-    maxWidth: space.layout,
-    marginInline: "auto",
-    boxSizing: "content-box",
-    paddingInline: { default: space.x4, [media.mobile]: phoneGutter },
-  },
-  /** Desktop: a sticky column. Phones: the name and the language in one row, the links below. */
-  sidebar: {
-    position: { default: "sticky", [media.mobile]: "static" },
+  header: {
+    position: "sticky",
     top: 0,
-    height: { default: "100dvh", [media.mobile]: "auto" },
-    display: { default: "flex", [media.mobile]: "grid" },
-    flexDirection: "column",
-    gridTemplateColumns: { default: null, [media.mobile]: "minmax(0, 1fr) auto" },
-    alignItems: { default: null, [media.mobile]: "baseline" },
-    paddingBlock: { default: space.x6, [media.mobile]: `${space.x3} 0` },
+    zIndex: 10,
+    backgroundColor: colors.bg,
+    borderBottomWidth: "1px",
+    borderBottomStyle: "solid",
+    borderBottomColor: colors.hairline,
   },
-  name: {
-    width: "fit-content",
-    gridRow: { default: null, [media.mobile]: 1 },
-    gridColumn: { default: null, [media.mobile]: 1 },
+  bar: {
+    display: "flex",
+    alignItems: "center",
+    columnGap: space.x4,
+    height: space.bar,
   },
-  home: {
-    color: "inherit",
+  wordmark: {
+    flexShrink: 0,
+    fontSize: "1.375rem",
+    fontWeight: 500,
+    lineHeight: "2rem",
+    letterSpacing: "-0.01em",
+    color: colors.primary,
     textDecoration: "none",
   },
   nav: {
-    display: "flex",
-    flexDirection: { default: "column", [media.mobile]: "row" },
-    flexWrap: "wrap",
-    alignItems: "flex-start",
-    rowGap: { default: space.x1, [media.mobile]: 0 },
-    columnGap: space.x3,
-    marginTop: { default: space.x4, [media.mobile]: space.x2 },
-    gridRow: { default: null, [media.mobile]: 2 },
-    gridColumn: { default: null, [media.mobile]: "1 / -1" },
-  },
-  languages: {
-    display: "flex",
-    columnGap: space.x3,
-    marginTop: { default: space.x4, [media.mobile]: 0 },
-    gridRow: { default: null, [media.mobile]: 1 },
-    gridColumn: { default: null, [media.mobile]: 2 },
-  },
-  /** Phones: each link pads out to a 40px target, into the gaps around it. */
-  tapTarget: {
-    paddingBlock: { default: null, [media.mobile]: space.x1 },
-    marginBlock: { default: null, [media.mobile]: `calc(${space.x1} * -1)` },
+    display: { default: "none", [media.desktop]: "flex" },
+    columnGap: space.x4,
   },
   current: { color: colors.primary },
-  content: {
-    minWidth: 0,
-    minHeight: { default: "100dvh", [media.mobile]: 0 },
-    paddingBlock: { default: space.x6, [media.mobile]: `${space.x4} ${space.x6}` },
-    outline: "none",
+  actions: {
+    display: { default: "none", [media.desktop]: "flex" },
+    alignItems: "center",
+    columnGap: space.x3,
+    marginInlineStart: "auto",
   },
-  contact: {
+  /** Phones: the menu button; open, its panel lies under the header, the full width of the page. */
+  menu: {
+    display: { default: "block", [media.desktop]: "none" },
+    marginInlineStart: "auto",
+  },
+  toggle: { height: space.x5 },
+  panel: {
+    position: "absolute",
+    top: "100%",
+    insetInline: 0,
+    maxHeight: `calc(100dvh - ${space.bar})`,
+    overflowY: "auto",
+    paddingBlock: space.x2,
+    paddingInline: space.x3,
+    backgroundColor: colors.bg,
+    borderBottomWidth: "1px",
+    borderBottomStyle: "solid",
+    borderBottomColor: colors.hairline,
+  },
+  panelNav: { display: "flex", flexDirection: "column" },
+  panelLink: {
+    display: "flex",
+    alignItems: "center",
+    height: space.x6,
+    fontSize: "1.25rem",
+    lineHeight: "1.75rem",
+  },
+  panelFoot: {
+    display: "flex",
+    flexDirection: "column",
+    rowGap: space.x2,
+    marginTop: space.x2,
+    paddingTop: space.x3,
+    borderTopWidth: "1px",
+    borderTopStyle: "solid",
+    borderTopColor: colors.hairline,
+  },
+  panelLanguage: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    height: space.x6,
+  },
+  main: { flexGrow: 1, outline: "none" },
+  footer: { borderTopWidth: "1px", borderTopStyle: "solid", borderTopColor: colors.hairline },
+  footerGrid: {
+    display: "grid",
+    gridTemplateColumns: {
+      default: "repeat(2, minmax(0, 1fr))",
+      [media.desktop]: "minmax(0, 2fr) repeat(3, minmax(0, 1fr))",
+    },
+    columnGap: space.x4,
+    rowGap: space.x5,
+    paddingBlock: { default: space.x6, [media.desktop]: space.x8 },
+  },
+  footerBrand: {
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
     rowGap: space.x1,
-    marginTop: { default: "auto", [media.mobile]: 0 },
-    paddingBottom: { default: null, [media.mobile]: space.x6 },
+    gridColumn: { default: "1 / -1", [media.desktop]: "auto" },
+  },
+  footerList: {
+    display: "flex",
+    flexDirection: "column",
+    rowGap: space.x1,
+    marginTop: space.x2,
+    listStyle: "none",
+  },
+  footerBase: {
+    borderTopWidth: "1px",
+    borderTopStyle: "solid",
+    borderTopColor: colors.hairline,
+  },
+  footerBaseRow: {
+    display: "flex",
+    flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: space.x2,
+    paddingBlock: space.x3,
   },
   // An address is lowercase: its @ keeps the default form, not the capitals' one.
   email: { fontFeatureSettings: fontFeatures.prose },
-  desktopOnly: { display: { default: "flex", [media.mobile]: "none" } },
-  phoneOnly: { display: { default: "none", [media.mobile]: "flex" } },
-});
-
-const blocks = stylex.create({
-  title: { marginBottom: space.x4 },
-  section: { marginTop: space.x6 },
-  label: { marginBottom: space.x1 },
-  lead: { color: colors.primary },
-  quiet: { color: colors.secondary },
-  stack: { display: "flex", flexDirection: "column", rowGap: space.x2 },
-  lines: { listStyle: "none" },
 });

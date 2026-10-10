@@ -1,9 +1,10 @@
 import * as stylex from "@stylexjs/stylex";
+import { Actions, ButtonLink, Card, Cards, Hero } from "../blocks.tsx";
 import { translators } from "../i18n.ts";
-import { type Assets, Page, Text, Title } from "../layout.tsx";
+import { type Assets, Page } from "../layout.tsx";
 import type { Locale } from "../locale.ts";
 import { company, email, mailto, roles } from "../site.ts";
-import { colors, space } from "../tokens.stylex.ts";
+import { media, space } from "../tokens.stylex.ts";
 import { richLink, ui } from "../ui.tsx";
 
 export function JoinPage({
@@ -36,40 +37,59 @@ export function JoinPage({
         mono: false,
       }}
     >
-      <Title>{t.text("join_title")}</Title>
-      <Text lead>{t.text("join_intro")}</Text>
-      {roles.map((role) => (
-        <section {...stylex.props(styles.role)} aria-labelledby={role.title}>
-          <h2 {...stylex.props(ui.text, ui.label, styles.title)} id={role.title}>
-            {t.text(role.title)}
-          </h2>
-          {role.intro.map((paragraph) => (
-            <p {...stylex.props(ui.text, ui.prose, styles.paragraph)}>{t.text(paragraph)}</p>
-          ))}
-          {role.lists.map(({ label, items }) => (
-            <>
-              <h3 {...stylex.props(ui.text, styles.listLabel)}>{t.text(label)}</h3>
-              <ul {...stylex.props(ui.text, ui.prose, styles.list)}>
-                {items.map((item) => (
-                  <li {...stylex.props(styles.item)}>{t.text(item)}</li>
+      <Hero title={t.text("join_title")} lead={t.text("join_intro")} />
+      <div {...stylex.props(ui.container, styles.roles)}>
+        <Cards columns={2}>
+          {roles.map((role) => {
+            const apply = mailto(t.text(role.subject));
+            return (
+              <Card>
+                <h2 {...stylex.props(ui.title)}>{t.text(role.title)}</h2>
+                {role.intro.map((paragraph) => (
+                  <p {...stylex.props(ui.prose)}>{t.text(paragraph)}</p>
                 ))}
-              </ul>
-            </>
-          ))}
-          <p {...stylex.props(ui.text, ui.prose, styles.paragraph)}>
-            {t.rich(role.apply, { link: richLink(mailto(t.text(role.subject))) }, { email })}
-          </p>
-        </section>
-      ))}
+                {role.lists.map(({ label, items }) => (
+                  <div {...stylex.props(styles.list)}>
+                    <h3 {...stylex.props(ui.text, ui.strong)}>{t.text(label)}</h3>
+                    <ul {...stylex.props(ui.prose, styles.items)}>
+                      {items.map((item) => (
+                        <li>{t.text(item)}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+                <p {...stylex.props(ui.prose, ui.label)}>
+                  {t.rich(role.apply, { link: richLink(apply) }, { email })}
+                </p>
+                <div {...stylex.props(styles.apply)}>
+                  <Actions>
+                    <ButtonLink href={apply} kind="primary">
+                      {t.text("role_apply_button")}
+                    </ButtonLink>
+                  </Actions>
+                </div>
+              </Card>
+            );
+          })}
+        </Cards>
+      </div>
     </Page>
   );
 }
 
 const styles = stylex.create({
-  role: { marginTop: space.x6 },
-  title: { marginBottom: space.x1 },
-  paragraph: { marginTop: { default: space.x2, ":first-of-type": 0 } },
-  listLabel: { marginTop: space.x4, color: colors.primary },
-  list: { marginTop: space.x1, paddingInlineStart: space.x3 },
-  item: { marginTop: { default: space.x1, ":first-child": 0 } },
+  roles: { paddingBottom: { default: space.x8, [media.desktop]: space.x12 } },
+  list: {
+    display: "flex",
+    flexDirection: "column",
+    rowGap: space.x1,
+    marginTop: space.x1,
+  },
+  items: {
+    display: "flex",
+    flexDirection: "column",
+    rowGap: space.x1,
+    paddingInlineStart: space.x3,
+  },
+  apply: { marginTop: "auto" },
 });

@@ -75,7 +75,7 @@ function translated(
 
 const routes: readonly Route[] = [
   ...translated("home", [], {
-    share: (locale) => ({ title: translators[locale].text("home_share_title") }),
+    share: (locale) => ({ title: translators[locale].text("tagline") }),
     build: (props) => <Home {...props} />,
   }),
   ...translated("products", [], {

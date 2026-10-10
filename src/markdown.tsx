@@ -245,25 +245,25 @@ export function Markdown({ blocks }: { blocks: readonly Block[] }) {
         switch (block.type) {
           case "h2":
             return (
-              <h2 {...stylex.props(ui.text, ui.label, spacing)}>
+              <h2 {...stylex.props(ui.serif, styles.h2, spacing)}>
                 <Inline text={block.text} />
               </h2>
             );
           case "h3":
             return (
-              <h3 {...stylex.props(ui.text, styles.subheading, spacing)}>
+              <h3 {...stylex.props(ui.serif, styles.h3, spacing)}>
                 <Inline text={block.text} />
               </h3>
             );
           case "p":
             return (
-              <p {...stylex.props(ui.text, ui.prose, spacing)}>
+              <p {...stylex.props(ui.prose, spacing)}>
                 <Inline text={block.text} />
               </p>
             );
           case "quote":
             return (
-              <blockquote {...stylex.props(ui.text, ui.prose, styles.quote, spacing)}>
+              <blockquote {...stylex.props(ui.prose, styles.quote, spacing)}>
                 <Inline text={block.text} />
               </blockquote>
             );
@@ -271,7 +271,7 @@ export function Markdown({ blocks }: { blocks: readonly Block[] }) {
           case "ol": {
             const List = block.type;
             return (
-              <List {...stylex.props(ui.text, ui.prose, styles.list, spacing)}>
+              <List {...stylex.props(ui.prose, styles.list, spacing)}>
                 {block.items.map((item) => (
                   <li {...stylex.props(styles.item)}>
                     <Inline text={item} />
@@ -311,11 +311,19 @@ export function Markdown({ blocks }: { blocks: readonly Block[] }) {
 const styles = stylex.create({
   chapter: { marginTop: space.x6 },
   subchapter: { marginTop: space.x4 },
-  afterHeading: { marginTop: space.x1 },
+  afterHeading: { marginTop: space.x2 },
   paragraph: { marginTop: space.x2 },
   aroundWide: { marginTop: space.x3 },
-  subheading: { color: colors.primary },
-  strong: { color: colors.primary, fontWeight: 500 },
+  h2: {
+    fontSize: "1.75rem",
+    fontWeight: 500,
+    lineHeight: "2.25rem",
+    letterSpacing: "-0.01em",
+    color: colors.primary,
+    textWrap: "balance",
+  },
+  h3: { fontSize: "1.375rem", fontWeight: 500, lineHeight: "2rem", color: colors.primary },
+  strong: { color: colors.primary, fontWeight: 600 },
   quote: {
     paddingInlineStart: space.x2,
     borderInlineStartWidth: "1px",

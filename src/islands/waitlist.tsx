@@ -145,10 +145,10 @@ export function Waitlist({ product, locale, text }: WaitlistProps) {
               value="yes"
               required
             />
-            <span {...stylex.props(ui.prose)}>{text.consent}</span>
+            <span {...stylex.props(ui.label)}>{text.consent}</span>
           </label>
           <button
-            {...stylex.props(ui.reset, ui.text, ui.focusRing, styles.button)}
+            {...stylex.props(ui.reset, ui.button, ui.primary, ui.focusRing, styles.button)}
             type="submit"
             disabled={state.$ === "sending"}
           >
@@ -157,7 +157,7 @@ export function Waitlist({ product, locale, text }: WaitlistProps) {
         </form>
       )}
       <p
-        {...stylex.props(ui.text, state.$ === "joined" ? ui.prose : styles.failed)}
+        {...stylex.props(state.$ === "joined" ? ui.prose : [ui.text, styles.failed])}
         role="status"
         aria-live="polite"
       >
@@ -215,11 +215,6 @@ const styles = stylex.create({
     cursor: "pointer",
   },
   button: {
-    height: { default: space.x5, [media.mobile]: space.x6 },
-    paddingInline: space.x2,
-    borderRadius: space.x1,
-    backgroundColor: { default: colors.primary, ":hover": { [media.hover]: colors.secondary } },
-    color: colors.bg,
     cursor: { default: "pointer", ":disabled": "progress" },
   },
   failed: { color: colors.secondary },

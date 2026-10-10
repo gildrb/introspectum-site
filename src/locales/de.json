@@ -1,11 +1,7 @@
 {
   "page_title": {
-    "source": "{brand} → {page}",
-    "message": "{brand} → {page}"
-  },
-  "page_title_nested": {
-    "source": "{brand} → {section} → {page}",
-    "message": "{brand} → {section} → {page}"
+    "source": "{page} | {brand}",
+    "message": "{page} | {brand}"
   },
   "skip_to_content": {
     "source": "Skip to content",
@@ -20,7 +16,7 @@
     "message": "Produkte"
   },
   "nav_join": {
-    "source": "Join us",
+    "source": "Careers",
     "message": "Karriere"
   },
   "nav_blog": {
@@ -31,9 +27,21 @@
     "source": "About",
     "message": "Über uns"
   },
-  "footer_label": {
-    "source": "Contact and legal",
-    "message": "Kontakt und Rechtliches"
+  "nav_menu": {
+    "source": "Menu",
+    "message": "Menü"
+  },
+  "nav_contact": {
+    "source": "Contact us",
+    "message": "Kontakt"
+  },
+  "footer_company": {
+    "source": "Company",
+    "message": "Unternehmen"
+  },
+  "footer_legal": {
+    "source": "Legal",
+    "message": "Rechtliches"
   },
   "footer_privacy": {
     "source": "Privacy",
@@ -51,33 +59,53 @@
     "source": "{brand} blog",
     "message": "{brand}-Blog"
   },
+  "tagline": {
+    "source": "Software that is checked instead of trusted.",
+    "message": "Software, die man prüft, statt ihr zu vertrauen."
+  },
   "home_description": {
     "source": "Introspectum builds software you can check: a verified software factory, an open-data ERP and CRM, and research in systematic trading.",
     "message": "Introspectum entwickelt prüfbare Software: eine verifizierte Software Factory, ein ERP und CRM mit offenen Daten und Forschung zum systematischen Börsenhandel."
   },
-  "home_share_title": {
-    "source": "Software that is checked instead of trusted.",
-    "message": "Software, die man prüft, statt ihr zu vertrauen."
+  "home_lead": {
+    "source": "We build tools that trace code to its requirements and prove it correct where it matters, so teams can write code with AI and still stand behind it.",
+    "message": "Wir bauen Werkzeuge, die Code bis zu seinen Anforderungen zurückverfolgen und seine Korrektheit beweisen, wo es darauf ankommt. So können Teams Code mit KI schreiben und trotzdem dafür geradestehen."
   },
-  "home_hook": {
-    "source": "{distrust, number, ::percent} of developers do not fully trust AI-generated code. Only {verify, number, ::percent} always check it before they commit.",
-    "message": "{distrust, number, ::percent} der Entwicklerinnen und Entwickler vertrauen KI-generiertem Code nicht vollständig. Nur {verify, number, ::percent} prüfen ihn immer, bevor sie ihn einchecken."
+  "home_cta_products": {
+    "source": "See the products",
+    "message": "Zu den Produkten"
   },
-  "home_why_label": {
-    "source": "Why",
-    "message": "Warum"
+  "home_why_title": {
+    "source": "AI writes code faster than anyone can review it.",
+    "message": "KI schreibt Code schneller, als ihn jemand prüfen kann."
   },
   "home_why_text": {
-    "source": "AI writes a growing share of all code, faster than anyone can review it. We build software that is checked instead of trusted: traced from requirement to code, proven where it matters, and open to the people who answer for it.",
-    "message": "KI schreibt einen wachsenden Anteil des gesamten Codes, schneller, als ihn jemand prüfen kann. Wir bauen Software, die man prüft, statt ihr zu vertrauen: von der Anforderung bis zum Code nachvollziehbar, bewiesen, wo es darauf ankommt, und offen für die Menschen, die für sie geradestehen."
+    "source": "We build software that is checked instead of trusted: traced from requirement to code, proven where it matters, and open to the people who answer for it.",
+    "message": "Wir bauen Software, die man prüft, statt ihr zu vertrauen: von der Anforderung bis zum Code nachvollziehbar, bewiesen, wo es darauf ankommt, und offen für die Menschen, die für sie geradestehen."
+  },
+  "home_stat_distrust": {
+    "source": "of developers do not fully trust AI-generated code",
+    "message": "der Entwicklerinnen und Entwickler vertrauen KI-generiertem Code nicht vollständig"
+  },
+  "home_stat_verify": {
+    "source": "always check it before they commit",
+    "message": "prüfen ihn immer vor dem Einchecken"
+  },
+  "home_stat_source": {
+    "source": "Source: <link>{source}</link>",
+    "message": "Quelle: <link>{source}</link>"
   },
   "home_what_label": {
     "source": "What we build",
     "message": "Was wir bauen"
   },
   "home_how_label": {
-    "source": "How",
-    "message": "Wie"
+    "source": "How we work",
+    "message": "Wie wir arbeiten"
+  },
+  "home_methods": {
+    "source": "We draw on {methods}.",
+    "message": "Wir stützen uns auf {methods}."
   },
   "home_who_label": {
     "source": "Who we are",
@@ -91,69 +119,85 @@
     "source": "More about us",
     "message": "Mehr über uns"
   },
-  "home_next_label": {
-    "source": "Next",
-    "message": "Nächste Schritte"
+  "team_role_fabian": {
+    "source": "Managing Director",
+    "message": "Geschäftsführer"
   },
-  "home_next_waitlist": {
-    "source": "<link>Join a waiting list</link> to test a product before its release.",
-    "message": "<link>Tragen Sie sich in eine Warteliste ein</link>, um ein Produkt vor dem Start zu testen."
+  "team_role_marc": {
+    "source": "ERP & CRM and infrastructure",
+    "message": "ERP & CRM und Infrastruktur"
   },
-  "home_next_consulting": {
-    "source": "<link>Send a consulting inquiry</link> to work with us now.",
-    "message": "<link>Senden Sie uns eine Beratungsanfrage</link>, um schon jetzt mit uns zu arbeiten."
+  "team_role_gil": {
+    "source": "Design and frontend",
+    "message": "Design und Frontend"
   },
-  "home_next_join": {
-    "source": "<link>Join us</link> as founding engineer or intern.",
-    "message": "<link>Arbeiten Sie bei uns</link> als Founding Engineer oder im Praktikum."
+  "cta_title": {
+    "source": "Tell us what you are working on.",
+    "message": "Erzählen Sie uns, woran Sie arbeiten."
   },
-  "methods_label": {
-    "source": "Methods",
-    "message": "Methoden"
+  "cta_text": {
+    "source": "Send a consulting inquiry to work with us now, or join a waiting list to test a product before its release.",
+    "message": "Senden Sie eine Beratungsanfrage, um schon jetzt mit uns zusammenzuarbeiten, oder tragen Sie sich in eine Warteliste ein, um ein Produkt vor dem Start zu testen."
   },
-  "principles_label": {
-    "source": "Principles",
-    "message": "Prinzipien"
+  "cta_waitlist": {
+    "source": "Join a waiting list",
+    "message": "Zu den Wartelisten"
   },
   "method_formal_methods": {
-    "source": "Formal methods",
-    "message": "Formale Methoden"
+    "source": "formal methods",
+    "message": "formale Methoden"
   },
   "method_compiler_construction": {
-    "source": "Compiler construction",
+    "source": "compiler construction",
     "message": "Compilerbau"
   },
   "method_model_based": {
-    "source": "Model-based software engineering",
-    "message": "Modellbasierte Softwareentwicklung"
+    "source": "model-based software engineering",
+    "message": "modellbasierte Softwareentwicklung"
   },
   "method_ai_agents": {
     "source": "AI agents",
     "message": "KI-Agenten"
   },
   "method_open_data": {
-    "source": "Open data",
-    "message": "Offene Daten"
+    "source": "open data",
+    "message": "offene Daten"
   },
   "method_reinforcement_learning": {
-    "source": "Reinforcement learning",
+    "source": "reinforcement learning",
     "message": "Reinforcement Learning"
   },
   "principle_proof": {
     "source": "Proof over trust",
     "message": "Beweis statt Vertrauen"
   },
+  "principle_proof_text": {
+    "source": "Formal verification checks each change against your specifications, whoever wrote it.",
+    "message": "Formale Verifikation prüft jede Änderung anhand Ihrer Spezifikationen, unabhängig davon, wer sie geschrieben hat."
+  },
   "principle_data": {
     "source": "Data that stays yours",
     "message": "Daten, die Ihnen gehören"
+  },
+  "principle_data_text": {
+    "source": "Each customer gets its own installation, and all data stays in open formats in one place.",
+    "message": "Jeder Kunde erhält eine eigene Installation, und alle Daten bleiben in offenen Formaten an einem Ort."
   },
   "principle_traceability": {
     "source": "Traceability from requirement to code",
     "message": "Nachvollziehbar von der Anforderung bis zum Code"
   },
+  "principle_traceability_text": {
+    "source": "Requirements, design, tests and bug reports, each linked to the code it concerns.",
+    "message": "Anforderungen, Entwurf, Tests und Fehlerberichte, jeweils verknüpft mit dem Code, den sie betreffen."
+  },
   "consulting_name": {
     "source": "Consulting",
     "message": "Beratung"
+  },
+  "consulting_title": {
+    "source": "Work with us now",
+    "message": "Arbeiten Sie schon jetzt mit uns zusammen"
   },
   "consulting_what": {
     "source": "Until our products ship, we help companies bring AI into their software development and set up CRM and ERP.",
@@ -162,6 +206,22 @@
   "consulting_audience": {
     "source": "For companies that want to use AI without losing control of their code or their data.",
     "message": "Für Unternehmen, die KI nutzen wollen, ohne die Kontrolle über ihren Code oder ihre Daten zu verlieren."
+  },
+  "consulting_ai_title": {
+    "source": "AI in software development",
+    "message": "KI in der Softwareentwicklung"
+  },
+  "consulting_ai_text": {
+    "source": "We help teams bring AI into their software development without losing control of their code.",
+    "message": "Wir helfen Teams, KI in ihre Softwareentwicklung einzuführen, ohne die Kontrolle über ihren Code zu verlieren."
+  },
+  "consulting_erp_title": {
+    "source": "CRM and ERP",
+    "message": "CRM und ERP"
+  },
+  "consulting_erp_text": {
+    "source": "We set up CRM and ERP systems that keep your data in open formats, in one place.",
+    "message": "Wir richten CRM- und ERP-Systeme ein, die Ihre Daten in offenen Formaten an einem Ort speichern."
   },
   "consulting_link": {
     "source": "Send a consulting inquiry",
@@ -182,6 +242,18 @@
   "products_intro": {
     "source": "Three products, all before release. Join a waiting list to test one first.",
     "message": "Drei Produkte, alle noch vor dem Start. Tragen Sie sich in eine Warteliste ein, um eines vorab zu testen."
+  },
+  "product_how_label": {
+    "source": "How it works",
+    "message": "So funktioniert es"
+  },
+  "product_waitlist_link": {
+    "source": "Join the waiting list",
+    "message": "Auf die Warteliste"
+  },
+  "product_waitlist_link_label": {
+    "source": "Join the waiting list for {product}",
+    "message": "Auf die Warteliste für das Produkt {product}"
   },
   "status_prototype": {
     "source": "Prototype",
@@ -261,7 +333,7 @@
   },
   "waitlist_intro": {
     "source": "Leave your email address to test the {product} before its release.",
-    "message": "Hinterlassen Sie Ihre E-Mail-Adresse, um {product} vor dem Start zu testen."
+    "message": "Hinterlassen Sie Ihre E-Mail-Adresse, um das Produkt {product} vor dem Start zu testen."
   },
   "waitlist_email_label": {
     "source": "Email",
@@ -277,7 +349,7 @@
   },
   "waitlist_consent": {
     "source": "I agree that Introspectum stores my email address to contact me about the {product} waiting list.",
-    "message": "Ich bin einverstanden, dass Introspectum meine E-Mail-Adresse speichert, um mich zur Warteliste für {product} zu kontaktieren."
+    "message": "Ich bin einverstanden, dass Introspectum meine E-Mail-Adresse speichert, um mich zur Warteliste für das Produkt {product} zu kontaktieren."
   },
   "waitlist_privacy": {
     "source": "Read what we store and why in the <link>privacy policy</link>.",
@@ -342,10 +414,6 @@
   "joined_text": {
     "source": "We will write to you when testing opens.",
     "message": "Wir schreiben Ihnen, sobald die Testphase beginnt."
-  },
-  "join_title": {
-    "source": "Join us",
-    "message": "Karriere"
   },
   "join_intro": {
     "source": "Introspectum is a small team. There are two ways to join it.",
@@ -510,5 +578,13 @@
   "not_found_home": {
     "source": "Go to the homepage",
     "message": "Zur Startseite"
+  },
+  "join_title": {
+    "source": "Careers",
+    "message": "Karriere"
+  },
+  "role_apply_button": {
+    "source": "Apply by email",
+    "message": "Per E-Mail bewerben"
   }
 }
