@@ -1,5 +1,5 @@
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
   Cross-Origin-Opener-Policy: same-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=()
   Referrer-Policy: strict-origin-when-cross-origin
@@ -7,16 +7,13 @@
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY
 
-/joined
-  X-Robots-Tag: noindex, follow
-
-/404.html
-  X-Robots-Tag: noindex, follow
-
 /llms.txt
   Content-Type: text/markdown; charset=utf-8
 
 /feed.xml
+  Content-Type: application/rss+xml; charset=utf-8
+
+/de/feed.xml
   Content-Type: application/rss+xml; charset=utf-8
 
 /sitemap.xml
