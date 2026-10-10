@@ -1,11 +1,12 @@
 .DS_Store
 AGENTS.md
 node_modules/
-dist/
+.cloudflare/
 .wrangler/
 
 .env
 .env.*
+.dev.vars*
 
 *.key
 *.p12

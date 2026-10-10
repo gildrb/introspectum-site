@@ -1,11 +1,20 @@
-import { email, products, waitlistConsent } from "../../src/site.ts";
+import { products, waitlistConsent } from "../src/site.ts";
 
 /**
- * `WAITLIST` is a KV namespace bound to the Pages project (Settings → Bindings). Each entry is keyed
- * `<product>:<email>`; list one product's entries with
- * `npx wrangler kv key list --namespace-id <id> --prefix software-factory:`.
+ * The Worker behind `/api/*`; every other path is a static asset (`cloudflare.config.ts`). The
+ * waiting lists live in the `WAITLIST` KV namespace, one entry per `<product>:<email>`. List a
+ * product's entries with `cf kv keys list --namespace-id <id> --prefix software-factory:`; the ID
+ * is in `cf kv namespaces list`.
  */
-type Env = { WAITLIST?: KVNamespace };
+export default {
+  async fetch(request, env) {
+    const { pathname } = new URL(request.url);
+    if (pathname !== "/api/waitlist") return new Response("Not found\n", { status: 404 });
+    if (request.method !== "POST")
+      return new Response("Method not allowed\n", { status: 405, headers: { Allow: "POST" } });
+    return join(request, env.WAITLIST);
+  },
+} satisfies ExportedHandler<Env>;
 
 /** What the namespace holds for each person on a waiting list. */
 type Entry = {
@@ -24,7 +33,7 @@ const address = /^[^\s@]+@[^\s@.]+(?:\.[^\s@.]+)+$/;
  * Adds a person to a product's waiting list. The form posts here: hydrated it asks for JSON and
  * reads the result in place; without JavaScript the browser follows the redirect to `/joined`.
  */
-export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+async function join(request: Request, storage: KVNamespace): Promise<Response> {
   const json = request.headers.get("Accept")?.includes("application/json") ?? false;
   const reject = (status: number, detail: string) =>
     json
@@ -46,9 +55,6 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   // Only this site's own form may write: a page elsewhere cannot add addresses to the list.
   if (request.headers.get("Origin") !== new URL(request.url).origin)
     return reject(403, "Send the form from this site.");
-  const storage = env.WAITLIST;
-  if (storage === undefined)
-    return reject(500, `The waiting list is not set up yet. Please write to ${email}.`);
 
   let form: FormData;
   try {
@@ -91,4 +97,4 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" },
       })
     : Response.redirect(new URL("/joined", request.url).href, 303);
-};
+}

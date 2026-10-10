@@ -2,6 +2,7 @@ import assert from "node:assert";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { cloudflare } from "@cloudflare/vite-plugin";
 import stylexVite from "@stylexjs/unplugin/vite";
 import { defineConfig, type Plugin } from "vite-plus";
 import type * as RenderModule from "./src/render.tsx";
@@ -126,18 +127,31 @@ export default defineConfig({
   },
   appType: "custom",
   server: { host: "127.0.0.1", port: 5175, strictPort: false },
-  plugins: [stylexPlugin, sitePlugin],
+  // The Cloudflare plugin runs `worker/` in the Workers runtime under `vp dev`, with local KV, and
+  // after the build below writes the Worker and the client output as Build Output for `cf deploy`.
+  // Its environment is named `worker`: `ssr` (its default) is the Node prerenderer below.
+  plugins: [stylexPlugin, sitePlugin, cloudflare({ viteEnvironment: { name: "worker" } })],
   environments: {
     client: { build: { rollupOptions: { input: "src/client.ts" } } },
-    ssr: { build: { outDir: ssrOutDir, rollupOptions: { input: "src/render.tsx" } } },
+    ssr: {
+      build: {
+        outDir: ssrOutDir,
+        copyPublicDir: false,
+        rollupOptions: { input: "src/render.tsx" },
+      },
+    },
   },
   builder: {
     // Prerender every page: the SSR pass registers all StyleX rules, the client pass bundles the
-    // island and emits the collected CSS, which is inlined into each page.
+    // island and emits the collected CSS, which is inlined into each page. The Cloudflare plugin's
+    // own post-build step then builds the Worker, once the pages are in the client output.
     async buildApp(builder) {
       const { ssr, client: browser } = builder.environments;
       assert(ssr && browser);
-      await builder.build(ssr);
+      const prerender = await builder.build(ssr);
+      assert("output" in prerender);
+      const renderer = prerender.output.find((chunk) => chunk.type === "chunk" && chunk.isEntry);
+      assert(renderer);
       const client = await builder.build(browser);
       assert("output" in client);
       const entry = client.output.find((chunk) => chunk.type === "chunk" && chunk.isEntry);
@@ -146,7 +160,7 @@ export default defineConfig({
       const cssFile = path.join(outDir, "assets/stylex.css");
       const css = await readFile(cssFile, "utf8");
       // Dynamic: the SSR bundle exists only once `builder.build(ssr)` above has written it.
-      const site = renderModule(await import(path.resolve(ssrOutDir, "render.mjs")));
+      const site = renderModule(await import(path.resolve(ssrOutDir, renderer.fileName)));
       const write = async (file: string, body: string | Uint8Array) => {
         await mkdir(path.dirname(path.join(outDir, file)), { recursive: true });
         await writeFile(path.join(outDir, file), body);
