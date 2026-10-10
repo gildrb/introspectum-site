@@ -226,9 +226,9 @@ export function Page({
                 <a
                   {...stylex.props(
                     ui.text,
-                    ui.quiet,
                     ui.focusRing,
-                    current !== undefined && styles.current,
+                    styles.navLink,
+                    current !== undefined && styles.navCurrent,
                   )}
                   href={target}
                   aria-current={current}
@@ -311,6 +311,7 @@ function Footer({ meta }: { meta: Meta }) {
   const groups = [
     {
       title: t.text("nav_products"),
+      place: styles.groupFirst,
       links: products.map((product) => ({
         target: href(locale, "products", product.slug),
         label: t.text(product.name),
@@ -318,6 +319,7 @@ function Footer({ meta }: { meta: Meta }) {
     },
     {
       title: t.text("footer_company"),
+      place: styles.groupSecond,
       links: [
         page("about", t.text("nav_about")),
         page("join", t.text("nav_join")),
@@ -326,6 +328,7 @@ function Footer({ meta }: { meta: Meta }) {
     },
     {
       title: t.text("footer_legal"),
+      place: styles.groupThird,
       links: [page("privacy", t.text("footer_privacy")), page("imprint", t.text("footer_imprint"))],
     },
   ];
@@ -345,8 +348,8 @@ function Footer({ meta }: { meta: Meta }) {
             {email}
           </a>
         </div>
-        {groups.map(({ title, links }) => (
-          <div>
+        {groups.map(({ title, place, links }) => (
+          <div {...stylex.props(place)}>
             <h2 {...stylex.props(ui.small, ui.strong)}>{title}</h2>
             <ul {...stylex.props(styles.footerList)}>
               {links.map(({ target, label }) => (
@@ -369,7 +372,7 @@ function Footer({ meta }: { meta: Meta }) {
           </div>
         ))}
       </div>
-      {/* The other language sits under the first column of links, on phones and desktops. */}
+      {/* The other language sits on the column line of the first group of links, Products. */}
       <div {...stylex.props(ui.container, styles.footerColumns, styles.footerBase)}>
         <p {...stylex.props(ui.small, ui.note, styles.copyright)}>
           {t.text("footer_copyright", {
@@ -420,9 +423,6 @@ const styles = stylex.create({
     top: 0,
     zIndex: 10,
     backgroundColor: colors.bg,
-    borderBottomWidth: "1px",
-    borderBottomStyle: "solid",
-    borderBottomColor: colors.hairline,
   },
   bar: {
     display: "flex",
@@ -433,22 +433,32 @@ const styles = stylex.create({
   wordmark: {
     flexShrink: 0,
     fontSize: "1.375rem",
-    fontWeight: 500,
+    fontWeight: 600,
     lineHeight: "2rem",
     letterSpacing: "-0.01em",
     color: colors.primary,
     textDecoration: "none",
   },
+  /** Desktop: the links sit on the right, next to the contact button. */
   nav: {
     display: { default: "none", [media.desktop]: "flex" },
     columnGap: space.x4,
+    marginInlineStart: "auto",
   },
   current: { color: colors.primary },
+  /** Header links in full ink; the current page and a link under the pointer are underlined. */
+  navLink: {
+    color: colors.primary,
+    textDecorationLine: { default: "none", ":hover": { [media.hover]: "underline" } },
+    textDecorationThickness: "1px",
+    textUnderlineOffset: "0.3em",
+    touchAction: "manipulation",
+  },
+  navCurrent: { textDecorationLine: "underline" },
   actions: {
     display: { default: "none", [media.desktop]: "flex" },
     alignItems: "center",
     columnGap: space.x3,
-    marginInlineStart: "auto",
   },
   /** Phones: the menu button; open, its panel lies under the header, the full width of the page. */
   menu: {
@@ -482,15 +492,23 @@ const styles = stylex.create({
     flexDirection: "column",
     marginTop: space.x2,
   },
-  main: { flexGrow: 1, outline: "none" },
-  /** The footer's columns: the name, then one per group of links; two on phones. */
+  main: {
+    flexGrow: 1,
+    paddingBottom: { default: space.x12, [media.desktop]: space.x20 },
+    outline: "none",
+  },
+  /**
+   * The footer on the page grid: on wide screens the name over six columns and each group of
+   * links over two, from the seventh column line on; on tablets the name on its own row and the
+   * groups over four columns each; on phones two groups to a row.
+   */
   footerColumns: {
     display: "grid",
     gridTemplateColumns: {
       default: "repeat(2, minmax(0, 1fr))",
-      [media.desktop]: "minmax(0, 2fr) repeat(3, minmax(0, 1fr))",
+      [media.desktop]: "repeat(12, minmax(0, 1fr))",
     },
-    columnGap: space.x4,
+    columnGap: space.x3,
   },
   footerGrid: {
     rowGap: space.x5,
@@ -501,7 +519,16 @@ const styles = stylex.create({
     flexDirection: "column",
     alignItems: "flex-start",
     rowGap: space.x1,
-    gridColumn: { default: "1 / -1", [media.desktop]: "auto" },
+    gridColumn: { default: "1 / -1", [media.wide]: "1 / span 6" },
+  },
+  groupFirst: {
+    gridColumn: { default: "auto", [media.desktop]: "1 / span 4", [media.wide]: "7 / span 2" },
+  },
+  groupSecond: {
+    gridColumn: { default: "auto", [media.desktop]: "5 / span 4", [media.wide]: "9 / span 2" },
+  },
+  groupThird: {
+    gridColumn: { default: "auto", [media.desktop]: "9 / span 4", [media.wide]: "11 / span 2" },
   },
   footerList: {
     display: "flex",
@@ -512,10 +539,12 @@ const styles = stylex.create({
   },
   footerBase: {
     rowGap: space.x2,
-    paddingBlock: space.x3,
+    paddingBottom: space.x4,
   },
-  copyright: { gridColumn: { default: "1 / -1", [media.desktop]: "1" } },
-  otherLanguage: { gridColumn: { default: "1", [media.desktop]: "2" } },
+  copyright: { gridColumn: { default: "1 / -1", [media.wide]: "1 / span 6" } },
+  otherLanguage: {
+    gridColumn: { default: "1", [media.desktop]: "1 / span 4", [media.wide]: "7 / span 2" },
+  },
   // An address is lowercase: its @ keeps the default form, not the capitals' one.
   email: { fontFeatureSettings: fontFeatures.prose },
 });

@@ -31,6 +31,28 @@ export const ui = stylex.create({
     marginInline: "auto",
     paddingInline: { default: space.x3, [media.desktop]: space.x4 },
   },
+  /*
+   * The page grid: twelve columns with a three-unit (24px) gutter inside the container, from
+   * tablets up; one column on phones. Every block starts at the left column line and is as wide
+   * as a whole number of columns, so text, cards and the footer share the same lines. Cards in two
+   * or three equal columns with the same gutter fall on six- and four-column lines by themselves.
+   */
+  /** Titles: ten columns on tablets, eight on wide screens. */
+  titleWidth: {
+    maxWidth: {
+      default: "100%",
+      [media.desktop]: "calc((100% - 264px) * 10 / 12 + 216px)",
+      [media.wide]: "calc((100% - 264px) * 8 / 12 + 168px)",
+    },
+  },
+  /** Running text, leads and forms: eight columns on tablets, seven on wide screens. */
+  textWidth: {
+    maxWidth: {
+      default: "100%",
+      [media.desktop]: "calc((100% - 264px) * 8 / 12 + 168px)",
+      [media.wide]: "calc((100% - 264px) * 7 / 12 + 144px)",
+    },
+  },
   /** Interface text: navigation, buttons, form fields. */
   text: {
     fontFamily: sans,
@@ -49,11 +71,11 @@ export const ui = stylex.create({
   },
   /** A heading at text size: footer columns, the lists in a job card. */
   strong: { fontWeight: 500, color: colors.primary },
-  /** A page's title. */
+  /** A page's title: Newsreader at a medium weight, so the display cut keeps its body. */
   display: {
     fontFamily: serif,
     fontSize: { default: "2.5rem", [media.desktop]: "4rem" },
-    fontWeight: 400,
+    fontWeight: 500,
     lineHeight: { default: "3rem", [media.desktop]: "4.5rem" },
     letterSpacing: "-0.02em",
     color: colors.primary,
@@ -63,29 +85,29 @@ export const ui = stylex.create({
   heading: {
     fontFamily: serif,
     fontSize: { default: "2rem", [media.desktop]: "2.75rem" },
-    fontWeight: 400,
+    fontWeight: 500,
     lineHeight: { default: "2.5rem", [media.desktop]: "3.25rem" },
     letterSpacing: "-0.015em",
     color: colors.primary,
     textWrap: "balance",
   },
-  /** A card's or a person's name. */
+  /** A card's or a person's name: the interface face, semibold, against the serif text. */
   title: {
-    fontFamily: serif,
-    fontSize: "1.5rem",
-    fontWeight: 500,
-    lineHeight: "2rem",
+    fontFamily: sans,
+    fontFeatureSettings: fontFeatures.interface,
+    fontSize: "1.375rem",
+    fontWeight: 600,
+    lineHeight: "1.75rem",
     letterSpacing: "-0.01em",
     color: colors.primary,
   },
-  /** The paragraph under a title. */
+  /** The paragraph under a title, in full ink. */
   lead: {
     fontFamily: serif,
-    fontSize: { default: "1.25rem", [media.desktop]: "1.375rem" },
+    fontSize: { default: "1.25rem", [media.desktop]: "1.5rem" },
     fontWeight: colors.proseWeight,
-    lineHeight: { default: "1.75rem", [media.desktop]: "2rem" },
-    color: colors.secondary,
-    textWrap: "pretty",
+    lineHeight: { default: "1.75rem", [media.desktop]: "2.25rem" },
+    color: colors.primary,
   },
   /** Running text. */
   prose: {
@@ -94,7 +116,6 @@ export const ui = stylex.create({
     fontWeight: colors.proseWeight,
     lineHeight: "1.75rem",
     color: colors.article,
-    textWrap: "pretty",
   },
   label: { color: colors.secondary },
   /** Quiet text beside a heading: dates, sources. Never running text (see `colors`). */
@@ -136,7 +157,7 @@ export const ui = stylex.create({
     paddingInline: space.x3,
     borderWidth: "1px",
     borderStyle: "solid",
-    borderRadius: "999px",
+    borderRadius: space.x1,
     fontFamily: sans,
     fontFeatureSettings: fontFeatures.interface,
     fontSize: "1rem",
@@ -147,27 +168,17 @@ export const ui = stylex.create({
     cursor: "pointer",
     touchAction: "manipulation",
   },
-  /** The main action: parchment on emerald. */
+  /** The main action: a button in the text color, like the text it sits among. */
   primary: {
-    color: colors.onAccent,
-    backgroundColor: { default: colors.accent, ":hover": { [media.hover]: colors.accentHover } },
-    borderColor: { default: colors.accent, ":hover": { [media.hover]: colors.accentHover } },
+    color: colors.bg,
+    backgroundColor: { default: colors.primary, ":hover": { [media.hover]: colors.secondary } },
+    borderColor: { default: colors.primary, ":hover": { [media.hover]: colors.secondary } },
   },
+  /** The other action beside it: the same edge, without the fill. */
   secondary: {
     color: colors.primary,
-    backgroundColor: "transparent",
-    borderColor: { default: colors.tertiary, ":hover": { [media.hover]: colors.primary } },
-  },
-  /** On the emerald closing panel: emerald on parchment. */
-  inverse: {
-    color: colors.accent,
-    backgroundColor: colors.onAccent,
-    borderColor: colors.onAccent,
-  },
-  inverseOutline: {
-    color: colors.onAccent,
-    backgroundColor: "transparent",
-    borderColor: colors.onAccent,
+    backgroundColor: { default: "transparent", ":hover": { [media.hover]: colors.surface } },
+    borderColor: colors.primary,
   },
   reset: {
     appearance: "none",

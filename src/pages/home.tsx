@@ -1,20 +1,39 @@
 import * as stylex from "@stylexjs/stylex";
-import type { VNode } from "preact";
-import { Actions, ButtonLink, CallToAction, Card, Cards, Hero, Section } from "../blocks.tsx";
+import {
+  Actions,
+  ButtonLink,
+  CallToAction,
+  Card,
+  Cards,
+  citeTags,
+  Figure,
+  Hero,
+  Measure,
+  Section,
+  Sources,
+  Text,
+} from "../blocks.tsx";
 import { type MessageId, translators } from "../i18n.ts";
 import { type Assets, Page } from "../layout.tsx";
 import { href, type Locale } from "../locale.ts";
-import { company, email, mailto, methods, origin, principles } from "../site.ts";
-import { colors, media, space } from "../tokens.stylex.ts";
+import {
+  company,
+  email,
+  illustrations,
+  mailto,
+  methods,
+  numbered,
+  origin,
+  principles,
+} from "../site.ts";
+import { media, space } from "../tokens.stylex.ts";
 import { ui, untranslated } from "../ui.tsx";
 import { Consulting, ProductCards } from "./products.tsx";
 
-/** The survey behind the "why": two results a visitor can check at the source. */
-const survey = {
-  distrust: 0.96,
-  verify: 0.48,
-  href: "https://www.sonarsource.com/company/press-releases/sonar-data-reveals-critical-verification-gap-in-ai-coding/",
-};
+/** The survey results behind the "why", as shares of the developers asked (see `sources.sonar`). */
+const survey = { distrust: 0.96, verify: 0.48, effort: 0.38 };
+
+const citations = numbered(["sonar"]);
 
 const team: readonly { name: string; role: MessageId }[] = [
   { name: "Fabian Klopfer", role: "team_role_fabian" },
@@ -41,17 +60,7 @@ export function Home({
   shareImage: string;
 }) {
   const t = translators[locale];
-  const source = (chunks: Array<string | VNode>) => (
-    <a
-      {...stylex.props(ui.link, ui.focusRing)}
-      href={survey.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      hreflang="en"
-    >
-      {chunks}
-    </a>
-  );
+  const cite = citeTags(t, citations);
   return (
     <Page
       assets={assets}
@@ -90,23 +99,25 @@ export function Home({
           </ButtonLink>
         </Actions>
       </Hero>
-      <Section id="why" title={t.text("home_why_title")} intro={t.text("home_why_text")}>
-        <ul {...stylex.props(styles.stats)}>
-          {(
-            [
-              [survey.distrust, "home_stat_distrust"],
-              [survey.verify, "home_stat_verify"],
-            ] as const
-          ).map(([value, caption]) => (
-            <li {...stylex.props(styles.stat)}>
-              <p {...stylex.props(ui.display)}>{t.text("percent", { value })}</p>
-              <p {...stylex.props(ui.prose, ui.label)}>{t.text(caption)}</p>
-            </li>
-          ))}
-        </ul>
-        <p {...stylex.props(ui.small, ui.note, styles.source)}>
-          {t.rich("home_stat_source", { link: source }, { source: t.text("home_hook_source") })}
-        </p>
+      <Section
+        id="why"
+        title={t.text("home_why_title")}
+        intro={t.rich("home_why_evidence", cite, {
+          distrust: survey.distrust,
+          verify: survey.verify,
+        })}
+        figure={
+          <Figure
+            illustration={illustrations.euclid}
+            alt={t.text(illustrations.euclid.alt)}
+            placement="beside"
+          />
+        }
+      >
+        <Measure>
+          <Text>{t.rich("home_why_review", cite, { effort: survey.effort })}</Text>
+          <Text>{t.text("home_why_text")}</Text>
+        </Measure>
       </Section>
       <Section id="products" title={t.text("home_what_label")} intro={t.text("products_intro")}>
         <ProductCards locale={locale} heading="h3" />
@@ -144,6 +155,7 @@ export function Home({
         </div>
       </Section>
       <Closing locale={locale} />
+      <Sources id="sources" title={t.text("sources_title")} list={citations} />
     </Page>
   );
 }
@@ -154,10 +166,10 @@ export function Closing({ locale }: { locale: Locale }) {
   return (
     <CallToAction id="next" title={t.text("cta_title")} text={t.text("cta_text")}>
       <Actions>
-        <ButtonLink href={mailto(t.text("consulting_subject"))} kind="inverse">
+        <ButtonLink href={mailto(t.text("consulting_subject"))} kind="primary">
           {t.text("consulting_link")}
         </ButtonLink>
-        <ButtonLink href={href(locale, "products")} kind="inverseOutline">
+        <ButtonLink href={href(locale, "products")} kind="secondary">
           {t.text("cta_waitlist")}
         </ButtonLink>
       </Actions>
@@ -166,25 +178,7 @@ export function Closing({ locale }: { locale: Locale }) {
 }
 
 const styles = stylex.create({
-  stats: {
-    display: "grid",
-    gridTemplateColumns: {
-      default: "minmax(0, 1fr)",
-      [media.desktop]: "repeat(2, minmax(0, 1fr))",
-    },
-    gap: { default: space.x4, [media.desktop]: space.x3 },
-    listStyle: "none",
-  },
-  stat: {
-    display: "flex",
-    flexDirection: "column",
-    rowGap: space.x1,
-    paddingTop: space.x3,
-    borderTopWidth: "1px",
-    borderTopStyle: "solid",
-    borderTopColor: "currentColor",
-  },
-  source: { marginTop: space.x3 },
+  /** The team in three columns on the card lines, without panels. */
   team: {
     display: "grid",
     gridTemplateColumns: {
@@ -194,14 +188,6 @@ const styles = stylex.create({
     gap: space.x3,
     listStyle: "none",
   },
-  member: {
-    display: "flex",
-    flexDirection: "column",
-    rowGap: space.x1,
-    paddingTop: space.x2,
-    borderTopWidth: "1px",
-    borderTopStyle: "solid",
-    borderTopColor: colors.hairline,
-  },
-  after: { marginTop: { default: space.x4, [media.desktop]: space.x5 } },
+  member: { display: "flex", flexDirection: "column", rowGap: space.x1 },
+  after: { marginTop: { default: space.x5, [media.desktop]: space.x6 } },
 });

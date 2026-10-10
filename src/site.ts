@@ -1,4 +1,4 @@
-import type { MessageId } from "./i18n.ts";
+import type { MessageId, Values } from "./i18n.ts";
 
 /**
  * The site's facts and structure. Text lives in `src/locales/`: everything here that a visitor
@@ -19,6 +19,219 @@ export const company = {
 export function mailto(subject: string): string {
   return `mailto:${email}?subject=${encodeURIComponent(subject)}`;
 }
+
+/**
+ * A published work the site cites. A message cites it with a tag named by its ID around the words
+ * it backs, `<prusti>Prusti</prusti>`, and the page lists it under its number at the end (see
+ * `citeTags` and `Sources`). Titles stay in their own language.
+ */
+export type Source = {
+  /** Authors, or the organisation that published it. */
+  by: string;
+  title: string;
+  /** Where it appeared: a journal, a conference, a publisher. */
+  in?: string;
+  year?: number;
+  url: string;
+  /** The language of the work, for `lang` and `hreflang`. */
+  lang: "en" | "de";
+};
+
+export const sources = {
+  sonar: {
+    by: "Sonar",
+    title: "State of Code Developer Survey report",
+    year: 2026,
+    url: "https://www.sonarsource.com/resources/developer-survey-report/",
+    lang: "en",
+  },
+  cpg: {
+    by: "Fabian Yamaguchi, Nico Golde, Daniel Arp, Konrad Rieck",
+    title: "Modeling and Discovering Vulnerabilities with Code Property Graphs",
+    in: "IEEE Symposium on Security and Privacy",
+    year: 2014,
+    url: "https://doi.org/10.1109/SP.2014.44",
+    lang: "en",
+  },
+  c4: {
+    by: "Simon Brown",
+    title: "The C4 model for visualising software architecture",
+    url: "https://c4model.com/",
+    lang: "en",
+  },
+  "iso-15288": {
+    by: "ISO, IEC, IEEE",
+    title: "ISO/IEC/IEEE 15288:2023, Systems and software engineering: System life cycle processes",
+    year: 2023,
+    url: "https://www.iso.org/standard/81702.html",
+    lang: "en",
+  },
+  prusti: {
+    by: "Vytautas Astrauskas, Peter Müller, Federico Poli, Alexander J. Summers",
+    title: "Leveraging Rust Types for Modular Specification and Verification",
+    in: "Proceedings of the ACM on Programming Languages, OOPSLA",
+    year: 2019,
+    url: "https://doi.org/10.1145/3360573",
+    lang: "en",
+  },
+  verus: {
+    by: "Andrea Lattuada et al.",
+    title: "Verus: Verifying Rust Programs using Linear Ghost Types",
+    in: "Proceedings of the ACM on Programming Languages, OOPSLA",
+    year: 2023,
+    url: "https://doi.org/10.1145/3586037",
+    lang: "en",
+  },
+  ripgrep: {
+    by: "Andrew Gallant",
+    title: "ripgrep",
+    in: "GitHub",
+    url: "https://github.com/BurntSushi/ripgrep",
+    lang: "en",
+  },
+  gsn: {
+    by: "Assurance Case Working Group",
+    title: "Goal Structuring Notation Community Standard, Version 3",
+    in: "Safety-Critical Systems Club",
+    year: 2021,
+    url: "https://scsc.uk/r1386.pdf",
+    lang: "en",
+  },
+  "ieee-830": {
+    by: "IEEE",
+    title: "IEEE 830-1998, Recommended Practice for Software Requirements Specifications",
+    year: 1998,
+    url: "https://standards.ieee.org/ieee/830/1222/",
+    lang: "en",
+  },
+  "ieee-1016": {
+    by: "IEEE",
+    title:
+      "IEEE 1016-2009, Standard for Information Technology: Systems Design: Software Design Descriptions",
+    year: 2009,
+    url: "https://standards.ieee.org/ieee/1016/4502/",
+    lang: "en",
+  },
+  twenty: {
+    by: "Twenty",
+    title: "twentyhq/twenty",
+    in: "GitHub",
+    url: "https://github.com/twentyhq/twenty",
+    lang: "en",
+  },
+  "iso-4217": {
+    by: "ISO",
+    title: "ISO 4217, Currency codes",
+    url: "https://www.iso.org/iso-4217-currency-codes.html",
+    lang: "en",
+  },
+  "iso-29148": {
+    by: "ISO, IEC, IEEE",
+    title:
+      "ISO/IEC/IEEE 29148:2018, Systems and software engineering: Life cycle processes: Requirements engineering",
+    year: 2018,
+    url: "https://www.iso.org/standard/72089.html",
+    lang: "en",
+  },
+  turtle: {
+    by: "Curtis Faith",
+    title: "Way of the Turtle",
+    in: "McGraw-Hill",
+    year: 2007,
+    url: "https://openlibrary.org/books/OL17563052M",
+    lang: "en",
+  },
+} as const satisfies Record<string, Source>;
+
+export type SourceId = keyof typeof sources;
+
+/** A source as a page cites it: its ID, which names its tag in messages, and its number. */
+export type Citation = { id: SourceId; number: number; source: Source };
+
+/** A page's sources, numbered from 1 in the order of `cited`, each cited source once. */
+export function numbered(cited: readonly SourceId[]): readonly Citation[] {
+  return [...new Set(cited)].map((id, index) => ({ id, number: index + 1, source: sources[id] }));
+}
+
+/**
+ * A figure from an old book, out of copyright: a woodcut, an engraving or a printed page, cleaned
+ * to black lines on white. It is stored in `public/images/illustrations/` as `<file>-<width>` in
+ * AVIF, WebP and JPEG at two widths. The caption credits the copy the scan was made from.
+ */
+export type Illustration = {
+  file: string;
+  widths: readonly [small: number, large: number];
+  /** What it shows, for people who cannot see it. */
+  alt: MessageId;
+  /** Who made it. */
+  by: string;
+  /** The book it is from, in its own language. */
+  work: string;
+  lang: "en" | "it" | "la";
+  /** The year of the printing the scan shows. */
+  year: number;
+  /** The library whose copy was scanned, where known. */
+  holding?: string;
+  /** Where the scan and its rights can be checked. */
+  url: string;
+};
+
+export const illustrations = {
+  tabula: {
+    file: "tabula",
+    widths: [800, 1600],
+    alt: "illustration_tabula_alt",
+    by: "Heinrich Khunrath",
+    work: "Amphitheatrum sapientiae aeternae",
+    lang: "la",
+    year: 1609,
+    holding: "Houghton Library, Harvard University",
+    url: "https://commons.wikimedia.org/wiki/File:Houghton_Typ_620.09.482_Heinrich_Khunrath,_Amphitheatrvm_sapientiae_aeternae.jpg",
+  },
+  llull: {
+    file: "llull",
+    widths: [800, 1600],
+    alt: "illustration_llull_alt",
+    by: "Ramon Llull",
+    work: "Ars magna, generalis et ultima",
+    lang: "la",
+    year: 1517,
+    holding: "Getty Research Institute",
+    url: "https://archive.org/details/gri_c00033125008263424",
+  },
+  pacioli: {
+    file: "pacioli",
+    widths: [800, 1600],
+    alt: "illustration_pacioli_alt",
+    by: "Luca Pacioli",
+    work: "Summa de arithmetica, geometria, proportioni et proportionalità",
+    lang: "it",
+    year: 1494,
+    holding: "Smithsonian Libraries",
+    url: "https://library.si.edu/digital-library/book/summadearithmeti00paci",
+  },
+  playfair: {
+    file: "playfair",
+    widths: [800, 1600],
+    alt: "illustration_playfair_alt",
+    by: "William Playfair",
+    work: "The Commercial and Political Atlas",
+    lang: "en",
+    year: 1786,
+    url: "https://commons.wikimedia.org/wiki/File:Playfair_TimeSeries.png",
+  },
+  euclid: {
+    file: "euclid",
+    widths: [800, 896],
+    alt: "illustration_euclid_alt",
+    by: "Euclid",
+    work: "Elementa geometriae",
+    lang: "la",
+    year: 1482,
+    holding: "Smithsonian Libraries",
+    url: "https://library.si.edu/digital-library/book/preclarissimusl00eucl",
+  },
+} as const satisfies Record<string, Illustration>;
 
 /** The methods, in the order the homepage lists them. */
 export const methods: readonly MessageId[] = [
@@ -46,6 +259,12 @@ export function isProductSlug(value: string): value is ProductSlug {
   return productSlugs.some((slug) => slug === value);
 }
 
+/**
+ * A paragraph of a product page: a message and the values it formats, dates at midnight UTC (see
+ * `day`). Its tags cite sources by ID (see `Source`).
+ */
+export type Paragraph = { text: MessageId; values?: Values };
+
 export type Product = {
   slug: ProductSlug;
   name: MessageId;
@@ -55,8 +274,14 @@ export type Product = {
   what: MessageId;
   /** Who it is for, in one sentence. */
   audience: MessageId;
-  /** The product page's text, one paragraph each. */
-  details: readonly MessageId[];
+  /** The figure on its card and beside its page's opening. */
+  illustration: Illustration;
+  /** How it works, one paragraph each. */
+  how: readonly Paragraph[];
+  /** Where it stands: what works, what was measured, what is not built yet. */
+  state: readonly Paragraph[];
+  /** The works its page cites, in the order the page first cites them. */
+  sources: readonly SourceId[];
 };
 
 export const products: readonly Product[] = [
@@ -66,10 +291,41 @@ export const products: readonly Product[] = [
     status: "status_prototype",
     what: "product_software_factory_what",
     audience: "product_software_factory_audience",
-    details: [
-      "product_software_factory_detail_1",
-      "product_software_factory_detail_2",
-      "product_software_factory_detail_3",
+    illustration: illustrations.llull,
+    how: [
+      { text: "product_software_factory_how_1" },
+      { text: "product_software_factory_how_2" },
+      { text: "product_software_factory_how_3" },
+    ],
+    state: [
+      {
+        text: "product_software_factory_state_1",
+        // docs/verification-logs/real-project-scale-2026-09-04.md in the product's repository.
+        values: {
+          date: new Date("2026-09-04T00:00:00Z"),
+          ownFiles: 113,
+          ownNodes: 12_801,
+          ownSeconds: 4.8,
+          otherFiles: 95,
+          otherNodes: 20_049,
+          otherSeconds: 7.3,
+        },
+      },
+      { text: "product_software_factory_state_2" },
+      { text: "product_software_factory_state_3" },
+      { text: "product_software_factory_state_4" },
+      { text: "product_software_factory_state_5" },
+    ],
+    sources: [
+      "cpg",
+      "c4",
+      "iso-15288",
+      "prusti",
+      "verus",
+      "ripgrep",
+      "gsn",
+      "ieee-830",
+      "ieee-1016",
     ],
   },
   {
@@ -78,7 +334,19 @@ export const products: readonly Product[] = [
     status: "status_in_development",
     what: "product_erp_crm_what",
     audience: "product_erp_crm_audience",
-    details: ["product_erp_crm_detail_1", "product_erp_crm_detail_2", "product_erp_crm_detail_3"],
+    illustration: illustrations.pacioli,
+    how: [
+      { text: "product_erp_crm_how_1" },
+      { text: "product_erp_crm_how_2" },
+      { text: "product_erp_crm_how_3" },
+      { text: "product_erp_crm_how_4" },
+    ],
+    state: [
+      // The specification's draft 2.1 and its progress review of 28 September 2026.
+      { text: "product_erp_crm_state_1", values: { requirements: 120, modules: 17 } },
+      { text: "product_erp_crm_state_2" },
+    ],
+    sources: ["twenty", "iso-4217", "iso-29148"],
   },
   {
     slug: "trading-platform",
@@ -86,11 +354,13 @@ export const products: readonly Product[] = [
     status: "status_research",
     what: "product_trading_platform_what",
     audience: "product_trading_platform_audience",
-    details: [
-      "product_trading_platform_detail_1",
-      "product_trading_platform_detail_2",
-      "product_trading_platform_detail_3",
+    illustration: illustrations.playfair,
+    how: [{ text: "product_trading_platform_how_1" }, { text: "product_trading_platform_how_2" }],
+    state: [
+      { text: "product_trading_platform_state_1" },
+      { text: "product_trading_platform_state_2" },
     ],
+    sources: ["turtle"],
   },
 ];
 

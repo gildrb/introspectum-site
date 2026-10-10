@@ -1,10 +1,10 @@
 import * as stylex from "@stylexjs/stylex";
-import { Actions, ButtonLink, Card, Cards, Hero } from "../blocks.tsx";
+import { Actions, ButtonLink, Card, Cards, Content, Hero } from "../blocks.tsx";
 import { translators } from "../i18n.ts";
 import { type Assets, Page } from "../layout.tsx";
 import type { Locale } from "../locale.ts";
 import { company, email, mailto, roles } from "../site.ts";
-import { media, space } from "../tokens.stylex.ts";
+import { space } from "../tokens.stylex.ts";
 import { richLink, ui } from "../ui.tsx";
 
 export function JoinPage({
@@ -38,7 +38,7 @@ export function JoinPage({
       }}
     >
       <Hero title={t.text("join_title")} lead={t.text("join_intro")} />
-      <div {...stylex.props(ui.container, styles.roles)}>
+      <Content>
         <Cards columns={2}>
           {roles.map((role) => {
             const apply = mailto(t.text(role.subject));
@@ -72,13 +72,12 @@ export function JoinPage({
             );
           })}
         </Cards>
-      </div>
+      </Content>
     </Page>
   );
 }
 
 const styles = stylex.create({
-  roles: { paddingBottom: { default: space.x8, [media.desktop]: space.x12 } },
   list: {
     display: "flex",
     flexDirection: "column",

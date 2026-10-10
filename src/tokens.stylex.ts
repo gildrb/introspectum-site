@@ -14,6 +14,8 @@ export const media = stylex.defineConsts({
   /** Three cards fit side by side from here; narrower, they stack. */
   wide: "@media (min-width: 1024px)",
   hover: "@media (hover: hover)",
+  /** The light scheme; dark is the default (see `colors`). */
+  light,
 });
 
 /**
@@ -30,29 +32,28 @@ export const fontFeatures = stylex.defineConsts({
  * engraving shows it: iron-gall ink on aged paper, sepia between them, and the emerald of its
  * name. Light is ink on parchment, dark is parchment on umber; both follow the system setting.
  *
- * Every text color meets APCA's Bronze level on what it sits on. Body text, a block of more than
- * two lines, needs at least Lc 75: `article` (Lc 90 light, Lc 92 dark) and `secondary` (Lc 78 in
- * both), which may run that long. Other content text, such as labels, navigation, notes and the
- * footer, needs at least Lc 60: `tertiary` (Lc 62 in both), which therefore never sets running
- * text. On `accent`, `onAccent` reaches Lc 85 light and Lc 83 dark, and `accent` itself stands
- * off the page at Lc 82 light and Lc 16 dark, above APCA's Lc 15 for a solid shape. Light prose
+ * Every text color meets APCA's Bronze level on the page and on `surface`, the ground of cards.
+ * Body text, a block of more than two lines, needs at least Lc 75: `primary` (Lc 95 light, Lc 100
+ * dark), `article` (Lc 90, Lc 92) and `secondary` (Lc 81, Lc 78; on cards Lc 76, Lc 77), which
+ * may run that long. Other content text, such as labels, navigation, notes and the footer, needs
+ * at least Lc 60: `tertiary` (Lc 66, Lc 62; on cards Lc 61 in both), which therefore never sets
+ * running text. Buttons are ink on parchment in light and parchment on umber in dark, like the
+ * text. Emerald, the brand color, stays a trace: the form's checkbox and the favicon. Light prose
  * is heavier (`proseWeight`): dark on light reads fainter than light on dark at the same Lc.
  */
 export const colors = stylex.defineVars({
   bg: { default: "oklch(18.5% 0.014 70)", [light]: "oklch(96% 0.02 85)" },
+  /** Cards and the form: a shade further into the paper, or the ink. */
+  surface: { default: "oklch(22.5% 0.016 70)", [light]: "oklch(93.5% 0.025 85)" },
   primary: { default: "oklch(96.74% 0.022 85)", [light]: "oklch(24.9% 0.02 65)" },
-  secondary: { default: "oklch(86.06% 0.03 80)", [light]: "oklch(45.09% 0.03 65)" },
-  tertiary: { default: "oklch(77.62% 0.035 75)", [light]: "oklch(57.8% 0.035 70)" },
+  secondary: { default: "oklch(86.06% 0.03 80)", [light]: "oklch(42.55% 0.03 65)" },
+  tertiary: { default: "oklch(77.62% 0.035 75)", [light]: "oklch(55.05% 0.035 70)" },
   article: { default: "oklch(93.09% 0.02 85)", [light]: "oklch(33% 0.022 65)" },
-  /** Emerald: buttons and the closing panel. */
+  /** Emerald, the brand color, used sparingly: the form's checkbox, the favicon. */
   accent: { default: "oklch(44% 0.1 160)", [light]: "oklch(40% 0.09 160)" },
-  /** Emerald under a pointer: further from `onAccent` in light, still Lc 75 from it in dark. */
-  accentHover: { default: "oklch(50% 0.1 160)", [light]: "oklch(34% 0.09 160)" },
-  /** Text on `accent`: parchment in both settings. */
-  onAccent: { default: "oklch(96.74% 0.022 85)", [light]: "oklch(96% 0.02 85)" },
   /**
-   * Dividers and card edges. Decoration only: what they group reads the same without them, so
-   * they may stay below APCA's Lc 15 for meaningful non-text. Form fields use `tertiary` instead.
+   * The edge of the open phone menu over the page. Decoration only: the menu reads the same
+   * without it, so it may stay below APCA's Lc 15 for meaningful non-text.
    */
   hairline: { default: "oklch(96.74% 0.022 85 / 0.16)", [light]: "oklch(24.9% 0.02 65 / 0.14)" },
   codeBg: { default: "oklch(24% 0.016 70)", [light]: "oklch(92% 0.025 85)" },
@@ -69,10 +70,10 @@ export const space = stylex.defineConsts({
   x6: `${6 * unit}px`,
   x8: `${8 * unit}px`,
   x12: `${12 * unit}px`,
+  x16: `${16 * unit}px`,
+  x20: `${20 * unit}px`,
   /** The header's height. */
   bar: `${8 * unit}px`,
-  /** The widest column: header, sections and footer. */
+  /** The widest column, twelve grid columns: header, sections and footer. */
   page: `${150 * unit}px`,
-  /** A column of running text: articles, legal pages, section intros. */
-  measure: `${90 * unit}px`,
 });

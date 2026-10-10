@@ -1,11 +1,32 @@
 import * as stylex from "@stylexjs/stylex";
-import { Actions, ButtonLink, Card, Cards, Hero, Measure, Section, Text } from "../blocks.tsx";
-import { translators, waitlistConsent } from "../i18n.ts";
+import {
+  Actions,
+  ButtonLink,
+  Card,
+  Cards,
+  citeTags,
+  Content,
+  Figure,
+  Hero,
+  Measure,
+  Section,
+  Sources,
+  Text,
+} from "../blocks.tsx";
+import { type Tag, type Translator, translators, waitlistConsent } from "../i18n.ts";
 import { Island } from "../island.tsx";
 import { Waitlist } from "../islands/waitlist.tsx";
 import { type Assets, Page } from "../layout.tsx";
 import { href, type Locale } from "../locale.ts";
-import { company, email, mailto, type Product, products } from "../site.ts";
+import {
+  company,
+  email,
+  mailto,
+  numbered,
+  type Paragraph,
+  type Product,
+  products,
+} from "../site.ts";
 import { colors, media, space } from "../tokens.stylex.ts";
 import { richLink, ui } from "../ui.tsx";
 
@@ -17,7 +38,10 @@ type PageProps = {
   shareImage: string;
 };
 
-/** The three products as cards: name, what it does, for whom, and its waiting list. */
+/**
+ * The three products as cards: its figure, name, what it does, for whom, and its waiting list. The
+ * figure is decoration here; the product's page describes it and credits it.
+ */
 export function ProductCards({ locale, heading }: { locale: Locale; heading: "h2" | "h3" }) {
   const t = translators[locale];
   const Heading = heading;
@@ -27,7 +51,7 @@ export function ProductCards({ locale, heading }: { locale: Locale; heading: "h2
         const page = href(locale, "products", product.slug);
         const name = t.text(product.name);
         return (
-          <Card>
+          <Card figure={<Figure illustration={product.illustration} alt="" placement="card" />}>
             <Heading {...stylex.props(ui.title)}>
               <a {...stylex.props(ui.entry, ui.focusRing)} href={page}>
                 {name}
@@ -67,7 +91,7 @@ export function Consulting({ locale }: { locale: Locale }) {
           </Card>
         ))}
       </Cards>
-      <div {...stylex.props(styles.after)}>
+      <div {...stylex.props(ui.textWidth, styles.after)}>
         <Text quiet>{t.text("consulting_audience")}</Text>
         <Actions>
           <ButtonLink href={mailto(t.text("consulting_subject"))} kind="primary">
@@ -98,9 +122,9 @@ export function ProductsPage({ assets, locale, path, alternates, shareImage }: P
       }}
     >
       <Hero title={t.text("products_title")} lead={t.text("products_intro")} />
-      <div {...stylex.props(ui.container, styles.cards)}>
+      <Content>
         <ProductCards locale={locale} heading="h2" />
-      </div>
+      </Content>
       <Consulting locale={locale} />
     </Page>
   );
@@ -116,6 +140,8 @@ export function ProductPage({
   const t = translators[locale];
   const name = t.text(product.name);
   const inquiry = mailto(t.text("consulting_subject_product", { product: name }));
+  const citations = numbered(product.sources);
+  const cite = citeTags(t, citations);
   return (
     <Page
       assets={assets}
@@ -132,8 +158,19 @@ export function ProductPage({
         mono: false,
       }}
     >
-      <Hero title={name} lead={t.text(product.what)}>
-        <p {...stylex.props(ui.prose, ui.label, styles.audience)}>{t.text(product.audience)}</p>
+      <Hero
+        title={name}
+        lead={t.text(product.what)}
+        figure={
+          <Figure
+            illustration={product.illustration}
+            alt={t.text(product.illustration.alt)}
+            placement="beside"
+            priority
+          />
+        }
+      >
+        <p {...stylex.props(ui.prose, ui.label)}>{t.text(product.audience)}</p>
         <Actions>
           <ButtonLink href="#waitlist" kind="primary">
             {t.text("product_waitlist_link")}
@@ -144,18 +181,17 @@ export function ProductPage({
         </Actions>
       </Hero>
       <Section id="how" title={t.text("product_how_label")}>
-        <Measure>
-          {product.details.map((paragraph) => (
-            <Text>{t.text(paragraph)}</Text>
-          ))}
-        </Measure>
+        <Paragraphs t={t} cite={cite} paragraphs={product.how} />
+      </Section>
+      <Section id="state" title={t.text("product_state_label")}>
+        <Paragraphs t={t} cite={cite} paragraphs={product.state} />
       </Section>
       <Section
         id="waitlist"
         title={t.text("waitlist_label")}
         intro={t.text("waitlist_intro", { product: name })}
       >
-        <div {...stylex.props(styles.form)}>
+        <div {...stylex.props(ui.textWidth, styles.form)}>
           <Island
             name="waitlist"
             component={Waitlist}
@@ -180,30 +216,45 @@ export function ProductPage({
           </p>
         </div>
       </Section>
+      <Sources id="sources" title={t.text("sources_title")} list={citations} />
     </Page>
   );
 }
 
+/** A product page's paragraphs in the text width, their tags citing the page's sources. */
+function Paragraphs({
+  t,
+  cite,
+  paragraphs,
+}: {
+  t: Translator;
+  cite: Readonly<Record<string, Tag>>;
+  paragraphs: readonly Paragraph[];
+}) {
+  return (
+    <Measure>
+      {paragraphs.map(({ text, values }) => (
+        <Text>{t.rich(text, cite, values)}</Text>
+      ))}
+    </Measure>
+  );
+}
+
 const styles = stylex.create({
-  cards: { paddingBottom: { default: space.x8, [media.desktop]: space.x12 } },
   cardLink: { marginTop: "auto", paddingTop: space.x1 },
   after: {
     display: "flex",
     flexDirection: "column",
     alignItems: "flex-start",
     rowGap: space.x2,
-    marginTop: { default: space.x4, [media.desktop]: space.x5 },
+    marginTop: { default: space.x5, [media.desktop]: space.x6 },
   },
-  audience: { maxWidth: space.measure },
   form: {
     display: "flex",
     flexDirection: "column",
     rowGap: space.x3,
-    maxWidth: space.measure,
     padding: { default: space.x3, [media.desktop]: space.x4 },
-    borderRadius: space.x2,
-    borderWidth: "1px",
-    borderStyle: "solid",
-    borderColor: colors.hairline,
+    borderRadius: space.x1,
+    backgroundColor: colors.surface,
   },
 });

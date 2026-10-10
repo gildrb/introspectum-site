@@ -1,12 +1,12 @@
 import * as stylex from "@stylexjs/stylex";
-import { Article, Card, Cards, Hero } from "../blocks.tsx";
+import { Article, Card, Cards, Content, Hero } from "../blocks.tsx";
 import { type Post, posts } from "../content.ts";
 import { day, translators } from "../i18n.ts";
 import { type Assets, Page } from "../layout.tsx";
 import { href, type Locale, localeInfo } from "../locale.ts";
 import { Markdown } from "../markdown.tsx";
 import { authors, company, origin } from "../site.ts";
-import { media, space } from "../tokens.stylex.ts";
+import { space } from "../tokens.stylex.ts";
 import { richLink, ui } from "../ui.tsx";
 import { Closing } from "./home.tsx";
 
@@ -42,9 +42,9 @@ export function BlogPage({ assets, locale, path, alternates, shareImage }: PageP
           {t.rich("blog_feed", { link: richLink(`${localeInfo[locale].prefix}/feed.xml`) })}
         </p>
       </Hero>
-      <div {...stylex.props(ui.container, styles.posts)}>
+      <Content>
         {list.length === 0 ? (
-          <p {...stylex.props(ui.prose, ui.label, styles.empty)}>{t.text("blog_empty")}</p>
+          <p {...stylex.props(ui.prose, ui.label, ui.textWidth)}>{t.text("blog_empty")}</p>
         ) : (
           <Cards columns={3}>
             {list.map((post) => (
@@ -68,7 +68,7 @@ export function BlogPage({ assets, locale, path, alternates, shareImage }: PageP
             ))}
           </Cards>
         )}
-      </div>
+      </Content>
     </Page>
   );
 }
@@ -133,9 +133,5 @@ export function PostPage({ post, ...props }: PageProps & { post: Post }) {
 }
 
 const styles = stylex.create({
-  posts: { paddingBottom: { default: space.x8, [media.desktop]: space.x12 } },
-  empty: {
-    paddingBlock: space.x4,
-  },
-  author: { marginTop: "auto" },
+  author: { marginTop: "auto", paddingTop: space.x1 },
 });

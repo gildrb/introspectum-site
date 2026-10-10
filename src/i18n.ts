@@ -44,7 +44,8 @@ function messages(locale: Locale): Record<string, string> {
 }
 
 export type Values = Readonly<Record<string, string | number | Date>>;
-type Tag = (chunks: Array<string | VNode>) => VNode;
+/** Builds the element for one `<tag>…</tag>` part of a rich message from what it wraps. */
+export type Tag = (chunks: Array<string | VNode>) => VNode;
 
 export type Translator = {
   locale: Locale;

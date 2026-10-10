@@ -1,10 +1,10 @@
-import { Actions, Article, ButtonLink, Hero } from "../blocks.tsx";
+import { Actions, Article, ButtonLink, Figure, Hero } from "../blocks.tsx";
 import type { Doc } from "../content.ts";
 import { translators } from "../i18n.ts";
 import { type Assets, Page } from "../layout.tsx";
 import { href, type Locale } from "../locale.ts";
 import { Markdown } from "../markdown.tsx";
-import { company } from "../site.ts";
+import { company, type Illustration } from "../site.ts";
 
 type PageProps = {
   assets: Assets;
@@ -14,14 +14,16 @@ type PageProps = {
   shareImage: string;
 };
 
-/** A plain page written in Markdown: About, Privacy, Imprint. */
+/** A plain page written in Markdown: About, Privacy, Imprint. `illustration` stands beside it. */
 export function DocPage({
   doc,
   description,
+  illustration,
   ...props
 }: PageProps & {
   doc: Doc;
   description: string;
+  illustration?: Illustration;
 }) {
   const { assets, locale, path, alternates, shareImage } = props;
   const t = translators[locale];
@@ -41,7 +43,19 @@ export function DocPage({
         mono: false,
       }}
     >
-      <Article title={doc.title}>
+      <Article
+        title={doc.title}
+        figure={
+          illustration === undefined ? undefined : (
+            <Figure
+              illustration={illustration}
+              alt={t.text(illustration.alt)}
+              placement="beside"
+              priority
+            />
+          )
+        }
+      >
         <Markdown blocks={doc.blocks} />
       </Article>
     </Page>

@@ -74,20 +74,50 @@
     "description": "Accessible name of the link to the same page in another language. {language} is that language's own name, e.g. Deutsch.",
     "maxLength": 48
   },
+  "cite_label": {
+    "message": "Source {number}",
+    "description": "Accessible name of a source's number after a claim; the number links to the source in the page's list of sources.",
+    "maxLength": 24
+  },
+  "sources_title": {
+    "message": "Sources",
+    "description": "Heading of the numbered list of works a page cites, at the end of the page.",
+    "maxLength": 32
+  },
+  "illustration_tabula_alt": {
+    "message": "Engraving of a rocky mountain carved with the Latin text of the Emerald Tablet, in a wide landscape.",
+    "description": "Alt text of Heinrich Khunrath’s engraving of the Emerald Tablet (Tabula Smaragdina) on the About page: what it shows, for people who cannot see it.",
+    "maxLength": 200
+  },
+  "illustration_llull_alt": {
+    "message": "Woodcut circle by Ramon Llull: nine concepts, each named by a letter and joined by straight lines to all the others.",
+    "description": "Alt text of Ramon Llull’s Figure A, the Software Factory’s figure: what it shows, for people who cannot see it.",
+    "maxLength": 200
+  },
+  "illustration_pacioli_alt": {
+    "message": "A page of Luca Pacioli’s Summa: ledger entries in two columns, debtors on the left and creditors on the right.",
+    "description": "Alt text of a page of Luca Pacioli’s bookkeeping treatise, the ERP & CRM’s figure: what it shows, for people who cannot see it.",
+    "maxLength": 200
+  },
+  "illustration_playfair_alt": {
+    "message": "William Playfair’s line chart of England’s trade with Denmark and Norway: exports and imports as two lines that cross where the balance turns.",
+    "description": "Alt text of William Playfair’s time-series chart, the Trading Platform’s figure: what it shows, for people who cannot see it.",
+    "maxLength": 200
+  },
+  "illustration_euclid_alt": {
+    "message": "Euclid’s figure for the theorem of Pythagoras: a right triangle with a square on each side, crossed by the lines of the proof.",
+    "description": "Alt text of the woodcut of Euclid’s proof beside the homepage’s ‘why’: what it shows, for people who cannot see it.",
+    "maxLength": 200
+  },
   "feed_title": {
     "message": "{brand} blog",
     "description": "Title of the blog's RSS feed, shown in feed readers.",
     "maxLength": 40
   },
   "tagline": {
-    "message": "Software that is checked instead of trusted.",
+    "message": "Software that is checked instead of trusted",
     "description": "The company's one-line promise: the homepage title, the footer, and the homepage's link-preview image.",
     "maxLength": 90
-  },
-  "percent": {
-    "message": "{value, number, ::percent}",
-    "description": "A share as a percentage, such as 96%. The same message in every language; the number format follows the locale.",
-    "translate": false
   },
   "home_description": {
     "message": "Introspectum builds software you can check: a verified software factory, an open-data ERP and CRM, and research in systematic trading.",
@@ -105,34 +135,24 @@
     "maxLength": 32
   },
   "home_why_title": {
-    "message": "AI writes code faster than anyone can review it.",
+    "message": "AI writes code faster than anyone can review it",
     "description": "Heading of the homepage section on why the company exists.",
     "maxLength": 90
+  },
+  "home_why_evidence": {
+    "message": "<sonar>{distrust, number, ::percent} of developers do not fully trust AI-generated code, and only {verify, number, ::percent} always check it before they commit.</sonar>",
+    "description": "Lead under the homepage's 'why' heading: a survey result. {distrust} and {verify} are shares formatted as percentages. The tag cites the survey: keep it around the whole sentence.",
+    "maxLength": 200
+  },
+  "home_why_review": {
+    "message": "Review is harder, too: <sonar>{effort, number, ::percent} say that AI-generated code takes more effort to review than code written by their colleagues.</sonar>",
+    "description": "First paragraph under the homepage's 'why' lead: a second result of the same survey. {effort} is a share formatted as a percentage. The tag cites the survey: keep it around the result.",
+    "maxLength": 200
   },
   "home_why_text": {
     "message": "We build software that is checked instead of trusted: traced from requirement to code, proven where it matters, and open to the people who answer for it.",
     "description": "Paragraph under the homepage's 'why' heading, one sentence.",
     "maxLength": 240
-  },
-  "home_stat_distrust": {
-    "message": "of developers do not fully trust AI-generated code",
-    "description": "Caption under a large percentage on the homepage, read as one sentence with it: '96%' then this text. No final period.",
-    "maxLength": 90
-  },
-  "home_stat_verify": {
-    "message": "always check it before they commit",
-    "description": "Caption under the second percentage: '48%' then this text. 'it' is the AI-generated code of the first caption, shown beside it. No final period.",
-    "maxLength": 90
-  },
-  "home_stat_source": {
-    "message": "Source: <link>{source}</link>",
-    "description": "Names the survey the two percentages come from. {source} is its English title; <link> wraps it and opens the survey's press release.",
-    "maxLength": 80
-  },
-  "home_hook_source": {
-    "message": "Sonar, State of Code Developer Survey 2026",
-    "description": "Source of the opening line: publisher and report title. Report titles stay in their original language.",
-    "translate": false
   },
   "home_what_label": {
     "message": "What we build",
@@ -179,7 +199,7 @@
     "maxLength": 40
   },
   "cta_title": {
-    "message": "Tell us what you are working on.",
+    "message": "Tell us what you are working on",
     "description": "Heading of the closing panel on the homepage and under each blog post.",
     "maxLength": 60
   },
@@ -321,6 +341,11 @@
     "description": "Heading above a product's description on its own page.",
     "maxLength": 40
   },
+  "product_state_label": {
+    "message": "Where it stands",
+    "description": "Heading above what of a product works today, what was measured and what is not built yet, on its own page.",
+    "maxLength": 40
+  },
   "product_waitlist_link": {
     "message": "Join the waiting list",
     "description": "Link on a product card and button on a product page that lead to the product's waiting list.",
@@ -360,17 +385,37 @@
     "message": "For software teams that use AI to write code and must stand behind it, starting with startups and small IT companies.",
     "description": "Who the Software Factory is for, one sentence."
   },
-  "product_software_factory_detail_1": {
-    "message": "The Software Factory reads your code and its documents into one graph: requirements, design, tests, bug reports and analysis results, each linked to the code it concerns. You see the system as architecture maps, from the overview down to single functions.",
-    "description": "Software Factory page, paragraph 1 of 3: the graph and the maps."
+  "product_software_factory_how_1": {
+    "message": "The Software Factory reads your code and its documents into one graph: requirements, design, tests, bug reports and analysis results, each linked to the code it concerns. The graph builds on the <cpg>code property graph</cpg>, which joins the syntax, control flow and data flow of a program. You see it as architecture maps in the <c4>C4 model</c4>, from the whole system down to single functions.",
+    "description": "Software Factory page, 'How it works', paragraph 1 of 3: the graph and the maps. Each tag cites a source: keep it around the words that name the work it cites."
   },
-  "product_software_factory_detail_2": {
-    "message": "On top of the graph, AI agents work in steps modelled on ISO/IEC/IEEE 15288, the standard for system life cycle processes, and formal verification checks their output against your specifications. Every step leaves an audit trail.",
-    "description": "Software Factory page, paragraph 2 of 3: the agent process and verification."
+  "product_software_factory_how_2": {
+    "message": "On top of the graph, AI agents work in steps modelled on <iso-15288>ISO/IEC/IEEE 15288</iso-15288>, the standard for system life cycle processes. A language model writes only what a proof can check: function bodies, against specifications that people approve. Skeletons, tests and documents come from the graph without a model, the same way every time.",
+    "description": "Software Factory page, 'How it works', paragraph 2 of 3: the agent process, and what a language model may write. The tag cites the standard."
   },
-  "product_software_factory_detail_3": {
-    "message": "The graph and the maps work today, and verification runs end to end with the Prusti and Verus verifiers. The agent process comes next.",
-    "description": "Software Factory page, paragraph 3 of 3: what works now. Prusti and Verus are tool names."
+  "product_software_factory_how_3": {
+    "message": "Formal verification checks each function against its specification, with the <prusti>Prusti</prusti> and <verus>Verus</verus> verifiers. When a proof or a test fails, the counterexample goes back to the model, until both pass or a person takes over. Every step leaves an audit trail.",
+    "description": "Software Factory page, 'How it works', paragraph 3 of 3: verification and the repair loop. Prusti and Verus are tool names; each tag cites the paper on the tool."
+  },
+  "product_software_factory_state_1": {
+    "message": "It reads Rust, C and TypeScript. On {date, date, long}, it read its own code, {ownFiles, number} Rust files, into a graph of {ownNodes, number} nodes in {ownSeconds, number} seconds, and the {otherFiles, number} files of <ripgrep>ripgrep</ripgrep> into {otherNodes, number} nodes in {otherSeconds, number} seconds. Repeated runs on the same code gave the same result.",
+    "description": "Software Factory page, 'Where it stands', paragraph 1 of 5: a measurement. {date} is the day it was taken; the other placeholders are counts and seconds. ripgrep is the name of an open-source program; the tag cites it."
+  },
+  "product_software_factory_state_2": {
+    "message": "Verification runs end to end with Prusti and Verus, so far on small programs such as a ring buffer and the alarm logic of a smoke detector.",
+    "description": "Software Factory page, 'Where it stands', paragraph 2 of 5: what verification covers today."
+  },
+  "product_software_factory_state_3": {
+    "message": "For an audit, it exports a traceability matrix and a safety case in the <gsn>Goal Structuring Notation</gsn>. It issues a certificate only when the verifiers ran, every proof obligation holds, every test passes and every requirement is traced.",
+    "description": "Software Factory page, 'Where it stands', paragraph 3 of 5: what it gives auditors. The Goal Structuring Notation is the name of a standard; the tag cites it."
+  },
+  "product_software_factory_state_4": {
+    "message": "It reads and writes requirements in the form of <ieee-830>IEEE 830</ieee-830> and design descriptions in the form of <ieee-1016>IEEE 1016</ieee-1016>, and draws UML, SysML and Mermaid diagrams from the code.",
+    "description": "Software Factory page, 'Where it stands', paragraph 4 of 5: the documents it reads and writes. Each tag cites a standard."
+  },
+  "product_software_factory_state_5": {
+    "message": "Next, we build the agent process on top of it.",
+    "description": "Software Factory page, 'Where it stands', paragraph 5 of 5: what comes next."
   },
   "product_erp_crm_name": {
     "message": "ERP & CRM",
@@ -383,20 +428,32 @@
     "maxLength": 160
   },
   "product_erp_crm_audience": {
-    "message": "For small businesses that still run on paper and spreadsheets, starting with real estate and IT services.",
+    "message": "For small businesses that still run on paper and spreadsheets.",
     "description": "Who the ERP & CRM is for, one sentence."
   },
-  "product_erp_crm_detail_1": {
-    "message": "An ERP and CRM built on Twenty, the open-source CRM, and extended with accounting, tax, purchasing, sales, payments, inventory and HR.",
-    "description": "ERP & CRM page, paragraph 1 of 3: what it is built on. Twenty is a product name."
+  "product_erp_crm_how_1": {
+    "message": "An ERP and CRM built on <twenty>Twenty</twenty>, the open-source CRM, which we extend with accounting, tax, purchasing, sales, payments, inventory and HR.",
+    "description": "ERP & CRM page, 'How it works', paragraph 1 of 4: what it is built on. Twenty is a product name; the tag cites its source code."
   },
-  "product_erp_crm_detail_2": {
+  "product_erp_crm_how_2": {
     "message": "Each customer gets its own installation, and all data stays in open formats in one place. An AI assistant works on the same data as your team: it can keep records in order, prepare analyses and draft documents.",
-    "description": "ERP & CRM page, paragraph 2 of 3: data ownership and the assistant."
+    "description": "ERP & CRM page, 'How it works', paragraph 2 of 4: data ownership and the assistant."
   },
-  "product_erp_crm_detail_3": {
-    "message": "Our own company and a real-estate brokerage are its first users.",
-    "description": "ERP & CRM page, paragraph 3 of 3: first users."
+  "product_erp_crm_how_3": {
+    "message": "The ledger keeps amounts as exact decimals in the minor units of <iso-4217>ISO 4217</iso-4217>, never as floating-point numbers. Both the application and the database enforce the rules of bookkeeping: a posted entry never changes, a correction is a reversal entry, and entry numbers have no gaps.",
+    "description": "ERP & CRM page, 'How it works', paragraph 3 of 4: how the ledger keeps its books exact. The tag cites the currency standard."
+  },
+  "product_erp_crm_how_4": {
+    "message": "The AI assistant reads the books through read-only database roles and cannot post to them. Every approval and every closed period is committed to a versioned archive, so each figure can be traced to who approved it and when.",
+    "description": "ERP & CRM page, 'How it works', paragraph 4 of 4: what the assistant may do, and the audit trail."
+  },
+  "product_erp_crm_state_1": {
+    "message": "The specification has about {requirements, number} requirements in {modules, number} modules, written to <iso-29148>ISO/IEC/IEEE 29148</iso-29148>. About a quarter of them are built: the ledger and its rules, the installation per customer, the versioned archive and the assistant’s read-only access.",
+    "description": "ERP & CRM page, 'Where it stands', paragraph 1 of 2: how much is built. {requirements} and {modules} are counts. The tag cites the standard for requirements."
+  },
+  "product_erp_crm_state_2": {
+    "message": "Reports, tax returns and bank reconciliation are not built yet. Our own company is its first user.",
+    "description": "ERP & CRM page, 'Where it stands', paragraph 2 of 2: what is missing, and who uses it."
   },
   "product_trading_platform_name": {
     "message": "Trading Platform",
@@ -412,17 +469,21 @@
     "message": "For investors from real estate, banking and IT who want to test a strategy before they trust it.",
     "description": "Who the Trading Platform is for, one sentence."
   },
-  "product_trading_platform_detail_1": {
-    "message": "The Trading Platform runs trend-following strategies, such as the Turtle rules, on many stocks in parallel.",
-    "description": "Trading Platform page, paragraph 1 of 3. The Turtle rules are a known trading system."
+  "product_trading_platform_how_1": {
+    "message": "The Trading Platform runs trend-following strategies, such as the <turtle>Turtle rules</turtle>, on many stocks in parallel.",
+    "description": "Trading Platform page, 'How it works', paragraph 1 of 2. The Turtle rules are a known trading system; the tag cites the book that describes them."
   },
-  "product_trading_platform_detail_2": {
+  "product_trading_platform_how_2": {
     "message": "Reinforcement learning tunes the settings for each stock, including the time scale on which its signals are most reliable.",
-    "description": "Trading Platform page, paragraph 2 of 3."
+    "description": "Trading Platform page, 'How it works', paragraph 2 of 2."
   },
-  "product_trading_platform_detail_3": {
+  "product_trading_platform_state_1": {
+    "message": "A first prototype tested trend following, mean reversion and order-flow strategies. We are now rebuilding it from the requirements and the design that prototype taught us.",
+    "description": "Trading Platform page, 'Where it stands', paragraph 1 of 2: the prototype and the rebuild."
+  },
+  "product_trading_platform_state_2": {
     "message": "It trades on paper only, and nothing here is investment advice.",
-    "description": "Trading Platform page, paragraph 3 of 3: simulated trading only; legal disclaimer."
+    "description": "Trading Platform page, 'Where it stands', paragraph 2 of 2: simulated trading only; legal disclaimer."
   },
   "waitlist_label": {
     "message": "Waiting list",
