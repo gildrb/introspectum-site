@@ -1,0 +1,343 @@
+import { readFileSync } from "node:fs";
+import * as stylex from "@stylexjs/stylex";
+import type { ComponentChildren } from "preact";
+import { colors, space } from "./tokens.stylex.ts";
+import { ui } from "./ui.tsx";
+import { versioned } from "./versioned.ts";
+
+/**
+ * The Markdown the site understands, and nothing more:
+ *
+ * - `## Heading` and `### Subheading`
+ * - paragraphs, lines joined until a blank line
+ * - `- item` lists and `1. item` lists
+ * - `> quote` lines
+ * - fenced code blocks, optionally naming a language: ```rust
+ * - `![Alt text](/images/blog/file.png)` on a line of its own; PNG, JPEG, WebP or SVG in `public/`
+ * - inline: `code`, [label](https://… or /path or mailto:…), **strong**, *emphasis*
+ *
+ * Anything else (tables, HTML, deeper headings, rules) stops the build with a message, so it never
+ * reaches the page as stray symbols.
+ */
+export type Block =
+  | { type: "h2" | "h3" | "p" | "quote"; text: string }
+  | { type: "ul" | "ol"; items: string[] }
+  | { type: "code"; language: string; code: string }
+  | { type: "image"; alt: string; src: string; width: number; height: number };
+
+const image = /^!\[([^\]]+)\]\(\/(images\/(?:[\w-]+\/)*[\w-]+\.(?:png|jpe?g|webp|svg))\)$/;
+const ordered = /^\d+\. /;
+const blockStart = /^(?:#|```|- |> |!\[)/;
+const unsupported: [pattern: RegExp, message: string][] = [
+  [/^#(?:\s|$)/, "The title is not part of the text: give it in the front matter or first line."],
+  [/^#{4,}/, "Only ## and ### headings are supported."],
+  [/^</, "HTML is not supported."],
+  [/^\|/, "Tables are not supported."],
+  [/^(?:-{3,}|\*{3,}|_{3,})$/, "Horizontal rules are not supported."],
+  [/^[*+] /, "Start list items with '- '."],
+  [/^!\[/, "Images need alt text and a path under /images/, on a line of their own."],
+];
+
+/**
+ * Parses a page or post body. `source` names the file in error messages, and `firstLine` is the
+ * file line the body starts on, so the messages point at the right line.
+ */
+export function parse(markdown: string, source: string, firstLine: number): Block[] {
+  const lines = markdown.replaceAll("\r\n", "\n").split("\n");
+  const blocks: Block[] = [];
+  let index = 0;
+  /** Consumes the run of lines that pass `test`, each passed through `strip`. */
+  const take = (test: (line: string) => boolean, strip: (line: string) => string) => {
+    const taken: string[] = [];
+    for (; index < lines.length && test(lines[index] ?? ""); index += 1)
+      taken.push(strip(lines[index] ?? ""));
+    return taken;
+  };
+  while (index < lines.length) {
+    const line = lines[index] ?? "";
+    const problem = unsupported.find(([pattern]) => pattern.test(line));
+    const figure = line.match(image);
+    if (line.trim() === "") {
+      index += 1;
+    } else if (line.startsWith("## ") || line.startsWith("### ")) {
+      blocks.push({ type: line.startsWith("## ") ? "h2" : "h3", text: line.replace(/^#+ /, "") });
+      index += 1;
+    } else if (line.startsWith("```")) {
+      const end = lines.indexOf("```", index + 1);
+      if (end === -1) throw new Error(`${source}:${firstLine + index}: unclosed code block.`);
+      blocks.push({
+        type: "code",
+        language: line.slice(3).trim(),
+        code: lines.slice(index + 1, end).join("\n"),
+      });
+      index = end + 1;
+    } else if (figure) {
+      const [, alt = "", path = ""] = figure;
+      blocks.push({ type: "image", alt, src: versioned(`/${path}`), ...size(path) });
+      index += 1;
+    } else if (problem) {
+      throw new Error(`${source}:${firstLine + index}: ${problem[1]}`);
+    } else if (line.startsWith("- ")) {
+      const items = take(
+        (next) => next.startsWith("- "),
+        (next) => next.slice(2),
+      );
+      blocks.push({ type: "ul", items });
+    } else if (ordered.test(line)) {
+      const items = take(
+        (next) => ordered.test(next),
+        (next) => next.replace(ordered, ""),
+      );
+      blocks.push({ type: "ol", items });
+    } else if (line.startsWith("> ")) {
+      const text = take(
+        (next) => next.startsWith("> "),
+        (next) => next.slice(2),
+      ).join(" ");
+      blocks.push({ type: "quote", text });
+    } else {
+      const text = take(
+        (next) =>
+          next.trim() !== "" &&
+          !blockStart.test(next) &&
+          !ordered.test(next) &&
+          !unsupported.some(([pattern]) => pattern.test(next)),
+        (next) => next.trim(),
+      ).join(" ");
+      blocks.push({ type: "p", text });
+    }
+  }
+  return blocks;
+}
+
+/** Words a reader reads: everything but code and images. */
+export function wordCount(blocks: readonly Block[]): number {
+  return blocks
+    .flatMap((block) => {
+      switch (block.type) {
+        case "ul":
+        case "ol":
+          return block.items;
+        case "code":
+        case "image":
+          return [];
+        case "h2":
+        case "h3":
+        case "p":
+        case "quote":
+          return [block.text];
+        default: {
+          const exhaustive: never = block;
+          return exhaustive;
+        }
+      }
+    })
+    .join(" ")
+    .split(/\s+/)
+    .filter((word) => /\w/.test(word)).length;
+}
+
+/**
+ * The intrinsic size of an image in `public/` (`path` is relative to it), so the page reserves
+ * the image's space before it loads.
+ */
+function size(path: string): { width: number; height: number } {
+  const file = readFileSync(`public/${path}`);
+  const fail = () => new Error(`Cannot read the size of public/${path}.`);
+  const ascii = (start: number, end: number) => file.toString("latin1", start, end);
+  if (ascii(1, 4) === "PNG" && file.length >= 24)
+    return { width: file.readUInt32BE(16), height: file.readUInt32BE(20) };
+  if (file[0] === 0xff && file[1] === 0xd8) {
+    // JPEG: walk the segments to the frame header, which holds the size.
+    for (let offset = 2; offset + 9 <= file.length && file[offset] === 0xff;) {
+      const marker = file[offset + 1] ?? 0;
+      const frame = marker >= 0xc0 && marker <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(marker);
+      if (frame)
+        return { height: file.readUInt16BE(offset + 5), width: file.readUInt16BE(offset + 7) };
+      offset += 2 + file.readUInt16BE(offset + 2);
+    }
+    throw fail();
+  }
+  if (ascii(0, 4) === "RIFF" && ascii(8, 12) === "WEBP" && file.length >= 30) {
+    const chunk = ascii(12, 16);
+    if (chunk === "VP8X")
+      return { width: 1 + file.readUIntLE(24, 3), height: 1 + file.readUIntLE(27, 3) };
+    if (chunk === "VP8L") {
+      const bits = file.readUInt32LE(21);
+      return { width: (bits & 0x3fff) + 1, height: ((bits >> 14) & 0x3fff) + 1 };
+    }
+    if (chunk === "VP8 ")
+      return { width: file.readUInt16LE(26) & 0x3fff, height: file.readUInt16LE(28) & 0x3fff };
+    throw fail();
+  }
+  if (path.endsWith(".svg")) {
+    const box = ascii(0, Math.min(file.length, 4096)).match(
+      /viewBox="[\d.-]+[\s,]+[\d.-]+[\s,]+([\d.]+)[\s,]+([\d.]+)"/,
+    );
+    if (box) return { width: Number(box[1]), height: Number(box[2]) };
+  }
+  throw fail();
+}
+
+const inline =
+  /`([^`]+)`|\[([^\]]+)\]\(((?:https?:\/\/|mailto:|\/)[^\s)]*)\)|\*\*([^*]+)\*\*|\*([^*]+)\*/g;
+
+/** Inline Markdown: code, links, strong and emphasis. */
+export function Inline({ text }: { text: string }) {
+  const nodes: ComponentChildren[] = [];
+  let last = 0;
+  for (const match of text.matchAll(inline)) {
+    const [whole, code, label, href = "", strong, em] = match;
+    nodes.push(text.slice(last, match.index));
+    last = match.index + whole.length;
+    if (code !== undefined) {
+      nodes.push(<code {...stylex.props(ui.mono, styles.code)}>{code}</code>);
+    } else if (label !== undefined) {
+      const external = href.startsWith("http") && { target: "_blank", rel: "noopener noreferrer" };
+      nodes.push(
+        <a {...stylex.props(ui.link, ui.focusRing)} href={href} {...external}>
+          <Inline text={label} />
+        </a>,
+      );
+    } else if (strong !== undefined) {
+      nodes.push(<strong {...stylex.props(styles.strong)}>{strong}</strong>);
+    } else {
+      nodes.push(<em>{em}</em>);
+    }
+  }
+  nodes.push(text.slice(last));
+  return <>{nodes}</>;
+}
+
+const wide: Record<Block["type"], boolean> = {
+  h2: false,
+  h3: false,
+  p: false,
+  quote: true,
+  ul: false,
+  ol: false,
+  code: true,
+  image: true,
+};
+
+/** Space above a block, by what came before it: chapters open wide, headings hold their text. */
+function gap(previous: Block | undefined, block: Block) {
+  if (previous === undefined) return null;
+  if (block.type === "h2") return styles.chapter;
+  if (block.type === "h3") return styles.subchapter;
+  if (previous.type === "h2" || previous.type === "h3") return styles.afterHeading;
+  return wide[previous.type] || wide[block.type] ? styles.aroundWide : styles.paragraph;
+}
+
+export function Markdown({ blocks }: { blocks: readonly Block[] }) {
+  return (
+    <>
+      {blocks.map((block, index) => {
+        const spacing = gap(blocks[index - 1], block);
+        switch (block.type) {
+          case "h2":
+            return (
+              <h2 {...stylex.props(ui.text, ui.label, spacing)}>
+                <Inline text={block.text} />
+              </h2>
+            );
+          case "h3":
+            return (
+              <h3 {...stylex.props(ui.text, styles.subheading, spacing)}>
+                <Inline text={block.text} />
+              </h3>
+            );
+          case "p":
+            return (
+              <p {...stylex.props(ui.text, ui.prose, spacing)}>
+                <Inline text={block.text} />
+              </p>
+            );
+          case "quote":
+            return (
+              <blockquote {...stylex.props(ui.text, ui.prose, styles.quote, spacing)}>
+                <Inline text={block.text} />
+              </blockquote>
+            );
+          case "ul":
+          case "ol": {
+            const List = block.type;
+            return (
+              <List {...stylex.props(ui.text, ui.prose, styles.list, spacing)}>
+                {block.items.map((item) => (
+                  <li {...stylex.props(styles.item)}>
+                    <Inline text={item} />
+                  </li>
+                ))}
+              </List>
+            );
+          }
+          case "code":
+            return (
+              <pre {...stylex.props(ui.mono, styles.pre, spacing)}>
+                <code>{block.code}</code>
+              </pre>
+            );
+          case "image":
+            return (
+              <img
+                {...stylex.props(styles.image, spacing)}
+                src={block.src}
+                alt={block.alt}
+                width={block.width}
+                height={block.height}
+                loading="lazy"
+                decoding="async"
+              />
+            );
+          default: {
+            const exhaustive: never = block;
+            return exhaustive;
+          }
+        }
+      })}
+    </>
+  );
+}
+
+const styles = stylex.create({
+  chapter: { marginTop: space.x6 },
+  subchapter: { marginTop: space.x4 },
+  afterHeading: { marginTop: space.x1 },
+  paragraph: { marginTop: space.x2 },
+  aroundWide: { marginTop: space.x3 },
+  subheading: { color: colors.primary },
+  strong: { color: colors.primary, fontWeight: 500 },
+  quote: {
+    paddingInlineStart: space.x2,
+    borderInlineStartWidth: "1px",
+    borderInlineStartStyle: "solid",
+    borderInlineStartColor: colors.tertiary,
+    color: colors.secondary,
+  },
+  list: { paddingInlineStart: space.x3 },
+  item: { marginTop: { default: space.x1, ":first-child": 0 } },
+  code: {
+    fontSize: "0.875em",
+    paddingInline: "0.25em",
+    borderRadius: "0.25em",
+    backgroundColor: colors.codeBg,
+    color: colors.primary,
+  },
+  pre: {
+    overflowX: "auto",
+    padding: space.x2,
+    borderRadius: space.x1,
+    backgroundColor: colors.codeBg,
+    color: colors.primary,
+    fontSize: "14px",
+    lineHeight: "20px",
+    tabSize: 4,
+  },
+  image: {
+    display: "block",
+    width: "100%",
+    height: "auto",
+    borderRadius: space.x1,
+  },
+});

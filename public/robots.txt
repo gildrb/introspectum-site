@@ -1,0 +1,8 @@
+# Site: https://introspectum.si/
+# LLM reference: https://introspectum.si/llms.txt
+
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://introspectum.si/sitemap.xml

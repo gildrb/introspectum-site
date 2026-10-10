@@ -1,0 +1,39 @@
+{
+  "name": "introspectum-web",
+  "private": true,
+  "scripts": {
+    "dev": "vp dev",
+    "build": "vp build",
+    "check": "vp check",
+    "prepare": "vp config"
+  },
+  "dependencies": {
+    "@stylexjs/stylex": "^0.19.1",
+    "preact": "^11.0.1"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261010.1",
+    "@resvg/resvg-js": "^2.6.2",
+    "@stylexjs/unplugin": "^0.19.1",
+    "@types/node": "^26.6.5",
+    "preact-render-to-string": "^6.8.0",
+    "satori": "^0.47.1",
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.1.0",
+    "vite-plus": "1.1.0",
+    "wawoff2": "^2.0.1"
+  },
+  "overrides": {
+    "fflate": "0.7.5",
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.1.0"
+  },
+  "browserslist": [
+    "baseline widely available"
+  ],
+  "devEngines": {
+    "packageManager": {
+      "name": "npm",
+      "version": "11.20.0",
+      "onFail": "download"
+    }
+  }
+}
