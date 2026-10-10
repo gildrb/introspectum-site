@@ -39,16 +39,19 @@ export const fontFeatures = stylex.defineConsts({
 });
 
 /**
- * The page follows the system's light or dark setting. Light is not a mirror of dark: gray on
- * white reads fainter than on black, so light prose is heavier (`proseWeight`) and its tertiary
- * gray sits at APCA Lc 61 on white (article Lc 102), where dark's sits at Lc 42 on black.
+ * The page follows the system's light or dark setting. Every gray meets APCA's Bronze level on
+ * the page background for the text it sets. Body text, a block of more than two lines, needs at
+ * least Lc 75: `article` (Lc 102 light, Lc 90 dark), and `secondary` (Lc 89, Lc 77), which may
+ * run that long. Other content text, such as labels, navigation, notes and the footer, needs at
+ * least Lc 60: `tertiary` (Lc 61 in both), which therefore never sets running text. Light prose
+ * is heavier (`proseWeight`): gray on white reads fainter than on black at the same Lc.
  */
 export const colors = stylex.defineVars({
   bg: { default: "oklch(0% 0 0)", [light]: "oklch(100% 0 0)" },
   primary: { default: "oklch(100% 0 0)", [light]: "oklch(0% 0 0)" },
-  secondary: { default: "oklch(76.68% 0 0)", [light]: "oklch(42.02% 0 0)" },
-  tertiary: { default: "oklch(64.83% 0 0)", [light]: "oklch(64% 0 0)" },
-  article: { default: "oklch(88.53% 0 0)", [light]: "oklch(27.07% 0 0)" },
+  secondary: { default: "oklch(85.3% 0 0)", [light]: "oklch(42.02% 0 0)" },
+  tertiary: { default: "oklch(76.68% 0 0)", [light]: "oklch(64% 0 0)" },
+  article: { default: "oklch(91.74% 0 0)", [light]: "oklch(27.07% 0 0)" },
   hairline: { default: "oklch(100% 0 0 / 0.12)", [light]: "oklch(0% 0 0 / 0.12)" },
   codeBg: { default: "oklch(20.44% 0 0)", [light]: "oklch(93.12% 0 0)" },
   proseWeight: { default: "380", [light]: "400" },

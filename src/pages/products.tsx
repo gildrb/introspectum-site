@@ -45,9 +45,9 @@ export function ProductsPage({ assets, locale, path, alternates, shareImage }: P
             >
               {t.text(product.name)}
             </a>
-            <Text note>{t.text(product.status)}</Text>
+            <p {...stylex.props(ui.text, ui.note)}>{t.text(product.status)}</p>
             <Text>{t.text(product.what)}</Text>
-            <Text note>{t.text(product.audience)}</Text>
+            <Text quiet>{t.text(product.audience)}</Text>
           </li>
         ))}
       </ul>
@@ -125,7 +125,7 @@ export function ProductPage({
             },
           }}
         />
-        <Text note>{t.rich("waitlist_privacy", { link: richLink(href(locale, "privacy")) })}</Text>
+        <Text quiet>{t.rich("waitlist_privacy", { link: richLink(href(locale, "privacy")) })}</Text>
       </Section>
       <Section id="consulting" label={t.text("consulting_name")}>
         <Text>

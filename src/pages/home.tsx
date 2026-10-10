@@ -88,7 +88,7 @@ export function Home({
                 {t.text(product.name)}
               </a>
               <Text>{t.text(product.what)}</Text>
-              <Text note>{t.text(product.audience)}</Text>
+              <Text quiet>{t.text(product.audience)}</Text>
             </li>
           ))}
           <li>
@@ -99,7 +99,7 @@ export function Home({
               {t.text("consulting_name")}
             </a>
             <Text>{t.text("consulting_what")}</Text>
-            <Text note>{t.text("consulting_audience")}</Text>
+            <Text quiet>{t.text("consulting_audience")}</Text>
           </li>
         </ul>
       </Section>

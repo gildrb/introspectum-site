@@ -301,18 +301,23 @@ export function Stack({ children }: { children: ComponentChildren }) {
   return <div {...stylex.props(blocks.stack)}>{children}</div>;
 }
 
-/** Running text. `lead` sets it in primary, for the line a page opens with. */
+/**
+ * Running text. `lead` sets it in primary, for the line a page opens with; `quiet` one step down,
+ * in secondary. Never tertiary: running text can wrap past two lines, where APCA asks Lc 75.
+ */
 export function Text({
   lead = false,
-  note = false,
+  quiet = false,
   children,
 }: {
   lead?: boolean;
-  note?: boolean;
+  quiet?: boolean;
   children: ComponentChildren;
 }) {
   return (
-    <p {...stylex.props(ui.text, ui.prose, lead && blocks.lead, note && ui.note)}>{children}</p>
+    <p {...stylex.props(ui.text, ui.prose, lead && blocks.lead, quiet && blocks.quiet)}>
+      {children}
+    </p>
   );
 }
 
@@ -440,6 +445,7 @@ const blocks = stylex.create({
   section: { marginTop: space.x6 },
   label: { marginBottom: space.x1 },
   lead: { color: colors.primary },
+  quiet: { color: colors.secondary },
   stack: { display: "flex", flexDirection: "column", rowGap: space.x2 },
   lines: { listStyle: "none" },
 });

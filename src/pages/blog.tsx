@@ -38,7 +38,7 @@ export function BlogPage({ assets, locale, path, alternates, shareImage }: PageP
     >
       <Title>{t.text("blog_title")}</Title>
       <Text lead>{t.text("blog_intro")}</Text>
-      <Text note>
+      <Text quiet>
         {t.rich("blog_feed", { link: richLink(`${localeInfo[locale].prefix}/feed.xml`) })}
       </Text>
       {list.length === 0 ? (
@@ -59,7 +59,7 @@ export function BlogPage({ assets, locale, path, alternates, shareImage }: PageP
                 {post.title}
               </a>
               <Text>{post.description}</Text>
-              <Text note>{authors[post.author].name}</Text>
+              <p {...stylex.props(ui.text, ui.note)}>{authors[post.author].name}</p>
             </li>
           ))}
         </ul>
