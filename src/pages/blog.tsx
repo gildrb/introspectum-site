@@ -136,9 +136,6 @@ const styles = stylex.create({
   posts: { paddingBottom: { default: space.x8, [media.desktop]: space.x12 } },
   empty: {
     paddingBlock: space.x4,
-    borderTopWidth: "1px",
-    borderTopStyle: "solid",
-    borderTopColor: "currentColor",
   },
   author: { marginTop: "auto" },
 });

@@ -82,7 +82,7 @@ const buttonKinds: Readonly<Record<ButtonKind, Style>> = {
   inverseOutline: ui.inverseOutline,
 };
 
-/** A link shaped as a button. `inverse` kinds sit on the closing call to action's dark panel. */
+/** A link shaped as a button. `inverse` kinds sit on the emerald closing panel. */
 export function ButtonLink({
   href,
   kind,
@@ -138,7 +138,7 @@ export function Article({
   );
 }
 
-/** The closing panel: what to do next, in full contrast. */
+/** The closing panel, an emerald tablet: what to do next. */
 export function CallToAction({
   id,
   title,
@@ -177,9 +177,6 @@ const styles = stylex.create({
   heroTitle: { maxWidth: "15em" },
   heroLead: { maxWidth: space.measure },
   section: {
-    borderTopWidth: "1px",
-    borderTopStyle: "solid",
-    borderTopColor: colors.hairline,
     paddingBlock: { default: space.x8, [media.desktop]: space.x12 },
   },
   head: {
@@ -249,7 +246,7 @@ const styles = stylex.create({
     rowGap: space.x3,
     padding: { default: space.x4, [media.desktop]: space.x8 },
     borderRadius: space.x2,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.accent,
   },
-  inverse: { color: colors.bg, maxWidth: space.measure },
+  inverse: { color: colors.onAccent, maxWidth: space.measure },
 });

@@ -170,8 +170,9 @@ export function Page({
             />
           </>
         )}
-        <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
-        <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+        {/* The page backgrounds, `colors.bg`, in sRGB. */}
+        <meta name="theme-color" content="#17120c" media="(prefers-color-scheme: dark)" />
+        <meta name="theme-color" content="#f8f1e3" media="(prefers-color-scheme: light)" />
         <meta property="og:type" content={meta.type} />
         <meta property="og:site_name" content={company.name} />
         <meta property="og:locale" content={ogLocale(locale)} />
@@ -237,7 +238,6 @@ export function Page({
               ))}
             </nav>
             <div {...stylex.props(styles.actions)}>
-              <Languages meta={meta} style={ui.text} />
               <a {...stylex.props(ui.button, ui.primary, ui.focusRing)} href={contact}>
                 {t.text("nav_contact")}
               </a>
@@ -267,7 +267,6 @@ export function Page({
                   <a {...stylex.props(ui.button, ui.primary, ui.focusRing)} href={contact}>
                     {t.text("nav_contact")}
                   </a>
-                  <Languages meta={meta} style={[ui.text, styles.panelLanguage]} />
                 </div>
               </div>
             </details>
@@ -331,8 +330,8 @@ function Footer({ meta }: { meta: Meta }) {
     },
   ];
   return (
-    <footer {...stylex.props(styles.footer)}>
-      <div {...stylex.props(ui.container, styles.footerGrid)}>
+    <footer>
+      <div {...stylex.props(ui.container, styles.footerColumns, styles.footerGrid)}>
         <div {...stylex.props(styles.footerBrand)}>
           <p {...stylex.props(ui.serif, styles.wordmark)} {...untranslated}>
             {company.name}
@@ -370,16 +369,17 @@ function Footer({ meta }: { meta: Meta }) {
           </div>
         ))}
       </div>
-      <div {...stylex.props(styles.footerBase)}>
-        <div {...stylex.props(ui.container, styles.footerBaseRow)}>
-          <p {...stylex.props(ui.small, ui.note)}>
-            {t.text("footer_copyright", {
-              year: String(new Date().getUTCFullYear()),
-              company: company.legalName,
-            })}
-          </p>
+      {/* The other language sits under the first column of links, on phones and desktops. */}
+      <div {...stylex.props(ui.container, styles.footerColumns, styles.footerBase)}>
+        <p {...stylex.props(ui.small, ui.note, styles.copyright)}>
+          {t.text("footer_copyright", {
+            year: String(new Date().getUTCFullYear()),
+            company: company.legalName,
+          })}
+        </p>
+        <p {...stylex.props(styles.otherLanguage)}>
           <Languages meta={meta} style={ui.small} />
-        </div>
+        </p>
       </div>
     </footer>
   );
@@ -480,28 +480,19 @@ const styles = stylex.create({
   panelFoot: {
     display: "flex",
     flexDirection: "column",
-    rowGap: space.x2,
     marginTop: space.x2,
-    paddingTop: space.x3,
-    borderTopWidth: "1px",
-    borderTopStyle: "solid",
-    borderTopColor: colors.hairline,
-  },
-  panelLanguage: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    height: space.x6,
   },
   main: { flexGrow: 1, outline: "none" },
-  footer: { borderTopWidth: "1px", borderTopStyle: "solid", borderTopColor: colors.hairline },
-  footerGrid: {
+  /** The footer's columns: the name, then one per group of links; two on phones. */
+  footerColumns: {
     display: "grid",
     gridTemplateColumns: {
       default: "repeat(2, minmax(0, 1fr))",
       [media.desktop]: "minmax(0, 2fr) repeat(3, minmax(0, 1fr))",
     },
     columnGap: space.x4,
+  },
+  footerGrid: {
     rowGap: space.x5,
     paddingBlock: { default: space.x6, [media.desktop]: space.x8 },
   },
@@ -520,18 +511,11 @@ const styles = stylex.create({
     listStyle: "none",
   },
   footerBase: {
-    borderTopWidth: "1px",
-    borderTopStyle: "solid",
-    borderTopColor: colors.hairline,
-  },
-  footerBaseRow: {
-    display: "flex",
-    flexWrap: "wrap",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: space.x2,
+    rowGap: space.x2,
     paddingBlock: space.x3,
   },
+  copyright: { gridColumn: { default: "1 / -1", [media.desktop]: "1" } },
+  otherLanguage: { gridColumn: { default: "1", [media.desktop]: "2" } },
   // An address is lowercase: its @ keeps the default form, not the capitals' one.
   email: { fontFeatureSettings: fontFeatures.prose },
 });

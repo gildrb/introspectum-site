@@ -26,25 +26,36 @@ export const fontFeatures = stylex.defineConsts({
 });
 
 /**
- * The page follows the system's light or dark setting. Every gray meets APCA's Bronze level on
- * the page background for the text it sets. Body text, a block of more than two lines, needs at
- * least Lc 75: `article` (Lc 102 light, Lc 90 dark), and `secondary` (Lc 89, Lc 77), which may
- * run that long. Other content text, such as labels, navigation, notes and the footer, needs at
- * least Lc 60: `tertiary` (Lc 61 in both), which therefore never sets running text. Light prose
- * is heavier (`proseWeight`): gray on white reads fainter than on black at the same Lc.
+ * The colors of the Tabula Smaragdina, the "emerald tablet", as Heinrich Khunrath's 1609
+ * engraving shows it: iron-gall ink on aged paper, sepia between them, and the emerald of its
+ * name. Light is ink on parchment, dark is parchment on umber; both follow the system setting.
+ *
+ * Every text color meets APCA's Bronze level on what it sits on. Body text, a block of more than
+ * two lines, needs at least Lc 75: `article` (Lc 90 light, Lc 92 dark) and `secondary` (Lc 78 in
+ * both), which may run that long. Other content text, such as labels, navigation, notes and the
+ * footer, needs at least Lc 60: `tertiary` (Lc 62 in both), which therefore never sets running
+ * text. On `accent`, `onAccent` reaches Lc 85 light and Lc 83 dark, and `accent` itself stands
+ * off the page at Lc 82 light and Lc 16 dark, above APCA's Lc 15 for a solid shape. Light prose
+ * is heavier (`proseWeight`): dark on light reads fainter than light on dark at the same Lc.
  */
 export const colors = stylex.defineVars({
-  bg: { default: "oklch(0% 0 0)", [light]: "oklch(100% 0 0)" },
-  primary: { default: "oklch(100% 0 0)", [light]: "oklch(0% 0 0)" },
-  secondary: { default: "oklch(85.3% 0 0)", [light]: "oklch(42.02% 0 0)" },
-  tertiary: { default: "oklch(76.68% 0 0)", [light]: "oklch(64% 0 0)" },
-  article: { default: "oklch(91.74% 0 0)", [light]: "oklch(27.07% 0 0)" },
+  bg: { default: "oklch(18.5% 0.014 70)", [light]: "oklch(96% 0.02 85)" },
+  primary: { default: "oklch(96.74% 0.022 85)", [light]: "oklch(24.9% 0.02 65)" },
+  secondary: { default: "oklch(86.06% 0.03 80)", [light]: "oklch(45.09% 0.03 65)" },
+  tertiary: { default: "oklch(77.62% 0.035 75)", [light]: "oklch(57.8% 0.035 70)" },
+  article: { default: "oklch(93.09% 0.02 85)", [light]: "oklch(33% 0.022 65)" },
+  /** Emerald: buttons and the closing panel. */
+  accent: { default: "oklch(44% 0.1 160)", [light]: "oklch(40% 0.09 160)" },
+  /** Emerald under a pointer: further from `onAccent` in light, still Lc 75 from it in dark. */
+  accentHover: { default: "oklch(50% 0.1 160)", [light]: "oklch(34% 0.09 160)" },
+  /** Text on `accent`: parchment in both settings. */
+  onAccent: { default: "oklch(96.74% 0.022 85)", [light]: "oklch(96% 0.02 85)" },
   /**
    * Dividers and card edges. Decoration only: what they group reads the same without them, so
    * they may stay below APCA's Lc 15 for meaningful non-text. Form fields use `tertiary` instead.
    */
-  hairline: { default: "oklch(100% 0 0 / 0.16)", [light]: "oklch(0% 0 0 / 0.12)" },
-  codeBg: { default: "oklch(20.44% 0 0)", [light]: "oklch(93.12% 0 0)" },
+  hairline: { default: "oklch(96.74% 0.022 85 / 0.16)", [light]: "oklch(24.9% 0.02 65 / 0.14)" },
+  codeBg: { default: "oklch(24% 0.016 70)", [light]: "oklch(92% 0.025 85)" },
   proseWeight: { default: "380", [light]: "400" },
 });
 

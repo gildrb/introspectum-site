@@ -211,7 +211,7 @@ const styles = stylex.create({
     height: "16px",
     // Centred on the first line of the sentence beside it.
     marginTop: `calc((${space.x3} - 16px) / 2)`,
-    accentColor: colors.primary,
+    accentColor: colors.accent,
     cursor: "pointer",
   },
   button: {

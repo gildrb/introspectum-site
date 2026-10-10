@@ -147,26 +147,27 @@ export const ui = stylex.create({
     cursor: "pointer",
     touchAction: "manipulation",
   },
+  /** The main action: parchment on emerald. */
   primary: {
-    color: colors.bg,
-    backgroundColor: { default: colors.primary, ":hover": { [media.hover]: colors.secondary } },
-    borderColor: { default: colors.primary, ":hover": { [media.hover]: colors.secondary } },
+    color: colors.onAccent,
+    backgroundColor: { default: colors.accent, ":hover": { [media.hover]: colors.accentHover } },
+    borderColor: { default: colors.accent, ":hover": { [media.hover]: colors.accentHover } },
   },
   secondary: {
     color: colors.primary,
     backgroundColor: "transparent",
     borderColor: { default: colors.tertiary, ":hover": { [media.hover]: colors.primary } },
   },
-  /** On a panel in the text color, the closing call to action: the page's colors swapped. */
+  /** On the emerald closing panel: emerald on parchment. */
   inverse: {
-    color: colors.primary,
-    backgroundColor: colors.bg,
-    borderColor: colors.bg,
+    color: colors.accent,
+    backgroundColor: colors.onAccent,
+    borderColor: colors.onAccent,
   },
   inverseOutline: {
-    color: colors.bg,
+    color: colors.onAccent,
     backgroundColor: "transparent",
-    borderColor: colors.bg,
+    borderColor: colors.onAccent,
   },
   reset: {
     appearance: "none",
