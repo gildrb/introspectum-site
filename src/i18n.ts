@@ -9,7 +9,9 @@ import en from "./locales/en.json";
  * Every user-facing string lives in `src/locales/<locale>.json` as an ICU MessageFormat message,
  * keyed by ID. `en.json` is the source: each entry carries a description for translators, and a
  * `maxLength` where space is tight. `translate: false` marks names that stay the same in every
- * language. `i18n-check.ts` holds the other catalogs to the source at build time.
+ * language. A translation records as `source` the English it was made from, so a change to the
+ * English shows which translations it left behind. `i18n-check.ts` holds the other catalogs to
+ * the source at build time.
  */
 export type SourceEntry = {
   message: string;
@@ -22,9 +24,12 @@ export type MessageId = keyof typeof en;
 
 export const source: Readonly<Record<MessageId, SourceEntry>> = en;
 
+/** A translated message and the English `message` it translates. */
+type TargetEntry = { source: string; message: string };
+
 /** Every catalog but the source's, keyed by locale. */
 export const targets: Readonly<
-  Record<Exclude<Locale, "en">, Readonly<Record<string, { message: string }>>>
+  Record<Exclude<Locale, "en">, Readonly<Record<string, TargetEntry>>>
 > = { de };
 
 function messages(locale: Locale): Record<string, string> {

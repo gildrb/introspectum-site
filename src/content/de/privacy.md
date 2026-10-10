@@ -1,3 +1,6 @@
+---
+source: 89a270a41337
+---
 # Datenschutzerklärung
 
 Fabian Klopfer betreibt diese Website für die Introspectum Limited und ist für die hier beschriebenen Daten verantwortlich. Seine Anschrift steht im [Impressum](/de/impressum). Fragen zu Ihren Daten richten Sie bitte an [{email}](mailto:{email}).

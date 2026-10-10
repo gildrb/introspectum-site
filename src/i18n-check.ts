@@ -4,9 +4,9 @@ import glossary from "./locales/glossary.json";
 
 /**
  * Holds every translation to the source catalog before a page is built. It fails on a message that
- * is missing, extra, or does not parse; that names other placeholders or tags than the source;
- * that is longer than its `maxLength`; that is the untranslated English; or that leaves out a
- * glossary term the English uses.
+ * is missing, extra, or does not parse; that translates other English than `en.json` now holds;
+ * that names other placeholders or tags than the source; that is longer than its `maxLength`;
+ * that is the untranslated English; or that leaves out a glossary term the English uses.
  */
 
 type Term = { en: string; de: string; match?: string; note: string };
@@ -109,6 +109,10 @@ export function checkTranslations(): void {
         problems.push(`${locale}:${id}: missing`);
         continue;
       }
+      if (target.source !== entry.message)
+        problems.push(
+          `${locale}:${id}: the English changed. Was "${target.source}", now "${entry.message}". Update the translation, then set source to the new English.`,
+        );
       const translated = parsed(`${locale}:${id}`, target.message);
       if (translated === undefined) continue;
       const want = [...new Set(english.slots)].toSorted().join(" ");

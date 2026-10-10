@@ -1,224 +1,514 @@
 {
-  "page_title": { "message": "{brand} → {page}" },
-  "page_title_nested": { "message": "{brand} → {section} → {page}" },
-  "skip_to_content": { "message": "Zum Inhalt springen" },
-  "nav_label": { "message": "Hauptnavigation" },
-  "nav_products": { "message": "Produkte" },
-  "nav_join": { "message": "Karriere" },
-  "nav_blog": { "message": "Blog" },
-  "nav_about": { "message": "Über uns" },
-  "footer_label": { "message": "Kontakt und Rechtliches" },
-  "footer_privacy": { "message": "Datenschutz" },
-  "footer_imprint": { "message": "Impressum" },
-  "language_switch": { "message": "Diese Seite auf {language}" },
-  "feed_title": { "message": "{brand} Blog" },
+  "page_title": {
+    "source": "{brand} → {page}",
+    "message": "{brand} → {page}"
+  },
+  "page_title_nested": {
+    "source": "{brand} → {section} → {page}",
+    "message": "{brand} → {section} → {page}"
+  },
+  "skip_to_content": {
+    "source": "Skip to content",
+    "message": "Zum Inhalt springen"
+  },
+  "nav_label": {
+    "source": "Main",
+    "message": "Hauptnavigation"
+  },
+  "nav_products": {
+    "source": "Products",
+    "message": "Produkte"
+  },
+  "nav_join": {
+    "source": "Join us",
+    "message": "Karriere"
+  },
+  "nav_blog": {
+    "source": "Blog",
+    "message": "Blog"
+  },
+  "nav_about": {
+    "source": "About",
+    "message": "Über uns"
+  },
+  "footer_label": {
+    "source": "Contact and legal",
+    "message": "Kontakt und Rechtliches"
+  },
+  "footer_privacy": {
+    "source": "Privacy",
+    "message": "Datenschutz"
+  },
+  "footer_imprint": {
+    "source": "Imprint",
+    "message": "Impressum"
+  },
+  "language_switch": {
+    "source": "This page in {language}",
+    "message": "Diese Seite auf {language}"
+  },
+  "feed_title": {
+    "source": "{brand} blog",
+    "message": "{brand}-Blog"
+  },
   "home_description": {
+    "source": "Introspectum builds software you can check: a verified software factory, an open-data ERP and CRM, and research in systematic trading.",
     "message": "Introspectum entwickelt prüfbare Software: eine verifizierte Software Factory, ein ERP und CRM mit offenen Daten und Forschung zum systematischen Börsenhandel."
   },
-  "home_share_title": { "message": "Software, die geprüft wird, statt ihr zu vertrauen." },
+  "home_share_title": {
+    "source": "Software that is checked instead of trusted.",
+    "message": "Software, die man prüft, statt ihr zu vertrauen."
+  },
   "home_hook": {
+    "source": "{distrust, number, ::percent} of developers do not fully trust AI-generated code. Only {verify, number, ::percent} always check it before they commit.",
     "message": "{distrust, number, ::percent} der Entwicklerinnen und Entwickler vertrauen KI-generiertem Code nicht vollständig. Nur {verify, number, ::percent} prüfen ihn immer, bevor sie ihn einchecken."
   },
-  "home_why_label": { "message": "Warum" },
-  "home_why_text": {
-    "message": "KI schreibt einen wachsenden Anteil des gesamten Codes, schneller, als ihn jemand prüfen kann. Wir bauen Software, die geprüft wird, statt ihr einfach zu vertrauen: von der Anforderung bis zum Code nachvollziehbar, bewiesen, wo es darauf ankommt, und offen für die Menschen, die für sie geradestehen."
+  "home_why_label": {
+    "source": "Why",
+    "message": "Warum"
   },
-  "home_what_label": { "message": "Was wir bauen" },
-  "home_how_label": { "message": "Wie" },
-  "home_who_label": { "message": "Wer wir sind" },
+  "home_why_text": {
+    "source": "AI writes a growing share of all code, faster than anyone can review it. We build software that is checked instead of trusted: traced from requirement to code, proven where it matters, and open to the people who answer for it.",
+    "message": "KI schreibt einen wachsenden Anteil des gesamten Codes, schneller, als ihn jemand prüfen kann. Wir bauen Software, die man prüft, statt ihr zu vertrauen: von der Anforderung bis zum Code nachvollziehbar, bewiesen, wo es darauf ankommt, und offen für die Menschen, die für sie geradestehen."
+  },
+  "home_what_label": {
+    "source": "What we build",
+    "message": "Was wir bauen"
+  },
+  "home_how_label": {
+    "source": "How",
+    "message": "Wie"
+  },
+  "home_who_label": {
+    "source": "Who we are",
+    "message": "Wer wir sind"
+  },
   "home_who_text": {
+    "source": "Introspectum Limited is registered in the Isle of Man and led by Fabian Klopfer, a computer scientist and former software engineer at IBM Germany Research & Development.",
     "message": "Introspectum Limited ist auf der Isle of Man registriert und wird von Fabian Klopfer geleitet, einem Informatiker und früheren Softwareentwickler bei IBM Deutschland Research & Development."
   },
-  "home_who_more": { "message": "Mehr über uns" },
-  "home_next_label": { "message": "Nächste Schritte" },
+  "home_who_more": {
+    "source": "More about us",
+    "message": "Mehr über uns"
+  },
+  "home_next_label": {
+    "source": "Next",
+    "message": "Nächste Schritte"
+  },
   "home_next_waitlist": {
+    "source": "<link>Join a waiting list</link> to test a product before its release.",
     "message": "<link>Tragen Sie sich in eine Warteliste ein</link>, um ein Produkt vor dem Start zu testen."
   },
   "home_next_consulting": {
+    "source": "<link>Send a consulting inquiry</link> to work with us now.",
     "message": "<link>Senden Sie uns eine Beratungsanfrage</link>, um schon jetzt mit uns zu arbeiten."
   },
   "home_next_join": {
+    "source": "<link>Join us</link> as founding engineer or intern.",
     "message": "<link>Arbeiten Sie bei uns</link> als Founding Engineer oder im Praktikum."
   },
-  "methods_label": { "message": "Methoden" },
-  "principles_label": { "message": "Prinzipien" },
-  "method_formal_methods": { "message": "Formale Methoden" },
-  "method_compiler_construction": { "message": "Compilerbau" },
-  "method_model_based": { "message": "Modellbasierte Softwareentwicklung" },
-  "method_ai_agents": { "message": "KI-Agenten" },
-  "method_open_data": { "message": "Offene Daten" },
-  "method_reinforcement_learning": { "message": "Reinforcement Learning" },
-  "principle_proof": { "message": "Beweis statt Vertrauen" },
-  "principle_data": { "message": "Daten, die Ihnen gehören" },
-  "principle_traceability": { "message": "Nachvollziehbar von der Anforderung bis zum Code" },
-  "consulting_name": { "message": "Beratung" },
+  "methods_label": {
+    "source": "Methods",
+    "message": "Methoden"
+  },
+  "principles_label": {
+    "source": "Principles",
+    "message": "Prinzipien"
+  },
+  "method_formal_methods": {
+    "source": "Formal methods",
+    "message": "Formale Methoden"
+  },
+  "method_compiler_construction": {
+    "source": "Compiler construction",
+    "message": "Compilerbau"
+  },
+  "method_model_based": {
+    "source": "Model-based software engineering",
+    "message": "Modellbasierte Softwareentwicklung"
+  },
+  "method_ai_agents": {
+    "source": "AI agents",
+    "message": "KI-Agenten"
+  },
+  "method_open_data": {
+    "source": "Open data",
+    "message": "Offene Daten"
+  },
+  "method_reinforcement_learning": {
+    "source": "Reinforcement learning",
+    "message": "Reinforcement Learning"
+  },
+  "principle_proof": {
+    "source": "Proof over trust",
+    "message": "Beweis statt Vertrauen"
+  },
+  "principle_data": {
+    "source": "Data that stays yours",
+    "message": "Daten, die Ihnen gehören"
+  },
+  "principle_traceability": {
+    "source": "Traceability from requirement to code",
+    "message": "Nachvollziehbar von der Anforderung bis zum Code"
+  },
+  "consulting_name": {
+    "source": "Consulting",
+    "message": "Beratung"
+  },
   "consulting_what": {
-    "message": "Bis unsere Produkte erscheinen, helfen wir Unternehmen, KI in ihre Softwareentwicklung zu bringen und CRM und ERP einzurichten."
+    "source": "Until our products ship, we help companies bring AI into their software development and set up CRM and ERP.",
+    "message": "Bis unsere Produkte erscheinen, helfen wir Unternehmen, KI in ihre Softwareentwicklung einzuführen und CRM und ERP einzurichten."
   },
   "consulting_audience": {
+    "source": "For companies that want to use AI without losing control of their code or their data.",
     "message": "Für Unternehmen, die KI nutzen wollen, ohne die Kontrolle über ihren Code oder ihre Daten zu verlieren."
   },
-  "consulting_link": { "message": "Beratungsanfrage senden" },
-  "consulting_subject": { "message": "Beratungsanfrage" },
-  "consulting_subject_product": { "message": "Beratungsanfrage: {product}" },
-  "products_title": { "message": "Produkte" },
+  "consulting_link": {
+    "source": "Send a consulting inquiry",
+    "message": "Beratungsanfrage senden"
+  },
+  "consulting_subject": {
+    "source": "Consulting inquiry",
+    "message": "Beratungsanfrage"
+  },
+  "consulting_subject_product": {
+    "source": "Consulting inquiry: {product}",
+    "message": "Beratungsanfrage: {product}"
+  },
+  "products_title": {
+    "source": "Products",
+    "message": "Produkte"
+  },
   "products_intro": {
+    "source": "Three products, all before release. Join a waiting list to test one first.",
     "message": "Drei Produkte, alle noch vor dem Start. Tragen Sie sich in eine Warteliste ein, um eines vorab zu testen."
   },
-  "status_prototype": { "message": "Prototyp" },
-  "status_in_development": { "message": "In Entwicklung" },
-  "status_research": { "message": "Forschung" },
+  "status_prototype": {
+    "source": "Prototype",
+    "message": "Prototyp"
+  },
+  "status_in_development": {
+    "source": "In development",
+    "message": "In Entwicklung"
+  },
+  "status_research": {
+    "source": "Research",
+    "message": "Forschung"
+  },
   "product_software_factory_what": {
+    "source": "Builds one graph from your code and documents, lets AI agents work on it, and checks their changes with formal verification.",
     "message": "Baut aus Ihrem Code und Ihren Dokumenten einen Graphen, lässt KI-Agenten darauf arbeiten und prüft ihre Änderungen mit formaler Verifikation."
   },
   "product_software_factory_audience": {
+    "source": "For software teams that use AI to write code and must stand behind it, starting with startups and small IT companies.",
     "message": "Für Softwareteams, die Code mit KI schreiben und dafür geradestehen müssen, zuerst für Start-ups und kleine IT-Unternehmen."
   },
   "product_software_factory_detail_1": {
+    "source": "The Software Factory reads your code and its documents into one graph: requirements, design, tests, bug reports and analysis results, each linked to the code it concerns. You see the system as architecture maps, from the overview down to single functions.",
     "message": "Die Software Factory liest Ihren Code und die zugehörigen Dokumente in einen Graphen ein: Anforderungen, Entwurf, Tests, Fehlerberichte und Analyseergebnisse, jeweils verknüpft mit dem Code, den sie betreffen. Sie sehen das System als Architekturkarten, von der Übersicht bis zu einzelnen Funktionen."
   },
   "product_software_factory_detail_2": {
+    "source": "On top of the graph, AI agents work in steps modelled on ISO/IEC/IEEE 15288, the standard for system life cycle processes, and formal verification checks their output against your specifications. Every step leaves an audit trail.",
     "message": "Auf dem Graphen arbeiten KI-Agenten in Schritten nach ISO/IEC/IEEE 15288, der Norm für Prozesse im Systemlebenszyklus, und formale Verifikation prüft ihre Ergebnisse gegen Ihre Spezifikationen. Jeder Schritt hinterlässt einen Prüfpfad."
   },
   "product_software_factory_detail_3": {
+    "source": "The graph and the maps work today, and verification runs end to end with the Prusti and Verus verifiers. The agent process comes next.",
     "message": "Graph und Karten funktionieren bereits, und die Verifikation läuft durchgängig mit den Verifizierern Prusti und Verus. Als Nächstes folgt der Agentenprozess."
   },
   "product_erp_crm_what": {
+    "source": "Customers, sales, accounting and HR in one open-data system, with an AI assistant that works on the same data.",
     "message": "Kunden, Vertrieb, Buchhaltung und Personal in einem System mit offenen Daten und einem KI-Assistenten, der mit denselben Daten arbeitet."
   },
   "product_erp_crm_audience": {
-    "message": "Für kleine Unternehmen, die noch mit Papier und Tabellen arbeiten, zuerst aus der Immobilienwirtschaft und der IT-Dienstleistung."
+    "source": "For small businesses that still run on paper and spreadsheets, starting with real estate and IT services.",
+    "message": "Für kleine Unternehmen, die noch mit Papier und Tabellen arbeiten, zuerst aus der Immobilienwirtschaft und der IT-Dienstleistungsbranche."
   },
   "product_erp_crm_detail_1": {
+    "source": "An ERP and CRM built on Twenty, the open-source CRM, and extended with accounting, tax, purchasing, sales, payments, inventory and HR.",
     "message": "Ein ERP- und CRM-System auf Basis von Twenty, dem Open-Source-CRM, erweitert um Buchhaltung, Steuern, Einkauf, Vertrieb, Zahlungsverkehr, Lagerhaltung und Personal."
   },
   "product_erp_crm_detail_2": {
+    "source": "Each customer gets its own installation, and all data stays in open formats in one place. An AI assistant works on the same data as your team: it can keep records in order, prepare analyses and draft documents.",
     "message": "Jeder Kunde erhält eine eigene Installation, und alle Daten bleiben in offenen Formaten an einem Ort. Ein KI-Assistent arbeitet mit denselben Daten wie Ihr Team: Er kann Datensätze ordnen, Analysen vorbereiten und Dokumente entwerfen."
   },
   "product_erp_crm_detail_3": {
+    "source": "Our own company and a real-estate brokerage are its first users.",
     "message": "Unser eigenes Unternehmen und ein Immobilienmakler nutzen es als Erste."
   },
   "product_trading_platform_what": {
+    "source": "Runs trend-following strategies on many stocks at once, with reinforcement learning tuning each stock’s settings.",
     "message": "Führt trendfolgende Strategien auf vielen Aktien zugleich aus; Reinforcement Learning stimmt die Einstellungen jeder Aktie ab."
   },
   "product_trading_platform_audience": {
+    "source": "For investors from real estate, banking and IT who want to test a strategy before they trust it.",
     "message": "Für Anlegerinnen und Anleger aus Immobilien, Banken und IT, die eine Strategie testen wollen, bevor sie ihr vertrauen."
   },
   "product_trading_platform_detail_1": {
+    "source": "The Trading Platform runs trend-following strategies, such as the Turtle rules, on many stocks in parallel.",
     "message": "Die Trading Platform führt trendfolgende Strategien wie die Turtle-Regeln parallel auf vielen Aktien aus."
   },
   "product_trading_platform_detail_2": {
+    "source": "Reinforcement learning tunes the settings for each stock, including the time scale on which its signals are most reliable.",
     "message": "Reinforcement Learning stimmt die Einstellungen für jede Aktie ab, auch den Zeitraum, in dem ihre Signale am verlässlichsten sind."
   },
   "product_trading_platform_detail_3": {
+    "source": "It trades on paper only, and nothing here is investment advice.",
     "message": "Sie handelt nur simuliert (Paper Trading), und nichts hier ist eine Anlageberatung."
   },
-  "waitlist_label": { "message": "Warteliste" },
+  "waitlist_label": {
+    "source": "Waiting list",
+    "message": "Warteliste"
+  },
   "waitlist_intro": {
+    "source": "Leave your email address to test the {product} before its release.",
     "message": "Hinterlassen Sie Ihre E-Mail-Adresse, um {product} vor dem Start zu testen."
   },
-  "waitlist_email_label": { "message": "E-Mail" },
-  "waitlist_company_label": { "message": "Unternehmen (optional)" },
-  "waitlist_honeypot_label": { "message": "Leer lassen" },
+  "waitlist_email_label": {
+    "source": "Email",
+    "message": "E-Mail"
+  },
+  "waitlist_company_label": {
+    "source": "Company (optional)",
+    "message": "Unternehmen (optional)"
+  },
+  "waitlist_honeypot_label": {
+    "source": "Leave empty",
+    "message": "Leer lassen"
+  },
   "waitlist_consent": {
+    "source": "I agree that Introspectum stores my email address to contact me about the {product} waiting list.",
     "message": "Ich bin einverstanden, dass Introspectum meine E-Mail-Adresse speichert, um mich zur Warteliste für {product} zu kontaktieren."
   },
   "waitlist_privacy": {
+    "source": "Read what we store and why in the <link>privacy policy</link>.",
     "message": "Was wir speichern und warum, steht in der <link>Datenschutzerklärung</link>."
   },
-  "waitlist_submit": { "message": "Auf die Warteliste" },
-  "waitlist_sending": { "message": "Wird gesendet …" },
+  "waitlist_submit": {
+    "source": "Join the waiting list",
+    "message": "Auf die Warteliste"
+  },
+  "waitlist_sending": {
+    "source": "Sending…",
+    "message": "Wird gesendet …"
+  },
   "waitlist_joined": {
+    "source": "You are on the waiting list. We will write to you when testing opens.",
     "message": "Sie stehen auf der Warteliste. Wir schreiben Ihnen, sobald die Testphase beginnt."
   },
   "waitlist_failed_connection": {
+    "source": "The connection failed. Try again, or write to {email}.",
     "message": "Die Verbindung ist fehlgeschlagen. Versuchen Sie es erneut oder schreiben Sie an {email}."
   },
   "waitlist_failed_server": {
+    "source": "We could not add you. Try again, or write to {email}.",
     "message": "Wir konnten Sie nicht eintragen. Versuchen Sie es erneut oder schreiben Sie an {email}."
   },
-  "api_not_added": { "message": "Nicht eingetragen" },
-  "api_error_origin": { "message": "Bitte senden Sie das Formular von dieser Website aus." },
+  "api_not_added": {
+    "source": "Not added",
+    "message": "Nicht eingetragen"
+  },
+  "api_error_origin": {
+    "source": "Send the form from this site.",
+    "message": "Bitte senden Sie das Formular von dieser Website aus."
+  },
   "api_error_unreadable": {
+    "source": "The form could not be read. Please send it again.",
     "message": "Das Formular konnte nicht gelesen werden. Bitte senden Sie es erneut."
   },
-  "api_error_product": { "message": "Für dieses Produkt gibt es keine Warteliste." },
-  "api_error_email": { "message": "Bitte geben Sie eine gültige E-Mail-Adresse ein." },
-  "api_error_company": { "message": "Bitte kürzen Sie den Unternehmensnamen." },
+  "api_error_product": {
+    "source": "There is no waiting list for this product.",
+    "message": "Für dieses Produkt gibt es keine Warteliste."
+  },
+  "api_error_email": {
+    "source": "Please enter a valid email address.",
+    "message": "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+  },
+  "api_error_company": {
+    "source": "Please shorten the company name.",
+    "message": "Bitte kürzen Sie den Unternehmensnamen."
+  },
   "api_error_consent": {
+    "source": "Please agree that we may store your address for this waiting list.",
     "message": "Bitte stimmen Sie zu, dass wir Ihre Adresse für diese Warteliste speichern dürfen."
   },
-  "back_to_products": { "message": "Zurück zu den Produkten" },
-  "joined_title": { "message": "Sie stehen auf der Warteliste" },
-  "joined_text": { "message": "Wir schreiben Ihnen, sobald die Testphase beginnt." },
-  "join_title": { "message": "Karriere" },
+  "back_to_products": {
+    "source": "Back to the products",
+    "message": "Zurück zu den Produkten"
+  },
+  "joined_title": {
+    "source": "You are on the waiting list",
+    "message": "Sie stehen auf der Warteliste"
+  },
+  "joined_text": {
+    "source": "We will write to you when testing opens.",
+    "message": "Wir schreiben Ihnen, sobald die Testphase beginnt."
+  },
+  "join_title": {
+    "source": "Join us",
+    "message": "Karriere"
+  },
   "join_intro": {
+    "source": "Introspectum is a small team. There are two ways to join it.",
     "message": "Introspectum ist ein kleines Team. Es gibt zwei Wege, dazuzustoßen."
   },
   "join_description": {
-    "message": "Introspectum ist ein kleines Team. Arbeiten Sie mit uns als Founding Engineer oder im Praktikum."
+    "source": "Introspectum is a small team. Join it as founding engineer or intern.",
+    "message": "Introspectum ist ein kleines Team. Arbeiten Sie bei uns als Founding Engineer oder im Praktikum."
   },
-  "join_share_title": { "message": "Founding Engineer und Praktika" },
-  "role_founding_engineer_title": { "message": "Founding Engineer" },
-  "role_founding_engineer_focus": { "message": "Formale Methoden und Codegenerierung." },
+  "join_share_title": {
+    "source": "Founding engineer and internships",
+    "message": "Founding Engineer und Praktika"
+  },
+  "role_founding_engineer_title": {
+    "source": "Founding engineer",
+    "message": "Founding Engineer"
+  },
+  "role_founding_engineer_focus": {
+    "source": "Formal methods and code generation.",
+    "message": "Formale Methoden und Codegenerierung."
+  },
   "role_founding_engineer_status": {
+    "source": "We do not hire for this role yet. We read every application now and talk to exceptional people right away.",
     "message": "Wir besetzen diese Rolle noch nicht. Wir lesen aber schon jetzt jede Bewerbung und sprechen sofort mit außergewöhnlichen Menschen."
   },
-  "role_founding_engineer_work_label": { "message": "Ihre Aufgaben" },
+  "role_founding_engineer_work_label": {
+    "source": "You would work on",
+    "message": "Ihre Aufgaben"
+  },
   "role_founding_engineer_work_1": {
+    "source": "Formal verification of Rust code with Prusti and Verus",
     "message": "Formale Verifikation von Rust-Code mit Prusti und Verus"
   },
   "role_founding_engineer_work_2": {
+    "source": "The agent harness that generates code from specifications",
     "message": "Die Laufzeitumgebung für KI-Agenten, die Code aus Spezifikationen erzeugen"
   },
-  "role_founding_engineer_work_3": { "message": "Code-Property-Graphen aus bestehendem Code" },
-  "role_founding_engineer_work_4": { "message": "Anbindungen an GitHub und an SARIF-Werkzeuge" },
-  "role_founding_engineer_profile_label": { "message": "Was Sie mitbringen" },
+  "role_founding_engineer_work_3": {
+    "source": "Code property graphs built from existing code",
+    "message": "Code-Property-Graphen aus bestehendem Code"
+  },
+  "role_founding_engineer_work_4": {
+    "source": "Connectors to GitHub and to SARIF tools",
+    "message": "Anbindungen an GitHub und an SARIF-Werkzeuge"
+  },
+  "role_founding_engineer_profile_label": {
+    "source": "We look for",
+    "message": "Was Sie mitbringen"
+  },
   "role_founding_engineer_profile_1": {
+    "source": "A degree in computer science with a focus on systems programming",
     "message": "Ein Informatikstudium mit Schwerpunkt Systemprogrammierung"
   },
   "role_founding_engineer_profile_2": {
+    "source": "Interest in compiler construction and formal methods; experience helps but is not required",
     "message": "Interesse an Compilerbau und formalen Methoden; Erfahrung hilft, ist aber keine Voraussetzung"
   },
-  "role_founding_engineer_profile_3": { "message": "Fließendes Englisch" },
+  "role_founding_engineer_profile_3": {
+    "source": "Fluent English",
+    "message": "Fließendes Englisch"
+  },
   "role_founding_engineer_apply": {
+    "source": "Send your CV or LinkedIn profile and links to your work to <link>{email}</link>.",
     "message": "Senden Sie Ihren Lebenslauf oder Ihr LinkedIn-Profil und Links zu Ihren Arbeiten an <link>{email}</link>."
   },
-  "role_founding_engineer_subject": { "message": "Bewerbung: Founding Engineer" },
-  "role_internships_title": { "message": "Praktika" },
+  "role_founding_engineer_subject": {
+    "source": "Application: founding engineer",
+    "message": "Bewerbung: Founding Engineer"
+  },
+  "role_internships_title": {
+    "source": "Internships",
+    "message": "Praktika"
+  },
   "role_internships_focus": {
+    "source": "For students who want to work on a real product.",
     "message": "Für Studierende, die an einem echten Produkt arbeiten wollen."
   },
-  "role_internships_topics_label": { "message": "Themen" },
-  "role_internships_topic_1": { "message": "Formale Verifikation und Compiler" },
-  "role_internships_topic_2": { "message": "KI-Agenten" },
-  "role_internships_topic_3": { "message": "ERP und CRM auf Basis von Twenty" },
+  "role_internships_topics_label": {
+    "source": "Topics",
+    "message": "Themen"
+  },
+  "role_internships_topic_1": {
+    "source": "Formal verification and compilers",
+    "message": "Formale Verifikation und Compiler"
+  },
+  "role_internships_topic_2": {
+    "source": "AI agents",
+    "message": "KI-Agenten"
+  },
+  "role_internships_topic_3": {
+    "source": "ERP and CRM on Twenty",
+    "message": "ERP und CRM auf Basis von Twenty"
+  },
   "role_internships_topic_4": {
+    "source": "Reinforcement learning for trading research",
     "message": "Reinforcement Learning für die Forschung zum Börsenhandel"
   },
   "role_internships_apply": {
+    "source": "Send your CV, the topic you want to work on and the months you are free to <link>{email}</link>.",
     "message": "Senden Sie Ihren Lebenslauf, Ihr Wunschthema und die Monate, in denen Sie Zeit haben, an <link>{email}</link>."
   },
-  "role_internships_subject": { "message": "Bewerbung: Praktikum" },
-  "blog_title": { "message": "Blog" },
-  "blog_intro": { "message": "Jede Woche Neues zu KI, Softwareentwicklung und Regulierung." },
-  "blog_feed": { "message": "Folgen Sie dem Blog per <link>RSS</link>." },
-  "blog_empty": { "message": "Noch keine Beiträge." },
-  "blog_date": { "message": "{date, date, long}" },
+  "role_internships_subject": {
+    "source": "Application: internship",
+    "message": "Bewerbung: Praktikum"
+  },
+  "blog_title": {
+    "source": "Blog",
+    "message": "Blog"
+  },
+  "blog_intro": {
+    "source": "Weekly writing on AI, software engineering and regulation.",
+    "message": "Jede Woche Neues zu KI, Softwareentwicklung und Regulierung."
+  },
+  "blog_feed": {
+    "source": "Follow it by <link>RSS</link>.",
+    "message": "Folgen Sie dem Blog per <link>RSS</link>."
+  },
+  "blog_empty": {
+    "source": "No posts yet.",
+    "message": "Noch keine Beiträge."
+  },
+  "blog_date": {
+    "source": "{date, date, long}",
+    "message": "{date, date, long}"
+  },
   "blog_post_meta": {
+    "source": "{date, date, long}, {author}, {minutes, plural, one {# minute} other {# minutes}} to read",
     "message": "{date, date, long}, {author}, {minutes, plural, one {# Minute} other {# Minuten}} Lesezeit"
   },
-  "blog_share_byline": { "message": "{author}, {date, date, long}" },
-  "about_share_title": { "message": "Ein auf der Isle of Man registriertes Softwareunternehmen" },
+  "blog_share_byline": {
+    "source": "{author}, {date, date, long}",
+    "message": "{author}, {date, date, long}"
+  },
+  "about_share_title": {
+    "source": "A software company registered in the Isle of Man",
+    "message": "Ein auf der Isle of Man registriertes Softwareunternehmen"
+  },
   "privacy_description": {
+    "source": "What the Introspectum site stores, why, and your rights.",
     "message": "Was die Website von Introspectum speichert, warum, und welche Rechte Sie haben."
   },
-  "privacy_share_title": { "message": "Was diese Website speichert und warum" },
-  "imprint_description": { "message": "Wer für die Website von Introspectum verantwortlich ist." },
-  "imprint_share_title": { "message": "Wer für diese Website verantwortlich ist" },
-  "not_found_title": { "message": "Seite nicht gefunden" },
+  "privacy_share_title": {
+    "source": "What this site stores and why",
+    "message": "Was diese Website speichert und warum"
+  },
+  "imprint_description": {
+    "source": "Who is responsible for the Introspectum site.",
+    "message": "Wer für die Website von Introspectum verantwortlich ist."
+  },
+  "imprint_share_title": {
+    "source": "Who is responsible for this site",
+    "message": "Wer für diese Website verantwortlich ist"
+  },
+  "not_found_title": {
+    "source": "Page not found",
+    "message": "Seite nicht gefunden"
+  },
   "not_found_text": {
+    "source": "This page does not exist. It may have moved, or the address has a typo.",
     "message": "Diese Seite gibt es nicht. Vielleicht ist sie umgezogen, oder die Adresse enthält einen Tippfehler."
   },
-  "not_found_home": { "message": "Zur Startseite" }
+  "not_found_home": {
+    "source": "Go to the homepage",
+    "message": "Zur Startseite"
+  }
 }
