@@ -1,34 +1,48 @@
 import * as stylex from "@stylexjs/stylex";
 import { useState } from "preact/hooks";
-import { email, isProductSlug, type ProductSlug } from "../site.ts";
+import { isLocale, type Locale } from "../locale.ts";
+import { isProductSlug, type ProductSlug } from "../site.ts";
 import { colors, fontFeatures, media, space } from "../tokens.stylex.ts";
 import { ui } from "../ui.tsx";
 
+/** The form's words, translated on the server so the browser loads no message catalog. */
+const textKeys = [
+  "email",
+  "company",
+  "honeypot",
+  "consent",
+  "submit",
+  "sending",
+  "joined",
+  "failedConnection",
+  "failedServer",
+] as const;
+
 export type WaitlistProps = {
   product: ProductSlug;
-  /** The sentence the person agrees to; `functions/api/waitlist.ts` stores the same one. */
-  consent: string;
+  locale: Locale;
+  /** `consent` is the sentence the person agrees to; the Worker stores the same one. */
+  text: Readonly<Record<(typeof textKeys)[number], string>>;
 };
 
 export function isWaitlistProps(value: unknown): value is WaitlistProps {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "product" in value &&
-    typeof value.product === "string" &&
-    isProductSlug(value.product) &&
-    "consent" in value &&
-    typeof value.consent === "string"
-  );
+  if (typeof value !== "object" || value === null) return false;
+  if (!("product" in value) || typeof value.product !== "string" || !isProductSlug(value.product))
+    return false;
+  if (!("locale" in value) || typeof value.locale !== "string" || !isLocale(value.locale))
+    return false;
+  if (!("text" in value) || typeof value.text !== "object" || value.text === null) return false;
+  const { text } = value;
+  return textKeys.every((key) => key in text && typeof Reflect.get(text, key) === "string");
 }
 
 type State = { $: "idle" } | { $: "sending" } | { $: "joined" } | { $: "failed"; reason: string };
 
 /**
  * A product's waiting-list form. Without JavaScript it posts to `/api/waitlist`, which redirects to
- * `/joined`; hydrated, it posts in the background and answers in place.
+ * the confirmation page; hydrated, it posts in the background and answers in place.
  */
-export function Waitlist({ product, consent }: WaitlistProps) {
+export function Waitlist({ product, locale, text }: WaitlistProps) {
   const [state, setState] = useState<State>({ $: "idle" });
 
   async function submit(form: HTMLFormElement) {
@@ -41,13 +55,14 @@ export function Waitlist({ product, consent }: WaitlistProps) {
         headers: { Accept: "application/json" },
       });
     } catch {
-      setState({ $: "failed", reason: "The connection failed." });
+      setState({ $: "failed", reason: text.failedConnection });
       return;
     }
     if (response.ok) {
       setState({ $: "joined" });
       return;
     }
+    // A rejected sign-up explains itself in the visitor's language; anything else is our fault.
     const problem: unknown = await response.json().catch(() => null);
     const detail =
       typeof problem === "object" &&
@@ -55,7 +70,7 @@ export function Waitlist({ product, consent }: WaitlistProps) {
       "detail" in problem &&
       typeof problem.detail === "string"
         ? problem.detail
-        : `The server answered ${response.status}.`;
+        : text.failedServer;
     setState({ $: "failed", reason: detail });
   }
 
@@ -66,10 +81,10 @@ export function Waitlist({ product, consent }: WaitlistProps) {
       status = "";
       break;
     case "joined":
-      status = "You are on the waiting list. We will write to you when testing opens.";
+      status = text.joined;
       break;
     case "failed":
-      status = `${state.reason} Try again, or write to ${email}.`;
+      status = state.reason;
       break;
     default: {
       const _: never = state;
@@ -90,9 +105,10 @@ export function Waitlist({ product, consent }: WaitlistProps) {
           }}
         >
           <input type="hidden" name="product" value={product} />
+          <input type="hidden" name="locale" value={locale} />
           <div {...stylex.props(styles.fields)}>
             <label {...stylex.props(ui.text, styles.field)}>
-              <span {...stylex.props(ui.label)}>Email</span>
+              <span {...stylex.props(ui.label)}>{text.email}</span>
               <input
                 {...stylex.props(ui.text, styles.input)}
                 type="email"
@@ -104,7 +120,7 @@ export function Waitlist({ product, consent }: WaitlistProps) {
               />
             </label>
             <label {...stylex.props(ui.text, styles.field)}>
-              <span {...stylex.props(ui.label)}>Company (optional)</span>
+              <span {...stylex.props(ui.label)}>{text.company}</span>
               <input
                 {...stylex.props(ui.text, styles.input)}
                 type="text"
@@ -117,7 +133,7 @@ export function Waitlist({ product, consent }: WaitlistProps) {
           {/* Left empty by people, filled by bots; the server turns away any entry that has it. */}
           <div {...stylex.props(ui.srOnly)} aria-hidden="true">
             <label>
-              Leave empty
+              {text.honeypot}
               <input type="text" name="website" tabIndex={-1} autoComplete="off" />
             </label>
           </div>
@@ -129,21 +145,14 @@ export function Waitlist({ product, consent }: WaitlistProps) {
               value="yes"
               required
             />
-            <span {...stylex.props(ui.prose)}>{consent}</span>
+            <span {...stylex.props(ui.prose)}>{text.consent}</span>
           </label>
-          <p {...stylex.props(ui.text, ui.note)}>
-            Read what we store and why in the{" "}
-            <a {...stylex.props(ui.link, ui.focusRing)} href="/privacy">
-              privacy policy
-            </a>
-            .
-          </p>
           <button
             {...stylex.props(ui.reset, ui.text, ui.focusRing, styles.button)}
             type="submit"
             disabled={state.$ === "sending"}
           >
-            {state.$ === "sending" ? "Sending…" : "Join the waiting list"}
+            {state.$ === "sending" ? text.sending : text.submit}
           </button>
         </form>
       )}

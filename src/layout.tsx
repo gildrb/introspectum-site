@@ -1,8 +1,10 @@
 import * as stylex from "@stylexjs/stylex";
 import type { ComponentChildren } from "preact";
+import { translators } from "./i18n.ts";
+import { href, type Locale, localeInfo, locales, type Route, sourceLocale } from "./locale.ts";
 import { shareFrame } from "./og.tsx";
-import { company, email, nav, origin } from "./site.ts";
-import { colors, fontFeatures, media, space } from "./tokens.stylex.ts";
+import { company, email, origin } from "./site.ts";
+import { colors, fontFeatures, media, rightToLeft, space } from "./tokens.stylex.ts";
 import { type Style, ui, untranslated } from "./ui.tsx";
 import { versioned } from "./versioned.ts";
 
@@ -11,13 +13,19 @@ export type Assets = { script: string; css: string };
 
 /** What a page tells the document head. */
 export type Meta = {
+  locale: Locale;
   path: `/${string}`;
+  /**
+   * The same page in every locale, for `hreflang` and the language switch. Absent on error
+   * pages, which have no address of their own.
+   */
+  alternates?: Readonly<Record<Locale, `/${string}`>>;
   title: string;
   description: string;
   /** The page's link-preview image, a stamped site path. */
   shareImage: string;
   type: "website" | "article";
-  /** False keeps the page out of search results (the waiting-list confirmation). */
+  /** False keeps the page out of search results. */
   index: boolean;
   /** Loads the island script; only pages with a form have islands. */
   script: boolean;
@@ -53,14 +61,6 @@ const globalCss = [
   "@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}",
 ].join("\n");
 
-/**
- * Runs in `<head>` right after the stylesheet: until Inter has loaded, the page stays hidden, so
- * the first frame is the intended one (browsers keep the previous page on screen meanwhile).
- * Capped at one second; the metric-matched fallback then shows and swaps to Inter on arrival.
- * Without JavaScript nothing is held.
- */
-const fontGate = `const r=document.documentElement;const inter=[...document.fonts].find(f=>f.family.replace(/"/g,"")==="Inter");if(inter&&inter.status!=="loaded"){r.style.setProperty("--first-paint","hidden");const go=()=>r.style.removeProperty("--first-paint");inter.load().then(go,go);setTimeout(go,1000)}`;
-
 function JsonLd({ value }: { value: unknown }) {
   return (
     <script
@@ -71,6 +71,19 @@ function JsonLd({ value }: { value: unknown }) {
     />
   );
 }
+
+/** Open Graph writes locales with an underscore: `de_DE`. */
+const ogLocale = (locale: Locale) => localeInfo[locale].tag.replace("-", "_");
+
+const nav: readonly {
+  route: Route;
+  label: "nav_products" | "nav_join" | "nav_blog" | "nav_about";
+}[] = [
+  { route: "products", label: "nav_products" },
+  { route: "join", label: "nav_join" },
+  { route: "blog", label: "nav_blog" },
+  { route: "about", label: "nav_about" },
+];
 
 /**
  * The whole document: head, a sticky sidebar with the name and navigation on desktop (a header on
@@ -85,22 +98,44 @@ export function Page({
   meta: Meta;
   children: ComponentChildren;
 }) {
-  const url = `${origin}${meta.path === "/" ? "/" : meta.path}`;
-  const home = meta.path === "/";
+  const { locale, path, alternates } = meta;
+  const t = translators[locale];
+  const home = href(locale, "home");
+  const others = locales.filter((other) => other !== locale);
   return (
-    <html lang="en" {...stylex.props(styles.html)}>
+    <html
+      lang={locale}
+      dir={localeInfo[locale].dir}
+      {...stylex.props(styles.html, localeInfo[locale].dir === "rtl" && rightToLeft)}
+    >
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{meta.title}</title>
         <meta name="description" content={meta.description} />
         <meta name="robots" content={meta.index ? "index, follow" : "noindex, follow"} />
-        <link rel="canonical" href={url} />
+        {alternates && (
+          <>
+            <link rel="canonical" href={`${origin}${path}`} />
+            {locales.map((other) => (
+              <link rel="alternate" hreflang={other} href={`${origin}${alternates[other]}`} />
+            ))}
+            <link
+              rel="alternate"
+              hreflang="x-default"
+              href={`${origin}${alternates[sourceLocale]}`}
+            />
+          </>
+        )}
         <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
         <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
         <meta property="og:type" content={meta.type} />
         <meta property="og:site_name" content={company.name} />
-        <meta property="og:url" content={url} />
+        <meta property="og:locale" content={ogLocale(locale)} />
+        {others.map((other) => (
+          <meta property="og:locale:alternate" content={ogLocale(other)} />
+        ))}
+        <meta property="og:url" content={`${origin}${path}`} />
         <meta property="og:title" content={meta.title} />
         <meta property="og:description" content={meta.description} />
         <meta property="og:image" content={`${origin}${meta.shareImage}`} />
@@ -112,82 +147,93 @@ export function Page({
         <link
           rel="alternate"
           type="application/rss+xml"
-          href={`${origin}/feed.xml`}
-          title={`${company.name} blog`}
+          href={`${origin}${localeInfo[locale].prefix}/feed.xml`}
+          title={t.text("feed_title", { brand: company.name })}
         />
         <link rel="preload" href={interUrl} as="font" type="font/woff2" crossorigin="anonymous" />
         {meta.mono && (
           <link rel="preload" href={monoUrl} as="font" type="font/woff2" crossorigin="anonymous" />
         )}
         <style dangerouslySetInnerHTML={{ __html: `${globalCss}\n${assets.css}` }} />
-        {/* After the stylesheet, so the Inter @font-face exists when the gate asks for it. */}
-        <script data-cfasync="false" dangerouslySetInnerHTML={{ __html: fontGate }} />
         {meta.script && (
           // Preact's typings lack `fetchpriority` on <script>, hence the spread.
-          <script
-            data-cfasync="false"
-            type="module"
-            src={assets.script}
-            {...{ fetchpriority: "low" }}
-          />
+          <script type="module" src={assets.script} {...{ fetchpriority: "low" }} />
         )}
         {meta.jsonLd !== undefined && <JsonLd value={meta.jsonLd} />}
         {meta.head}
       </head>
       <body {...stylex.props(ui.sans, styles.body)}>
         <a {...stylex.props(ui.text, ui.focusRing, styles.skip)} href="#content">
-          Skip to content
+          {t.text("skip_to_content")}
         </a>
         <div {...stylex.props(styles.layout)}>
           <header {...stylex.props(styles.sidebar)}>
-            {home ? (
+            {path === home ? (
               <h1 {...stylex.props(ui.heading, styles.name)} {...untranslated}>
                 {company.name}
               </h1>
             ) : (
               <p {...stylex.props(ui.heading, styles.name)}>
-                <a {...stylex.props(styles.home, ui.focusRing)} href="/" {...untranslated}>
+                <a {...stylex.props(styles.home, ui.focusRing)} href={home} {...untranslated}>
                   {company.name}
                 </a>
               </p>
             )}
-            <nav {...stylex.props(ui.text, styles.nav)} aria-label="Main">
-              {nav.map(({ label, href }) => {
+            <nav {...stylex.props(ui.text, styles.nav)} aria-label={t.text("nav_label")}>
+              {nav.map(({ route, label }) => {
+                const target = href(locale, route);
                 const current =
-                  meta.path === href ? "page" : meta.path.startsWith(`${href}/`) ? "true" : null;
+                  path === target ? "page" : path.startsWith(`${target}/`) ? "true" : null;
                 return (
                   <a
                     {...stylex.props(
                       ui.quiet,
                       ui.focusRing,
-                      styles.navLink,
+                      styles.tapTarget,
                       current !== null && styles.current,
                     )}
-                    href={href}
+                    href={target}
                     aria-current={current ?? undefined}
                   >
-                    {label}
+                    {t.text(label)}
                   </a>
                 );
               })}
             </nav>
-            <Contact style={styles.desktopOnly} path={meta.path} />
+            <p {...stylex.props(ui.text, styles.languages)}>
+              {others.map((other) => (
+                <a
+                  {...stylex.props(ui.quiet, ui.focusRing, styles.tapTarget)}
+                  href={alternates?.[other] ?? href(other, "home")}
+                  hreflang={other}
+                  lang={other}
+                  aria-label={t.text("language_switch", { language: t.language(other) })}
+                >
+                  {translators[other].language(other)}
+                </a>
+              ))}
+            </p>
+            <Contact style={styles.desktopOnly} locale={locale} path={path} />
           </header>
           <main {...stylex.props(styles.content)} id="content" tabIndex={-1}>
             {children}
           </main>
-          <Contact style={styles.phoneOnly} path={meta.path} />
+          <Contact style={styles.phoneOnly} locale={locale} path={path} />
         </div>
       </body>
     </html>
   );
 }
 
-/** The address and the privacy policy: at the foot of the sidebar on desktop, of the page on phones. */
-function Contact({ style, path }: { style: Style; path: string }) {
-  const privacy = path === "/privacy";
+/** The address and the legal pages: at the foot of the sidebar on desktop, of the page on phones. */
+function Contact({ style, locale, path }: { style: Style; locale: Locale; path: string }) {
+  const t = translators[locale];
+  const legal: readonly { route: Route; label: "footer_privacy" | "footer_imprint" }[] = [
+    { route: "privacy", label: "footer_privacy" },
+    { route: "imprint", label: "footer_imprint" },
+  ];
   return (
-    <footer {...stylex.props(ui.text, styles.contact, style)}>
+    <footer {...stylex.props(ui.text, styles.contact, style)} aria-label={t.text("footer_label")}>
       <a
         {...stylex.props(ui.quiet, ui.focusRing, styles.email)}
         href={`mailto:${email}`}
@@ -195,13 +241,18 @@ function Contact({ style, path }: { style: Style; path: string }) {
       >
         {email}
       </a>
-      <a
-        {...stylex.props(ui.quiet, ui.focusRing, privacy && styles.current)}
-        href="/privacy"
-        aria-current={privacy ? "page" : undefined}
-      >
-        Privacy
-      </a>
+      {legal.map(({ route, label }) => {
+        const target = href(locale, route);
+        return (
+          <a
+            {...stylex.props(ui.quiet, ui.focusRing, path === target && styles.current)}
+            href={target}
+            aria-current={path === target ? "page" : undefined}
+          >
+            {t.text(label)}
+          </a>
+        );
+      })}
     </footer>
   );
 }
@@ -265,6 +316,17 @@ export function Text({
   );
 }
 
+/** Items one per line, without bullets: methods, principles. */
+export function Lines({ items }: { items: readonly ComponentChildren[] }) {
+  return (
+    <ul {...stylex.props(ui.text, ui.prose, blocks.lines)}>
+      {items.map((item) => (
+        <li>{item}</li>
+      ))}
+    </ul>
+  );
+}
+
 /** The page's side margin on phones. */
 const phoneGutter = space.x2;
 
@@ -275,8 +337,6 @@ const styles = stylex.create({
     scrollbarGutter: { default: null, [media.desktop]: "stable" },
   },
   body: {
-    // Held hidden by the font gate until Inter is ready; see `fontGate`.
-    visibility: "var(--first-paint, visible)",
     minHeight: "100dvh",
     backgroundColor: colors.bg,
     color: colors.primary,
@@ -292,7 +352,7 @@ const styles = stylex.create({
     position: "absolute",
     zIndex: 2,
     top: { default: space.x6, [media.mobile]: space.x3 },
-    left: { default: space.x4, [media.mobile]: phoneGutter },
+    insetInlineStart: { default: space.x4, [media.mobile]: phoneGutter },
     color: colors.primary,
     backgroundColor: colors.bg,
     textDecoration: "none",
@@ -311,15 +371,22 @@ const styles = stylex.create({
     boxSizing: "content-box",
     paddingInline: { default: space.x4, [media.mobile]: phoneGutter },
   },
+  /** Desktop: a sticky column. Phones: the name and the language in one row, the links below. */
   sidebar: {
     position: { default: "sticky", [media.mobile]: "static" },
     top: 0,
     height: { default: "100dvh", [media.mobile]: "auto" },
-    display: "flex",
+    display: { default: "flex", [media.mobile]: "grid" },
     flexDirection: "column",
+    gridTemplateColumns: { default: null, [media.mobile]: "minmax(0, 1fr) auto" },
+    alignItems: { default: null, [media.mobile]: "baseline" },
     paddingBlock: { default: space.x6, [media.mobile]: `${space.x3} 0` },
   },
-  name: { width: "fit-content" },
+  name: {
+    width: "fit-content",
+    gridRow: { default: null, [media.mobile]: 1 },
+    gridColumn: { default: null, [media.mobile]: 1 },
+  },
   home: {
     color: "inherit",
     textDecoration: "none",
@@ -332,9 +399,18 @@ const styles = stylex.create({
     rowGap: { default: space.x1, [media.mobile]: 0 },
     columnGap: space.x3,
     marginTop: { default: space.x4, [media.mobile]: space.x2 },
+    gridRow: { default: null, [media.mobile]: 2 },
+    gridColumn: { default: null, [media.mobile]: "1 / -1" },
+  },
+  languages: {
+    display: "flex",
+    columnGap: space.x3,
+    marginTop: { default: space.x4, [media.mobile]: 0 },
+    gridRow: { default: null, [media.mobile]: 1 },
+    gridColumn: { default: null, [media.mobile]: 2 },
   },
   /** Phones: each link pads out to a 40px target, into the gaps around it. */
-  navLink: {
+  tapTarget: {
     paddingBlock: { default: null, [media.mobile]: space.x1 },
     marginBlock: { default: null, [media.mobile]: `calc(${space.x1} * -1)` },
   },
@@ -365,4 +441,5 @@ const blocks = stylex.create({
   label: { marginBottom: space.x1 },
   lead: { color: colors.primary },
   stack: { display: "flex", flexDirection: "column", rowGap: space.x2 },
+  lines: { listStyle: "none" },
 });

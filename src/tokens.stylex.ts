@@ -15,18 +15,17 @@ export const media = stylex.defineConsts({
 });
 
 /**
- * How dates are spaced, in Inter's font units (see `ui.figures`): tabular digits, tracked to the
- * mean ink-to-ink gap between the letters around them, measured from Inter's outlines at weight
- * 400 across every date from 2000 to 2099.
+ * Arrows that point along the reading direction: after a link that leads on, and after one that
+ * leaves the site. `rightToLeft` mirrors them for Arabic, Hebrew and other right-to-left scripts.
  */
-export const figureUnits = stylex.defineConsts({
-  unitsPerEm: "2048",
-  /** Digit to digit. */
-  digit: "-95.1",
-  /** Digit to hyphen, after the digit's own tracking. */
-  beforeHyphen: "17",
-  /** Hyphen to digit. */
-  afterHyphen: "-88.2",
+export const arrows = stylex.defineVars({
+  onward: '"\u00a0→"',
+  outbound: '"\u00a0↗"',
+});
+
+export const rightToLeft = stylex.createTheme(arrows, {
+  onward: '"\u00a0←"',
+  outbound: '"\u00a0↖"',
 });
 
 /**

@@ -8,6 +8,10 @@ The name comes from the Latin *introspicere*: to look inside.
 
 **Fabian Klopfer**, Managing Director. Computer scientist (M.Sc., University of Konstanz) and neuroscientist (M.Sc., University of Tübingen). Previously a software engineer in Db2 development at IBM Germany Research & Development. Earlier research at the University of Konstanz, the Max Planck Institute for Biological Cybernetics, OpenCog and Hanson Robotics.
 
+**Marc Gsell**, ERP & CRM and infrastructure. Previously head of engineering for a team of 70.
+
+**Gil Rodrigues**, design and frontend. Designer based in Germany: [gildrb.com](https://gildrb.com).
+
 ## Contact
 
 Write to [{email}](mailto:{email}).

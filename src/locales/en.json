@@ -1,0 +1,613 @@
+{
+  "brand": {
+    "message": "Introspectum",
+    "description": "Company and brand name. Shown in the header, tab titles and link previews.",
+    "translate": false
+  },
+  "page_title": {
+    "message": "{brand} → {page}",
+    "description": "Browser tab and link-preview title of a page: brand, arrow, page name. Mirror the arrow for right-to-left scripts.",
+    "maxLength": 70
+  },
+  "page_title_nested": {
+    "message": "{brand} → {section} → {page}",
+    "description": "Tab title of a page inside a section, such as one product or one blog post.",
+    "maxLength": 90
+  },
+  "skip_to_content": {
+    "message": "Skip to content",
+    "description": "Keyboard-only link at the top of every page that jumps past the navigation.",
+    "maxLength": 32
+  },
+  "nav_label": {
+    "message": "Main",
+    "description": "Accessible name of the main navigation, read by screen readers only.",
+    "maxLength": 32
+  },
+  "nav_products": {
+    "message": "Products",
+    "description": "Main navigation link to the product overview. Sidebar on desktop, one row on phones.",
+    "maxLength": 16
+  },
+  "nav_join": {
+    "message": "Join us",
+    "description": "Main navigation link to the jobs page (founding engineer, internships).",
+    "maxLength": 16
+  },
+  "nav_blog": {
+    "message": "Blog",
+    "description": "Main navigation link to the blog.",
+    "maxLength": 16
+  },
+  "nav_about": {
+    "message": "About",
+    "description": "Main navigation link to the page about the company and team.",
+    "maxLength": 16
+  },
+  "footer_label": {
+    "message": "Contact and legal",
+    "description": "Accessible name of the footer with the email address and the legal pages.",
+    "maxLength": 40
+  },
+  "footer_privacy": {
+    "message": "Privacy",
+    "description": "Footer link to the privacy policy.",
+    "maxLength": 20
+  },
+  "footer_imprint": {
+    "message": "Imprint",
+    "description": "Footer link to the legal notice required by German law (Impressum).",
+    "maxLength": 20
+  },
+  "language_switch": {
+    "message": "This page in {language}",
+    "description": "Accessible name of the link to the same page in another language. {language} is that language's own name, e.g. Deutsch.",
+    "maxLength": 48
+  },
+  "feed_title": {
+    "message": "{brand} blog",
+    "description": "Title of the blog's RSS feed, shown in feed readers.",
+    "maxLength": 40
+  },
+  "home_description": {
+    "message": "Introspectum builds software you can check: a verified software factory, an open-data ERP and CRM, and research in systematic trading.",
+    "description": "Meta description of the homepage, shown in search results and link previews.",
+    "maxLength": 160
+  },
+  "home_share_title": {
+    "message": "Software that is checked instead of trusted.",
+    "description": "Large line on the homepage's link-preview image (LinkedIn, social media).",
+    "maxLength": 90
+  },
+  "home_hook": {
+    "message": "{distrust, number, ::percent} of developers do not fully trust AI-generated code. Only {verify, number, ::percent} always check it before they commit.",
+    "description": "Opening line of the homepage, a survey result. {distrust} and {verify} are shares formatted as percentages.",
+    "maxLength": 180
+  },
+  "home_hook_source": {
+    "message": "Sonar, State of Code Developer Survey 2026",
+    "description": "Source of the opening line: publisher and report title. Report titles stay in their original language.",
+    "translate": false
+  },
+  "home_why_label": {
+    "message": "Why",
+    "description": "Homepage section label: why the company exists.",
+    "maxLength": 32
+  },
+  "home_why_text": {
+    "message": "AI writes a growing share of all code, faster than anyone can review it. We build software that is checked instead of trusted: traced from requirement to code, proven where it matters, and open to the people who answer for it.",
+    "description": "Homepage mission statement, two sentences."
+  },
+  "home_what_label": {
+    "message": "What we build",
+    "description": "Homepage section label above the products and consulting.",
+    "maxLength": 32
+  },
+  "home_how_label": {
+    "message": "How",
+    "description": "Homepage section label above the methods and principles.",
+    "maxLength": 32
+  },
+  "home_who_label": {
+    "message": "Who we are",
+    "description": "Homepage section label above one sentence about the company.",
+    "maxLength": 32
+  },
+  "home_who_text": {
+    "message": "Introspectum Limited is registered in the Isle of Man and led by Fabian Klopfer, a computer scientist and former software engineer at IBM Germany Research & Development.",
+    "description": "Homepage: who runs the company, one sentence. Also the About page's meta description."
+  },
+  "home_who_more": {
+    "message": "More about us",
+    "description": "Link from the homepage to the About page.",
+    "maxLength": 32
+  },
+  "home_next_label": {
+    "message": "Next",
+    "description": "Homepage section label above three calls to action; also closes each blog post.",
+    "maxLength": 32
+  },
+  "home_next_waitlist": {
+    "message": "<link>Join a waiting list</link> to test a product before its release.",
+    "description": "Call to action. <link> wraps the words that lead to the product overview."
+  },
+  "home_next_consulting": {
+    "message": "<link>Send a consulting inquiry</link> to work with us now.",
+    "description": "Call to action. <link> wraps the words that open an email to the company."
+  },
+  "home_next_join": {
+    "message": "<link>Join us</link> as founding engineer or intern.",
+    "description": "Call to action. <link> wraps the words that lead to the jobs page."
+  },
+  "methods_label": {
+    "message": "Methods",
+    "description": "Label above a list of methods (homepage, product pages).",
+    "maxLength": 32
+  },
+  "principles_label": {
+    "message": "Principles",
+    "description": "Label above a list of principles on the homepage.",
+    "maxLength": 32
+  },
+  "method_formal_methods": {
+    "message": "Formal methods",
+    "description": "Method, one list item: mathematical proof that software meets its specification.",
+    "maxLength": 48
+  },
+  "method_compiler_construction": {
+    "message": "Compiler construction",
+    "description": "Method, one list item: the field of building compilers and code analysis.",
+    "maxLength": 48
+  },
+  "method_model_based": {
+    "message": "Model-based software engineering",
+    "description": "Method, one list item: building software from models such as UML and SysML.",
+    "maxLength": 48
+  },
+  "method_ai_agents": {
+    "message": "AI agents",
+    "description": "Method, one list item: software agents driven by AI models.",
+    "maxLength": 48
+  },
+  "method_open_data": {
+    "message": "Open data",
+    "description": "Method, one list item: data kept in open formats, owned by the customer.",
+    "maxLength": 48
+  },
+  "method_reinforcement_learning": {
+    "message": "Reinforcement learning",
+    "description": "Method, one list item: the machine-learning technique.",
+    "maxLength": 48
+  },
+  "principle_proof": {
+    "message": "Proof over trust",
+    "description": "Principle, one list item: we prove software correct rather than trust it.",
+    "maxLength": 64
+  },
+  "principle_data": {
+    "message": "Data that stays yours",
+    "description": "Principle, one list item: customers keep ownership of their data.",
+    "maxLength": 64
+  },
+  "principle_traceability": {
+    "message": "Traceability from requirement to code",
+    "description": "Principle, one list item: every line of code traces back to a requirement.",
+    "maxLength": 64
+  },
+  "consulting_name": {
+    "message": "Consulting",
+    "description": "Name of the consulting offer, shown like a product name on the homepage and as a section label.",
+    "maxLength": 32
+  },
+  "consulting_what": {
+    "message": "Until our products ship, we help companies bring AI into their software development and set up CRM and ERP.",
+    "description": "What the consulting offer is, one sentence."
+  },
+  "consulting_audience": {
+    "message": "For companies that want to use AI without losing control of their code or their data.",
+    "description": "Who the consulting offer is for, one sentence."
+  },
+  "consulting_link": {
+    "message": "Send a consulting inquiry",
+    "description": "Link that opens an email to the company.",
+    "maxLength": 40
+  },
+  "consulting_subject": {
+    "message": "Consulting inquiry",
+    "description": "Subject line of the email the consulting link opens.",
+    "maxLength": 60
+  },
+  "consulting_subject_product": {
+    "message": "Consulting inquiry: {product}",
+    "description": "Email subject for a consulting inquiry from a product page. {product} is the product name.",
+    "maxLength": 60
+  },
+  "products_title": {
+    "message": "Products",
+    "description": "Title of the product overview page.",
+    "maxLength": 32
+  },
+  "products_intro": {
+    "message": "Three products, all before release. Join a waiting list to test one first.",
+    "description": "Opening line of the product overview; also its meta description and link-preview title.",
+    "maxLength": 160
+  },
+  "status_prototype": {
+    "message": "Prototype",
+    "description": "Product status shown under the product name: a working prototype.",
+    "maxLength": 24
+  },
+  "status_in_development": {
+    "message": "In development",
+    "description": "Product status shown under the product name.",
+    "maxLength": 24
+  },
+  "status_research": {
+    "message": "Research",
+    "description": "Product status shown under the product name: research, not a product yet.",
+    "maxLength": 24
+  },
+  "product_software_factory_name": {
+    "message": "Software Factory",
+    "description": "Product name. Fixed term in every language (glossary).",
+    "translate": false
+  },
+  "product_software_factory_what": {
+    "message": "Builds one graph from your code and documents, lets AI agents work on it, and checks their changes with formal verification.",
+    "description": "What the Software Factory does, one sentence. Also its link-preview title and meta description.",
+    "maxLength": 160
+  },
+  "product_software_factory_audience": {
+    "message": "For software teams that use AI to write code and must stand behind it, starting with startups and small IT companies.",
+    "description": "Who the Software Factory is for, one sentence."
+  },
+  "product_software_factory_detail_1": {
+    "message": "The Software Factory reads your code and its documents into one graph: requirements, design, tests, bug reports and analysis results, each linked to the code it concerns. You see the system as architecture maps, from the overview down to single functions.",
+    "description": "Software Factory page, paragraph 1 of 3: the graph and the maps."
+  },
+  "product_software_factory_detail_2": {
+    "message": "On top of the graph, AI agents work in steps modelled on ISO/IEC/IEEE 15288, the standard for system life cycle processes, and formal verification checks their output against your specifications. Every step leaves an audit trail.",
+    "description": "Software Factory page, paragraph 2 of 3: the agent process and verification."
+  },
+  "product_software_factory_detail_3": {
+    "message": "The graph and the maps work today, and verification runs end to end with the Prusti and Verus verifiers. The agent process comes next.",
+    "description": "Software Factory page, paragraph 3 of 3: what works now. Prusti and Verus are tool names."
+  },
+  "product_erp_crm_name": {
+    "message": "ERP\u00a0&\u00a0CRM",
+    "description": "Product name. Fixed term in every language (glossary). Contains no-break spaces so it never splits across lines.",
+    "translate": false
+  },
+  "product_erp_crm_what": {
+    "message": "Customers, sales, accounting and HR in one open-data system, with an AI assistant that works on the same data.",
+    "description": "What the ERP & CRM does, one sentence. Also its link-preview title and meta description.",
+    "maxLength": 160
+  },
+  "product_erp_crm_audience": {
+    "message": "For small businesses that still run on paper and spreadsheets, starting with real estate and IT services.",
+    "description": "Who the ERP & CRM is for, one sentence."
+  },
+  "product_erp_crm_detail_1": {
+    "message": "An ERP and CRM built on Twenty, the open-source CRM, and extended with accounting, tax, purchasing, sales, payments, inventory and HR.",
+    "description": "ERP & CRM page, paragraph 1 of 3: what it is built on. Twenty is a product name."
+  },
+  "product_erp_crm_detail_2": {
+    "message": "Each customer gets its own installation, and all data stays in open formats in one place. An AI assistant works on the same data as your team: it can keep records in order, prepare analyses and draft documents.",
+    "description": "ERP & CRM page, paragraph 2 of 3: data ownership and the assistant."
+  },
+  "product_erp_crm_detail_3": {
+    "message": "Our own company and a real-estate brokerage are its first users.",
+    "description": "ERP & CRM page, paragraph 3 of 3: first users."
+  },
+  "product_trading_platform_name": {
+    "message": "Trading Platform",
+    "description": "Product name. Fixed term in every language (glossary).",
+    "translate": false
+  },
+  "product_trading_platform_what": {
+    "message": "Runs trend-following strategies on many stocks at once, with reinforcement learning tuning each stock’s settings.",
+    "description": "What the Trading Platform does, one sentence. Also its link-preview title and meta description.",
+    "maxLength": 160
+  },
+  "product_trading_platform_audience": {
+    "message": "For investors from real estate, banking and IT who want to test a strategy before they trust it.",
+    "description": "Who the Trading Platform is for, one sentence."
+  },
+  "product_trading_platform_detail_1": {
+    "message": "The Trading Platform runs trend-following strategies, such as the Turtle rules, on many stocks in parallel.",
+    "description": "Trading Platform page, paragraph 1 of 3. The Turtle rules are a known trading system."
+  },
+  "product_trading_platform_detail_2": {
+    "message": "Reinforcement learning tunes the settings for each stock, including the time scale on which its signals are most reliable.",
+    "description": "Trading Platform page, paragraph 2 of 3."
+  },
+  "product_trading_platform_detail_3": {
+    "message": "It trades on paper only, and nothing here is investment advice.",
+    "description": "Trading Platform page, paragraph 3 of 3: simulated trading only; legal disclaimer."
+  },
+  "waitlist_label": {
+    "message": "Waiting list",
+    "description": "Section label above the waiting-list form on a product page; kicker on the confirmation page's preview.",
+    "maxLength": 32
+  },
+  "waitlist_intro": {
+    "message": "Leave your email address to test the {product} before its release.",
+    "description": "Line above the waiting-list form. {product} is the product name."
+  },
+  "waitlist_email_label": {
+    "message": "Email",
+    "description": "Label of the email field in the waiting-list form.",
+    "maxLength": 24
+  },
+  "waitlist_company_label": {
+    "message": "Company (optional)",
+    "description": "Label of the optional company field in the waiting-list form.",
+    "maxLength": 32
+  },
+  "waitlist_honeypot_label": {
+    "message": "Leave empty",
+    "description": "Label of a hidden field that only spam bots fill in. Never visible.",
+    "maxLength": 32
+  },
+  "waitlist_consent": {
+    "message": "I agree that Introspectum stores my email address to contact me about the {product} waiting list.",
+    "description": "Consent checkbox label in the waiting-list form; stored with each entry as proof of consent. {product} is the product name."
+  },
+  "waitlist_privacy": {
+    "message": "Read what we store and why in the <link>privacy policy</link>.",
+    "description": "Line under the consent checkbox. <link> wraps the words that lead to the privacy policy."
+  },
+  "waitlist_submit": {
+    "message": "Join the waiting list",
+    "description": "Button that sends the waiting-list form.",
+    "maxLength": 32
+  },
+  "waitlist_sending": {
+    "message": "Sending…",
+    "description": "Button text while the form is being sent.",
+    "maxLength": 32
+  },
+  "waitlist_joined": {
+    "message": "You are on the waiting list. We will write to you when testing opens.",
+    "description": "Message that replaces the waiting-list form after a successful sign-up."
+  },
+  "waitlist_failed_connection": {
+    "message": "The connection failed. Try again, or write to {email}.",
+    "description": "Error under the form when the browser could not reach the server. {email} is the company address."
+  },
+  "waitlist_failed_server": {
+    "message": "We could not add you. Try again, or write to {email}.",
+    "description": "Error under the form when the server failed. {email} is the company address."
+  },
+  "api_not_added": {
+    "message": "Not added",
+    "description": "Title of the error page or error response when a waiting-list sign-up is rejected.",
+    "maxLength": 40
+  },
+  "api_error_origin": {
+    "message": "Send the form from this site.",
+    "description": "Sign-up rejected because the form was sent from another website."
+  },
+  "api_error_unreadable": {
+    "message": "The form could not be read. Please send it again.",
+    "description": "Sign-up rejected because the request was malformed or looked automated."
+  },
+  "api_error_product": {
+    "message": "There is no waiting list for this product.",
+    "description": "Sign-up rejected because the product is unknown."
+  },
+  "api_error_email": {
+    "message": "Please enter a valid email address.",
+    "description": "Sign-up rejected because the email address is invalid."
+  },
+  "api_error_company": {
+    "message": "Please shorten the company name.",
+    "description": "Sign-up rejected because the company name is longer than 200 characters."
+  },
+  "api_error_consent": {
+    "message": "Please agree that we may store your address for this waiting list.",
+    "description": "Sign-up rejected because the consent box was not ticked."
+  },
+  "back_to_products": {
+    "message": "Back to the products",
+    "description": "Link back to the product overview, on the sign-up confirmation and error pages.",
+    "maxLength": 40
+  },
+  "joined_title": {
+    "message": "You are on the waiting list",
+    "description": "Title of the page shown after a sign-up sent without JavaScript.",
+    "maxLength": 60
+  },
+  "joined_text": {
+    "message": "We will write to you when testing opens.",
+    "description": "Text of the sign-up confirmation page."
+  },
+  "join_title": {
+    "message": "Join us",
+    "description": "Title of the jobs page.",
+    "maxLength": 32
+  },
+  "join_intro": {
+    "message": "Introspectum is a small team. There are two ways to join it.",
+    "description": "Opening line of the jobs page."
+  },
+  "join_description": {
+    "message": "Introspectum is a small team. Join it as founding engineer or intern.",
+    "description": "Meta description of the jobs page.",
+    "maxLength": 160
+  },
+  "join_share_title": {
+    "message": "Founding engineer and internships",
+    "description": "Large line on the jobs page's link-preview image.",
+    "maxLength": 90
+  },
+  "role_founding_engineer_title": {
+    "message": "Founding engineer",
+    "description": "Job title, section heading on the jobs page.",
+    "maxLength": 40
+  },
+  "role_founding_engineer_focus": {
+    "message": "Formal methods and code generation.",
+    "description": "Founding engineer: the focus of the role."
+  },
+  "role_founding_engineer_status": {
+    "message": "We do not hire for this role yet. We read every application now and talk to exceptional people right away.",
+    "description": "Founding engineer: hiring status. Exceptional applicants are screened now."
+  },
+  "role_founding_engineer_work_label": {
+    "message": "You would work on",
+    "description": "Founding engineer: label above the list of tasks.",
+    "maxLength": 40
+  },
+  "role_founding_engineer_work_1": {
+    "message": "Formal verification of Rust code with Prusti and Verus",
+    "description": "Founding engineer task, list item. Prusti and Verus are tool names."
+  },
+  "role_founding_engineer_work_2": {
+    "message": "The agent harness that generates code from specifications",
+    "description": "Founding engineer task, list item: the runtime that steers AI agents."
+  },
+  "role_founding_engineer_work_3": {
+    "message": "Code property graphs built from existing code",
+    "description": "Founding engineer task, list item. A code property graph is a code-analysis data structure."
+  },
+  "role_founding_engineer_work_4": {
+    "message": "Connectors to GitHub and to SARIF tools",
+    "description": "Founding engineer task, list item. SARIF is a format for analysis results."
+  },
+  "role_founding_engineer_profile_label": {
+    "message": "We look for",
+    "description": "Founding engineer: label above the list of requirements.",
+    "maxLength": 40
+  },
+  "role_founding_engineer_profile_1": {
+    "message": "A degree in computer science with a focus on systems programming",
+    "description": "Founding engineer requirement, list item."
+  },
+  "role_founding_engineer_profile_2": {
+    "message": "Interest in compiler construction and formal methods; experience helps but is not required",
+    "description": "Founding engineer requirement, list item."
+  },
+  "role_founding_engineer_profile_3": {
+    "message": "Fluent English",
+    "description": "Founding engineer requirement, list item."
+  },
+  "role_founding_engineer_apply": {
+    "message": "Send your CV or LinkedIn profile and links to your work to <link>{email}</link>.",
+    "description": "How to apply. <link> wraps the email address and opens an email."
+  },
+  "role_founding_engineer_subject": {
+    "message": "Application: founding engineer",
+    "description": "Subject line of the application email.",
+    "maxLength": 60
+  },
+  "role_internships_title": {
+    "message": "Internships",
+    "description": "Section heading on the jobs page.",
+    "maxLength": 40
+  },
+  "role_internships_focus": {
+    "message": "For students who want to work on a real product.",
+    "description": "Internships: who they are for."
+  },
+  "role_internships_topics_label": {
+    "message": "Topics",
+    "description": "Internships: label above the list of topics.",
+    "maxLength": 40
+  },
+  "role_internships_topic_1": {
+    "message": "Formal verification and compilers",
+    "description": "Internship topic, list item."
+  },
+  "role_internships_topic_2": {
+    "message": "AI agents",
+    "description": "Internship topic, list item."
+  },
+  "role_internships_topic_3": {
+    "message": "ERP and CRM on Twenty",
+    "description": "Internship topic, list item. Twenty is an open-source CRM."
+  },
+  "role_internships_topic_4": {
+    "message": "Reinforcement learning for trading research",
+    "description": "Internship topic, list item."
+  },
+  "role_internships_apply": {
+    "message": "Send your CV, the topic you want to work on and the months you are free to <link>{email}</link>.",
+    "description": "How to apply. <link> wraps the email address and opens an email."
+  },
+  "role_internships_subject": {
+    "message": "Application: internship",
+    "description": "Subject line of the application email.",
+    "maxLength": 60
+  },
+  "blog_title": {
+    "message": "Blog",
+    "description": "Title of the blog page.",
+    "maxLength": 32
+  },
+  "blog_intro": {
+    "message": "Weekly writing on AI, software engineering and regulation.",
+    "description": "Opening line of the blog; also its meta description and link-preview title.",
+    "maxLength": 160
+  },
+  "blog_feed": {
+    "message": "Follow it by <link>RSS</link>.",
+    "description": "Line under the blog intro. <link> wraps the word that leads to the RSS feed."
+  },
+  "blog_empty": {
+    "message": "No posts yet.",
+    "description": "Shown on the blog page while there are no posts.",
+    "maxLength": 60
+  },
+  "blog_date": {
+    "message": "{date, date, long}",
+    "description": "Date of a blog post in the post list."
+  },
+  "blog_post_meta": {
+    "message": "{date, date, long}, {author}, {minutes, plural, one {# minute} other {# minutes}} to read",
+    "description": "Line under a blog post's title: publication date, author name and reading time in minutes."
+  },
+  "blog_share_byline": {
+    "message": "{author}, {date, date, long}",
+    "description": "Byline on a blog post's link-preview image: author and date."
+  },
+  "about_share_title": {
+    "message": "A software company registered in the Isle of Man",
+    "description": "Large line on the About page's link-preview image.",
+    "maxLength": 90
+  },
+  "privacy_description": {
+    "message": "What the Introspectum site stores, why, and your rights.",
+    "description": "Meta description of the privacy policy.",
+    "maxLength": 160
+  },
+  "privacy_share_title": {
+    "message": "What this site stores and why",
+    "description": "Large line on the privacy policy's link-preview image.",
+    "maxLength": 90
+  },
+  "imprint_description": {
+    "message": "Who is responsible for the Introspectum site.",
+    "description": "Meta description of the imprint (legal notice).",
+    "maxLength": 160
+  },
+  "imprint_share_title": {
+    "message": "Who is responsible for this site",
+    "description": "Large line on the imprint's link-preview image.",
+    "maxLength": 90
+  },
+  "not_found_title": {
+    "message": "Page not found",
+    "description": "Title of the error page for a missing page.",
+    "maxLength": 40
+  },
+  "not_found_text": {
+    "message": "This page does not exist. It may have moved, or the address has a typo.",
+    "description": "Text of the error page for a missing page."
+  },
+  "not_found_home": {
+    "message": "Go to the homepage",
+    "description": "Link from the error page to the homepage.",
+    "maxLength": 40
+  }
+}

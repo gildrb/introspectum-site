@@ -1,4 +1,6 @@
-import { products, waitlistConsent } from "../src/site.ts";
+import { type MessageId, translators, waitlistConsent } from "../src/i18n.ts";
+import { href, isLocale, type Locale, sourceLocale } from "../src/locale.ts";
+import { products } from "../src/site.ts";
 
 /**
  * The Worker behind `/api/*`; every other path is a static asset (`cloudflare.config.ts`). The
@@ -21,6 +23,8 @@ type Entry = {
   email: string;
   company: string | null;
   product: string;
+  /** The language the person signed up in. */
+  locale: Locale;
   /** The sentence the person agreed to, as the form showed it. */
   consent: string;
   joinedAt: string;
@@ -31,53 +35,54 @@ const address = /^[^\s@]+@[^\s@.]+(?:\.[^\s@.]+)+$/;
 
 /**
  * Adds a person to a product's waiting list. The form posts here: hydrated it asks for JSON and
- * reads the result in place; without JavaScript the browser follows the redirect to `/joined`.
+ * reads the result in place; without JavaScript the browser follows the redirect to the
+ * confirmation page. Every answer is in the language of the page the form was on.
  */
 async function join(request: Request, storage: KVNamespace): Promise<Response> {
   const json = request.headers.get("Accept")?.includes("application/json") ?? false;
-  const reject = (status: number, detail: string) =>
-    json
-      ? new Response(`${JSON.stringify({ title: "Not added", status, detail })}\n`, {
-          status,
-          headers: {
-            "Content-Type": "application/problem+json; charset=utf-8",
-            "Cache-Control": "no-store",
-          },
-        })
-      : new Response(
-          `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Not added</title><p>${detail}</p><p><a href="/products">Back to the products</a></p>\n`,
-          {
-            status,
-            headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" },
-          },
-        );
+  const reject = (locale: Locale, status: number, reason: MessageId) => {
+    const t = translators[locale];
+    const title = t.text("api_not_added");
+    const detail = t.text(reason);
+    const headers = { "Cache-Control": "no-store", "Content-Language": locale };
+    if (json)
+      return new Response(`${JSON.stringify({ title, status, detail })}\n`, {
+        status,
+        headers: { ...headers, "Content-Type": "application/problem+json; charset=utf-8" },
+      });
+    const back = t.text("back_to_products");
+    return new Response(
+      `<!doctype html><html lang="${locale}"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title}</title><p>${detail}</p><p><a href="${href(locale, "products")}">${back}</a></p></html>\n`,
+      { status, headers: { ...headers, "Content-Type": "text/html; charset=utf-8" } },
+    );
+  };
 
   // Only this site's own form may write: a page elsewhere cannot add addresses to the list.
   if (request.headers.get("Origin") !== new URL(request.url).origin)
-    return reject(403, "Send the form from this site.");
+    return reject(sourceLocale, 403, "api_error_origin");
 
   let form: FormData;
   try {
     form = await request.formData();
   } catch {
-    return reject(400, "The form could not be read. Please send it again.");
+    return reject(sourceLocale, 400, "api_error_unreadable");
   }
   const field = (name: string) => {
     const value = form.get(name);
     return typeof value === "string" ? value.trim() : "";
   };
 
-  if (field("website") !== "")
-    return reject(400, "The form could not be read. Please send it again.");
+  const requested = field("locale");
+  const locale = isLocale(requested) ? requested : sourceLocale;
+  if (field("website") !== "" || !isLocale(requested))
+    return reject(locale, 400, "api_error_unreadable");
   const product = products.find(({ slug }) => slug === field("product"));
-  if (product === undefined) return reject(400, "There is no waiting list for this product.");
+  if (product === undefined) return reject(locale, 400, "api_error_product");
   const person = field("email").toLowerCase();
-  if (person.length > 254 || !address.test(person))
-    return reject(400, "Please enter a valid email address.");
+  if (person.length > 254 || !address.test(person)) return reject(locale, 400, "api_error_email");
   const company = field("company");
-  if (company.length > 200) return reject(400, "Please shorten the company name.");
-  if (field("consent") !== "yes")
-    return reject(400, "Please agree that we may store your address for this waiting list.");
+  if (company.length > 200) return reject(locale, 400, "api_error_company");
+  if (field("consent") !== "yes") return reject(locale, 400, "api_error_consent");
 
   // Joining twice keeps the first entry, and its date.
   const key = `${product.slug}:${person}`;
@@ -86,7 +91,8 @@ async function join(request: Request, storage: KVNamespace): Promise<Response> {
       email: person,
       company: company === "" ? null : company,
       product: product.slug,
-      consent: waitlistConsent(product),
+      locale,
+      consent: waitlistConsent(locale, product),
       joinedAt: new Date().toISOString(),
     };
     await storage.put(key, JSON.stringify(entry), { metadata: { joinedAt: entry.joinedAt } });
@@ -96,5 +102,5 @@ async function join(request: Request, storage: KVNamespace): Promise<Response> {
     ? new Response(`${JSON.stringify({ status: "joined", product: product.slug })}\n`, {
         headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" },
       })
-    : Response.redirect(new URL("/joined", request.url).href, 303);
+    : Response.redirect(new URL(href(locale, "joined"), request.url).href, 303);
 }

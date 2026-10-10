@@ -9,7 +9,7 @@ import { versioned } from "./versioned.ts";
  * The Markdown the site understands, and nothing more:
  *
  * - `## Heading` and `### Subheading`
- * - paragraphs, lines joined until a blank line
+ * - paragraphs, lines joined until a blank line; a line ending in `\` breaks there (addresses)
  * - `- item` lists and `1. item` lists
  * - `> quote` lines
  * - fenced code blocks, optionally naming a language: ```rust
@@ -103,7 +103,10 @@ export function parse(markdown: string, source: string, firstLine: number): Bloc
           !ordered.test(next) &&
           !unsupported.some(([pattern]) => pattern.test(next)),
         (next) => next.trim(),
-      ).join(" ");
+      )
+        .map((part) => (part.endsWith("\\") ? `${part.slice(0, -1)}\n` : `${part} `))
+        .join("")
+        .trim();
       blocks.push({ type: "p", text });
     }
   }
@@ -182,13 +185,18 @@ function size(path: string): { width: number; height: number } {
 const inline =
   /`([^`]+)`|\[([^\]]+)\]\(((?:https?:\/\/|mailto:|\/)[^\s)]*)\)|\*\*([^*]+)\*\*|\*([^*]+)\*/g;
 
+/** Plain text with its hard line breaks rendered as `<br>`. */
+function withBreaks(text: string): ComponentChildren[] {
+  return text.split("\n").flatMap((part, index) => (index === 0 ? [part] : [<br />, part]));
+}
+
 /** Inline Markdown: code, links, strong and emphasis. */
 export function Inline({ text }: { text: string }) {
   const nodes: ComponentChildren[] = [];
   let last = 0;
   for (const match of text.matchAll(inline)) {
     const [whole, code, label, href = "", strong, em] = match;
-    nodes.push(text.slice(last, match.index));
+    nodes.push(...withBreaks(text.slice(last, match.index)));
     last = match.index + whole.length;
     if (code !== undefined) {
       nodes.push(<code {...stylex.props(ui.mono, styles.code)}>{code}</code>);
@@ -205,7 +213,7 @@ export function Inline({ text }: { text: string }) {
       nodes.push(<em>{em}</em>);
     }
   }
-  nodes.push(text.slice(last));
+  nodes.push(...withBreaks(text.slice(last)));
   return <>{nodes}</>;
 }
 

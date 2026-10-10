@@ -1,0 +1,65 @@
+[
+  {
+    "en": "Introspectum",
+    "de": "Introspectum",
+    "note": "Brand. Never translate."
+  },
+  {
+    "en": "Software Factory",
+    "de": "Software Factory",
+    "note": "Product name. Never translate."
+  },
+  {
+    "en": "ERP & CRM",
+    "de": "ERP & CRM",
+    "note": "Product name. Never translate. Written with no-break spaces."
+  },
+  {
+    "en": "Trading Platform",
+    "de": "Trading Platform",
+    "note": "Product name. Never translate."
+  },
+  {
+    "en": "Blog",
+    "de": "Blog",
+    "note": "Same word in German."
+  },
+  {
+    "en": "waiting list",
+    "de": "Warteliste",
+    "match": "Wartelist",
+    "note": "Product waiting list for testers. Plural: Wartelisten."
+  },
+  {
+    "en": "consulting",
+    "de": "Beratung",
+    "note": "The consulting offer. Inquiry: Beratungsanfrage."
+  },
+  {
+    "en": "founding engineer",
+    "de": "Founding Engineer",
+    "note": "Job title. Kept in English, as usual in German start-ups."
+  },
+  {
+    "en": "internship",
+    "de": "Praktikum",
+    "match": "Praktik",
+    "note": "Plural: Praktika. Interns: im Praktikum."
+  },
+  {
+    "en": "AI agent",
+    "de": "KI-Agent",
+    "note": "AI is always KI in German."
+  },
+  {
+    "en": "reinforcement learning",
+    "de": "Reinforcement Learning",
+    "note": "Established term in German; not bestärkendes Lernen."
+  },
+  {
+    "en": "formal verification",
+    "de": "formale Verifikation",
+    "match": "Verifikation",
+    "note": "Adjective inflects: formaler, formalen Verifikation."
+  }
+]

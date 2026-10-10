@@ -1,0 +1,224 @@
+{
+  "page_title": { "message": "{brand} → {page}" },
+  "page_title_nested": { "message": "{brand} → {section} → {page}" },
+  "skip_to_content": { "message": "Zum Inhalt springen" },
+  "nav_label": { "message": "Hauptnavigation" },
+  "nav_products": { "message": "Produkte" },
+  "nav_join": { "message": "Karriere" },
+  "nav_blog": { "message": "Blog" },
+  "nav_about": { "message": "Über uns" },
+  "footer_label": { "message": "Kontakt und Rechtliches" },
+  "footer_privacy": { "message": "Datenschutz" },
+  "footer_imprint": { "message": "Impressum" },
+  "language_switch": { "message": "Diese Seite auf {language}" },
+  "feed_title": { "message": "{brand} Blog" },
+  "home_description": {
+    "message": "Introspectum entwickelt prüfbare Software: eine verifizierte Software Factory, ein ERP und CRM mit offenen Daten und Forschung zum systematischen Börsenhandel."
+  },
+  "home_share_title": { "message": "Software, die geprüft wird, statt ihr zu vertrauen." },
+  "home_hook": {
+    "message": "{distrust, number, ::percent} der Entwicklerinnen und Entwickler vertrauen KI-generiertem Code nicht vollständig. Nur {verify, number, ::percent} prüfen ihn immer, bevor sie ihn einchecken."
+  },
+  "home_why_label": { "message": "Warum" },
+  "home_why_text": {
+    "message": "KI schreibt einen wachsenden Anteil des gesamten Codes, schneller, als ihn jemand prüfen kann. Wir bauen Software, die geprüft wird, statt ihr einfach zu vertrauen: von der Anforderung bis zum Code nachvollziehbar, bewiesen, wo es darauf ankommt, und offen für die Menschen, die für sie geradestehen."
+  },
+  "home_what_label": { "message": "Was wir bauen" },
+  "home_how_label": { "message": "Wie" },
+  "home_who_label": { "message": "Wer wir sind" },
+  "home_who_text": {
+    "message": "Introspectum Limited ist auf der Isle of Man registriert und wird von Fabian Klopfer geleitet, einem Informatiker und früheren Softwareentwickler bei IBM Deutschland Research & Development."
+  },
+  "home_who_more": { "message": "Mehr über uns" },
+  "home_next_label": { "message": "Nächste Schritte" },
+  "home_next_waitlist": {
+    "message": "<link>Tragen Sie sich in eine Warteliste ein</link>, um ein Produkt vor dem Start zu testen."
+  },
+  "home_next_consulting": {
+    "message": "<link>Senden Sie uns eine Beratungsanfrage</link>, um schon jetzt mit uns zu arbeiten."
+  },
+  "home_next_join": {
+    "message": "<link>Arbeiten Sie bei uns</link> als Founding Engineer oder im Praktikum."
+  },
+  "methods_label": { "message": "Methoden" },
+  "principles_label": { "message": "Prinzipien" },
+  "method_formal_methods": { "message": "Formale Methoden" },
+  "method_compiler_construction": { "message": "Compilerbau" },
+  "method_model_based": { "message": "Modellbasierte Softwareentwicklung" },
+  "method_ai_agents": { "message": "KI-Agenten" },
+  "method_open_data": { "message": "Offene Daten" },
+  "method_reinforcement_learning": { "message": "Reinforcement Learning" },
+  "principle_proof": { "message": "Beweis statt Vertrauen" },
+  "principle_data": { "message": "Daten, die Ihnen gehören" },
+  "principle_traceability": { "message": "Nachvollziehbar von der Anforderung bis zum Code" },
+  "consulting_name": { "message": "Beratung" },
+  "consulting_what": {
+    "message": "Bis unsere Produkte erscheinen, helfen wir Unternehmen, KI in ihre Softwareentwicklung zu bringen und CRM und ERP einzurichten."
+  },
+  "consulting_audience": {
+    "message": "Für Unternehmen, die KI nutzen wollen, ohne die Kontrolle über ihren Code oder ihre Daten zu verlieren."
+  },
+  "consulting_link": { "message": "Beratungsanfrage senden" },
+  "consulting_subject": { "message": "Beratungsanfrage" },
+  "consulting_subject_product": { "message": "Beratungsanfrage: {product}" },
+  "products_title": { "message": "Produkte" },
+  "products_intro": {
+    "message": "Drei Produkte, alle noch vor dem Start. Tragen Sie sich in eine Warteliste ein, um eines vorab zu testen."
+  },
+  "status_prototype": { "message": "Prototyp" },
+  "status_in_development": { "message": "In Entwicklung" },
+  "status_research": { "message": "Forschung" },
+  "product_software_factory_what": {
+    "message": "Baut aus Ihrem Code und Ihren Dokumenten einen Graphen, lässt KI-Agenten darauf arbeiten und prüft ihre Änderungen mit formaler Verifikation."
+  },
+  "product_software_factory_audience": {
+    "message": "Für Softwareteams, die Code mit KI schreiben und dafür geradestehen müssen, zuerst für Start-ups und kleine IT-Unternehmen."
+  },
+  "product_software_factory_detail_1": {
+    "message": "Die Software Factory liest Ihren Code und die zugehörigen Dokumente in einen Graphen ein: Anforderungen, Entwurf, Tests, Fehlerberichte und Analyseergebnisse, jeweils verknüpft mit dem Code, den sie betreffen. Sie sehen das System als Architekturkarten, von der Übersicht bis zu einzelnen Funktionen."
+  },
+  "product_software_factory_detail_2": {
+    "message": "Auf dem Graphen arbeiten KI-Agenten in Schritten nach ISO/IEC/IEEE 15288, der Norm für Prozesse im Systemlebenszyklus, und formale Verifikation prüft ihre Ergebnisse gegen Ihre Spezifikationen. Jeder Schritt hinterlässt einen Prüfpfad."
+  },
+  "product_software_factory_detail_3": {
+    "message": "Graph und Karten funktionieren bereits, und die Verifikation läuft durchgängig mit den Verifizierern Prusti und Verus. Als Nächstes folgt der Agentenprozess."
+  },
+  "product_erp_crm_what": {
+    "message": "Kunden, Vertrieb, Buchhaltung und Personal in einem System mit offenen Daten und einem KI-Assistenten, der mit denselben Daten arbeitet."
+  },
+  "product_erp_crm_audience": {
+    "message": "Für kleine Unternehmen, die noch mit Papier und Tabellen arbeiten, zuerst aus der Immobilienwirtschaft und der IT-Dienstleistung."
+  },
+  "product_erp_crm_detail_1": {
+    "message": "Ein ERP- und CRM-System auf Basis von Twenty, dem Open-Source-CRM, erweitert um Buchhaltung, Steuern, Einkauf, Vertrieb, Zahlungsverkehr, Lagerhaltung und Personal."
+  },
+  "product_erp_crm_detail_2": {
+    "message": "Jeder Kunde erhält eine eigene Installation, und alle Daten bleiben in offenen Formaten an einem Ort. Ein KI-Assistent arbeitet mit denselben Daten wie Ihr Team: Er kann Datensätze ordnen, Analysen vorbereiten und Dokumente entwerfen."
+  },
+  "product_erp_crm_detail_3": {
+    "message": "Unser eigenes Unternehmen und ein Immobilienmakler nutzen es als Erste."
+  },
+  "product_trading_platform_what": {
+    "message": "Führt trendfolgende Strategien auf vielen Aktien zugleich aus; Reinforcement Learning stimmt die Einstellungen jeder Aktie ab."
+  },
+  "product_trading_platform_audience": {
+    "message": "Für Anlegerinnen und Anleger aus Immobilien, Banken und IT, die eine Strategie testen wollen, bevor sie ihr vertrauen."
+  },
+  "product_trading_platform_detail_1": {
+    "message": "Die Trading Platform führt trendfolgende Strategien wie die Turtle-Regeln parallel auf vielen Aktien aus."
+  },
+  "product_trading_platform_detail_2": {
+    "message": "Reinforcement Learning stimmt die Einstellungen für jede Aktie ab, auch den Zeitraum, in dem ihre Signale am verlässlichsten sind."
+  },
+  "product_trading_platform_detail_3": {
+    "message": "Sie handelt nur simuliert (Paper Trading), und nichts hier ist eine Anlageberatung."
+  },
+  "waitlist_label": { "message": "Warteliste" },
+  "waitlist_intro": {
+    "message": "Hinterlassen Sie Ihre E-Mail-Adresse, um {product} vor dem Start zu testen."
+  },
+  "waitlist_email_label": { "message": "E-Mail" },
+  "waitlist_company_label": { "message": "Unternehmen (optional)" },
+  "waitlist_honeypot_label": { "message": "Leer lassen" },
+  "waitlist_consent": {
+    "message": "Ich bin einverstanden, dass Introspectum meine E-Mail-Adresse speichert, um mich zur Warteliste für {product} zu kontaktieren."
+  },
+  "waitlist_privacy": {
+    "message": "Was wir speichern und warum, steht in der <link>Datenschutzerklärung</link>."
+  },
+  "waitlist_submit": { "message": "Auf die Warteliste" },
+  "waitlist_sending": { "message": "Wird gesendet …" },
+  "waitlist_joined": {
+    "message": "Sie stehen auf der Warteliste. Wir schreiben Ihnen, sobald die Testphase beginnt."
+  },
+  "waitlist_failed_connection": {
+    "message": "Die Verbindung ist fehlgeschlagen. Versuchen Sie es erneut oder schreiben Sie an {email}."
+  },
+  "waitlist_failed_server": {
+    "message": "Wir konnten Sie nicht eintragen. Versuchen Sie es erneut oder schreiben Sie an {email}."
+  },
+  "api_not_added": { "message": "Nicht eingetragen" },
+  "api_error_origin": { "message": "Bitte senden Sie das Formular von dieser Website aus." },
+  "api_error_unreadable": {
+    "message": "Das Formular konnte nicht gelesen werden. Bitte senden Sie es erneut."
+  },
+  "api_error_product": { "message": "Für dieses Produkt gibt es keine Warteliste." },
+  "api_error_email": { "message": "Bitte geben Sie eine gültige E-Mail-Adresse ein." },
+  "api_error_company": { "message": "Bitte kürzen Sie den Unternehmensnamen." },
+  "api_error_consent": {
+    "message": "Bitte stimmen Sie zu, dass wir Ihre Adresse für diese Warteliste speichern dürfen."
+  },
+  "back_to_products": { "message": "Zurück zu den Produkten" },
+  "joined_title": { "message": "Sie stehen auf der Warteliste" },
+  "joined_text": { "message": "Wir schreiben Ihnen, sobald die Testphase beginnt." },
+  "join_title": { "message": "Karriere" },
+  "join_intro": {
+    "message": "Introspectum ist ein kleines Team. Es gibt zwei Wege, dazuzustoßen."
+  },
+  "join_description": {
+    "message": "Introspectum ist ein kleines Team. Arbeiten Sie mit uns als Founding Engineer oder im Praktikum."
+  },
+  "join_share_title": { "message": "Founding Engineer und Praktika" },
+  "role_founding_engineer_title": { "message": "Founding Engineer" },
+  "role_founding_engineer_focus": { "message": "Formale Methoden und Codegenerierung." },
+  "role_founding_engineer_status": {
+    "message": "Wir besetzen diese Rolle noch nicht. Wir lesen aber schon jetzt jede Bewerbung und sprechen sofort mit außergewöhnlichen Menschen."
+  },
+  "role_founding_engineer_work_label": { "message": "Ihre Aufgaben" },
+  "role_founding_engineer_work_1": {
+    "message": "Formale Verifikation von Rust-Code mit Prusti und Verus"
+  },
+  "role_founding_engineer_work_2": {
+    "message": "Die Laufzeitumgebung für KI-Agenten, die Code aus Spezifikationen erzeugen"
+  },
+  "role_founding_engineer_work_3": { "message": "Code-Property-Graphen aus bestehendem Code" },
+  "role_founding_engineer_work_4": { "message": "Anbindungen an GitHub und an SARIF-Werkzeuge" },
+  "role_founding_engineer_profile_label": { "message": "Was Sie mitbringen" },
+  "role_founding_engineer_profile_1": {
+    "message": "Ein Informatikstudium mit Schwerpunkt Systemprogrammierung"
+  },
+  "role_founding_engineer_profile_2": {
+    "message": "Interesse an Compilerbau und formalen Methoden; Erfahrung hilft, ist aber keine Voraussetzung"
+  },
+  "role_founding_engineer_profile_3": { "message": "Fließendes Englisch" },
+  "role_founding_engineer_apply": {
+    "message": "Senden Sie Ihren Lebenslauf oder Ihr LinkedIn-Profil und Links zu Ihren Arbeiten an <link>{email}</link>."
+  },
+  "role_founding_engineer_subject": { "message": "Bewerbung: Founding Engineer" },
+  "role_internships_title": { "message": "Praktika" },
+  "role_internships_focus": {
+    "message": "Für Studierende, die an einem echten Produkt arbeiten wollen."
+  },
+  "role_internships_topics_label": { "message": "Themen" },
+  "role_internships_topic_1": { "message": "Formale Verifikation und Compiler" },
+  "role_internships_topic_2": { "message": "KI-Agenten" },
+  "role_internships_topic_3": { "message": "ERP und CRM auf Basis von Twenty" },
+  "role_internships_topic_4": {
+    "message": "Reinforcement Learning für die Forschung zum Börsenhandel"
+  },
+  "role_internships_apply": {
+    "message": "Senden Sie Ihren Lebenslauf, Ihr Wunschthema und die Monate, in denen Sie Zeit haben, an <link>{email}</link>."
+  },
+  "role_internships_subject": { "message": "Bewerbung: Praktikum" },
+  "blog_title": { "message": "Blog" },
+  "blog_intro": { "message": "Jede Woche Neues zu KI, Softwareentwicklung und Regulierung." },
+  "blog_feed": { "message": "Folgen Sie dem Blog per <link>RSS</link>." },
+  "blog_empty": { "message": "Noch keine Beiträge." },
+  "blog_date": { "message": "{date, date, long}" },
+  "blog_post_meta": {
+    "message": "{date, date, long}, {author}, {minutes, plural, one {# Minute} other {# Minuten}} Lesezeit"
+  },
+  "blog_share_byline": { "message": "{author}, {date, date, long}" },
+  "about_share_title": { "message": "Ein auf der Isle of Man registriertes Softwareunternehmen" },
+  "privacy_description": {
+    "message": "Was die Website von Introspectum speichert, warum, und welche Rechte Sie haben."
+  },
+  "privacy_share_title": { "message": "Was diese Website speichert und warum" },
+  "imprint_description": { "message": "Wer für die Website von Introspectum verantwortlich ist." },
+  "imprint_share_title": { "message": "Wer für diese Website verantwortlich ist" },
+  "not_found_title": { "message": "Seite nicht gefunden" },
+  "not_found_text": {
+    "message": "Diese Seite gibt es nicht. Vielleicht ist sie umgezogen, oder die Adresse enthält einen Tippfehler."
+  },
+  "not_found_home": { "message": "Zur Startseite" }
+}

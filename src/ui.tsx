@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
-import { colors, figureUnits, fontFeatures, media, space } from "./tokens.stylex.ts";
+import type { VNode } from "preact";
+import { arrows, colors, fontFeatures, media, space } from "./tokens.stylex.ts";
 
 /** Anything `stylex.props` accepts: a style, `false`, `null`, or a nested array of them. */
 export type Style = stylex.StyleXArray<stylex.CompiledStyles | boolean | null | undefined>;
@@ -78,9 +79,9 @@ export const ui = stylex.create({
     textDecorationColor: colors.tertiary,
   },
   /** A link that leads on within the site. */
-  onward: { "::after": { content: '"\u00a0→"', fontFamily: sans } },
+  onward: { "::after": { content: arrows.onward, fontFamily: sans } },
   /** A link that leaves the site. */
-  outbound: { "::after": { content: '"\u00a0↗"', fontFamily: sans } },
+  outbound: { "::after": { content: arrows.outbound, fontFamily: sans } },
   reset: {
     appearance: "none",
     padding: 0,
@@ -93,7 +94,7 @@ export const ui = stylex.create({
     lineHeight: "inherit",
     // Browsers reset a control's font features; controls take the page's, case forms included.
     fontFeatureSettings: "inherit",
-    textAlign: "left",
+    textAlign: "start",
     cursor: "pointer",
     touchAction: "manipulation",
   },
@@ -108,37 +109,13 @@ export const ui = stylex.create({
     whiteSpace: "nowrap",
     borderWidth: 0,
   },
-  /** Tabular digits at the density of the words beside them; see `figureUnits`. */
-  figures: {
-    fontVariantNumeric: "tabular-nums",
-    letterSpacing: `calc(${figureUnits.digit} / ${figureUnits.unitsPerEm} * 1em)`,
-  },
-  /** A date's hyphen, set proportionally, with the gaps on each side matched as above. */
-  separator: {
-    marginInlineStart: `calc(${figureUnits.beforeHyphen} / ${figureUnits.unitsPerEm} * 1em)`,
-    marginInlineEnd: `calc(${figureUnits.afterHyphen} / ${figureUnits.unitsPerEm} * 1em)`,
-  },
 });
 
-/**
- * Sets an ISO date (`2026-10-12`) in steady columns: tabular digits, proportional hyphens. Only
- * the digits take `tnum`, since Inter's tabular set also widens the hyphen to a digit's width.
- */
-export function Figures({ text }: { text: string }) {
-  return (
-    <>
-      {text
-        .split(/(\d+|-)/)
-        .filter((part) => part !== "")
-        .map((part) =>
-          part === "-" ? (
-            <span {...stylex.props(ui.separator)}>-</span>
-          ) : /^\d+$/.test(part) ? (
-            <span {...stylex.props(ui.figures)}>{part}</span>
-          ) : (
-            part
-          ),
-        )}
-    </>
+/** For `Translator.rich`: renders a message's `<link>…</link>` part as a link to `target`. */
+export function richLink(target: string) {
+  return (chunks: Array<string | VNode>) => (
+    <a {...stylex.props(ui.link, ui.focusRing)} href={target}>
+      {chunks}
+    </a>
   );
 }
