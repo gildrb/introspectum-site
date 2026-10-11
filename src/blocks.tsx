@@ -511,10 +511,11 @@ const styles = stylex.create({
     marginTop: space.x3,
     listStyle: "none",
   },
-  /** The number in its own column, the entry hanging beside it. */
+  /** The number in its own column, the entry hanging beside it in even lines. */
   source: {
     display: "grid",
     gridTemplateColumns: `${space.x4} minmax(0, 1fr)`,
+    textWrap: "balance",
   },
   sourceNumber: { color: colors.primary, fontVariantNumeric: "tabular-nums" },
 });

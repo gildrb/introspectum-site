@@ -188,6 +188,6 @@ const styles = stylex.create({
     gap: space.x3,
     listStyle: "none",
   },
-  member: { display: "flex", flexDirection: "column", rowGap: space.x1 },
+  member: { display: "flex", flexDirection: "column", rowGap: space.x1, textWrap: "balance" },
   after: { marginTop: { default: space.x5, [media.desktop]: space.x6 } },
 });

@@ -13,7 +13,7 @@ Der Name kommt vom lateinischen *introspicere*: hineinschauen.
 
 Wir haben das Problem untersucht: Wir haben 17 Branchenberichte gelesen und 15 Entwicklerinnen und Entwickler, Teamleitungen und Budgetverantwortliche befragt. Die meisten von ihnen beschrieben ein Problem als ernst: KI-generierten Code zu prüfen kostet mehr Aufwand als Code, den Menschen geschrieben haben.
 
-Die Idee geht auf Fabian Klopfers Arbeit an Graphdatenbanken an der Universität Konstanz zurück, wo er seine Bachelorarbeit über das Ableiten von Typhierarchien in Property-Graph-Datenbanken schrieb.
+Die Idee geht auf Fabian Klopfers Arbeit an Graphdatenbanken an der Universität Konstanz zurück. Seine Bachelorarbeit dort behandelte das Ableiten von Typhierarchien in Property-Graph-Datenbanken.
 
 ## Team
 

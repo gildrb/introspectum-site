@@ -279,7 +279,13 @@ const styles = stylex.create({
     color: colors.primary,
     textWrap: "balance",
   },
-  h3: { fontSize: "1.375rem", fontWeight: 500, lineHeight: "2rem", color: colors.primary },
+  h3: {
+    fontSize: "1.375rem",
+    fontWeight: 500,
+    lineHeight: "2rem",
+    color: colors.primary,
+    textWrap: "balance",
+  },
   strong: { color: colors.primary, fontWeight: 600 },
   quote: {
     paddingInlineStart: space.x2,

@@ -405,6 +405,8 @@ const styles = stylex.create({
     MozOsxFontSmoothing: "grayscale",
     WebkitTextSizeAdjust: "100%",
     textRendering: "optimizeLegibility",
+    // No paragraph ends on a word alone; titles balance their lines instead (`ui.display`).
+    textWrap: "pretty",
   },
   /** Hidden until focused, then set over the header. */
   skip: {

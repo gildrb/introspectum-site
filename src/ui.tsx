@@ -100,14 +100,19 @@ export const ui = stylex.create({
     lineHeight: "1.75rem",
     letterSpacing: "-0.01em",
     color: colors.primary,
+    textWrap: "balance",
   },
-  /** The paragraph under a title, in full ink. */
+  /**
+   * The paragraph under a title, in full ink. A few lines at most, set in even lengths like the
+   * title above it, so none ends on a stray word or two.
+   */
   lead: {
     fontFamily: serif,
     fontSize: { default: "1.25rem", [media.desktop]: "1.5rem" },
     fontWeight: colors.proseWeight,
     lineHeight: { default: "1.75rem", [media.desktop]: "2.25rem" },
     color: colors.primary,
+    textWrap: "balance",
   },
   /** Running text. */
   prose: {
