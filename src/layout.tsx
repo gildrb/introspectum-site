@@ -343,7 +343,13 @@ function Footer({ meta }: { meta: Meta }) {
     },
   ];
   return (
-    <footer>
+    <footer {...stylex.props(styles.footer)}>
+      <div {...stylex.props(ui.container, styles.emblemArea)} aria-hidden="true">
+        <div
+          {...stylex.props(styles.emblem)}
+          style={{ maskImage: `url("${emblemUrl}")`, WebkitMaskImage: `url("${emblemUrl}")` }}
+        />
+      </div>
       <div {...stylex.props(ui.container, styles.footerColumns, styles.footerGrid)}>
         <div {...stylex.props(styles.footerBrand)}>
           <p {...stylex.props(ui.serif, styles.wordmark)} {...untranslated}>
@@ -383,13 +389,6 @@ function Footer({ meta }: { meta: Meta }) {
             </ul>
           </div>
         ))}
-      </div>
-      <div {...stylex.props(ui.container)}>
-        <div
-          {...stylex.props(styles.emblem)}
-          style={{ maskImage: `url("${emblemUrl}")`, WebkitMaskImage: `url("${emblemUrl}")` }}
-          aria-hidden="true"
-        />
       </div>
       {/* The other language sits on the column line of the first group of links, Products. */}
       <div {...stylex.props(ui.container, styles.footerColumns, styles.footerBase)}>
@@ -518,24 +517,36 @@ const styles = stylex.create({
     paddingBottom: { default: space.x12, [media.desktop]: space.x20 },
     outline: "none",
   },
+  /** A layer of its own, so the emblem sits behind the footer's text and never moves it. */
+  footer: {
+    position: "relative",
+    isolation: "isolate",
+  },
+  /** The footer's box inside the page margins: the emblem fits in it, from its lower edge up. */
+  emblemArea: {
+    position: "absolute",
+    insetBlock: 0,
+    insetInline: 0,
+    zIndex: -1,
+    pointerEvents: "none",
+  },
   /**
-   * The logo in outline across the footer's whole width, under its links: the chevron above the
-   * eye, and the eye down to just above the lower chevron. From the eye's top down, its lines
-   * crumble into grain, like chalk on rough paper, with no gradient. The mask (2400 by 1727)
-   * holds that part; the box keeps its proportions and fills it with the color of the text, at
-   * a fraction of its strength.
+   * The logo in outline, as large as the footer allows, behind its links: the chevron, and the
+   * eye down to its middle. From the eye's top down, its lines crumble into grain, like chalk on
+   * rough paper, with no gradient. The mask fits the box and sits on its lower edge; the color
+   * is the text's, at a fraction of its strength.
    */
   emblem: {
-    display: "block",
     width: "100%",
-    aspectRatio: "2400 / 1727",
+    height: "100%",
     backgroundColor: colors.primary,
     opacity: 0.32,
-    maskSize: "100% 100%",
+    maskSize: "contain",
     maskRepeat: "no-repeat",
-    WebkitMaskSize: "100% 100%",
+    maskPosition: "center bottom",
+    WebkitMaskSize: "contain",
     WebkitMaskRepeat: "no-repeat",
-    pointerEvents: "none",
+    WebkitMaskPosition: "center bottom",
   },
   /**
    * The footer on the page grid: on wide screens the name over six columns and each group of
@@ -578,8 +589,10 @@ const styles = stylex.create({
     listStyle: "none",
   },
   footerLink: { display: "block", width: "fit-content", paddingBlock: `calc(${space.x1} / 2)` },
+  /** Some room above the copyright line on wide screens, where the emblem's eye shows. */
   footerBase: {
     rowGap: space.x2,
+    paddingTop: { default: null, [media.desktop]: space.x16 },
     paddingBottom: space.x4,
   },
   copyright: { gridColumn: { default: "1 / -1", [media.wide]: "1 / span 6" } },
