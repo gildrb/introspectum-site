@@ -1,11 +1,12 @@
 import { posts } from "./content.ts";
 import { day, translators } from "./i18n.ts";
 import { href, type Locale, localeInfo, locales, sourceLocale } from "./locale.ts";
+import { favicon } from "./logo.tsx";
 import { authors, company, email, origin, products, roles } from "./site.ts";
 
 /**
- * The feeds, the sitemap and llms.txt. Everything comes from the catalogs, `site.ts` and the posts,
- * so a new post, product or translation reaches all of them at once.
+ * The feeds, the sitemap, llms.txt and the favicon. Everything comes from the catalogs, `site.ts`,
+ * the posts and the logo, so a new post, product, translation or mark reaches all of them at once.
  */
 
 const url = (path: string) => `${origin}${path}`;
@@ -140,4 +141,5 @@ export const files: Record<string, string> = {
   "feed.xml": feed("en"),
   "de/feed.xml": feed("de"),
   "llms.txt": llms(),
+  "favicon.svg": favicon(),
 };

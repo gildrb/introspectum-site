@@ -92,7 +92,9 @@ const sitePlugin: Plugin = {
         ? "text/html"
         : file.endsWith(".xml")
           ? "application/xml"
-          : "text/plain";
+          : file.endsWith(".svg")
+            ? "image/svg+xml"
+            : "text/plain";
       response.setHeader("Content-Type", `${type}; charset=utf-8`);
       response.end(file.endsWith(".html") ? await server.transformIndexHtml(pathname, body) : body);
       return true;

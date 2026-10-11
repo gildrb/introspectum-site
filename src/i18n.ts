@@ -55,7 +55,7 @@ export type Translator = {
   rich(id: MessageId, tags: Readonly<Record<string, Tag>>, values?: Values): ComponentChildren;
   /** The name of a language, written in this one: "German" in English, "Englisch" in German. */
   language(of: Locale): string;
-  /** Items as one list, joined as this language joins them: "A, B and C", "A, B und C". */
+  /** Items as one list, the last two joined by "&", as the brand writes it: "A, B & C". */
   list(items: readonly string[]): string;
 };
 
@@ -74,6 +74,7 @@ function translator(locale: Locale): Translator {
     },
   });
   const names = new Intl.DisplayNames([tag], { type: "language" });
+  const lists = new Intl.ListFormat(tag, { type: "conjunction" });
   return {
     locale,
     text: (id, values) => intl.formatMessage({ id }, values),
@@ -83,7 +84,12 @@ function translator(locale: Locale): Translator {
       if (name === undefined) throw new Error(`No ${locale} name for the language ${of}`);
       return name;
     },
-    list: (items) => intl.formatList(items, { type: "conjunction" }),
+    list: (items) => {
+      // The language's separators, except the one before the last item, which is always "&".
+      const parts = lists.formatToParts(items);
+      const last = parts.findLastIndex((part) => part.type === "literal");
+      return parts.map((part, index) => (index === last ? " & " : part.value)).join("");
+    },
   };
 }
 

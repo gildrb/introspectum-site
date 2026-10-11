@@ -90,17 +90,17 @@
     "maxLength": 200
   },
   "illustration_llull_alt": {
-    "message": "Woodcut circle by Ramon Llull: nine concepts, each named by a letter and joined by straight lines to all the others.",
+    "message": "Woodcut circle by Ramon Llull: nine concepts, each named by a letter & joined by straight lines to all the others.",
     "description": "Alt text of Ramon Llull’s Figure A, the Software Factory’s figure: what it shows, for people who cannot see it.",
     "maxLength": 200
   },
   "illustration_pacioli_alt": {
-    "message": "A page of Luca Pacioli’s Summa: ledger entries in two columns, debtors on the left and creditors on the right.",
+    "message": "A page of Luca Pacioli’s Summa: ledger entries in two columns, debtors on the left & creditors on the right.",
     "description": "Alt text of a page of Luca Pacioli’s bookkeeping treatise, the ERP & CRM’s figure: what it shows, for people who cannot see it.",
     "maxLength": 200
   },
   "illustration_playfair_alt": {
-    "message": "William Playfair’s line chart of England’s trade with Denmark and Norway: exports and imports as two lines that cross where the balance turns.",
+    "message": "William Playfair’s line chart of England’s trade with Denmark & Norway: exports & imports as two lines that cross where the balance turns.",
     "description": "Alt text of William Playfair’s time-series chart, the Trading Platform’s figure: what it shows, for people who cannot see it.",
     "maxLength": 200
   },
@@ -120,12 +120,12 @@
     "maxLength": 90
   },
   "home_description": {
-    "message": "Introspectum builds software you can check: a verified software factory, an open-data ERP and CRM, and research in systematic trading.",
+    "message": "Introspectum builds software you can check: a verified software factory, an open-data ERP & CRM, & research in systematic trading.",
     "description": "Meta description of the homepage, shown in search results and link previews.",
     "maxLength": 160
   },
   "home_lead": {
-    "message": "We build tools that trace code to its requirements and prove it correct where it matters, so teams can write code with AI and still stand behind it.",
+    "message": "We build tools that trace code to its requirements & prove it correct where it matters, so teams can write code with AI & still stand behind it.",
     "description": "Paragraph under the homepage title: what the company builds and why it matters.",
     "maxLength": 240
   },
@@ -140,7 +140,7 @@
     "maxLength": 90
   },
   "home_why_evidence": {
-    "message": "<sonar>{distrust, number, ::percent} of developers do not fully trust AI-generated code, and only {verify, number, ::percent} always check it before they commit.</sonar>",
+    "message": "<sonar>{distrust, number, ::percent} of developers do not fully trust AI-generated code, & only {verify, number, ::percent} always check it before they commit.</sonar>",
     "description": "Lead under the homepage's 'why' heading: a survey result. {distrust} and {verify} are shares formatted as percentages. The tag cites the survey: keep it around the whole sentence.",
     "maxLength": 200
   },
@@ -150,7 +150,7 @@
     "maxLength": 200
   },
   "home_why_text": {
-    "message": "We build software that is checked instead of trusted: traced from requirement to code, proven where it matters, and open to the people who answer for it.",
+    "message": "We build software that is checked instead of trusted: traced from requirement to code, proven where it matters, & open to the people who answer for it.",
     "description": "Paragraph under the homepage's 'why' heading, one sentence.",
     "maxLength": 240
   },
@@ -175,7 +175,7 @@
     "maxLength": 32
   },
   "home_who_text": {
-    "message": "Introspectum Limited is registered in the Isle of Man and led by Fabian Klopfer, a computer scientist and former software engineer at IBM Germany Research & Development.",
+    "message": "Introspectum Limited is registered in the Isle of Man & led by Fabian Klopfer, a computer scientist & former software engineer at IBM Germany Research & Development.",
     "description": "Homepage: who runs the company, one sentence. Also the About page's meta description."
   },
   "home_who_more": {
@@ -189,13 +189,13 @@
     "maxLength": 40
   },
   "team_role_marc": {
-    "message": "ERP & CRM and infrastructure",
+    "message": "ERP & CRM, infrastructure",
     "description": "Role of Marc Gsell in the homepage's team list. 'ERP & CRM' is the product's name.",
     "maxLength": 40
   },
   "team_role_gil": {
-    "message": "Design and frontend",
-    "description": "Role of Gil Rodrigues in the homepage's team list.",
+    "message": "Founding Designer",
+    "description": "Role of Gil Rodrigues in the homepage's team list: a job title, like 'Managing Director' for Fabian Klopfer.",
     "maxLength": 40
   },
   "cta_title": {
@@ -259,7 +259,7 @@
     "maxLength": 64
   },
   "principle_data_text": {
-    "message": "Each customer gets its own installation, and all data stays in open formats in one place.",
+    "message": "Each customer gets its own installation, & all data stays in open formats in one place.",
     "description": "One sentence under the principle 'Data that stays yours'.",
     "maxLength": 140
   },
@@ -269,7 +269,7 @@
     "maxLength": 64
   },
   "principle_traceability_text": {
-    "message": "Requirements, design, tests and bug reports, each linked to the code it concerns.",
+    "message": "Requirements, design, tests & bug reports, each linked to the code it concerns.",
     "description": "One sentence under the principle 'Traceability from requirement to code'.",
     "maxLength": 140
   },
@@ -284,7 +284,7 @@
     "maxLength": 60
   },
   "consulting_what": {
-    "message": "Until our products ship, we help companies bring AI into their software development and set up CRM and ERP.",
+    "message": "Until our products ship, we help companies bring AI into their software development & set up CRM & ERP.",
     "description": "What the consulting offer is, one sentence."
   },
   "consulting_audience": {
@@ -302,12 +302,12 @@
     "maxLength": 160
   },
   "consulting_erp_title": {
-    "message": "CRM and ERP",
+    "message": "CRM & ERP",
     "description": "Title of the second consulting offer.",
     "maxLength": 48
   },
   "consulting_erp_text": {
-    "message": "We set up CRM and ERP systems that keep your data in open formats, in one place.",
+    "message": "We set up CRM & ERP systems that keep your data in open formats, in one place.",
     "description": "One sentence on the second consulting offer.",
     "maxLength": 160
   },
@@ -377,40 +377,40 @@
     "translate": false
   },
   "product_software_factory_what": {
-    "message": "Builds one graph from your code and documents, lets AI agents work on it, and checks their changes with formal verification.",
+    "message": "Builds one graph from your code & documents, lets AI agents work on it, & checks their changes with formal verification.",
     "description": "What the Software Factory does, one sentence. Also its link-preview title and meta description.",
     "maxLength": 160
   },
   "product_software_factory_audience": {
-    "message": "For software teams that use AI to write code and must stand behind it, starting with startups and small IT companies.",
+    "message": "For software teams that use AI to write code & must stand behind it, starting with startups & small IT companies.",
     "description": "Who the Software Factory is for, one sentence."
   },
   "product_software_factory_how_1": {
-    "message": "The Software Factory reads your code and its documents into one graph: requirements, design, tests, bug reports and analysis results, each linked to the code it concerns. The graph builds on the <cpg>code property graph</cpg>, which joins the syntax, control flow and data flow of a program. You see it as architecture maps in the <c4>C4 model</c4>, from the whole system down to single functions.",
+    "message": "The Software Factory reads your code & its documents into one graph: requirements, design, tests, bug reports & analysis results, each linked to the code it concerns. The graph builds on the <cpg>code property graph</cpg>, which joins the syntax, control flow & data flow of a program. You see it as architecture maps in the <c4>C4 model</c4>, from the whole system down to single functions.",
     "description": "Software Factory page, 'How it works', paragraph 1 of 3: the graph and the maps. Each tag cites a source: keep it around the words that name the work it cites."
   },
   "product_software_factory_how_2": {
-    "message": "On top of the graph, AI agents work in steps modelled on <iso-15288>ISO/IEC/IEEE 15288</iso-15288>, the standard for system life cycle processes. A language model writes only what a proof can check: function bodies, against specifications that people approve. Skeletons, tests and documents come from the graph without a model, the same way every time.",
+    "message": "On top of the graph, AI agents work in steps modelled on <iso-15288>ISO/IEC/IEEE 15288</iso-15288>, the standard for system life cycle processes. A language model writes only what a proof can check: function bodies, against specifications that people approve. Skeletons, tests & documents come from the graph without a model, the same way every time.",
     "description": "Software Factory page, 'How it works', paragraph 2 of 3: the agent process, and what a language model may write. The tag cites the standard."
   },
   "product_software_factory_how_3": {
-    "message": "Formal verification checks each function against its specification, with the <prusti>Prusti</prusti> and <verus>Verus</verus> verifiers. When a proof or a test fails, the counterexample goes back to the model, until both pass or a person takes over. Every step leaves an audit trail.",
+    "message": "Formal verification checks each function against its specification, with the <prusti>Prusti</prusti> & <verus>Verus</verus> verifiers. When a proof or a test fails, the counterexample goes back to the model, until both pass or a person takes over. Every step leaves an audit trail.",
     "description": "Software Factory page, 'How it works', paragraph 3 of 3: verification and the repair loop. Prusti and Verus are tool names; each tag cites the paper on the tool."
   },
   "product_software_factory_state_1": {
-    "message": "It reads Rust, C and TypeScript. On {date, date, long}, it read its own code, {ownFiles, number} Rust files, into a graph of {ownNodes, number} nodes in {ownSeconds, number} seconds, and the {otherFiles, number} files of <ripgrep>ripgrep</ripgrep> into {otherNodes, number} nodes in {otherSeconds, number} seconds. Repeated runs on the same code gave the same result.",
+    "message": "It reads Rust, C & TypeScript. On {date, date, long}, it read its own code, {ownFiles, number} Rust files, into a graph of {ownNodes, number} nodes in {ownSeconds, number} seconds, & the {otherFiles, number} files of <ripgrep>ripgrep</ripgrep> into {otherNodes, number} nodes in {otherSeconds, number} seconds. Repeated runs on the same code gave the same result.",
     "description": "Software Factory page, 'Where it stands', paragraph 1 of 5: a measurement. {date} is the day it was taken; the other placeholders are counts and seconds. ripgrep is the name of an open-source program; the tag cites it."
   },
   "product_software_factory_state_2": {
-    "message": "Verification runs end to end with Prusti and Verus, so far on small programs such as a ring buffer and the alarm logic of a smoke detector.",
+    "message": "Verification runs end to end with Prusti & Verus, so far on small programs such as a ring buffer & the alarm logic of a smoke detector.",
     "description": "Software Factory page, 'Where it stands', paragraph 2 of 5: what verification covers today."
   },
   "product_software_factory_state_3": {
-    "message": "For an audit, it exports a traceability matrix and a safety case in the <gsn>Goal Structuring Notation</gsn>. It issues a certificate only when the verifiers ran, every proof obligation holds, every test passes and every requirement is traced.",
+    "message": "For an audit, it exports a traceability matrix & a safety case in the <gsn>Goal Structuring Notation</gsn>. It issues a certificate only when the verifiers ran, every proof obligation holds, every test passes & every requirement is traced.",
     "description": "Software Factory page, 'Where it stands', paragraph 3 of 5: what it gives auditors. The Goal Structuring Notation is the name of a standard; the tag cites it."
   },
   "product_software_factory_state_4": {
-    "message": "It reads and writes requirements in the form of <ieee-830>IEEE 830</ieee-830> and design descriptions in the form of <ieee-1016>IEEE 1016</ieee-1016>, and draws UML, SysML and Mermaid diagrams from the code.",
+    "message": "It reads & writes requirements in the form of <ieee-830>IEEE 830</ieee-830> & design descriptions in the form of <ieee-1016>IEEE 1016</ieee-1016>, & draws UML, SysML & Mermaid diagrams from the code.",
     "description": "Software Factory page, 'Where it stands', paragraph 4 of 5: the documents it reads and writes. Each tag cites a standard."
   },
   "product_software_factory_state_5": {
@@ -423,36 +423,36 @@
     "translate": false
   },
   "product_erp_crm_what": {
-    "message": "Customers, sales, accounting and HR in one open-data system, with an AI assistant that works on the same data.",
+    "message": "Customers, sales, accounting & HR in one open-data system, with an AI assistant that works on the same data.",
     "description": "What the ERP & CRM does, one sentence. Also its link-preview title and meta description.",
     "maxLength": 160
   },
   "product_erp_crm_audience": {
-    "message": "For small businesses that still run on paper and spreadsheets.",
+    "message": "For small businesses that still run on paper & spreadsheets.",
     "description": "Who the ERP & CRM is for, one sentence."
   },
   "product_erp_crm_how_1": {
-    "message": "An ERP and CRM built on <twenty>Twenty</twenty>, the open-source CRM, which we extend with accounting, tax, purchasing, sales, payments, inventory and HR.",
+    "message": "An ERP & CRM built on <twenty>Twenty</twenty>, the open-source CRM, which we extend with accounting, tax, purchasing, sales, payments, inventory & HR.",
     "description": "ERP & CRM page, 'How it works', paragraph 1 of 4: what it is built on. Twenty is a product name; the tag cites its source code."
   },
   "product_erp_crm_how_2": {
-    "message": "Each customer gets its own installation, and all data stays in open formats in one place. An AI assistant works on the same data as your team: it can keep records in order, prepare analyses and draft documents.",
+    "message": "Each customer gets its own installation, & all data stays in open formats in one place. An AI assistant works on the same data as your team: it can keep records in order, prepare analyses & draft documents.",
     "description": "ERP & CRM page, 'How it works', paragraph 2 of 4: data ownership and the assistant."
   },
   "product_erp_crm_how_3": {
-    "message": "The ledger keeps amounts as exact decimals in the minor units of <iso-4217>ISO 4217</iso-4217>, never as floating-point numbers. Both the application and the database enforce the rules of bookkeeping: a posted entry never changes, a correction is a reversal entry, and entry numbers have no gaps.",
+    "message": "The ledger keeps amounts as exact decimals in the minor units of <iso-4217>ISO 4217</iso-4217>, never as floating-point numbers. Both the application & the database enforce the rules of bookkeeping: a posted entry never changes, a correction is a reversal entry, & entry numbers have no gaps.",
     "description": "ERP & CRM page, 'How it works', paragraph 3 of 4: how the ledger keeps its books exact. The tag cites the currency standard."
   },
   "product_erp_crm_how_4": {
-    "message": "The AI assistant reads the books through read-only database roles and cannot post to them. Every approval and every closed period is committed to a versioned archive, so each figure can be traced to who approved it and when.",
+    "message": "The AI assistant reads the books through read-only database roles & cannot post to them. Every approval & every closed period is committed to a versioned archive, so each figure can be traced to who approved it & when.",
     "description": "ERP & CRM page, 'How it works', paragraph 4 of 4: what the assistant may do, and the audit trail."
   },
   "product_erp_crm_state_1": {
-    "message": "The specification has about {requirements, number} requirements in {modules, number} modules, written to <iso-29148>ISO/IEC/IEEE 29148</iso-29148>. About a quarter of them are built: the ledger and its rules, the installation per customer, the versioned archive and the assistant’s read-only access.",
+    "message": "The specification has about {requirements, number} requirements in {modules, number} modules, written to <iso-29148>ISO/IEC/IEEE 29148</iso-29148>. About a quarter of them are built: the ledger & its rules, the installation per customer, the versioned archive & the assistant’s read-only access.",
     "description": "ERP & CRM page, 'Where it stands', paragraph 1 of 2: how much is built. {requirements} and {modules} are counts. The tag cites the standard for requirements."
   },
   "product_erp_crm_state_2": {
-    "message": "Reports, tax returns and bank reconciliation are not built yet. Our own company is its first user.",
+    "message": "Reports, tax returns & bank reconciliation are not built yet. Our own company is its first user.",
     "description": "ERP & CRM page, 'Where it stands', paragraph 2 of 2: what is missing, and who uses it."
   },
   "product_trading_platform_name": {
@@ -466,7 +466,7 @@
     "maxLength": 160
   },
   "product_trading_platform_audience": {
-    "message": "For investors from real estate, banking and IT who want to test a strategy before they trust it.",
+    "message": "For investors from real estate, banking & IT who want to test a strategy before they trust it.",
     "description": "Who the Trading Platform is for, one sentence."
   },
   "product_trading_platform_how_1": {
@@ -478,11 +478,11 @@
     "description": "Trading Platform page, 'How it works', paragraph 2 of 2."
   },
   "product_trading_platform_state_1": {
-    "message": "A first prototype tested trend following, mean reversion and order-flow strategies. We are now rebuilding it from the requirements and the design that prototype taught us.",
+    "message": "A first prototype tested trend following, mean reversion & order-flow strategies. We are now rebuilding it from the requirements & the design that prototype taught us.",
     "description": "Trading Platform page, 'Where it stands', paragraph 1 of 2: the prototype and the rebuild."
   },
   "product_trading_platform_state_2": {
-    "message": "It trades on paper only, and nothing here is investment advice.",
+    "message": "It trades on paper only, & nothing here is investment advice.",
     "description": "Trading Platform page, 'Where it stands', paragraph 2 of 2: simulated trading only; legal disclaimer."
   },
   "waitlist_label": {
@@ -514,7 +514,7 @@
     "description": "Consent checkbox label in the waiting-list form; stored with each entry as proof of consent. {product} is the product name."
   },
   "waitlist_privacy": {
-    "message": "Read what we store and why in the <link>privacy policy</link>.",
+    "message": "Read what we store & why in the <link>privacy policy</link>.",
     "description": "Line under the consent checkbox. <link> wraps the words that lead to the privacy policy."
   },
   "waitlist_submit": {
@@ -592,7 +592,7 @@
     "maxLength": 160
   },
   "join_share_title": {
-    "message": "Founding engineer and internships",
+    "message": "Founding engineer & internships",
     "description": "Large line on the jobs page's link-preview image.",
     "maxLength": 90
   },
@@ -602,11 +602,11 @@
     "maxLength": 40
   },
   "role_founding_engineer_focus": {
-    "message": "Formal methods and code generation.",
+    "message": "Formal methods & code generation.",
     "description": "Founding engineer: the focus of the role."
   },
   "role_founding_engineer_status": {
-    "message": "We do not hire for this role yet. We read every application now and talk to exceptional people right away.",
+    "message": "We do not hire for this role yet. We read every application now & talk to exceptional people right away.",
     "description": "Founding engineer: hiring status. Exceptional applicants are screened now."
   },
   "role_founding_engineer_work_label": {
@@ -615,7 +615,7 @@
     "maxLength": 40
   },
   "role_founding_engineer_work_1": {
-    "message": "Formal verification of Rust code with Prusti and Verus",
+    "message": "Formal verification of Rust code with Prusti & Verus",
     "description": "Founding engineer task, list item. Prusti and Verus are tool names."
   },
   "role_founding_engineer_work_2": {
@@ -627,7 +627,7 @@
     "description": "Founding engineer task, list item. A code property graph is a code-analysis data structure."
   },
   "role_founding_engineer_work_4": {
-    "message": "Connectors to GitHub and to SARIF tools",
+    "message": "Connectors to GitHub & to SARIF tools",
     "description": "Founding engineer task, list item. SARIF is a format for analysis results."
   },
   "role_founding_engineer_profile_label": {
@@ -640,7 +640,7 @@
     "description": "Founding engineer requirement, list item."
   },
   "role_founding_engineer_profile_2": {
-    "message": "Interest in compiler construction and formal methods; experience helps but is not required",
+    "message": "Interest in compiler construction & formal methods; experience helps but is not required",
     "description": "Founding engineer requirement, list item."
   },
   "role_founding_engineer_profile_3": {
@@ -648,7 +648,7 @@
     "description": "Founding engineer requirement, list item."
   },
   "role_founding_engineer_apply": {
-    "message": "Send your CV or LinkedIn profile and links to your work to <link>{email}</link>.",
+    "message": "Send your CV or LinkedIn profile & links to your work to <link>{email}</link>.",
     "description": "How to apply. <link> wraps the email address and opens an email."
   },
   "role_founding_engineer_subject": {
@@ -671,7 +671,7 @@
     "maxLength": 40
   },
   "role_internships_topic_1": {
-    "message": "Formal verification and compilers",
+    "message": "Formal verification & compilers",
     "description": "Internship topic, list item."
   },
   "role_internships_topic_2": {
@@ -679,7 +679,7 @@
     "description": "Internship topic, list item."
   },
   "role_internships_topic_3": {
-    "message": "ERP and CRM on Twenty",
+    "message": "ERP & CRM on Twenty",
     "description": "Internship topic, list item. Twenty is an open-source CRM."
   },
   "role_internships_topic_4": {
@@ -687,7 +687,7 @@
     "description": "Internship topic, list item."
   },
   "role_internships_apply": {
-    "message": "Send your CV, the topic you want to work on and the months you are free to <link>{email}</link>.",
+    "message": "Send your CV, the topic you want to work on & the months you are free to <link>{email}</link>.",
     "description": "How to apply. <link> wraps the email address and opens an email."
   },
   "role_internships_subject": {
@@ -701,7 +701,7 @@
     "maxLength": 32
   },
   "blog_intro": {
-    "message": "Weekly writing on AI, software engineering and regulation.",
+    "message": "Weekly writing on AI, software engineering & regulation.",
     "description": "Opening line of the blog; also its meta description and link-preview title.",
     "maxLength": 160
   },
@@ -732,12 +732,12 @@
     "maxLength": 90
   },
   "privacy_description": {
-    "message": "What the Introspectum site stores, why, and your rights.",
+    "message": "What the Introspectum site stores, why, & your rights.",
     "description": "Meta description of the privacy policy.",
     "maxLength": 160
   },
   "privacy_share_title": {
-    "message": "What this site stores and why",
+    "message": "What this site stores & why",
     "description": "Large line on the privacy policy's link-preview image.",
     "maxLength": 90
   },

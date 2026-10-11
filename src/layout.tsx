@@ -2,6 +2,7 @@ import * as stylex from "@stylexjs/stylex";
 import type { ComponentChildren } from "preact";
 import { translators } from "./i18n.ts";
 import { href, type Locale, localeInfo, locales, type Route, sourceLocale } from "./locale.ts";
+import { Logo } from "./logo.tsx";
 import { shareFrame } from "./og.tsx";
 import { company, email, mailto, origin, products } from "./site.ts";
 import { colors, fontFeatures, media, space } from "./tokens.stylex.ts";
@@ -215,12 +216,14 @@ export function Page({
         <header {...stylex.props(styles.header)}>
           <div {...stylex.props(ui.container, styles.bar)}>
             <a
-              {...stylex.props(ui.serif, ui.focusRing, styles.wordmark)}
+              {...stylex.props(ui.focusRing, styles.home)}
               href={href(locale, "home")}
               aria-current={currentness(path, href(locale, "home")) === "page" ? "page" : undefined}
-              {...untranslated}
             >
-              {company.name}
+              <Logo style={styles.logo} />
+              <span {...stylex.props(ui.srOnly)} {...untranslated}>
+                {company.name}
+              </span>
             </a>
             <nav {...stylex.props(styles.nav)} aria-label={t.text("nav_label")}>
               {links.map(({ target, current, label }) => (
@@ -307,6 +310,9 @@ function Languages({ meta, style }: { meta: Meta; style: Style }) {
   );
 }
 
+/** The logo in outline, worn away towards its lower edge, as a mask (see `styles.emblem`). */
+const emblemUrl = versioned("/images/logo-outline.webp");
+
 /** The name and address, every page by group, the legal pages, and the other languages. */
 function Footer({ meta }: { meta: Meta }) {
   const { locale, path } = meta;
@@ -378,6 +384,13 @@ function Footer({ meta }: { meta: Meta }) {
           </div>
         ))}
       </div>
+      <div {...stylex.props(ui.container)}>
+        <div
+          {...stylex.props(styles.emblem)}
+          style={{ maskImage: `url("${emblemUrl}")`, WebkitMaskImage: `url("${emblemUrl}")` }}
+          aria-hidden="true"
+        />
+      </div>
       {/* The other language sits on the column line of the first group of links, Products. */}
       <div {...stylex.props(ui.container, styles.footerColumns, styles.footerBase)}>
         <p {...stylex.props(ui.small, ui.note, styles.copyright)}>
@@ -438,6 +451,7 @@ const styles = stylex.create({
     columnGap: space.x4,
     height: space.bar,
   },
+  /** The footer's name, set as the wordmark. */
   wordmark: {
     flexShrink: 0,
     fontSize: "1.375rem",
@@ -447,6 +461,10 @@ const styles = stylex.create({
     color: colors.primary,
     textDecoration: "none",
   },
+  /** The header's link home: the mark alone, in the color of the text. */
+  home: { display: "flex", flexShrink: 0, color: colors.primary },
+  /** Four and a half units tall; its width follows from the mark's own proportions (its viewBox). */
+  logo: { display: "block", height: `calc(${space.x4} + ${space.x1} / 2)`, width: "auto" },
   /**
    * Desktop: the links sit on the right, next to the contact button. Each link's padding fills the
    * gap between them, so the pointer finds no dead space along the row; the row reaches out by one
@@ -499,6 +517,25 @@ const styles = stylex.create({
     flexGrow: 1,
     paddingBottom: { default: space.x12, [media.desktop]: space.x20 },
     outline: "none",
+  },
+  /**
+   * The logo in outline across the footer's whole width, under its links: the chevron above the
+   * eye, and the eye down to just above the lower chevron. From the eye's top down, its lines
+   * crumble into grain, like chalk on rough paper, with no gradient. The mask (2400 by 1727)
+   * holds that part; the box keeps its proportions and fills it with the color of the text, at
+   * a fraction of its strength.
+   */
+  emblem: {
+    display: "block",
+    width: "100%",
+    aspectRatio: "2400 / 1727",
+    backgroundColor: colors.primary,
+    opacity: 0.32,
+    maskSize: "100% 100%",
+    maskRepeat: "no-repeat",
+    WebkitMaskSize: "100% 100%",
+    WebkitMaskRepeat: "no-repeat",
+    pointerEvents: "none",
   },
   /**
    * The footer on the page grid: on wide screens the name over six columns and each group of

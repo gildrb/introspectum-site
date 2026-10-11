@@ -38,7 +38,7 @@ export const fontFeatures = stylex.defineConsts({
  * may run that long. Other content text, such as labels, navigation, notes and the footer, needs
  * at least Lc 60: `tertiary` (Lc 66, Lc 62; on cards Lc 61 in both), which therefore never sets
  * running text. Buttons are ink on parchment in light and parchment on umber in dark, like the
- * text. Emerald, the brand color, stays a trace: the form's checkbox and the favicon.
+ * text. Emerald, the brand color, stays a trace: the form's checkbox.
  */
 export const colors = stylex.defineVars({
   bg: { default: "oklch(18.5% 0.014 70)", [light]: "oklch(96% 0.02 85)" },
@@ -48,7 +48,7 @@ export const colors = stylex.defineVars({
   secondary: { default: "oklch(86.06% 0.03 80)", [light]: "oklch(42.55% 0.03 65)" },
   tertiary: { default: "oklch(77.62% 0.035 75)", [light]: "oklch(55.05% 0.035 70)" },
   article: { default: "oklch(93.09% 0.02 85)", [light]: "oklch(33% 0.022 65)" },
-  /** Emerald, the brand color, used sparingly: the form's checkbox, the favicon. */
+  /** Emerald, the brand color, used sparingly: the form's checkbox. */
   accent: { default: "oklch(44% 0.1 160)", [light]: "oklch(40% 0.09 160)" },
   /**
    * The edge of the open phone menu over the page. Decoration only: the menu reads the same

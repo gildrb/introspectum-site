@@ -1,24 +1,24 @@
 # About
 
-Introspectum Limited is a software company registered in the Isle of Man. We build tools that make software, and the businesses that run on it, checkable: a verified [Software Factory](/products/software-factory), an open-data [ERP & CRM](/products/erp-crm), and research on a [Trading Platform](/products/trading-platform).
+Introspectum Limited is a software company registered in the Isle of Man. We build tools that make software, & the businesses that run on it, checkable: a verified [Software Factory](/products/software-factory), an open-data [ERP & CRM](/products/erp-crm), & research on a [Trading Platform](/products/trading-platform).
 
-We are our own first customer: our development is the first to run on the Software Factory, and our business the first to run on the ERP & CRM.
+We are our own first customer: our development is the first to run on the Software Factory, & our business the first to run on the ERP & CRM.
 
 The name comes from the Latin *introspicere*: to look inside.
 
 ## Research
 
-We studied the problem: we read 17 industry reports and interviewed 15 engineers, team leaders and budget owners. Most of them described one problem as serious: reviewing AI-generated code takes more effort than reviewing code written by people.
+We studied the problem: we read 17 industry reports & interviewed 15 engineers, team leaders & budget owners. Most of them described one problem as serious: reviewing AI-generated code takes more effort than reviewing code written by people.
 
 The idea goes back to Fabian Klopfer’s work on graph databases at the University of Konstanz, where he wrote his bachelor’s thesis on inferring type hierarchies in property graph databases.
 
 ## Team
 
-**Fabian Klopfer**, Managing Director. Computer scientist (M.Sc., University of Konstanz) and neuroscientist (M.Sc., University of Tübingen). Previously a software engineer in Db2 development at IBM Germany Research & Development. Earlier research at the University of Konstanz, the Max Planck Institute for Biological Cybernetics, OpenCog and Hanson Robotics.
+**Fabian Klopfer**, Managing Director. Computer scientist (M.Sc., University of Konstanz) & neuroscientist (M.Sc., University of Tübingen). Previously a software engineer in Db2 development at IBM Germany Research & Development. Earlier research at the University of Konstanz, the Max Planck Institute for Biological Cybernetics, OpenCog & Hanson Robotics.
 
-**Marc Gsell**, ERP & CRM and infrastructure. Previously head of engineering for a team of 70.
+**Marc Gsell**, ERP & CRM, infrastructure. Previously head of engineering for a team of 70.
 
-**Gil Rodrigues**, design and frontend. Designer based in Germany: [gildrb.com](https://gildrb.com).
+**Gil Rodrigues**, Founding Designer: [gildrb.com](https://gildrb.com).
 
 ## Publications
 
