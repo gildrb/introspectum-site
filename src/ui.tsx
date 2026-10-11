@@ -120,34 +120,59 @@ export const ui = stylex.create({
   label: { color: colors.secondary },
   /** Quiet text beside a heading: dates, sources. Never running text (see `colors`). */
   note: { color: colors.tertiary },
-  /** Navigation and footer links: secondary, full contrast on hover and keyboard focus. */
+  /*
+   * Links. Every link reads in full ink under the pointer and on keyboard focus, its text and a
+   * 1px underline alike, so pointing at one always raises its contrast. At rest, a link in running
+   * text keeps a tertiary underline to show what it is (`link`); a link that stands on its own,
+   * in navigation, a card's title or a source's number, has none (`entry`, `quiet`). The page a
+   * link leads to, when it is the current one, is in full ink and underlined (`current`).
+   */
+  /** A link standing on its own in a quieter gray: navigation lists, the footer. */
   quiet: {
     color: {
       default: colors.secondary,
       ":hover": { [media.hover]: colors.primary },
       ":focus-visible": colors.primary,
     },
-    textDecoration: "none",
+    textDecorationLine: {
+      default: "none",
+      ":hover": { [media.hover]: "underline" },
+      ":focus-visible": "underline",
+    },
+    textDecorationThickness: "1px",
+    textUnderlineOffset: "0.2em",
     touchAction: "manipulation",
   },
-  /** A link in running text: underlined in tertiary, the underline taking the text color on hover. */
+  /** A link in running text: underlined in tertiary at rest. */
   link: {
-    color: { default: "inherit", ":focus-visible": colors.primary },
+    color: {
+      default: "inherit",
+      ":hover": { [media.hover]: colors.primary },
+      ":focus-visible": colors.primary,
+    },
     textDecorationLine: "underline",
     textDecorationThickness: "1px",
     textUnderlineOffset: "0.2em",
     textDecorationColor: {
       default: colors.tertiary,
-      ":hover": { [media.hover]: "currentColor" },
+      ":hover": { [media.hover]: colors.primary },
+      ":focus-visible": colors.primary,
     },
   },
-  /** A card's title link: primary, underlined on hover. */
+  /** A link standing on its own in full ink: the header, a card's title, a source's number. */
   entry: {
     color: colors.primary,
-    textDecorationLine: { default: "none", ":hover": { [media.hover]: "underline" } },
+    textDecorationLine: {
+      default: "none",
+      ":hover": { [media.hover]: "underline" },
+      ":focus-visible": "underline",
+    },
     textDecorationThickness: "1px",
-    textUnderlineOffset: "0.15em",
+    textUnderlineOffset: "0.2em",
+    touchAction: "manipulation",
   },
+  /** The link to the page it is on. */
+  current: { color: colors.primary, textDecorationLine: "underline" },
   /** A link or a control shaped as a button. Six units tall on phones, for a finger; five above. */
   button: {
     display: "inline-flex",

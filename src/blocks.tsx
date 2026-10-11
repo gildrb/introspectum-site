@@ -241,11 +241,7 @@ export function Figure({
 export function Cite({ number, label }: { number: number; label: string }) {
   return (
     <sup {...stylex.props(ui.sans, styles.cite)}>
-      <a
-        {...stylex.props(ui.focusRing, styles.citeLink)}
-        href={`#source-${number}`}
-        aria-label={label}
-      >
+      <a {...stylex.props(ui.entry, ui.focusRing)} href={`#source-${number}`} aria-label={label}>
         {number}
       </a>
     </sup>
@@ -322,7 +318,8 @@ export function Sources({
 
 /**
  * A long text, a post or a legal page, in the text width under its title. A `figure` stands
- * beside its opening on wide screens and under the title on narrower ones.
+ * beside the text on wide screens, its top on the text's first line, and between the title and
+ * the text on narrower ones.
  */
 export function Article({
   title,
@@ -337,12 +334,12 @@ export function Article({
 }) {
   return (
     <article {...stylex.props(ui.container, styles.opening, figure !== undefined && styles.beside)}>
-      <div {...stylex.props(styles.besideText)}>
+      <div {...stylex.props(styles.articleHead)}>
         <h1 {...stylex.props(ui.display, ui.titleWidth)}>{title}</h1>
         {note !== undefined && <p {...stylex.props(ui.small, ui.note, styles.lead)}>{note}</p>}
-        <div {...stylex.props(ui.textWidth, styles.afterOpening)}>{children}</div>
       </div>
-      {figure !== undefined && <div {...stylex.props(styles.besideFigure)}>{figure}</div>}
+      {figure !== undefined && <div {...stylex.props(styles.articleFigure)}>{figure}</div>}
+      <div {...stylex.props(ui.textWidth, styles.afterOpening, styles.articleText)}>{children}</div>
     </article>
   );
 }
@@ -416,6 +413,36 @@ const styles = stylex.create({
     },
     marginTop: { default: space.x6, [media.desktop]: space.x8, [media.wide]: 0 },
   },
+  /** An article's title row, across all columns. */
+  articleHead: {
+    gridColumn: { default: null, [media.wide]: "1 / -1" },
+    gridRow: { default: null, [media.wide]: "1" },
+  },
+  /** An article's text, the row under its title; its own width keeps it clear of the figure. */
+  articleText: {
+    gridColumn: { default: null, [media.wide]: "1 / -1" },
+    gridRow: { default: null, [media.wide]: "2" },
+  },
+  /**
+   * In the text's row on wide screens, its top on the capitals of the text's first line: as far
+   * under the title as the text, plus half the leading of running text (`ui.prose`, 18px on 28px)
+   * that sits above them. Between the title and the text on narrower screens.
+   */
+  articleFigure: {
+    gridColumn: { default: null, [media.wide]: "9 / -1" },
+    gridRow: { default: null, [media.wide]: "2" },
+    alignSelf: "start",
+    maxWidth: {
+      default: "100%",
+      [media.desktop]: "calc((100% - 264px) * 6 / 12 + 120px)",
+      [media.wide]: "none",
+    },
+    marginTop: {
+      default: space.x6,
+      [media.desktop]: space.x8,
+      [media.wide]: `calc(${space.x8} + (1.75rem - 1.125rem) / 2)`,
+    },
+  },
   /** The lines in ink on the paper, or inverted, in paper on the umber (see `Figure`). */
   ink: {
     mixBlendMode: { default: "screen", [media.light]: "multiply" },
@@ -476,10 +503,6 @@ const styles = stylex.create({
     fontWeight: 500,
     lineHeight: 0,
     marginInlineStart: "0.125em",
-  },
-  citeLink: {
-    color: colors.primary,
-    textDecorationLine: { default: "none", ":hover": { [media.hover]: "underline" } },
   },
   sources: {
     display: "flex",

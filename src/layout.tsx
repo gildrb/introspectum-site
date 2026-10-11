@@ -226,9 +226,9 @@ export function Page({
                 <a
                   {...stylex.props(
                     ui.text,
+                    ui.entry,
                     ui.focusRing,
-                    styles.navLink,
-                    current !== undefined && styles.navCurrent,
+                    current !== undefined && ui.current,
                   )}
                   href={target}
                   aria-current={current}
@@ -251,10 +251,10 @@ export function Page({
                   {links.map(({ target, current, label }) => (
                     <a
                       {...stylex.props(
-                        ui.quiet,
+                        ui.entry,
                         ui.focusRing,
                         styles.panelLink,
-                        current !== undefined && styles.current,
+                        current !== undefined && ui.current,
                       )}
                       href={target}
                       aria-current={current}
@@ -359,7 +359,7 @@ function Footer({ meta }: { meta: Meta }) {
                       ui.small,
                       ui.quiet,
                       ui.focusRing,
-                      path === target && styles.current,
+                      path === target && ui.current,
                     )}
                     href={target}
                     aria-current={path === target ? "page" : undefined}
@@ -445,16 +445,6 @@ const styles = stylex.create({
     columnGap: space.x4,
     marginInlineStart: "auto",
   },
-  current: { color: colors.primary },
-  /** Header links in full ink; the current page and a link under the pointer are underlined. */
-  navLink: {
-    color: colors.primary,
-    textDecorationLine: { default: "none", ":hover": { [media.hover]: "underline" } },
-    textDecorationThickness: "1px",
-    textUnderlineOffset: "0.3em",
-    touchAction: "manipulation",
-  },
-  navCurrent: { textDecorationLine: "underline" },
   actions: {
     display: { default: "none", [media.desktop]: "flex" },
     alignItems: "center",
