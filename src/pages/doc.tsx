@@ -39,7 +39,6 @@ export function DocPage({
         shareImage,
         type: "website",
         index: true,
-        script: false,
         mono: false,
       }}
     >
@@ -77,7 +76,6 @@ export function JoinedPage({ assets, locale, path, alternates, shareImage }: Pag
         shareImage,
         type: "website",
         index: false,
-        script: false,
         mono: false,
       }}
     >
@@ -109,7 +107,6 @@ export function NotFoundPage({ assets, locale, path, shareImage }: Omit<PageProp
         shareImage,
         type: "website",
         index: false,
-        script: false,
         mono: false,
       }}
     >

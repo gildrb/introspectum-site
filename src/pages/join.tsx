@@ -33,7 +33,6 @@ export function JoinPage({
         shareImage,
         type: "website",
         index: true,
-        script: false,
         mono: false,
       }}
     >

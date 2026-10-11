@@ -31,6 +31,18 @@
     "source": "Menu",
     "message": "Menü"
   },
+  "logo_menu_label": {
+    "source": "Logo options",
+    "message": "Logo-Optionen"
+  },
+  "logo_menu_copy": {
+    "source": "Copy logo as SVG",
+    "message": "Logo als SVG kopieren"
+  },
+  "logo_menu_download": {
+    "source": "Download brand assets",
+    "message": "Markenmaterial herunterladen"
+  },
   "nav_contact": {
     "source": "Contact us",
     "message": "Kontakt"

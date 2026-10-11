@@ -117,7 +117,6 @@ export function ProductsPage({ assets, locale, path, alternates, shareImage }: P
         shareImage,
         type: "website",
         index: true,
-        script: false,
         mono: false,
       }}
     >
@@ -154,7 +153,6 @@ export function ProductPage({
         shareImage,
         type: "website",
         index: true,
-        script: true,
         mono: false,
       }}
     >

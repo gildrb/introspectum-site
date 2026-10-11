@@ -33,7 +33,6 @@ export function BlogPage({ assets, locale, path, alternates, shareImage }: PageP
         shareImage,
         type: "website",
         index: true,
-        script: false,
         mono: false,
       }}
     >
@@ -90,7 +89,6 @@ export function PostPage({ post, ...props }: PageProps & { post: Post }) {
         shareImage,
         type: "article",
         index: true,
-        script: false,
         mono: post.blocks.some((block) => block.type === "code"),
         jsonLd: {
           "@context": "https://schema.org",

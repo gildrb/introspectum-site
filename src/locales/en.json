@@ -39,6 +39,21 @@
     "description": "Button that opens the navigation on phones.",
     "maxLength": 16
   },
+  "logo_menu_label": {
+    "message": "Logo options",
+    "description": "Accessible name of the menu that right-clicking the header logo opens.",
+    "maxLength": 24
+  },
+  "logo_menu_copy": {
+    "message": "Copy logo as SVG",
+    "description": "Item in the header logo's right-click menu: copies the logo's SVG code.",
+    "maxLength": 32
+  },
+  "logo_menu_download": {
+    "message": "Download brand assets",
+    "description": "Item in the header logo's right-click menu: downloads a ZIP of the logo in black & white, as SVG, PDF, PNG, JPEG, WebP & favicon.",
+    "maxLength": 32
+  },
   "nav_contact": {
     "message": "Contact us",
     "description": "Button in the header that opens an email to the company.",

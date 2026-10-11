@@ -58,6 +58,11 @@ export const colors = stylex.defineVars({
    * without it, so it may stay below APCA's Lc 15 for meaningful non-text.
    */
   hairline: { default: "oklch(96.74% 0.022 85 / 0.16)", [light]: "oklch(24.9% 0.02 65 / 0.14)" },
+  /**
+   * The footer's emblem, the mark drawn in chalk: one solid color between the page and `tertiary`,
+   * so it reads as a drawing behind the text, not as text. Decoration only, like `hairline`.
+   */
+  chalk: { default: "oklch(50% 0.03 75)", [light]: "oklch(66% 0.035 75)" },
   codeBg: { default: "oklch(24% 0.016 70)", [light]: "oklch(92% 0.025 85)" },
 });
 

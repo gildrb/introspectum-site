@@ -22,7 +22,7 @@ import {
 import { type Style, ui, untranslated } from "./ui.tsx";
 import { versioned } from "./versioned.ts";
 
-/** What the build hands every page: the island script and the stylesheet StyleX collected. */
+/** What the build hands every page: the client script and the stylesheet StyleX collected. */
 export type Assets = { script: string; css: string };
 
 /** What a page tells the document head. */
@@ -41,8 +41,6 @@ export type Meta = {
   type: "website" | "article";
   /** False keeps the page out of search results. */
   index: boolean;
-  /** Loads the island script; only pages with a form have islands. */
-  script: boolean;
   /** Preloads the monospace face, for pages that show code. */
   mono: boolean;
   jsonLd?: unknown;
@@ -111,6 +109,25 @@ const globalCss = [
   "summary{list-style:none}summary::-webkit-details-marker{display:none}",
   "@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}",
 ].join("\n");
+
+/**
+ * Pages open at once: the browser fetches every page a link on this one leads to as soon as it
+ * can, and renders one in the background, fonts & images included, once the pointer rests on its
+ * link or a finger goes down on it. Following the link then shows the finished page. Only pages:
+ * links to files (feeds, images) and to other windows are left alone. Browsers without
+ * speculation rules ignore it. The policy allows it with 'inline-speculation-rules'.
+ */
+const pageLinks = {
+  and: [
+    { href_matches: "/*" },
+    { not: { href_matches: "/*.*" } },
+    { not: { selector_matches: "[target=_blank]" } },
+  ],
+};
+const speculationRules = JSON.stringify({
+  prefetch: [{ where: pageLinks, eagerness: "eager" }],
+  prerender: [{ where: pageLinks, eagerness: "moderate" }],
+});
 
 function JsonLd({ value }: { value: unknown }) {
   return (
@@ -215,11 +232,10 @@ export function Page({
         {meta.mono && (
           <link rel="preload" href={monoUrl} as="font" type="font/woff2" crossorigin="anonymous" />
         )}
+        <script type="speculationrules" dangerouslySetInnerHTML={{ __html: speculationRules }} />
         <style dangerouslySetInnerHTML={{ __html: `${globalCss}\n${assets.css}` }} />
-        {meta.script && (
-          // Preact's typings lack `fetchpriority` on <script>, hence the spread.
-          <script type="module" src={assets.script} {...{ fetchpriority: "low" }} />
-        )}
+        {/* Preact's typings lack `fetchpriority` on <script>, hence the spread. */}
+        <script type="module" src={assets.script} {...{ fetchpriority: "low" }} />
         {meta.jsonLd !== undefined && <JsonLd value={meta.jsonLd} />}
         {meta.head}
       </head>
@@ -233,12 +249,38 @@ export function Page({
               {...stylex.props(ui.focusRing, styles.home)}
               href={href(locale, "home")}
               aria-current={currentness(path, href(locale, "home")) === "page" ? "page" : undefined}
+              data-logo-menu="logo-menu"
             >
               <Logo style={styles.logo} />
               <span {...stylex.props(ui.srOnly)} {...untranslated}>
                 {company.name}
               </span>
             </a>
+            <div
+              {...stylex.props(styles.logoMenu)}
+              id="logo-menu"
+              popover="auto"
+              role="menu"
+              tabIndex={-1}
+              aria-label={t.text("logo_menu_label")}
+            >
+              <button
+                {...stylex.props(ui.text, ui.control, styles.logoMenuItem)}
+                type="button"
+                role="menuitem"
+                data-copy-logo=""
+              >
+                {t.text("logo_menu_copy")}
+              </button>
+              <a
+                {...stylex.props(ui.text, ui.control, styles.logoMenuItem)}
+                role="menuitem"
+                href={brandAssetsUrl}
+                download="introspectum-brand.zip"
+              >
+                {t.text("logo_menu_download")}
+              </a>
+            </div>
             <nav {...stylex.props(styles.nav)} aria-label={t.text("nav_label")}>
               {links.map(({ target, current, label }) => (
                 <a
@@ -326,6 +368,9 @@ function Languages({ meta, style }: { meta: Meta; style: Style }) {
 
 /** The logo in outline, worn away towards its lower edge, as a mask (see `styles.emblem`). */
 const emblemUrl = versioned("/images/logo-outline.webp");
+
+/** The logo in black & white in every format, for the logo's menu (see `styles.logoMenu`). */
+const brandAssetsUrl = versioned("/brand/introspectum-brand.zip");
 
 /** The name and address, every page by group, the legal pages, and the other languages. */
 function Footer({ meta }: { meta: Meta }) {
@@ -481,6 +526,43 @@ const styles = stylex.create({
   /** Four and a half units tall; its width follows from the mark's own proportions (its viewBox). */
   logo: { display: "block", height: `calc(${space.x4} + ${space.half})`, width: "auto" },
   /**
+   * The logo's own menu, opened by a right click or a long press on it (`src/logo-menu.ts`), at
+   * the pointer. A card on the page, edged like the phone menu; it sits over everything else.
+   */
+  logoMenu: {
+    inset: "auto",
+    margin: 0,
+    // Focus rests on the menu only until an item takes it; the items show their own.
+    outline: "none",
+    minWidth: `calc(${space.x20} + ${space.x12})`,
+    padding: space.x1,
+    borderWidth: stroke.width,
+    borderStyle: "solid",
+    borderColor: colors.hairline,
+    borderRadius: space.x1,
+    backgroundColor: colors.surface,
+    color: colors.primary,
+  },
+  /** One line of the menu: the whole width answers the pointer, in the page's own ground. */
+  logoMenuItem: {
+    display: "block",
+    width: "100%",
+    paddingInline: space.x2,
+    paddingBlock: space.x1,
+    borderWidth: 0,
+    borderRadius: space.half,
+    outline: "none",
+    backgroundColor: {
+      default: "transparent",
+      ":hover": { [media.hover]: colors.bg },
+      ":focus-visible": colors.bg,
+    },
+    color: colors.primary,
+    textAlign: "start",
+    textDecoration: "none",
+    cursor: "pointer",
+  },
+  /**
    * Desktop: the links sit on the right, next to the contact button. Each link's padding fills the
    * gap between them, so the pointer finds no dead space along the row; the row reaches out by one
    * padding at its end, so the last link's text keeps its distance from the button.
@@ -548,15 +630,14 @@ const styles = stylex.create({
   },
   /**
    * The logo in outline, as large as the footer allows, behind its links: the chevron, and the
-   * eye down to its middle. From the eye's top down, its lines crumble into grain, like chalk on
-   * rough paper, with no gradient. The mask fits the box and sits on its lower edge; the color
-   * is the text's, at a fraction of its strength.
+   * eye down to its middle, drawn in chalk on rough paper. From the eye's top down, the chalk
+   * crumbles into grain (see `scripts/emblem.py`). The mask fits the box and sits on its lower
+   * edge; the color is one solid tone, `colors.chalk`, with no opacity.
    */
   emblem: {
     width: "100%",
     height: "100%",
-    backgroundColor: colors.primary,
-    opacity: 0.32,
+    backgroundColor: colors.chalk,
     maskSize: "contain",
     maskRepeat: "no-repeat",
     maskPosition: "center bottom",

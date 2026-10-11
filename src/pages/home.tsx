@@ -73,7 +73,6 @@ export function Home({
         shareImage,
         type: "website",
         index: true,
-        script: false,
         mono: false,
         jsonLd: {
           "@context": "https://schema.org",
