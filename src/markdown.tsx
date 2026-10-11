@@ -253,6 +253,7 @@ export function Markdown({ blocks }: { blocks: readonly Block[] }) {
                 height={block.height}
                 loading="lazy"
                 decoding="async"
+                draggable={false}
               />
             );
           default: {

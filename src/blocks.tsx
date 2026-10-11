@@ -205,6 +205,7 @@ export function Figure({
         loading={priority ? "eager" : "lazy"}
         fetchpriority={priority ? "high" : "auto"}
         decoding="async"
+        draggable={false}
       />
     </picture>
   );
