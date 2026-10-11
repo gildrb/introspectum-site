@@ -127,6 +127,7 @@ export function Waitlist({ product, locale, text }: WaitlistProps) {
                 name="company"
                 maxLength={200}
                 autoComplete="organization"
+                spellcheck={false}
               />
             </label>
           </div>

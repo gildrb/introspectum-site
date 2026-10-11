@@ -178,6 +178,11 @@ export const ui = stylex.create({
   },
   /** The link to the page it is on. */
   current: { color: colors.primary, textDecorationLine: "underline" },
+  /**
+   * A link that works as a control, in a menu or a list of links: a stray double-click or long
+   * press selects nothing. Links in running text stay selectable, to be copied with it.
+   */
+  control: { userSelect: "none", WebkitUserSelect: "none" },
   /** A link or a control shaped as a button. Six units tall on phones, for a finger; five above. */
   button: {
     display: "inline-flex",
@@ -197,6 +202,8 @@ export const ui = stylex.create({
     whiteSpace: "nowrap",
     cursor: "pointer",
     touchAction: "manipulation",
+    userSelect: "none",
+    WebkitUserSelect: "none",
   },
   /** The main action: a button in the text color, like the text it sits among. */
   primary: {

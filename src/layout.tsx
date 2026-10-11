@@ -227,7 +227,9 @@ export function Page({
                   {...stylex.props(
                     ui.text,
                     ui.entry,
+                    ui.control,
                     ui.focusRing,
+                    styles.navLink,
                     current !== undefined && ui.current,
                   )}
                   href={target}
@@ -252,6 +254,7 @@ export function Page({
                     <a
                       {...stylex.props(
                         ui.entry,
+                        ui.control,
                         ui.focusRing,
                         styles.panelLink,
                         current !== undefined && ui.current,
@@ -290,7 +293,7 @@ function Languages({ meta, style }: { meta: Meta; style: Style }) {
         .filter((other) => other !== meta.locale)
         .map((other) => (
           <a
-            {...stylex.props(ui.quiet, ui.focusRing, style)}
+            {...stylex.props(ui.quiet, ui.control, ui.focusRing, style)}
             href={meta.alternates?.[other] ?? href(other, "home")}
             hreflang={other}
             lang={other}
@@ -358,7 +361,9 @@ function Footer({ meta }: { meta: Meta }) {
                     {...stylex.props(
                       ui.small,
                       ui.quiet,
+                      ui.control,
                       ui.focusRing,
+                      styles.footerLink,
                       path === target && ui.current,
                     )}
                     href={target}
@@ -441,12 +446,17 @@ const styles = stylex.create({
     color: colors.primary,
     textDecoration: "none",
   },
-  /** Desktop: the links sit on the right, next to the contact button. */
+  /**
+   * Desktop: the links sit on the right, next to the contact button. Each link's padding fills the
+   * gap between them, so the pointer finds no dead space along the row; the row reaches out by one
+   * padding at its end, so the last link's text keeps its distance from the button.
+   */
   nav: {
     display: { default: "none", [media.desktop]: "flex" },
-    columnGap: space.x4,
     marginInlineStart: "auto",
+    marginInlineEnd: `calc(-1 * ${space.x2})`,
   },
+  navLink: { paddingInline: space.x2, paddingBlock: space.x1 },
   actions: {
     display: { default: "none", [media.desktop]: "flex" },
     alignItems: "center",
@@ -522,13 +532,14 @@ const styles = stylex.create({
   groupThird: {
     gridColumn: { default: "auto", [media.desktop]: "9 / span 4", [media.wide]: "11 / span 2" },
   },
+  /** The links' padding fills the space between them; the list starts higher by as much. */
   footerList: {
     display: "flex",
     flexDirection: "column",
-    rowGap: space.x1,
-    marginTop: space.x2,
+    marginTop: `calc(${space.x2} - ${space.x1} / 2)`,
     listStyle: "none",
   },
+  footerLink: { display: "block", width: "fit-content", paddingBlock: `calc(${space.x1} / 2)` },
   footerBase: {
     rowGap: space.x2,
     paddingBottom: space.x4,
