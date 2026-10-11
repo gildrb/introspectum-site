@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { Resvg } from "@resvg/resvg-js";
 import satori from "satori";
 import { decompress } from "wawoff2";
+import { srgb, token } from "./color.ts";
 import { company } from "./site.ts";
 import { colors } from "./tokens.stylex.ts";
 
@@ -10,47 +11,6 @@ export const shareFrame = { width: 1200, height: 630 } as const;
 
 /** What a page's link preview says: where it sits on the site, its title, and who wrote it. */
 export type ShareCard = { kicker?: string; title: string; byline?: string };
-
-/** A token's default (dark) value: the first declaration of its variable in the built CSS. */
-function token(css: string, variable: string): string {
-  const name = variable.match(/^var\((--[\w-]+)\)$/)?.[1];
-  if (name === undefined) throw new Error(`Not a CSS variable: ${variable}`);
-  const value = css.match(new RegExp(`${name}:([^;}]+)`))?.[1];
-  if (value === undefined) throw new Error(`No value for ${name} in the built CSS.`);
-  return value.trim();
-}
-
-/** A linear-light sRGB channel, clamped, gamma-encoded and scaled to 0–255. */
-function srgbChannel(linear: number): number {
-  const clamped = Math.min(1, Math.max(0, linear));
-  const encoded = clamped <= 0.0031308 ? 12.92 * clamped : 1.055 * clamped ** (1 / 2.4) - 0.055;
-  return Math.round(encoded * 255);
-}
-
-/**
- * `oklch(L C H / alpha)` in sRGB, which the rasterizer understands. The matrices are OKLab's
- * (Björn Ottosson, 2020), from OKLCH through linear LMS and linear sRGB.
- */
-function srgb(color: string): string {
-  const match = color.match(
-    /^oklch\(\s*([\d.]+)(%?)\s+([\d.]+)\s+([\d.]+)(?:deg)?\s*(?:\/\s*([\d.]+)(%?))?\s*\)$/,
-  );
-  if (!match) throw new Error(`Unsupported color: ${color}`);
-  const [, lightness = "", lightnessPercent, chroma = "", hue = "", alpha, alphaPercent] = match;
-  const l = Number(lightness) / (lightnessPercent ? 100 : 1);
-  const c = Number(chroma);
-  const h = (Number(hue) * Math.PI) / 180;
-  const a = c * Math.cos(h);
-  const b = c * Math.sin(h);
-  const long = (l + 0.3963377774 * a + 0.2158037573 * b) ** 3;
-  const medium = (l - 0.1055613458 * a - 0.0638541728 * b) ** 3;
-  const short = (l - 0.0894841775 * a - 1.291485548 * b) ** 3;
-  const red = srgbChannel(4.0767416621 * long - 3.3077115913 * medium + 0.2309699292 * short);
-  const green = srgbChannel(-1.2684380046 * long + 2.6097574011 * medium - 0.3413193965 * short);
-  const blue = srgbChannel(-0.0041960863 * long - 0.7034186147 * medium + 1.707614701 * short);
-  const opacity = alpha === undefined ? 1 : Number(alpha) / (alphaPercent ? 100 : 1);
-  return `rgba(${red}, ${green}, ${blue}, ${opacity})`;
-}
 
 const variationTables: Record<string, true> = {
   fvar: true,

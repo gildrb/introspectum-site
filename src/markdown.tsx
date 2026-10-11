@@ -1,6 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import type { ComponentChildren } from "preact";
-import { colors, space } from "./tokens.stylex.ts";
+import { colors, leading, space, stroke, tracking, type, weights } from "./tokens.stylex.ts";
 import { ui } from "./ui.tsx";
 import { imageSize, versioned } from "./versioned.ts";
 
@@ -273,24 +273,24 @@ const styles = stylex.create({
   paragraph: { marginTop: space.x2 },
   aroundWide: { marginTop: space.x3 },
   h2: {
-    fontSize: "1.75rem",
-    fontWeight: 500,
-    lineHeight: "2.25rem",
-    letterSpacing: "-0.01em",
+    fontSize: type.subheading,
+    fontWeight: weights.medium,
+    lineHeight: leading.x4_5,
+    letterSpacing: tracking.tight,
     color: colors.primary,
     textWrap: "balance",
   },
   h3: {
-    fontSize: "1.375rem",
-    fontWeight: 500,
-    lineHeight: "2rem",
+    fontSize: type.title,
+    fontWeight: weights.medium,
+    lineHeight: leading.x4,
     color: colors.primary,
     textWrap: "balance",
   },
-  strong: { color: colors.primary, fontWeight: 600 },
+  strong: { color: colors.primary, fontWeight: weights.semibold },
   quote: {
     paddingInlineStart: space.x2,
-    borderInlineStartWidth: "1px",
+    borderInlineStartWidth: stroke.width,
     borderInlineStartStyle: "solid",
     borderInlineStartColor: colors.tertiary,
     color: colors.secondary,
@@ -310,8 +310,8 @@ const styles = stylex.create({
     borderRadius: space.x1,
     backgroundColor: colors.codeBg,
     color: colors.primary,
-    fontSize: "14px",
-    lineHeight: "20px",
+    fontSize: type.small,
+    lineHeight: leading.x2_5,
     tabSize: 4,
   },
   image: {

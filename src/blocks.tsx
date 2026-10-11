@@ -2,7 +2,7 @@ import * as stylex from "@stylexjs/stylex";
 import type { ComponentChildren } from "preact";
 import type { Tag, Translator } from "./i18n.ts";
 import type { Citation, Illustration } from "./site.ts";
-import { colors, media, space } from "./tokens.stylex.ts";
+import { colors, grid, leading, media, space, type, weights } from "./tokens.stylex.ts";
 import { type Style, ui } from "./ui.tsx";
 import { imageSize, versioned } from "./versioned.ts";
 
@@ -162,6 +162,12 @@ export function Measure({ children }: { children: ComponentChildren }) {
 /** Where a figure stands: beside a text, with its credit under it, or atop a card, without. */
 type Placement = "beside" | "card";
 
+/** A `@media` rule's query alone, for an image's `sizes`. */
+const query = (rule: string) => rule.replace(/^@media /, "");
+
+/** Four columns beside text, or a card's width, on wide screens; six columns on tablets. */
+const sizes = `${query(media.wide)} ${grid.span4Widest}, ${query(media.desktop)} ${grid.span6Tablet}, 100vw`;
+
 /**
  * An illustration from an old book (`Illustration`), in AVIF, WebP and JPEG at its two widths.
  * The scans are black lines on white: in light mode they multiply into the ground they lie on,
@@ -188,8 +194,6 @@ export function Figure({
     widths.map((width) => `${versioned(path(width, format))} ${width}w`).join(", ");
   const [small, large] = widths;
   const { width, height } = imageSize(path(large, "jpg"));
-  // Four columns beside text, or a card's width, on wide screens; about half the page on tablets.
-  const sizes = "(min-width: 1024px) 384px, (min-width: 768px) 50vw, 100vw";
   const picture = (
     <picture>
       <source type="image/avif" srcset={srcset("avif")} sizes={sizes} />
@@ -395,8 +399,8 @@ const styles = stylex.create({
    */
   beside: {
     display: { default: null, [media.wide]: "grid" },
-    gridTemplateColumns: { default: null, [media.wide]: "repeat(12, minmax(0, 1fr))" },
-    columnGap: space.x3,
+    gridTemplateColumns: { default: null, [media.wide]: grid.columns },
+    columnGap: grid.gutter,
   },
   besideText: {
     gridColumn: { default: null, [media.wide]: "1 / -1" },
@@ -409,7 +413,7 @@ const styles = stylex.create({
     alignSelf: "start",
     maxWidth: {
       default: "100%",
-      [media.desktop]: "calc((100% - 264px) * 6 / 12 + 120px)",
+      [media.desktop]: grid.span6,
       [media.wide]: "none",
     },
     marginTop: { default: space.x6, [media.desktop]: space.x8, [media.wide]: 0 },
@@ -435,13 +439,13 @@ const styles = stylex.create({
     alignSelf: "start",
     maxWidth: {
       default: "100%",
-      [media.desktop]: "calc((100% - 264px) * 6 / 12 + 120px)",
+      [media.desktop]: grid.span6,
       [media.wide]: "none",
     },
     marginTop: {
       default: space.x6,
       [media.desktop]: space.x8,
-      [media.wide]: `calc(${space.x8} + (1.75rem - 1.125rem) / 2)`,
+      [media.wide]: `calc(${space.x8} + (${leading.x3_5} - ${type.prose}) / 2)`,
     },
   },
   /** The lines in ink on the paper, or inverted, in paper on the umber (see `Figure`). */
@@ -462,7 +466,7 @@ const styles = stylex.create({
   cardFigure: { alignSelf: "stretch", marginBottom: space.x2 },
   cards: {
     display: "grid",
-    gap: space.x3,
+    gap: grid.gutter,
     listStyle: "none",
   },
   twoColumns: {
@@ -501,7 +505,7 @@ const styles = stylex.create({
   /** Small, raised, and without effect on the line's height. */
   cite: {
     fontSize: "0.6875rem",
-    fontWeight: 500,
+    fontWeight: weights.medium,
     lineHeight: 0,
     marginInlineStart: "0.125em",
   },

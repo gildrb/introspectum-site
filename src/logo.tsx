@@ -1,5 +1,7 @@
 import { readFileSync } from "node:fs";
 import * as stylex from "@stylexjs/stylex";
+import { schemeToken } from "./color.ts";
+import { colors } from "./tokens.stylex.ts";
 import type { Style } from "./ui.tsx";
 
 /**
@@ -37,11 +39,12 @@ export function Logo({ style }: { style: Style }) {
 
 /**
  * The favicon: the mark centred in a square, in the ink of the text where the browser is light and
- * in its cream where it is dark (`colors.primary`, in sRGB).
+ * in its cream where it is dark: `colors.primary`, read from the built CSS `css`.
  */
-export function favicon(): string {
+export function favicon(css: string): string {
+  const ink = schemeToken(css, colors.primary);
   const side = Math.max(mark.width, mark.height);
   const x = (mark.width - side) / 2;
   const y = (mark.height - side) / 2;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x} ${y} ${side} ${side}"><style>path{fill:#282017}@media (prefers-color-scheme:dark){path{fill:#fbf4e4}}</style><path fill-rule="evenodd" d="${mark.path}"/></svg>\n`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x} ${y} ${side} ${side}"><style>path{fill:${ink.light}}@media (prefers-color-scheme:dark){path{fill:${ink.dark}}}</style><path fill-rule="evenodd" d="${mark.path}"/></svg>\n`;
 }

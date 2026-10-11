@@ -8,6 +8,9 @@ const light = "@media (prefers-color-scheme: light)";
  */
 const unit = 8;
 
+/** The widest column, in px: 150 units. */
+const page = 150 * unit;
+
 export const media = stylex.defineConsts({
   mobile: "@media (max-width: 767px)",
   desktop: "@media (min-width: 768px)",
@@ -58,8 +61,20 @@ export const colors = stylex.defineVars({
   codeBg: { default: "oklch(24% 0.016 70)", [light]: "oklch(92% 0.025 85)" },
 });
 
+/**
+ * Font weights. Light text on a dark ground looks heavier than the same weight of dark text on a
+ * light ground, so the light scheme sets every weight 30 heavier: both schemes then look equally
+ * bold. Dark is the reference. Every face is declared up to 630 (src/layout.tsx).
+ */
+export const weights = stylex.defineVars({
+  regular: { default: 400, [light]: 430 },
+  medium: { default: 500, [light]: 530 },
+  semibold: { default: 600, [light]: 630 },
+});
+
 /** Multiples of the unit, named by their factor: `x3` is three units. */
 export const space = stylex.defineConsts({
+  half: `${unit / 2}px`,
   x1: `${unit}px`,
   x2: `${2 * unit}px`,
   x3: `${3 * unit}px`,
@@ -73,5 +88,82 @@ export const space = stylex.defineConsts({
   /** The header's height. */
   bar: `${8 * unit}px`,
   /** The widest column, twelve grid columns: header, sections and footer. */
-  page: `${150 * unit}px`,
+  page: `${page}px`,
+});
+
+/** The grid's gutter: three units, between its twelve columns and between cards. */
+const gutter = 3 * unit;
+
+/** The container's side margin from tablets up: four units. */
+const margin = 4 * unit;
+
+/** The width of `n` of the twelve columns and the `n - 1` gutters between them, in `whole`. */
+const span = (n: number, whole: string) =>
+  `calc((${whole} - ${11 * gutter}px) * ${n} / 12 + ${(n - 1) * gutter}px)`;
+
+/** The page grid (see `ui.titleWidth`): twelve columns, from tablets up. */
+export const grid = stylex.defineConsts({
+  gutter: `${gutter}px`,
+  margin: `${margin}px`,
+  columns: "repeat(12, minmax(0, 1fr))",
+  span6: span(6, "100%"),
+  span7: span(7, "100%"),
+  span8: span(8, "100%"),
+  span10: span(10, "100%"),
+  /*
+   * Widths in viewport units and px, for an image's `sizes`, which cannot take `%`: six columns
+   * on a tablet, where the page fills the window inside its margins, and four of the page at its
+   * widest.
+   */
+  span6Tablet: span(6, `100vw - ${2 * margin}px`),
+  span4Widest: `${((page - 11 * gutter) * 4) / 12 + 3 * gutter}px`,
+});
+
+/** Font sizes in rem, so text follows the reader's own default size, named by role. */
+export const type = stylex.defineConsts({
+  /** Footer, notes, code blocks. */
+  small: "0.875rem",
+  /** Interface text and buttons. */
+  text: "1rem",
+  /** Running text. */
+  prose: "1.125rem",
+  /** The phone menu's links. */
+  menu: "1.25rem",
+  /** Card titles, the wordmark, an article's third-level headings. */
+  title: "1.375rem",
+  /** An article's second-level headings. */
+  subheading: "1.75rem",
+});
+
+/** Line heights, in rem like the text, named by their factor of the unit: `x3_5` is 3.5 units. */
+export const leading = stylex.defineConsts({
+  x2_5: `${(2.5 * unit) / 16}rem`,
+  x3: `${(3 * unit) / 16}rem`,
+  x3_5: `${(3.5 * unit) / 16}rem`,
+  x4: `${(4 * unit) / 16}rem`,
+  x4_5: `${(4.5 * unit) / 16}rem`,
+});
+
+/** Letter spacing: the larger the text, the tighter. */
+export const tracking = stylex.defineConsts({
+  tight: "-0.01em",
+  tighter: "-0.015em",
+  tightest: "-0.02em",
+});
+
+/** Every rule on the page, borders, outlines and underlines, is one pixel wide. */
+export const stroke = stylex.defineConsts({
+  width: "1px",
+  /** An underline's distance below the text. */
+  underlineOffset: "0.2em",
+});
+
+/** The stacking order, bottom to top. */
+export const layer = stylex.defineConsts({
+  /** Behind its section's content: the footer's emblem. */
+  behind: -1,
+  /** The sticky header over the page. */
+  header: 10,
+  /** The skip link, once focused, over the header. */
+  skip: 20,
 });

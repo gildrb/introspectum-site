@@ -137,9 +137,12 @@ ${locales
 `;
 }
 
-export const files: Record<string, string> = {
-  "feed.xml": feed("en"),
-  "de/feed.xml": feed("de"),
-  "llms.txt": llms(),
-  "favicon.svg": favicon(),
-};
+/** The site's other files. `css` is the built stylesheet, for the favicon's colors. */
+export function files(css: string): Record<string, string> {
+  return {
+    "feed.xml": feed("en"),
+    "de/feed.xml": feed("de"),
+    "llms.txt": llms(),
+    "favicon.svg": favicon(css),
+  };
+}

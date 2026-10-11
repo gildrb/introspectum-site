@@ -2,7 +2,7 @@ import * as stylex from "@stylexjs/stylex";
 import { useState } from "preact/hooks";
 import { isLocale, type Locale } from "../locale.ts";
 import { isProductSlug, type ProductSlug } from "../site.ts";
-import { colors, fontFeatures, media, space } from "../tokens.stylex.ts";
+import { colors, fontFeatures, leading, media, space, stroke } from "../tokens.stylex.ts";
 import { ui } from "../ui.tsx";
 
 /** The form's words, translated on the server so the browser loads no message catalog. */
@@ -188,11 +188,11 @@ const styles = stylex.create({
     // Controls: five units tall, six on phones for a finger.
     height: { default: space.x5, [media.mobile]: space.x6 },
     paddingInline: space.x2,
-    borderWidth: "1px",
+    borderWidth: stroke.width,
     borderStyle: "solid",
     borderColor: { default: colors.tertiary, ":focus": colors.primary },
     borderRadius: space.x1,
-    boxShadow: { default: null, ":focus": `0 0 0 1px ${colors.primary}` },
+    boxShadow: { default: null, ":focus": `0 0 0 ${stroke.width} ${colors.primary}` },
     outline: "none",
     backgroundColor: "transparent",
     color: colors.primary,
@@ -208,10 +208,10 @@ const styles = stylex.create({
   },
   checkbox: {
     flexShrink: 0,
-    width: "16px",
-    height: "16px",
+    width: space.x2,
+    height: space.x2,
     // Centred on the first line of the sentence beside it.
-    marginTop: `calc((${space.x3} - 16px) / 2)`,
+    marginTop: `calc((${leading.x3} - ${space.x2}) / 2)`,
     accentColor: colors.accent,
     cursor: "pointer",
   },

@@ -1,11 +1,24 @@
 import * as stylex from "@stylexjs/stylex";
 import type { ComponentChildren } from "preact";
+import { schemeToken } from "./color.ts";
 import { translators } from "./i18n.ts";
 import { href, type Locale, localeInfo, locales, type Route, sourceLocale } from "./locale.ts";
 import { Logo } from "./logo.tsx";
 import { shareFrame } from "./og.tsx";
 import { company, email, mailto, origin, products } from "./site.ts";
-import { colors, fontFeatures, media, space } from "./tokens.stylex.ts";
+import {
+  colors,
+  fontFeatures,
+  grid,
+  layer,
+  leading,
+  media,
+  space,
+  stroke,
+  tracking,
+  type,
+  weights,
+} from "./tokens.stylex.ts";
 import { type Style, ui, untranslated } from "./ui.tsx";
 import { versioned } from "./versioned.ts";
 
@@ -39,8 +52,8 @@ export type Meta = {
 
 // Newsreader and JetBrains Mono come as Google Fonts subsets them: Latin, and Latin Extended for
 // names such as Slovenian, Czech or Polish ones. The browser fetches a subset only for text that
-// needs it. Every face is declared for weights 400 to 600, all the site uses: nothing is set
-// lighter than regular.
+// needs it. Every face is declared for weights 400 to 630, all the site uses (`weights`):
+// nothing is set lighter than regular.
 const latin =
   "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD";
 const latinExtended =
@@ -64,7 +77,7 @@ const serifFaces = (
   ] as const
 ).map(
   ([style, url, ranges]) =>
-    `@font-face{font-family:"Newsreader";font-style:${style};font-weight:400 600;font-display:swap;src:url("${url}") format("woff2");unicode-range:${ranges}}`,
+    `@font-face{font-family:"Newsreader";font-style:${style};font-weight:400 630;font-display:swap;src:url("${url}") format("woff2");unicode-range:${ranges}}`,
 );
 
 /** JetBrains Mono, upright only, for code. Shown only if it arrives in time: code never reflows. */
@@ -75,14 +88,14 @@ const monoFaces = (
   ] as const
 ).map(
   ([url, ranges]) =>
-    `@font-face{font-family:"JetBrains Mono";font-weight:400 600;font-display:optional;src:url("${url}") format("woff2");unicode-range:${ranges}}`,
+    `@font-face{font-family:"JetBrains Mono";font-weight:400 630;font-display:optional;src:url("${url}") format("woff2");unicode-range:${ranges}}`,
 );
 
 /** The few rules StyleX cannot attach to an element, layered beneath StyleX's own layers. */
 const globalCss = [
   "@layer reset;",
   ...serifFaces,
-  `@font-face{font-family:"Inter";font-weight:400 600;font-display:swap;src:url("${interUrl}") format("woff2");unicode-range:${interRanges}}`,
+  `@font-face{font-family:"Inter";font-weight:400 630;font-display:swap;src:url("${interUrl}") format("woff2");unicode-range:${interRanges}}`,
   ...monoFaces,
   // Local faces scaled to the web fonts' metrics, so text laid out before a web font arrives does
   // not move when it does: Arial (or metric-identical Liberation Sans) for Inter; Georgia, else
@@ -151,6 +164,7 @@ export function Page({
     const target = href(locale, route);
     return { target, current: currentness(path, target), label: t.text(label) };
   });
+  const page = schemeToken(assets.css, colors.bg);
   return (
     <html lang={locale} dir={localeInfo[locale].dir} {...stylex.props(styles.html)}>
       <head>
@@ -172,9 +186,9 @@ export function Page({
             />
           </>
         )}
-        {/* The page backgrounds, `colors.bg`, in sRGB. */}
-        <meta name="theme-color" content="#17120c" media="(prefers-color-scheme: dark)" />
-        <meta name="theme-color" content="#f8f1e3" media="(prefers-color-scheme: light)" />
+        {/* The page backgrounds, `colors.bg`. */}
+        <meta name="theme-color" content={page.dark} media="(prefers-color-scheme: dark)" />
+        <meta name="theme-color" content={page.light} media="(prefers-color-scheme: light)" />
         <meta property="og:type" content={meta.type} />
         <meta property="og:site_name" content={company.name} />
         <meta property="og:locale" content={ogLocale(locale)} />
@@ -419,6 +433,8 @@ const styles = stylex.create({
     minHeight: "100dvh",
     backgroundColor: colors.bg,
     color: colors.primary,
+    // Text without a weight of its own, such as a form's fields, is regular in both schemes.
+    fontWeight: weights.regular,
     WebkitFontSmoothing: "antialiased",
     MozOsxFontSmoothing: "grayscale",
     WebkitTextSizeAdjust: "100%",
@@ -429,7 +445,7 @@ const styles = stylex.create({
   /** Hidden until focused, then set over the header. */
   skip: {
     position: "absolute",
-    zIndex: 20,
+    zIndex: layer.skip,
     top: space.x2,
     insetInlineStart: space.x2,
     paddingInline: space.x2,
@@ -441,7 +457,7 @@ const styles = stylex.create({
   header: {
     position: "sticky",
     top: 0,
-    zIndex: 10,
+    zIndex: layer.header,
     backgroundColor: colors.bg,
   },
   bar: {
@@ -453,17 +469,17 @@ const styles = stylex.create({
   /** The footer's name, set as the wordmark. */
   wordmark: {
     flexShrink: 0,
-    fontSize: "1.375rem",
-    fontWeight: 600,
-    lineHeight: "2rem",
-    letterSpacing: "-0.01em",
+    fontSize: type.title,
+    fontWeight: weights.semibold,
+    lineHeight: leading.x4,
+    letterSpacing: tracking.tight,
     color: colors.primary,
     textDecoration: "none",
   },
   /** The header's link home: the mark alone, in the color of the text. */
   home: { display: "flex", flexShrink: 0, color: colors.primary },
   /** Four and a half units tall; its width follows from the mark's own proportions (its viewBox). */
-  logo: { display: "block", height: `calc(${space.x4} + ${space.x1} / 2)`, width: "auto" },
+  logo: { display: "block", height: `calc(${space.x4} + ${space.half})`, width: "auto" },
   /**
    * Desktop: the links sit on the right, next to the contact button. Each link's padding fills the
    * gap between them, so the pointer finds no dead space along the row; the row reaches out by one
@@ -495,7 +511,7 @@ const styles = stylex.create({
     paddingBlock: space.x2,
     paddingInline: space.x3,
     backgroundColor: colors.bg,
-    borderBottomWidth: "1px",
+    borderBottomWidth: stroke.width,
     borderBottomStyle: "solid",
     borderBottomColor: colors.hairline,
   },
@@ -504,8 +520,8 @@ const styles = stylex.create({
     display: "flex",
     alignItems: "center",
     height: space.x6,
-    fontSize: "1.25rem",
-    lineHeight: "1.75rem",
+    fontSize: type.menu,
+    lineHeight: leading.x3_5,
   },
   panelFoot: {
     display: "flex",
@@ -527,7 +543,7 @@ const styles = stylex.create({
     position: "absolute",
     insetBlock: 0,
     insetInline: 0,
-    zIndex: -1,
+    zIndex: layer.behind,
     pointerEvents: "none",
   },
   /**
@@ -557,9 +573,9 @@ const styles = stylex.create({
     display: "grid",
     gridTemplateColumns: {
       default: "repeat(2, minmax(0, 1fr))",
-      [media.desktop]: "repeat(12, minmax(0, 1fr))",
+      [media.desktop]: grid.columns,
     },
-    columnGap: space.x3,
+    columnGap: grid.gutter,
   },
   footerGrid: {
     rowGap: space.x5,

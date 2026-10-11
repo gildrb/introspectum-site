@@ -263,5 +263,5 @@ export function render(
   const listings: Listing[] = routes.flatMap(({ path, alternates, index, changed }) =>
     index && alternates ? [{ path, alternates, ...(changed !== undefined && { changed }) }] : [],
   );
-  return { ...pages, ...files, "sitemap.xml": sitemap(listings) };
+  return { ...pages, ...files(assets.css), "sitemap.xml": sitemap(listings) };
 }

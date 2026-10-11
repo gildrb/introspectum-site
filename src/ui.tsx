@@ -1,6 +1,17 @@
 import * as stylex from "@stylexjs/stylex";
 import type { VNode } from "preact";
-import { colors, fontFeatures, media, space } from "./tokens.stylex.ts";
+import {
+  colors,
+  fontFeatures,
+  grid,
+  leading,
+  media,
+  space,
+  stroke,
+  tracking,
+  type,
+  weights,
+} from "./tokens.stylex.ts";
 
 /** Anything `stylex.props` accepts: a style, `false`, `null`, or a nested array of them. */
 export type Style = stylex.StyleXArray<stylex.CompiledStyles | boolean | null | undefined>;
@@ -21,18 +32,18 @@ export const ui = stylex.create({
   mono: { fontFamily: '"JetBrains Mono", "SFMono-Regular", "SF Mono", Menlo, Consolas, monospace' },
   serif: { fontFamily: serif },
   focusRing: {
-    outline: { default: null, ":focus-visible": `1px solid ${colors.primary}` },
-    outlineOffset: "4px",
+    outline: { default: null, ":focus-visible": `${stroke.width} solid ${colors.primary}` },
+    outlineOffset: space.half,
   },
   /** The page's widest column, centred, with the side margin inside it. */
   container: {
     boxSizing: "content-box",
     maxWidth: space.page,
     marginInline: "auto",
-    paddingInline: { default: space.x3, [media.desktop]: space.x4 },
+    paddingInline: { default: space.x3, [media.desktop]: grid.margin },
   },
   /*
-   * The page grid: twelve columns with a three-unit (24px) gutter inside the container, from
+   * The page grid (`grid`): twelve columns with a three-unit (24px) gutter in the container, from
    * tablets up; one column on phones. Every block starts at the left column line and is as wide
    * as a whole number of columns, so text, cards and the footer share the same lines. Cards in two
    * or three equal columns with the same gutter fall on six- and four-column lines by themselves.
@@ -41,36 +52,36 @@ export const ui = stylex.create({
   titleWidth: {
     maxWidth: {
       default: "100%",
-      [media.desktop]: "calc((100% - 264px) * 10 / 12 + 216px)",
-      [media.wide]: "calc((100% - 264px) * 8 / 12 + 168px)",
+      [media.desktop]: grid.span10,
+      [media.wide]: grid.span8,
     },
   },
   /** Running text, leads and forms: eight columns on tablets, seven on wide screens. */
   textWidth: {
     maxWidth: {
       default: "100%",
-      [media.desktop]: "calc((100% - 264px) * 8 / 12 + 168px)",
-      [media.wide]: "calc((100% - 264px) * 7 / 12 + 144px)",
+      [media.desktop]: grid.span8,
+      [media.wide]: grid.span7,
     },
   },
   /** Interface text: navigation, buttons, form fields. */
   text: {
     fontFamily: sans,
     fontFeatureSettings: fontFeatures.interface,
-    fontSize: "1rem",
-    fontWeight: 400,
-    lineHeight: "1.5rem",
+    fontSize: type.text,
+    fontWeight: weights.regular,
+    lineHeight: leading.x3,
   },
   /** Smaller interface text: badges, the footer, notes beside a heading. */
   small: {
     fontFamily: sans,
     fontFeatureSettings: fontFeatures.interface,
-    fontSize: "0.875rem",
-    fontWeight: 400,
-    lineHeight: "1.25rem",
+    fontSize: type.small,
+    fontWeight: weights.regular,
+    lineHeight: leading.x2_5,
   },
   /** A heading at text size: footer columns, the lists in a job card. */
-  strong: { fontWeight: 500, color: colors.primary },
+  strong: { fontWeight: weights.medium, color: colors.primary },
   /*
    * Titles and leads grow with the window, from their size on a 360px phone to their size where
    * the page stops growing (1264px, the container and its margins), so no width makes them jump.
@@ -82,9 +93,9 @@ export const ui = stylex.create({
   display: {
     fontFamily: serif,
     fontSize: "clamp(2.5rem, 1.9rem + 2.65vw, 4rem)",
-    fontWeight: 500,
-    lineHeight: stylex.firstThatWorks("round(nearest, 1.15em, 4px)", "1.15"),
-    letterSpacing: "-0.02em",
+    fontWeight: weights.medium,
+    lineHeight: stylex.firstThatWorks(`round(nearest, 1.15em, ${space.half})`, "1.15"),
+    letterSpacing: tracking.tightest,
     color: colors.primary,
     textWrap: "balance",
   },
@@ -92,9 +103,9 @@ export const ui = stylex.create({
   heading: {
     fontFamily: serif,
     fontSize: "clamp(2rem, 1.7rem + 1.33vw, 2.75rem)",
-    fontWeight: 500,
-    lineHeight: stylex.firstThatWorks("round(nearest, 1.2em, 4px)", "1.2"),
-    letterSpacing: "-0.015em",
+    fontWeight: weights.medium,
+    lineHeight: stylex.firstThatWorks(`round(nearest, 1.2em, ${space.half})`, "1.2"),
+    letterSpacing: tracking.tighter,
     color: colors.primary,
     textWrap: "balance",
   },
@@ -102,10 +113,10 @@ export const ui = stylex.create({
   title: {
     fontFamily: sans,
     fontFeatureSettings: fontFeatures.interface,
-    fontSize: "1.375rem",
-    fontWeight: 600,
-    lineHeight: "1.75rem",
-    letterSpacing: "-0.01em",
+    fontSize: type.title,
+    fontWeight: weights.semibold,
+    lineHeight: leading.x3_5,
+    letterSpacing: tracking.tight,
     color: colors.primary,
     textWrap: "balance",
   },
@@ -116,17 +127,17 @@ export const ui = stylex.create({
   lead: {
     fontFamily: serif,
     fontSize: "clamp(1.25rem, 1.15rem + 0.44vw, 1.5rem)",
-    fontWeight: 400,
-    lineHeight: stylex.firstThatWorks("round(nearest, 1.45em, 4px)", "1.45"),
+    fontWeight: weights.regular,
+    lineHeight: stylex.firstThatWorks(`round(nearest, 1.45em, ${space.half})`, "1.45"),
     color: colors.primary,
     textWrap: "balance",
   },
   /** Running text. */
   prose: {
     fontFamily: serif,
-    fontSize: "1.125rem",
-    fontWeight: 400,
-    lineHeight: "1.75rem",
+    fontSize: type.prose,
+    fontWeight: weights.regular,
+    lineHeight: leading.x3_5,
     color: colors.article,
   },
   label: { color: colors.secondary },
@@ -151,8 +162,8 @@ export const ui = stylex.create({
       ":hover": { [media.hover]: "underline" },
       ":focus-visible": "underline",
     },
-    textDecorationThickness: "1px",
-    textUnderlineOffset: "0.2em",
+    textDecorationThickness: stroke.width,
+    textUnderlineOffset: stroke.underlineOffset,
     touchAction: "manipulation",
   },
   /** A link in running text: underlined in tertiary at rest. */
@@ -163,8 +174,8 @@ export const ui = stylex.create({
       ":focus-visible": colors.primary,
     },
     textDecorationLine: "underline",
-    textDecorationThickness: "1px",
-    textUnderlineOffset: "0.2em",
+    textDecorationThickness: stroke.width,
+    textUnderlineOffset: stroke.underlineOffset,
     textDecorationColor: {
       default: colors.tertiary,
       ":hover": { [media.hover]: colors.primary },
@@ -179,8 +190,8 @@ export const ui = stylex.create({
       ":hover": { [media.hover]: "underline" },
       ":focus-visible": "underline",
     },
-    textDecorationThickness: "1px",
-    textUnderlineOffset: "0.2em",
+    textDecorationThickness: stroke.width,
+    textUnderlineOffset: stroke.underlineOffset,
     touchAction: "manipulation",
   },
   /** The link to the page it is on. */
@@ -197,14 +208,14 @@ export const ui = stylex.create({
     justifyContent: "center",
     height: { default: space.x6, [media.desktop]: space.x5 },
     paddingInline: space.x3,
-    borderWidth: "1px",
+    borderWidth: stroke.width,
     borderStyle: "solid",
     borderRadius: space.x1,
     fontFamily: sans,
     fontFeatureSettings: fontFeatures.interface,
-    fontSize: "1rem",
-    fontWeight: 500,
-    lineHeight: "1.5rem",
+    fontSize: type.text,
+    fontWeight: weights.medium,
+    lineHeight: leading.x3,
     textDecoration: "none",
     whiteSpace: "nowrap",
     cursor: "pointer",

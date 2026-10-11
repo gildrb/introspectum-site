@@ -26,7 +26,7 @@ import {
   origin,
   principles,
 } from "../site.ts";
-import { media, space } from "../tokens.stylex.ts";
+import { grid, media, space } from "../tokens.stylex.ts";
 import { ui, untranslated } from "../ui.tsx";
 import { Consulting, ProductCards } from "./products.tsx";
 
@@ -185,7 +185,7 @@ const styles = stylex.create({
       default: "minmax(0, 1fr)",
       [media.desktop]: "repeat(3, minmax(0, 1fr))",
     },
-    gap: space.x3,
+    gap: grid.gutter,
     listStyle: "none",
   },
   member: { display: "flex", flexDirection: "column", rowGap: space.x1, textWrap: "balance" },
