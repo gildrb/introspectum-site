@@ -89,9 +89,9 @@
     "description": "Alt text of Heinrich Khunrath’s engraving of the Emerald Tablet (Tabula Smaragdina) on the About page: what it shows, for people who cannot see it.",
     "maxLength": 200
   },
-  "illustration_llull_alt": {
-    "message": "Woodcut circle by Ramon Llull: nine concepts, each named by a letter & joined by straight lines to all the others.",
-    "description": "Alt text of Ramon Llull’s Figure A, the Software Factory’s figure: what it shows, for people who cannot see it.",
+  "illustration_frege_alt": {
+    "message": "Proposition 129 in Gottlob Frege’s concept notation: a formula drawn as a tree of lines, its conditions branching from one judgement stroke.",
+    "description": "Alt text of the page from Frege’s Begriffsschrift, the Software Factory’s figure: what it shows, for people who cannot see it.",
     "maxLength": 200
   },
   "illustration_pacioli_alt": {

@@ -167,7 +167,7 @@ export type Illustration = {
   by: string;
   /** The book it is from, in its own language. */
   work: string;
-  lang: "en" | "it" | "la";
+  lang: "de" | "en" | "it" | "la";
   /** The year of the printing the scan shows. */
   year: number;
   /** The library whose copy was scanned, where known. */
@@ -188,16 +188,16 @@ export const illustrations = {
     holding: "Houghton Library, Harvard University",
     url: "https://commons.wikimedia.org/wiki/File:Houghton_Typ_620.09.482_Heinrich_Khunrath,_Amphitheatrvm_sapientiae_aeternae.jpg",
   },
-  llull: {
-    file: "llull",
-    widths: [800, 1600],
-    alt: "illustration_llull_alt",
-    by: "Ramon Llull",
-    work: "Ars magna, generalis et ultima",
-    lang: "la",
-    year: 1517,
-    holding: "Getty Research Institute",
-    url: "https://archive.org/details/gri_c00033125008263424",
+  frege: {
+    file: "frege",
+    widths: [800, 941],
+    alt: "illustration_frege_alt",
+    by: "Gottlob Frege",
+    work: "Begriffsschrift",
+    lang: "de",
+    year: 1879,
+    holding: "Library of the Institute of Mathematics, Polish Academy of Sciences",
+    url: "https://archive.org/details/rcin.org.pl.WA35_20448_6464_Begriffsschrift_50430",
   },
   pacioli: {
     file: "pacioli",
@@ -291,7 +291,7 @@ export const products: readonly Product[] = [
     status: "status_prototype",
     what: "product_software_factory_what",
     audience: "product_software_factory_audience",
-    illustration: illustrations.llull,
+    illustration: illustrations.frege,
     how: [
       { text: "product_software_factory_how_1" },
       { text: "product_software_factory_how_2" },

@@ -67,9 +67,9 @@
     "source": "Engraving of a rocky mountain carved with the Latin text of the Emerald Tablet, in a wide landscape.",
     "message": "Kupferstich eines Felsberges, in den der lateinische Text der Smaragdtafel gemeißelt ist, in einer weiten Landschaft."
   },
-  "illustration_llull_alt": {
-    "source": "Woodcut circle by Ramon Llull: nine concepts, each named by a letter & joined by straight lines to all the others.",
-    "message": "Holzschnitt-Kreis von Ramon Llull: neun Begriffe, jeder mit einem Buchstaben bezeichnet & durch gerade Linien mit allen anderen verbunden."
+  "illustration_frege_alt": {
+    "source": "Proposition 129 in Gottlob Frege’s concept notation: a formula drawn as a tree of lines, its conditions branching from one judgement stroke.",
+    "message": "Satz 129 in Gottlob Freges Begriffsschrift: eine Formel als Baum aus Linien, ihre Bedingungen verzweigen sich von einem Urteilsstrich aus."
   },
   "illustration_pacioli_alt": {
     "source": "A page of Luca Pacioli’s Summa: ledger entries in two columns, debtors on the left & creditors on the right.",
