@@ -38,8 +38,7 @@ export const fontFeatures = stylex.defineConsts({
  * may run that long. Other content text, such as labels, navigation, notes and the footer, needs
  * at least Lc 60: `tertiary` (Lc 66, Lc 62; on cards Lc 61 in both), which therefore never sets
  * running text. Buttons are ink on parchment in light and parchment on umber in dark, like the
- * text. Emerald, the brand color, stays a trace: the form's checkbox and the favicon. Light prose
- * is heavier (`proseWeight`): dark on light reads fainter than light on dark at the same Lc.
+ * text. Emerald, the brand color, stays a trace: the form's checkbox and the favicon.
  */
 export const colors = stylex.defineVars({
   bg: { default: "oklch(18.5% 0.014 70)", [light]: "oklch(96% 0.02 85)" },
@@ -57,7 +56,6 @@ export const colors = stylex.defineVars({
    */
   hairline: { default: "oklch(96.74% 0.022 85 / 0.16)", [light]: "oklch(24.9% 0.02 65 / 0.14)" },
   codeBg: { default: "oklch(24% 0.016 70)", [light]: "oklch(92% 0.025 85)" },
-  proseWeight: { default: "380", [light]: "400" },
 });
 
 /** Multiples of the unit, named by their factor: `x3` is three units. */

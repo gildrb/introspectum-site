@@ -38,14 +38,15 @@ export type Meta = {
 
 // Newsreader and JetBrains Mono come as Google Fonts subsets them: Latin, and Latin Extended for
 // names such as Slovenian, Czech or Polish ones. The browser fetches a subset only for text that
-// needs it.
+// needs it. Every face is declared for weights 400 to 600, all the site uses: nothing is set
+// lighter than regular.
 const latin =
   "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD";
 const latinExtended =
   "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF";
-// Inter is subset to exactly these ranges: Latin-1, Latin Extended-A and punctuation.
+// Inter is subset to Latin-1, Latin Extended-A, punctuation and arrows: one file, these ranges.
 const interRanges =
-  "U+0020-007E,U+00A0-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2010-205E,U+20AC,U+2122,U+2190-21FF,U+2212,U+2500-257F,U+0100-017F";
+  "U+0020-007E,U+00A0-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2010-205E,U+20AC,U+2122,U+2190-21FF,U+2212,U+0100-017F";
 
 // One URL per face, shared by its @font-face and its preload so the browser fetches it once.
 const serifUrl = versioned("/fonts/newsreader-latin.woff2");
@@ -62,7 +63,7 @@ const serifFaces = (
   ] as const
 ).map(
   ([style, url, ranges]) =>
-    `@font-face{font-family:"Newsreader";font-style:${style};font-weight:200 800;font-display:swap;src:url("${url}") format("woff2");unicode-range:${ranges}}`,
+    `@font-face{font-family:"Newsreader";font-style:${style};font-weight:400 600;font-display:swap;src:url("${url}") format("woff2");unicode-range:${ranges}}`,
 );
 
 /** JetBrains Mono, upright only, for code. Shown only if it arrives in time: code never reflows. */
@@ -73,14 +74,14 @@ const monoFaces = (
   ] as const
 ).map(
   ([url, ranges]) =>
-    `@font-face{font-family:"JetBrains Mono";font-weight:100 800;font-display:optional;src:url("${url}") format("woff2");unicode-range:${ranges}}`,
+    `@font-face{font-family:"JetBrains Mono";font-weight:400 600;font-display:optional;src:url("${url}") format("woff2");unicode-range:${ranges}}`,
 );
 
 /** The few rules StyleX cannot attach to an element, layered beneath StyleX's own layers. */
 const globalCss = [
   "@layer reset;",
   ...serifFaces,
-  `@font-face{font-family:"Inter";font-weight:380 600;font-display:swap;src:url("${interUrl}") format("woff2");unicode-range:${interRanges}}`,
+  `@font-face{font-family:"Inter";font-weight:400 600;font-display:swap;src:url("${interUrl}") format("woff2");unicode-range:${interRanges}}`,
   ...monoFaces,
   // Local faces scaled to the web fonts' metrics, so text laid out before a web font arrives does
   // not move when it does: Arial (or metric-identical Liberation Sans) for Inter; Georgia, else

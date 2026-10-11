@@ -71,22 +71,29 @@ export const ui = stylex.create({
   },
   /** A heading at text size: footer columns, the lists in a job card. */
   strong: { fontWeight: 500, color: colors.primary },
-  /** A page's title: Newsreader at a medium weight, so the display cut keeps its body. */
+  /*
+   * Titles and leads grow with the window, from their size on a 360px phone to their size where
+   * the page stops growing (1264px, the container and its margins), so no width makes them jump.
+   * Their line height follows, rounded to whole half units so lines keep to the 4px grid, with
+   * ratios that round to the same heights as before at both ends. A browser without `round()`
+   * takes the plain ratio.
+   */
+  /** A page's title: Newsreader at a medium weight, so the display cut keeps its body. 40-64px. */
   display: {
     fontFamily: serif,
-    fontSize: { default: "2.5rem", [media.desktop]: "4rem" },
+    fontSize: "clamp(2.5rem, 1.9rem + 2.65vw, 4rem)",
     fontWeight: 500,
-    lineHeight: { default: "3rem", [media.desktop]: "4.5rem" },
+    lineHeight: stylex.firstThatWorks("round(nearest, 1.15em, 4px)", "1.15"),
     letterSpacing: "-0.02em",
     color: colors.primary,
     textWrap: "balance",
   },
-  /** A section's title. */
+  /** A section's title. 32-44px. */
   heading: {
     fontFamily: serif,
-    fontSize: { default: "2rem", [media.desktop]: "2.75rem" },
+    fontSize: "clamp(2rem, 1.7rem + 1.33vw, 2.75rem)",
     fontWeight: 500,
-    lineHeight: { default: "2.5rem", [media.desktop]: "3.25rem" },
+    lineHeight: stylex.firstThatWorks("round(nearest, 1.2em, 4px)", "1.2"),
     letterSpacing: "-0.015em",
     color: colors.primary,
     textWrap: "balance",
@@ -104,13 +111,13 @@ export const ui = stylex.create({
   },
   /**
    * The paragraph under a title, in full ink. A few lines at most, set in even lengths like the
-   * title above it, so none ends on a stray word or two.
+   * title above it, so none ends on a stray word or two. 20-24px.
    */
   lead: {
     fontFamily: serif,
-    fontSize: { default: "1.25rem", [media.desktop]: "1.5rem" },
-    fontWeight: colors.proseWeight,
-    lineHeight: { default: "1.75rem", [media.desktop]: "2.25rem" },
+    fontSize: "clamp(1.25rem, 1.15rem + 0.44vw, 1.5rem)",
+    fontWeight: 400,
+    lineHeight: stylex.firstThatWorks("round(nearest, 1.45em, 4px)", "1.45"),
     color: colors.primary,
     textWrap: "balance",
   },
@@ -118,7 +125,7 @@ export const ui = stylex.create({
   prose: {
     fontFamily: serif,
     fontSize: "1.125rem",
-    fontWeight: colors.proseWeight,
+    fontWeight: 400,
     lineHeight: "1.75rem",
     color: colors.article,
   },
