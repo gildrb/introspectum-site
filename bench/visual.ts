@@ -108,7 +108,13 @@ async function screenshot(page: string, view: (typeof views)[number]): Promise<B
   );
   await send(
     "Emulation.setEmulatedMedia",
-    { features: [{ name: "prefers-color-scheme", value: view.scheme }] },
+    {
+      // The machines autoplay; with reduced motion they stand still, so a screenshot is stable.
+      features: [
+        { name: "prefers-color-scheme", value: view.scheme },
+        { name: "prefers-reduced-motion", value: "reduce" },
+      ],
+    },
     session,
   );
   const loaded = Promise.withResolvers<void>();

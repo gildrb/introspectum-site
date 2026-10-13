@@ -45,7 +45,7 @@
   },
   "nav_contact": {
     "source": "Email us",
-    "message": "Uns schreiben"
+    "message": "Anfragen"
   },
   "footer_company": {
     "source": "Company",
@@ -113,7 +113,7 @@
   },
   "home_cta_products": {
     "source": "See the products",
-    "message": "Produkte ansehen"
+    "message": "Produkte sehen"
   },
   "home_why_title": {
     "source": "AI writes code faster than anyone can review it",
@@ -177,7 +177,7 @@
   },
   "cta_waitlist": {
     "source": "Join a waitlist",
-    "message": "Wartelisten ansehen"
+    "message": "Eintragen"
   },
   "method_formal_methods": {
     "source": "formal methods",
@@ -501,7 +501,7 @@
   },
   "back_to_products": {
     "source": "See the products",
-    "message": "Produkte ansehen"
+    "message": "Produkte sehen"
   },
   "joined_title": {
     "source": "You are on the waiting list",

@@ -1,11 +1,28 @@
 #!/usr/bin/env bash
-# Builds the site, serves the Build Output in the local Workers runtime, then measures agent
-# readiness (bench/agent-ready.ts), checks that no page moved a pixel (bench/visual.ts) and runs
-# Lighthouse 13.5 on the homepage, mobile & desktop, as PageSpeed Insights does.
-# Exits non-zero when the lint/type check fails, the server breaks, agent readiness drops below
-# 16 checks, or any screenshot changed.
+# Scores the codebase with React Doctor (pinned 0.9.18, the `npx react-doctor@latest` of
+# 2026-10-13, default checks incl. supply chain). The score comes from the react.doctor score
+# API, a pure function of the diagnostics; error/warning counts are local.
+# Gates, so a fix can't break the site: the lint/type check, the build, agent readiness
+# (>= 16 checks) and the visual check (no page moved a pixel).
 set -euo pipefail
 cd "$(dirname "$0")"
+
+report=/tmp/introspectum-react-doctor.json
+rm -f "$report"
+# Exits 1 while any error-level diagnostic remains; the report decides.
+npx --yes react-doctor@0.9.18 . --yes --no-cache --json --json-out "$report" || true
+jq -e '.ok == true and .summary.score != null' "$report" >/dev/null || {
+  jq -c '{ok, error, summary}' "$report" 2>/dev/null || echo "react-doctor wrote no report"
+  exit 1
+}
+jq -r '.diagnostics[] | "\(.severity) \(.plugin)/\(.rule) \(.filePath):\(.line)"' "$report" |
+  sort | uniq -c | sort -rn | sed 's/^/  /'
+jq -r '.summary |
+  "METRIC react_doctor_score=\(.score)",
+  "METRIC errors=\(.errorCount)",
+  "METRIC warnings=\(.warningCount)",
+  "METRIC diagnostics=\(.totalDiagnosticCount)",
+  "METRIC affected_files=\(.affectedFileCount)"' "$report"
 
 npx vp check >/tmp/introspectum-check.log 2>&1 || { tail -n 30 /tmp/introspectum-check.log; exit 1; }
 npx vp build >/tmp/introspectum-build.log 2>&1 || { tail -n 30 /tmp/introspectum-build.log; exit 1; }
@@ -24,28 +41,9 @@ done
 curl -sf -o /dev/null "$base/robots.txt" || { tail -n 30 /tmp/introspectum-preview.log; exit 1; }
 
 agent=$(node bench/agent-ready.ts "$base")
-echo "$agent"
 passed=$(sed -n 's/^METRIC checks_passed=//p' <<<"$agent")
+echo "METRIC agent_checks_passed=$passed"
 [ "$passed" -ge 16 ] || { echo "agent readiness dropped to $passed checks"; exit 1; }
 visual=$(node bench/visual.ts "$base")
 echo "$visual"
 grep -q '^METRIC visual_changed=0$' <<<"$visual" || { echo "visible pages changed"; exit 1; }
-
-# Lighthouse: the four categories, mobile (PageSpeed's default) & desktop. Mobile performance is
-# the median of three runs, the noisiest score.
-lighthouse() {
-  npx --yes lighthouse@13.5.0 "$base/" "$@" --chrome-path="${CHROME_PATH:-chromium}" \
-    --chrome-flags="--headless=new" --quiet --output=json --output-path=stdout \
-    --only-categories=performance,accessibility,best-practices,seo
-}
-scores='([.categories[] | {key: .id, value: (.score * 100)}] | from_entries)'
-for _ in 1 2 3; do lighthouse | jq -c "$scores + {lcp: .audits[\"largest-contentful-paint\"].numericValue}"; done >/tmp/introspectum-lh-mobile.jsonl
-desktop=$(lighthouse --preset=desktop | jq -c "$scores")
-mobile=$(jq -s -c 'sort_by(.performance)[1]' /tmp/introspectum-lh-mobile.jsonl)
-jq -r -n --argjson m "$mobile" --argjson d "$desktop" '
-  "METRIC pagespeed_total=\(([$m, $d] | map(.performance + .accessibility + .["best-practices"] + .seo) | add * 100 | round / 100))",
-  "METRIC mobile_performance=\($m.performance)", "METRIC mobile_accessibility=\($m.accessibility)",
-  "METRIC mobile_best_practices=\($m["best-practices"])", "METRIC mobile_seo=\($m.seo)",
-  "METRIC desktop_performance=\($d.performance)", "METRIC desktop_accessibility=\($d.accessibility)",
-  "METRIC desktop_best_practices=\($d["best-practices"])", "METRIC desktop_seo=\($d.seo)",
-  "METRIC mobile_lcp_ms=\($m.lcp | round)"'
