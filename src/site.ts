@@ -5,7 +5,7 @@ import type { MessageId, Values } from "./i18n.ts";
  * reads is a message ID, except proper names, which are the same in every language.
  */
 
-export const origin = "https://introspectum.si";
+export const origin = "https://introspectum.eu";
 /** One address for inquiries, applications and the waiting lists. */
 export const email = "fabian.klopfer@introspectum.io";
 

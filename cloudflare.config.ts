@@ -10,7 +10,7 @@ export default defineConfig({
     name: "introspectum-si",
     entrypoint,
     compatibilityDate: "2026-10-01",
-    domains: ["introspectum.si"],
+    domains: ["introspectum.eu"],
     assets: {
       runWorkerFirst: ["/api/*"],
       // Unknown paths get `public/404.html` with a 404 status.
