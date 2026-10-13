@@ -219,7 +219,7 @@ export function ProductPage({
         title={t.text("waitlist_label")}
         intro={t.text("waitlist_intro", { product: name })}
       >
-        <div {...stylex.props(ui.textWidth, styles.form)}>
+        <div {...stylex.props(ui.textWidth, styles.form, ui.edge)}>
           <Island
             name="waitlist"
             component={Waitlist}

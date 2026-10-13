@@ -15,6 +15,7 @@ import {
   layer,
   leading,
   media,
+  shadows,
   space,
   stroke,
   tracking,
@@ -463,63 +464,69 @@ function Footer({ meta }: { meta: Meta }) {
   ];
   return (
     <footer {...stylex.props(styles.footer)}>
-      <div {...stylex.props(ui.container, styles.emblemArea)} aria-hidden="true">
-        <div
-          {...stylex.props(styles.emblem)}
-          style={{ maskImage: `url("${emblemUrl}")`, WebkitMaskImage: `url("${emblemUrl}")` }}
-        />
-      </div>
-      <div {...stylex.props(ui.container, styles.footerColumns, styles.footerGrid)}>
-        <div {...stylex.props(styles.footerBrand)}>
-          <p {...stylex.props(ui.serif, styles.wordmark)} {...untranslated}>
-            {company.name}
-          </p>
-          <p {...stylex.props(ui.small, ui.label)}>{t.text("tagline")}</p>
-          <a
-            {...stylex.props(ui.small, ui.quiet, ui.focusRing, styles.email)}
-            href={`mailto:${email}`}
-            {...untranslated}
-          >
-            {email}
-          </a>
+      <div {...stylex.props(styles.emblemArea)} aria-hidden="true">
+        <div {...stylex.props(ui.container)}>
+          <div
+            {...stylex.props(styles.emblem)}
+            style={{ maskImage: `url("${emblemUrl}")`, WebkitMaskImage: `url("${emblemUrl}")` }}
+          />
         </div>
-        {groups.map(({ title, place, links }) => (
-          <div {...stylex.props(place)}>
-            <h2 {...stylex.props(ui.small, ui.strong)}>{title}</h2>
-            <ul {...stylex.props(styles.footerList)}>
-              {links.map(({ target, label }) => (
-                <li>
-                  <a
-                    {...stylex.props(
-                      ui.small,
-                      ui.quiet,
-                      ui.control,
-                      ui.focusRing,
-                      styles.footerLink,
-                      path === target && ui.current,
-                    )}
-                    href={target}
-                    aria-current={path === target ? "page" : undefined}
-                  >
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
+      </div>
+      <div {...stylex.props(styles.footerTop)}>
+        <div {...stylex.props(ui.container, styles.footerColumns, styles.footerGrid)}>
+          <div {...stylex.props(styles.footerBrand)}>
+            <p {...stylex.props(ui.serif, styles.wordmark)} {...untranslated}>
+              {company.name}
+            </p>
+            <p {...stylex.props(ui.small, ui.label)}>{t.text("tagline")}</p>
+            <a
+              {...stylex.props(ui.small, ui.quiet, ui.focusRing, styles.email)}
+              href={`mailto:${email}`}
+              {...untranslated}
+            >
+              {email}
+            </a>
           </div>
-        ))}
+          {groups.map(({ title, place, links }) => (
+            <div {...stylex.props(place)}>
+              <h2 {...stylex.props(ui.small, ui.strong)}>{title}</h2>
+              <ul {...stylex.props(styles.footerList)}>
+                {links.map(({ target, label }) => (
+                  <li>
+                    <a
+                      {...stylex.props(
+                        ui.small,
+                        ui.quiet,
+                        ui.control,
+                        ui.focusRing,
+                        styles.footerLink,
+                        path === target && ui.current,
+                      )}
+                      href={target}
+                      aria-current={path === target ? "page" : undefined}
+                    >
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
       {/* The other language sits on the column line of the first group of links, Products. */}
-      <div {...stylex.props(ui.container, styles.footerColumns, styles.footerBase)}>
-        <p {...stylex.props(ui.small, ui.note, styles.copyright)}>
-          {t.text("footer_copyright", {
-            year: String(new Date().getUTCFullYear()),
-            company: company.legalName,
-          })}
-        </p>
-        <p {...stylex.props(styles.otherLanguage)}>
-          <Languages meta={meta} style={ui.small} />
-        </p>
+      <div {...stylex.props(styles.footerBottom)}>
+        <div {...stylex.props(ui.container, styles.footerColumns, styles.footerBase)}>
+          <p {...stylex.props(ui.small, ui.note, styles.copyright)}>
+            {t.text("footer_copyright", {
+              year: String(new Date().getUTCFullYear()),
+              company: company.legalName,
+            })}
+          </p>
+          <p {...stylex.props(styles.otherLanguage)}>
+            <Languages meta={meta} style={ui.small} />
+          </p>
+        </div>
       </div>
     </footer>
   );
@@ -587,8 +594,8 @@ const styles = stylex.create({
   logo: { display: "block", height: `calc(${space.x4} + ${space.half})`, width: "auto" },
   /**
    * The logo's own menu, opened by a right click or a long press on it (`src/logo-menu.ts`),
-   * always just under the logo, its left edge on the logo's, one unit below it. A card on the
-   * page, edged like the phone menu; it sits over everything else.
+   * always just under the logo, its left edge on the logo's, one unit below it. A card over the
+   * page, edged & raised like the phone menu; it sits over everything else.
    */
   logoMenu: {
     inset: "auto",
@@ -602,6 +609,7 @@ const styles = stylex.create({
     borderStyle: "solid",
     borderColor: colors.hairline,
     borderRadius: space.x1,
+    boxShadow: shadows.raised,
     backgroundColor: colors.surface,
     color: colors.primary,
   },
@@ -659,6 +667,7 @@ const styles = stylex.create({
     borderBottomWidth: stroke.width,
     borderBottomStyle: "solid",
     borderBottomColor: colors.hairline,
+    boxShadow: shadows.raised,
   },
   panelNav: { display: "flex", flexDirection: "column" },
   panelLink: {
@@ -701,35 +710,43 @@ const styles = stylex.create({
     paddingBottom: { default: space.x12, [media.desktop]: space.x20 },
     outline: "none",
   },
-  /** A layer of its own, so the emblem sits behind the footer's text and never moves it. */
+  /**
+   * A layer of its own, so the emblem sits behind the footer's text. One column of rows: the
+   * links on top, the copyright line at the bottom, and the emblem across both. Where the emblem
+   * is taller than the text, the room goes between the links and the copyright line.
+   */
   footer: {
-    position: "relative",
+    display: "grid",
+    gridTemplateColumns: "minmax(0, 1fr)",
+    gridTemplateRows: "1fr auto",
     isolation: "isolate",
   },
-  /** The footer's box inside the page margins: the emblem fits in it, from its lower edge up. */
+  footerTop: { gridArea: "1 / 1" },
+  footerBottom: { gridArea: "2 / 1" },
+  /** Across the footer's rows, behind the text, on its lower edge. */
   emblemArea: {
-    position: "absolute",
-    insetBlock: 0,
-    insetInline: 0,
+    gridArea: "1 / 1 / 3 / 2",
+    alignSelf: "end",
     zIndex: layer.behind,
     pointerEvents: "none",
   },
   /**
-   * The logo in outline, as large as the footer allows, behind its links: the chevron, and the
+   * The logo in outline behind the footer's links: exactly its upper half, the chevron and the
    * eye down to its middle, drawn in chalk on rough paper. From the eye's top down, the chalk
-   * crumbles into grain (see `scripts/emblem.py`). The mask fits the box and sits on its lower
-   * edge; the color is one solid tone, `colors.chalk`, with no opacity.
+   * crumbles into grain (see `scripts/emblem.py`). Eight columns wide from tablets up, centred,
+   * so two columns stay free on each side (about 925px at the page's widest); the whole width on
+   * phones. The color is one solid tone, `colors.chalk`, with no opacity.
    */
   emblem: {
-    width: "100%",
-    height: "100%",
+    width: { default: "100%", [media.desktop]: grid.span8 },
+    marginInline: "auto",
+    // `src/emblem.webp` is 1500 × 839 px.
+    aspectRatio: "1500 / 839",
     backgroundColor: colors.chalk,
-    maskSize: "contain",
+    maskSize: "100% 100%",
     maskRepeat: "no-repeat",
-    maskPosition: "center bottom",
-    WebkitMaskSize: "contain",
+    WebkitMaskSize: "100% 100%",
     WebkitMaskRepeat: "no-repeat",
-    WebkitMaskPosition: "center bottom",
   },
   /**
    * The footer on the page grid: on wide screens the name over six columns and each group of

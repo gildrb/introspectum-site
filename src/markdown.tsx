@@ -255,14 +255,14 @@ export function Markdown({ blocks }: { blocks: readonly Block[] }) {
           }
           case "code":
             return (
-              <pre {...stylex.props(ui.mono, styles.pre, spacing)}>
+              <pre {...stylex.props(ui.mono, styles.pre, ui.edge, spacing)}>
                 <code>{block.code}</code>
               </pre>
             );
           case "image":
             return (
               <img
-                {...stylex.props(styles.image, spacing)}
+                {...stylex.props(styles.image, ui.imageEdge, spacing)}
                 src={block.src}
                 alt={block.alt}
                 width={block.width}

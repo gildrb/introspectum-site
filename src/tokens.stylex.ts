@@ -55,8 +55,9 @@ export const colors = stylex.defineVars({
   /** Emerald, the brand color, used sparingly: the form's checkbox. */
   accent: { default: "oklch(44% 0.1 160)", [light]: "oklch(40% 0.09 160)" },
   /**
-   * The edge of the open phone menu over the page. Decoration only: the menu reads the same
-   * without it, so it may stay below APCA's Lc 15 for meaningful non-text.
+   * The edge of everything that stands off the page: cards, panels, code, images and the menus.
+   * Translucent, so one edge sharpens every ground it lies on. Decoration only: each reads the
+   * same without it, so it may stay below APCA's Lc 15 for meaningful non-text.
    */
   hairline: { default: "oklch(96.74% 0.022 85 / 0.16)", [light]: "oklch(24.9% 0.02 65 / 0.14)" },
   /**
@@ -65,6 +66,17 @@ export const colors = stylex.defineVars({
    */
   chalk: { default: "oklch(50% 0.03 75)", [light]: "oklch(66% 0.035 75)" },
   codeBg: { default: "oklch(24% 0.016 70)", [light]: "oklch(92% 0.025 85)" },
+});
+
+/**
+ * The menus over the page, with `colors.hairline` as their edge: a close shadow under the edge &
+ * a wide one under the menu, the page's ink at low strength, so the menu lifts off what it covers.
+ */
+export const shadows = stylex.defineVars({
+  raised: {
+    default: "0 1px 2px oklch(0% 0 0 / 0.32), 0 8px 24px oklch(0% 0 0 / 0.4)",
+    [light]: "0 1px 2px oklch(24.9% 0.02 65 / 0.08), 0 8px 24px oklch(24.9% 0.02 65 / 0.1)",
+  },
 });
 
 /**

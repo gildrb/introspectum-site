@@ -246,7 +246,7 @@ export function Card({
   children: ComponentChildren;
 }) {
   return (
-    <li {...stylex.props(styles.card)}>
+    <li {...stylex.props(styles.card, ui.edge)}>
       {figure !== undefined && <div {...stylex.props(styles.cardFigure)}>{figure}</div>}
       {children}
     </li>
@@ -504,7 +504,7 @@ export function CallToAction({
 }) {
   return (
     <section {...stylex.props(ui.container, styles.part)} aria-labelledby={id}>
-      <div {...stylex.props(styles.panel)}>
+      <div {...stylex.props(styles.panel, ui.edge)}>
         <h2 {...stylex.props(ui.heading, ui.titleWidth)} id={id}>
           {title}
         </h2>

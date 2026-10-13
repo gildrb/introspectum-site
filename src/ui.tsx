@@ -35,6 +35,13 @@ export const ui = stylex.create({
     outline: { default: null, ":focus-visible": `${stroke.width} solid ${colors.primary}` },
     outlineOffset: space.half,
   },
+  /** The edge of a filled block, a card, panel or code: a hairline inside it, taking no room. */
+  edge: { boxShadow: `inset 0 0 0 ${stroke.width} ${colors.hairline}` },
+  /** An image's edge, drawn over its outer pixels, so it shows on light & dark pictures alike. */
+  imageEdge: {
+    outline: `${stroke.width} solid ${colors.hairline}`,
+    outlineOffset: `-${stroke.width}`,
+  },
   /** The page's widest column, centred, with the side margin inside it. */
   container: {
     boxSizing: "content-box",
