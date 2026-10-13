@@ -30,6 +30,17 @@ export default {
     if (!(response.headers.get("Content-Type") ?? "").startsWith("text/html")) return response;
     const page = new Response(response.body, response);
     page.headers.append("Vary", "Accept");
+    // Where an agent finds the machine-readable side of the site (RFC 8288, RFC 9727).
+    const copy = `${url.pathname.replace(/\/+$/, "") || "/index"}.md`;
+    page.headers.append(
+      "Link",
+      [
+        '</.well-known/api-catalog>; rel="api-catalog"',
+        '</.well-known/mcp/server-card.json>; rel="service-desc"; type="application/json"',
+        '</llms.txt>; rel="describedby"; type="text/markdown"',
+        ...(response.status === 200 ? [`<${copy}>; rel="alternate"; type="text/markdown"`] : []),
+      ].join(", "),
+    );
     return page;
   },
 } satisfies ExportedHandler<Env>;
