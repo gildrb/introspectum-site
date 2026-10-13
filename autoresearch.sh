@@ -9,9 +9,11 @@ npx vp check >/tmp/introspectum-check.log 2>&1 || { tail -n 30 /tmp/introspectum
 npx vp build >/tmp/introspectum-build.log 2>&1 || { tail -n 30 /tmp/introspectum-build.log; exit 1; }
 
 port=4179
-npx vp preview --port "$port" --strictPort >/tmp/introspectum-preview.log 2>&1 &
+if curl -s -o /dev/null "http://127.0.0.1:$port/"; then echo "port $port is busy"; exit 1; fi
+# Its own process group: npx, Vite and workerd all stop with it.
+setsid npx vp preview --port "$port" --strictPort >/tmp/introspectum-preview.log 2>&1 &
 server=$!
-trap 'kill "$server" 2>/dev/null || true; wait "$server" 2>/dev/null || true' EXIT
+trap 'kill -- "-$server" 2>/dev/null || true; wait "$server" 2>/dev/null || true' EXIT
 base="http://127.0.0.1:$port"
 for _ in $(seq 1 60); do
   curl -sf -o /dev/null "$base/robots.txt" && break
