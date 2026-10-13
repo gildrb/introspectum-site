@@ -7,7 +7,7 @@ import * as entrypoint from "./worker/index.ts" with { type: "cf-worker" };
  */
 export default defineConfig({
   worker: {
-    name: "introspectum-si",
+    name: "introspectum-eu",
     entrypoint,
     compatibilityDate: "2026-10-01",
     domains: ["introspectum.eu"],
