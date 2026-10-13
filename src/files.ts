@@ -91,6 +91,20 @@ ${t.text("home_why_title")} ${t.text("home_why_text")}
 
 ${t.text("home_who_text")}
 
+## ${t.text("llms_when_title")}
+
+${t.text("llms_when_text")}
+
+${[
+  `- ${t.text("consulting_name")}: ${t.text("consulting_audience")} ${email}`,
+  ...products.map(
+    (product) =>
+      `- ${link(t.text(product.name), href("en", "products", product.slug))}: ${t.text(product.audience)}`,
+  ),
+].join("\n")}
+
+${t.text("llms_when_not")}
+
 ## ${t.text("nav_products")}
 
 ${products
