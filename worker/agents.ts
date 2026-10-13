@@ -1,4 +1,5 @@
-import { agentVersion, productList, type ToolName, tools } from "../src/agents.ts";
+import { type ToolName, tools } from "../src/agent-tools.ts";
+import { agentVersion, productList } from "../src/agents.ts";
 import { isLocale, sourceLocale } from "../src/locale.ts";
 import { company } from "../src/site.ts";
 

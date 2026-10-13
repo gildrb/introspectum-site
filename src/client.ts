@@ -1,10 +1,17 @@
 import { logoMenu } from "./logo-menu.ts";
+import { registerTools } from "./webmcp.ts";
 
 // Every page: the header logo's menu. Its parts are server-rendered; it only needs its events.
 const logo = document.querySelector<HTMLAnchorElement>("a[data-logo-menu]");
 const menu = document.getElementById(logo?.dataset.logoMenu ?? "");
 if (logo === null || menu === null) throw new Error("The header logo or its menu is missing.");
 logoMenu(logo, menu);
+
+// Every page, in a browser with WebMCP: the site's read-only tools for the visitor's agent,
+// registered at once so an agent sees them as the page loads.
+const modelContext: unknown =
+  Reflect.get(document, "modelContext") ?? Reflect.get(navigator, "modelContext");
+if (typeof modelContext === "object" && modelContext !== null) registerTools(modelContext);
 
 // The islands are server-rendered and work without JavaScript. Only pages that have one load
 // Preact & the island's code: let the first frame paint, then hydrate each one in its own task

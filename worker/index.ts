@@ -1,4 +1,4 @@
-import { a2aPath, mcpPath } from "../src/agents.ts";
+import { a2aPath, mcpPath } from "../src/agent-tools.ts";
 import { type MessageId, translators, waitlistConsent } from "../src/i18n.ts";
 import { href, isLocale, type Locale, sourceLocale } from "../src/locale.ts";
 import { products } from "../src/site.ts";

@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { NodeHtmlMarkdown } from "node-html-markdown";
-import { agentCard, apiCatalog, mcpPath, mcpServerCard, tools } from "./agents.ts";
+import { mcpPath, tools } from "./agent-tools.ts";
+import { agentCard, apiCatalog, mcpServerCard } from "./agents.ts";
 import { posts } from "./content.ts";
 import { day, translators } from "./i18n.ts";
 import { href, type Locale, localeInfo, locales, sourceLocale } from "./locale.ts";
