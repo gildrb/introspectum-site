@@ -55,8 +55,8 @@
     "maxLength": 32
   },
   "nav_contact": {
-    "message": "Contact us",
-    "description": "Button in the header that opens an email to the company.",
+    "message": "Email us",
+    "description": "Button that opens an email to the company: in the header, the openings & the closing panel.",
     "maxLength": 20
   },
   "footer_company": {
@@ -194,7 +194,7 @@
     "description": "Homepage: who runs the company, one sentence. Also the About page's meta description."
   },
   "home_who_more": {
-    "message": "More about us",
+    "message": "Read about us",
     "description": "Link from the homepage to the About page.",
     "maxLength": 32
   },
@@ -224,7 +224,7 @@
     "maxLength": 200
   },
   "cta_waitlist": {
-    "message": "Join a waiting list",
+    "message": "Join a waitlist",
     "description": "Button in the closing panel that leads to the products and their waiting lists.",
     "maxLength": 32
   },
@@ -341,11 +341,6 @@
     "description": "One sentence on the second consulting offer.",
     "maxLength": 160
   },
-  "consulting_link": {
-    "message": "Send a consulting inquiry",
-    "description": "Link that opens an email to the company.",
-    "maxLength": 40
-  },
   "consulting_subject": {
     "message": "Consulting inquiry",
     "description": "Subject line of the email the consulting link opens.",
@@ -407,12 +402,12 @@
     "maxLength": 100
   },
   "product_waitlist_link": {
-    "message": "Join the waiting list",
+    "message": "Join the waitlist",
     "description": "Link on a product card and button on a product page that lead to the product's waiting list.",
     "maxLength": 32
   },
   "product_waitlist_link_label": {
-    "message": "Join the waiting list for {product}",
+    "message": "Join the waitlist for {product}",
     "description": "Accessible name of the waiting-list link on a product card, which names the product.",
     "maxLength": 80
   },
@@ -578,7 +573,7 @@
     "description": "Line under the consent checkbox. <link> wraps the words that lead to the privacy policy."
   },
   "waitlist_submit": {
-    "message": "Join the waiting list",
+    "message": "Join the waitlist",
     "description": "Button that sends the waiting-list form.",
     "maxLength": 32
   },
@@ -629,7 +624,7 @@
     "description": "Sign-up rejected because the consent box was not ticked."
   },
   "back_to_products": {
-    "message": "Back to the products",
+    "message": "See the products",
     "description": "Link back to the product overview, on the sign-up confirmation and error pages.",
     "maxLength": 40
   },

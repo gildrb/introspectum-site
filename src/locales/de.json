@@ -44,8 +44,8 @@
     "message": "Markenmaterial herunterladen"
   },
   "nav_contact": {
-    "source": "Contact us",
-    "message": "Kontakt"
+    "source": "Email us",
+    "message": "Uns schreiben"
   },
   "footer_company": {
     "source": "Company",
@@ -113,7 +113,7 @@
   },
   "home_cta_products": {
     "source": "See the products",
-    "message": "Zu den Produkten"
+    "message": "Produkte ansehen"
   },
   "home_why_title": {
     "source": "AI writes code faster than anyone can review it",
@@ -152,8 +152,8 @@
     "message": "Introspectum Limited ist auf der Isle of Man registriert & wird von Fabian Klopfer geleitet, einem Informatiker & früheren Softwareentwickler bei IBM Deutschland Research & Development."
   },
   "home_who_more": {
-    "source": "More about us",
-    "message": "Mehr über uns"
+    "source": "Read about us",
+    "message": "Mehr über uns lesen"
   },
   "team_role_fabian": {
     "source": "Managing Director",
@@ -176,8 +176,8 @@
     "message": "Senden Sie eine Beratungsanfrage, um schon jetzt mit uns zusammenzuarbeiten, oder tragen Sie sich in eine Warteliste ein, um ein Produkt vor dem Start zu testen."
   },
   "cta_waitlist": {
-    "source": "Join a waiting list",
-    "message": "Zu den Wartelisten"
+    "source": "Join a waitlist",
+    "message": "Wartelisten ansehen"
   },
   "method_formal_methods": {
     "source": "formal methods",
@@ -259,10 +259,6 @@
     "source": "We set up CRM & ERP systems that keep your data in open formats, in one place.",
     "message": "Wir richten CRM & ERP so ein, dass Ihre Daten in offenen Formaten an einem Ort liegen."
   },
-  "consulting_link": {
-    "source": "Send a consulting inquiry",
-    "message": "Beratungsanfrage senden"
-  },
   "consulting_subject": {
     "source": "Consulting inquiry",
     "message": "Beratungsanfrage"
@@ -312,12 +308,12 @@
     "message": "Ein Schreiber je Aktie, jeder folgt seinem Trend in seinem eigenen Zeitmaßstab, auf Papier."
   },
   "product_waitlist_link": {
-    "source": "Join the waiting list",
-    "message": "Auf die Warteliste"
+    "source": "Join the waitlist",
+    "message": "Eintragen"
   },
   "product_waitlist_link_label": {
-    "source": "Join the waiting list for {product}",
-    "message": "Auf die Warteliste für das Produkt {product}"
+    "source": "Join the waitlist for {product}",
+    "message": "Warteliste für {product} beitreten"
   },
   "status_prototype": {
     "source": "Prototype",
@@ -456,8 +452,8 @@
     "message": "Was wir speichern & warum, steht in der <link>Datenschutzerklärung</link>."
   },
   "waitlist_submit": {
-    "source": "Join the waiting list",
-    "message": "Auf die Warteliste"
+    "source": "Join the waitlist",
+    "message": "Eintragen"
   },
   "waitlist_sending": {
     "source": "Sending…",
@@ -504,8 +500,8 @@
     "message": "Bitte stimmen Sie zu, dass wir Ihre Adresse für diese Warteliste speichern dürfen."
   },
   "back_to_products": {
-    "source": "Back to the products",
-    "message": "Zurück zu den Produkten"
+    "source": "See the products",
+    "message": "Produkte ansehen"
   },
   "joined_title": {
     "source": "You are on the waiting list",
@@ -689,7 +685,7 @@
   },
   "not_found_home": {
     "source": "Go to the homepage",
-    "message": "Zur Startseite"
+    "message": "Startseite öffnen"
   },
   "join_title": {
     "source": "Careers",

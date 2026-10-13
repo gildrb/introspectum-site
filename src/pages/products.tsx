@@ -97,7 +97,7 @@ export function Consulting({ locale }: { locale: Locale }) {
         <Text quiet>{t.text("consulting_audience")}</Text>
         <Actions>
           <ButtonLink href={mailto(t.text("consulting_subject"))} kind="primary">
-            {t.text("consulting_link")}
+            {t.text("nav_contact")}
           </ButtonLink>
         </Actions>
       </div>
@@ -178,7 +178,7 @@ export function ProductPage({
             {t.text("product_waitlist_link")}
           </ButtonLink>
           <ButtonLink href={inquiry} kind="secondary">
-            {t.text("consulting_link")}
+            {t.text("nav_contact")}
           </ButtonLink>
         </Actions>
       </Hero>

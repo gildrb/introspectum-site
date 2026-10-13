@@ -187,7 +187,7 @@ export function Closing({ locale }: { locale: Locale }) {
     <CallToAction id="next" title={t.text("cta_title")} text={t.text("cta_text")}>
       <Actions>
         <ButtonLink href={mailto(t.text("consulting_subject"))} kind="primary">
-          {t.text("consulting_link")}
+          {t.text("nav_contact")}
         </ButtonLink>
         <ButtonLink href={href(locale, "products")} kind="secondary">
           {t.text("cta_waitlist")}

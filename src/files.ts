@@ -229,7 +229,7 @@ ${forAgents}
 
 ## Contact
 
-${t.text("consulting_link")}: ${email}
+${t.text("nav_contact")}: ${email}
 `;
 
 const jsonFile = (value: unknown) => `${JSON.stringify(value, null, 2)}\n`;
