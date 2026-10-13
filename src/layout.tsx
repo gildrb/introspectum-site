@@ -54,7 +54,7 @@ export type Meta = {
 // Newsreader and JetBrains Mono come as Google Fonts subsets them: Latin, and Latin Extended for
 // names such as Slovenian, Czech or Polish ones. The browser fetches a subset only for text that
 // needs it. Every face is declared for weights 400 to 630, all the site uses (`weights`):
-// nothing is set lighter than regular.
+// nothing is set lighter than regular, so `scripts/newsreader.py` cuts Newsreader's lighter half.
 const latin =
   "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD";
 const latinExtended =
@@ -169,8 +169,9 @@ function currentness(path: string, target: string): "page" | "true" | undefined 
 }
 
 /**
- * The whole document: head, a sticky header with the name, the navigation, the other language and
- * the contact button (behind a menu button on phones), the page's content, and the footer.
+ * The whole document: head, a sticky header with the name, the navigation, the other language (a
+ * globe beside the contact button) and the contact button (behind a menu button on phones), the
+ * page's content, and the footer.
  */
 export function Page({
   assets,
@@ -317,6 +318,7 @@ export function Page({
               ))}
             </nav>
             <div {...stylex.props(styles.actions)}>
+              <Globe meta={meta} />
               <a {...stylex.props(ui.button, ui.primary, ui.focusRing)} href={contact}>
                 {t.text("nav_contact")}
               </a>
@@ -344,7 +346,11 @@ export function Page({
                   ))}
                 </nav>
                 <div {...stylex.props(styles.panelFoot)}>
-                  <a {...stylex.props(ui.button, ui.primary, ui.focusRing)} href={contact}>
+                  <Globe meta={meta} />
+                  <a
+                    {...stylex.props(ui.button, ui.primary, ui.focusRing, styles.panelContact)}
+                    href={contact}
+                  >
                     {t.text("nav_contact")}
                   </a>
                 </div>
@@ -377,6 +383,34 @@ function Languages({ meta, style }: { meta: Meta; style: Style }) {
             aria-label={t.text("language_switch", { language: t.language(other) })}
           >
             {translators[other].language(other)}
+          </a>
+        ))}
+    </>
+  );
+}
+
+/** Links to this page in the other languages, each a globe named for the language it leads to. */
+function Globe({ meta }: { meta: Meta }) {
+  const t = translators[meta.locale];
+  return (
+    <>
+      {locales
+        .filter((other) => other !== meta.locale)
+        .map((other) => (
+          <a
+            {...stylex.props(ui.quiet, ui.control, ui.focusRing, styles.globe)}
+            href={meta.alternates?.[other] ?? href(other, "home")}
+            hreflang={other}
+            aria-label={t.text("language_switch", { language: t.language(other) })}
+          >
+            {/* Centred on a half pixel, so its one-pixel lines fall on whole pixels. */}
+            <svg {...stylex.props(styles.globeIcon)} viewBox="0 0 20 20" aria-hidden="true">
+              <g fill="none" stroke="currentColor" stroke-width={1}>
+                <circle cx={9.5} cy={9.5} r={8} />
+                <ellipse cx={9.5} cy={9.5} rx={3} ry={8} />
+                <path d="M1.5 9.5h16" />
+              </g>
+            </svg>
           </a>
         ))}
     </>
@@ -627,10 +661,28 @@ const styles = stylex.create({
     fontSize: type.menu,
     lineHeight: leading.x3_5,
   },
+  /** The globe, then the contact button across the rest of the row. */
   panelFoot: {
     display: "flex",
-    flexDirection: "column",
+    alignItems: "center",
+    columnGap: space.x3,
     marginTop: space.x2,
+  },
+  panelContact: { flexGrow: 1 },
+  /** A square as tall as the button beside it, all of it answering the pointer. */
+  globe: {
+    display: "inline-flex",
+    flexShrink: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    width: { default: space.x6, [media.desktop]: space.x5 },
+    height: { default: space.x6, [media.desktop]: space.x5 },
+    borderRadius: space.x1,
+  },
+  globeIcon: {
+    display: "block",
+    width: `calc(${space.x2} + ${space.half})`,
+    height: `calc(${space.x2} + ${space.half})`,
   },
   main: {
     flexGrow: 1,
