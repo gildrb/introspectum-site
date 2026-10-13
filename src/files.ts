@@ -256,5 +256,38 @@ export function files(css: string): Record<string, string> {
         },
       ],
     }),
+    // Agentic Resource Discovery: every agent-facing artifact of the site in one catalog.
+    ".well-known/ai-catalog.json": jsonFile({
+      specVersion: "1.0",
+      host: { displayName: company.legalName, identifier: "introspectum.eu" },
+      entries: [
+        {
+          identifier: "urn:air:introspectum.eu:mcp:site",
+          displayName: `${company.name} MCP server`,
+          type: "application/mcp-server-card+json",
+          description: tools.map(({ description }) => description).join(" "),
+          url: url("/.well-known/mcp/server-card.json"),
+        },
+        {
+          identifier: "urn:air:introspectum.eu:a2a:site",
+          displayName: `${company.name} agent`,
+          type: "application/a2a-agent-card+json",
+          url: url("/.well-known/agent-card.json"),
+        },
+        {
+          identifier: `urn:air:introspectum.eu:skill:${skillName}`,
+          displayName: `${company.name} skill`,
+          type: "application/agent-skills+md",
+          description: skillDescription,
+          url: url(`/${skillPath}`),
+        },
+        {
+          identifier: "urn:air:introspectum.eu:guide:llms",
+          displayName: "Guide for language models",
+          type: "text/markdown",
+          url: url("/llms.txt"),
+        },
+      ],
+    }),
   };
 }
