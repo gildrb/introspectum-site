@@ -118,6 +118,7 @@ export function ProductsPage({ assets, locale, path, alternates, shareImage }: P
         type: "website",
         index: true,
         mono: false,
+        italic: false,
       }}
     >
       <Hero title={t.text("products_title")} lead={t.text("products_intro")} />
@@ -154,6 +155,7 @@ export function ProductPage({
         type: "website",
         index: true,
         mono: false,
+        italic: false,
       }}
     >
       <Hero

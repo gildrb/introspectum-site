@@ -44,6 +44,17 @@ const stylexPlugin: Plugin & { __stylexCollectCss?: () => string } = stylexVite(
   devMode: "css-only",
 });
 
+/** The types of the files `versioned()` stamps: fonts, images and the brand assets. */
+const stampedTypes: Readonly<Record<string, string>> = {
+  ".woff2": "font/woff2",
+  ".avif": "image/avif",
+  ".webp": "image/webp",
+  ".jpg": "image/jpeg",
+  ".png": "image/png",
+  ".svg": "image/svg+xml",
+  ".zip": "application/zip",
+};
+
 const sitePlugin: Plugin = {
   name: "site",
   configureServer(server) {
@@ -77,11 +88,17 @@ const sitePlugin: Plugin = {
         Object.keys(site.shareCards).map((page) => [page, site.sharePath(page)]),
       );
       const files = site.render({ script: "/src/client.ts", css }, shareImages);
-      // A stamped font or image: rewrite the URL so Vite serves the public file it copies.
+      // A stamped font, image or archive: served from the public file it copies, cached for good
+      // as `public/_headers` caches it in production. Vite would mark it `no-cache`, and the
+      // browser would then check every font with the server on every page before showing text.
       const copy = site.versionedCopies().get(pathname);
       if (copy) {
-        request.url = copy;
-        return false;
+        const type = stampedTypes[path.extname(copy)];
+        if (type === undefined) throw new Error(`No content type for the stamped file ${copy}`);
+        response.setHeader("Content-Type", type);
+        response.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+        response.end(await readFile(path.join(server.config.publicDir, copy)));
+        return true;
       }
       const file = [pathname.slice(1), `${pathname.slice(1) || "index"}.html`].find(
         (name) => name in files,

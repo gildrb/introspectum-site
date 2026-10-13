@@ -2,7 +2,7 @@
 # requires-python = ">=3.11"
 # dependencies = ["pillow==12.0.0", "numpy==2.3.4", "scipy==1.16.3", "svg.path==7.0"]
 # ///
-"""Builds public/images/logo-outline.webp, the footer's emblem, from src/logo.svg.
+"""Builds src/emblem.webp, the footer's emblem, from src/logo.svg.
 
     uv run scripts/emblem.py
 
@@ -23,7 +23,7 @@ from svg.path import Move, parse_path
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "src/logo.svg"
-OUTPUT = ROOT / "public/images/logo-outline.webp"
+OUTPUT = ROOT / "src/emblem.webp"
 # Twice the emblem's widest showing (about 750px, the footer's height across the mark), so a
 # pixel of the mask is a device pixel on a sharp screen: the browser never averages the grain
 # into a paler, see-through line.

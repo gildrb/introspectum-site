@@ -34,6 +34,7 @@ export function JoinPage({
         type: "website",
         index: true,
         mono: false,
+        italic: false,
       }}
     >
       <Hero title={t.text("join_title")} lead={t.text("join_intro")} />

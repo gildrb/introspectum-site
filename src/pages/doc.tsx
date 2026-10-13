@@ -3,7 +3,7 @@ import type { Doc } from "../content.ts";
 import { translators } from "../i18n.ts";
 import { type Assets, Page } from "../layout.tsx";
 import { href, type Locale } from "../locale.ts";
-import { Markdown } from "../markdown.tsx";
+import { Markdown, usesItalic } from "../markdown.tsx";
 import { company, type Illustration } from "../site.ts";
 
 type PageProps = {
@@ -40,6 +40,7 @@ export function DocPage({
         type: "website",
         index: true,
         mono: false,
+        italic: usesItalic(doc.blocks),
       }}
     >
       <Article
@@ -77,6 +78,7 @@ export function JoinedPage({ assets, locale, path, alternates, shareImage }: Pag
         type: "website",
         index: false,
         mono: false,
+        italic: false,
       }}
     >
       <Hero title={t.text("joined_title")} lead={t.text("joined_text")}>
@@ -108,6 +110,7 @@ export function NotFoundPage({ assets, locale, path, shareImage }: Omit<PageProp
         type: "website",
         index: false,
         mono: false,
+        italic: false,
       }}
     >
       <Hero title={t.text("not_found_title")} lead={t.text("not_found_text")}>

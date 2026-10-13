@@ -74,6 +74,7 @@ export function Home({
         type: "website",
         index: true,
         mono: false,
+        italic: false,
         jsonLd: {
           "@context": "https://schema.org",
           "@type": "Organization",

@@ -112,28 +112,32 @@ export function parse(markdown: string, source: string, firstLine: number): Bloc
   return blocks;
 }
 
+/** The text of every block that has any, in order. */
+function texts(blocks: readonly Block[]): string[] {
+  return blocks.flatMap((block) => {
+    switch (block.type) {
+      case "ul":
+      case "ol":
+        return block.items;
+      case "code":
+      case "image":
+        return [];
+      case "h2":
+      case "h3":
+      case "p":
+      case "quote":
+        return [block.text];
+      default: {
+        const exhaustive: never = block;
+        return exhaustive;
+      }
+    }
+  });
+}
+
 /** Words a reader reads: everything but code and images. */
 export function wordCount(blocks: readonly Block[]): number {
-  return blocks
-    .flatMap((block) => {
-      switch (block.type) {
-        case "ul":
-        case "ol":
-          return block.items;
-        case "code":
-        case "image":
-          return [];
-        case "h2":
-        case "h3":
-        case "p":
-        case "quote":
-          return [block.text];
-        default: {
-          const exhaustive: never = block;
-          return exhaustive;
-        }
-      }
-    })
+  return texts(blocks)
     .join(" ")
     .split(/\s+/)
     .filter((word) => /\w/.test(word)).length;
@@ -141,6 +145,18 @@ export function wordCount(blocks: readonly Block[]): number {
 
 const inline =
   /`([^`]+)`|\[([^\]]+)\]\(((?:https?:\/\/|mailto:|\/)[^\s)]*)\)|\*\*([^*]+)\*\*|\*([^*]+)\*/g;
+
+/** Whether `Inline` sets any of `text` in italics, a link's label included. */
+function emphasized(text: string): boolean {
+  return [...text.matchAll(inline)].some(
+    ([, , label, , , em]) => em !== undefined || (label !== undefined && emphasized(label)),
+  );
+}
+
+/** Whether the blocks set anything in italics, so the page can preload the italic face. */
+export function usesItalic(blocks: readonly Block[]): boolean {
+  return texts(blocks).some(emphasized);
+}
 
 /** Plain text with its hard line breaks rendered as `<br>`. */
 function withBreaks(text: string): ComponentChildren[] {

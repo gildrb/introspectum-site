@@ -4,7 +4,7 @@ import { type Post, posts } from "../content.ts";
 import { day, translators } from "../i18n.ts";
 import { type Assets, Page } from "../layout.tsx";
 import { href, type Locale, localeInfo } from "../locale.ts";
-import { Markdown } from "../markdown.tsx";
+import { Markdown, usesItalic } from "../markdown.tsx";
 import { authors, company, origin } from "../site.ts";
 import { space } from "../tokens.stylex.ts";
 import { richLink, ui } from "../ui.tsx";
@@ -34,6 +34,7 @@ export function BlogPage({ assets, locale, path, alternates, shareImage }: PageP
         type: "website",
         index: true,
         mono: false,
+        italic: false,
       }}
     >
       <Hero title={t.text("blog_title")} lead={t.text("blog_intro")}>
@@ -90,6 +91,7 @@ export function PostPage({ post, ...props }: PageProps & { post: Post }) {
         type: "article",
         index: true,
         mono: post.blocks.some((block) => block.type === "code"),
+        italic: usesItalic(post.blocks),
         jsonLd: {
           "@context": "https://schema.org",
           "@type": "BlogPosting",

@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import * as stylex from "@stylexjs/stylex";
 import type { ComponentChildren } from "preact";
 import { schemeToken } from "./color.ts";
@@ -43,6 +44,8 @@ export type Meta = {
   index: boolean;
   /** Preloads the monospace face, for pages that show code. */
   mono: boolean;
+  /** Preloads Newsreader's italic, for pages that set words in it, so they never arrive late. */
+  italic: boolean;
   jsonLd?: unknown;
   /** More head elements, such as an article's dates. */
   head?: ComponentChildren;
@@ -61,21 +64,26 @@ const interRanges =
   "U+0020-007E,U+00A0-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2010-205E,U+20AC,U+2122,U+2190-21FF,U+2212,U+0100-017F";
 
 // One URL per face, shared by its @font-face and its preload so the browser fetches it once.
+// Newsreader and Inter wait for their files (`font-display: block`) instead of showing a fallback
+// that then changes: the preloaded files arrive within the first frames, and on later pages they
+// come from the cache. Only a file that takes longer than the browser's block period (about 3s)
+// lets the metric-matched fallback below show.
 const serifUrl = versioned("/fonts/newsreader-latin.woff2");
 const interUrl = versioned("/fonts/inter.woff2");
 const monoUrl = versioned("/fonts/jetbrains-mono-latin.woff2");
+const serifItalicUrl = versioned("/fonts/newsreader-italic-latin.woff2");
 
 /** Newsreader's four files: upright and italic, each in Latin and Latin Extended. */
 const serifFaces = (
   [
     ["normal", serifUrl, latin],
     ["normal", versioned("/fonts/newsreader-latin-ext.woff2"), latinExtended],
-    ["italic", versioned("/fonts/newsreader-italic-latin.woff2"), latin],
+    ["italic", serifItalicUrl, latin],
     ["italic", versioned("/fonts/newsreader-italic-latin-ext.woff2"), latinExtended],
   ] as const
 ).map(
   ([style, url, ranges]) =>
-    `@font-face{font-family:"Newsreader";font-style:${style};font-weight:400 630;font-display:swap;src:url("${url}") format("woff2");unicode-range:${ranges}}`,
+    `@font-face{font-family:"Newsreader";font-style:${style};font-weight:400 630;font-display:block;src:url("${url}") format("woff2");unicode-range:${ranges}}`,
 );
 
 /** JetBrains Mono, upright only, for code. Shown only if it arrives in time: code never reflows. */
@@ -93,7 +101,7 @@ const monoFaces = (
 const globalCss = [
   "@layer reset;",
   ...serifFaces,
-  `@font-face{font-family:"Inter";font-weight:400 630;font-display:swap;src:url("${interUrl}") format("woff2");unicode-range:${interRanges}}`,
+  `@font-face{font-family:"Inter";font-weight:400 630;font-display:block;src:url("${interUrl}") format("woff2");unicode-range:${interRanges}}`,
   ...monoFaces,
   // Local faces scaled to the web fonts' metrics, so text laid out before a web font arrives does
   // not move when it does: Arial (or metric-identical Liberation Sans) for Inter; Georgia, else
@@ -232,6 +240,15 @@ export function Page({
         {meta.mono && (
           <link rel="preload" href={monoUrl} as="font" type="font/woff2" crossorigin="anonymous" />
         )}
+        {meta.italic && (
+          <link
+            rel="preload"
+            href={serifItalicUrl}
+            as="font"
+            type="font/woff2"
+            crossorigin="anonymous"
+          />
+        )}
         <script type="speculationrules" dangerouslySetInnerHTML={{ __html: speculationRules }} />
         <style dangerouslySetInnerHTML={{ __html: `${globalCss}\n${assets.css}` }} />
         {/* Preact's typings lack `fetchpriority` on <script>, hence the spread. */}
@@ -366,8 +383,11 @@ function Languages({ meta, style }: { meta: Meta; style: Style }) {
   );
 }
 
-/** The logo in outline, worn away towards its lower edge, as a mask (see `styles.emblem`). */
-const emblemUrl = versioned("/images/logo-outline.webp");
+/**
+ * The logo in outline, drawn in chalk, as a mask (see `styles.emblem`). Inlined in each page, a
+ * few kilobytes, so the footer paints whole with the page instead of the emblem arriving after it.
+ */
+const emblemUrl = `data:image/webp;base64,${readFileSync("src/emblem.webp").toString("base64")}`;
 
 /** The logo in black & white in every format, for the logo's menu (see `styles.logoMenu`). */
 const brandAssetsUrl = versioned("/brand/introspectum-brand.zip");
@@ -526,12 +546,14 @@ const styles = stylex.create({
   /** Four and a half units tall; its width follows from the mark's own proportions (its viewBox). */
   logo: { display: "block", height: `calc(${space.x4} + ${space.half})`, width: "auto" },
   /**
-   * The logo's own menu, opened by a right click or a long press on it (`src/logo-menu.ts`), at
-   * the pointer. A card on the page, edged like the phone menu; it sits over everything else.
+   * The logo's own menu, opened by a right click or a long press on it (`src/logo-menu.ts`),
+   * always just under the logo, its left edge on the logo's, one unit below it. A card on the
+   * page, edged like the phone menu; it sits over everything else.
    */
   logoMenu: {
     inset: "auto",
     margin: 0,
+    marginTop: space.x1,
     // Focus rests on the menu only until an item takes it; the items show their own.
     outline: "none",
     minWidth: `calc(${space.x20} + ${space.x12})`,
