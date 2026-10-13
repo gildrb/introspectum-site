@@ -619,20 +619,21 @@ const styles = stylex.create({
     cursor: "pointer",
   },
   /**
-   * Desktop: the links sit on the right, next to the contact button. Each link's padding fills the
-   * gap between them, so the pointer finds no dead space along the row; the row reaches out by one
-   * padding at its end, so the last link's text keeps its distance from the button.
+   * Desktop: the links sit on the left, next to the logo. Each link's padding fills the gap between
+   * them, so the pointer finds no dead space along the row; the row reaches back by one padding at
+   * its start, so the first link's text keeps the bar's gap from the logo.
    */
   nav: {
     display: { default: "none", [media.desktop]: "flex" },
-    marginInlineStart: "auto",
-    marginInlineEnd: `calc(-1 * ${space.x2})`,
+    marginInlineStart: `calc(-1 * ${space.x2})`,
   },
   navLink: { paddingInline: space.x2, paddingBlock: space.x1 },
+  /** Desktop: the language globe & the contact button, on the right. */
   actions: {
     display: { default: "none", [media.desktop]: "flex" },
     alignItems: "center",
     columnGap: space.x3,
+    marginInlineStart: "auto",
   },
   /** Phones: the menu button; open, its panel lies under the header, the full width of the page. */
   menu: {
