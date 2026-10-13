@@ -1,4 +1,5 @@
 import { NodeHtmlMarkdown } from "node-html-markdown";
+import { agentCard, apiCatalog, mcpPath, mcpServerCard, tools } from "./agents.ts";
 import { posts } from "./content.ts";
 import { day, translators } from "./i18n.ts";
 import { href, type Locale, localeInfo, locales, sourceLocale } from "./locale.ts";
@@ -165,6 +166,15 @@ ${[
   ),
 ].join("\n")}
 
+## For agents
+
+${[
+  `- Every page answers \`Accept: text/markdown\` with its Markdown copy.`,
+  `- MCP server (Streamable HTTP, no sign-in): ${url(mcpPath)}, described at ${url("/.well-known/mcp/server-card.json")}. Tools: ${tools.map(({ name }) => `\`${name}\``).join(", ")}.`,
+  `- A2A agent: ${url("/.well-known/agent-card.json")}.`,
+  `- API catalog: ${url("/.well-known/api-catalog")}.`,
+].join("\n")}
+
 ## ${t.text("nav_about")}
 
 - ${link(t.text("nav_about"), href("en", "about"))}: ${t.text("about_share_title")}
@@ -184,6 +194,8 @@ ${locales
 `;
 }
 
+const jsonFile = (value: unknown) => `${JSON.stringify(value, null, 2)}\n`;
+
 /** The site's other files. `css` is the built stylesheet, for the favicon's colors. */
 export function files(css: string): Record<string, string> {
   return {
@@ -191,5 +203,8 @@ export function files(css: string): Record<string, string> {
     "de/feed.xml": feed("de"),
     "llms.txt": llms(),
     "favicon.svg": favicon(css),
+    ".well-known/mcp/server-card.json": jsonFile(mcpServerCard()),
+    ".well-known/agent-card.json": jsonFile(agentCard()),
+    ".well-known/api-catalog": jsonFile(apiCatalog()),
   };
 }

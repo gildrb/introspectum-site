@@ -1,11 +1,14 @@
+import { a2aPath, mcpPath } from "../src/agents.ts";
 import { type MessageId, translators, waitlistConsent } from "../src/i18n.ts";
 import { href, isLocale, type Locale, sourceLocale } from "../src/locale.ts";
 import { products } from "../src/site.ts";
+import { a2a, mcp } from "./agents.ts";
 
 /**
- * The Worker in front of the site (`cloudflare.config.ts`). `/api/waitlist` takes sign-ups; every
- * page goes to the static assets, as HTML or, for clients that ask for `text/markdown`, as the
- * Markdown copy the build writes next to it. The waiting lists live in the `WAITLIST` KV namespace,
+ * The Worker in front of the site (`cloudflare.config.ts`). `/api/waitlist` takes sign-ups, `/mcp`
+ * and `/a2a` answer AI agents (`agents.ts`); every page goes to the static assets, as HTML or, for
+ * clients that ask for `text/markdown`, as the Markdown copy the build writes next to it. The
+ * waiting lists live in the `WAITLIST` KV namespace,
  * one entry per `<product>:<email>`. List a product's entries with
  * `cf kv keys list --namespace-id <id> --prefix software-factory:`; the ID is in
  * `cf kv namespaces list`.
@@ -19,6 +22,8 @@ export default {
       return join(request, env.WAITLIST);
     }
     if (url.pathname.startsWith("/api/")) return new Response("Not found\n", { status: 404 });
+    if (url.pathname === mcpPath) return mcp(request, env.ASSETS);
+    if (url.pathname === a2aPath) return a2a(request, env.ASSETS);
     if (prefersMarkdown(request.headers.get("Accept")) && !/\.[a-z0-9]+$/i.test(url.pathname))
       return markdown(url, env.ASSETS);
     const response = await env.ASSETS.fetch(request);
