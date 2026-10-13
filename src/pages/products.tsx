@@ -2,6 +2,7 @@ import * as stylex from "@stylexjs/stylex";
 import {
   Actions,
   ButtonLink,
+  MachineSection,
   Card,
   Cards,
   citeTags,
@@ -17,6 +18,7 @@ import { type Tag, type Translator, translators, waitlistConsent } from "../i18n
 import { Island } from "../island.tsx";
 import { Waitlist } from "../islands/waitlist.tsx";
 import { type Assets, Page } from "../layout.tsx";
+import { Machine } from "../figures/machine.tsx";
 import { href, type Locale } from "../locale.ts";
 import {
   company,
@@ -165,7 +167,7 @@ export function ProductPage({
           <Figure
             illustration={product.illustration}
             alt={t.text(product.illustration.alt)}
-            placement="beside"
+            placement="band"
             priority
           />
         }
@@ -180,12 +182,38 @@ export function ProductPage({
           </ButtonLink>
         </Actions>
       </Hero>
-      <Section id="how" title={t.text("product_how_label")}>
-        <Paragraphs t={t} cite={cite} paragraphs={product.how} />
-      </Section>
-      <Section id="state" title={t.text("product_state_label")}>
-        <Paragraphs t={t} cite={cite} paragraphs={product.state} />
-      </Section>
+      {product.machine === undefined ? (
+        <>
+          <Section id="how" title={t.text("product_how_label")}>
+            <Paragraphs t={t} cite={cite} paragraphs={product.how} />
+          </Section>
+          <Section id="state" title={t.text("product_state_label")}>
+            <Paragraphs t={t} cite={cite} paragraphs={product.state} />
+          </Section>
+        </>
+      ) : (
+        <MachineSection
+          parts={[
+            {
+              id: "how",
+              title: t.text("product_how_label"),
+              blocks: product.how.map(({ text, values }) => (
+                <Text>{t.rich(text, cite, values)}</Text>
+              )),
+            },
+            {
+              id: "state",
+              title: t.text("product_state_label"),
+              blocks: product.state.map(({ text, values }) => (
+                <Text>{t.rich(text, cite, values)}</Text>
+              )),
+            },
+          ]}
+          from={{ part: 0, block: product.machine.from }}
+          to={product.machine.through === "state" ? 1 : 0}
+          machine={<Machine name={product.machine.name} locale={locale} fill />}
+        />
+      )}
       <Section
         id="waitlist"
         title={t.text("waitlist_label")}

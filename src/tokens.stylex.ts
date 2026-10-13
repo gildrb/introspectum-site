@@ -8,8 +8,8 @@ const light = "@media (prefers-color-scheme: light)";
  */
 const unit = 8;
 
-/** The widest column, in px: 150 units. */
-const page = 150 * unit;
+/** The widest column, in px: 175 units. */
+const page = 175 * unit;
 
 export const media = stylex.defineConsts({
   mobile: "@media (max-width: 767px)",
@@ -93,6 +93,8 @@ export const space = stylex.defineConsts({
   x20: `${20 * unit}px`,
   /** The header's height. */
   bar: `${8 * unit}px`,
+  /** The least height a drawn machine is drawn at beside text: forty units. */
+  band: `${40 * unit}px`,
   /** The widest column, twelve grid columns: header, sections and footer. */
   page: `${page}px`,
 });
@@ -107,6 +109,9 @@ const margin = 4 * unit;
 const span = (n: number, whole: string) =>
   `calc((${whole} - ${11 * gutter}px) * ${n} / 12 + ${(n - 1) * gutter}px)`;
 
+/** The width of `n` of the twelve columns of the page at its widest, in px. */
+const widest = (n: number) => `${((page - 11 * gutter) * n) / 12 + (n - 1) * gutter}px`;
+
 /** The page grid (see `ui.titleWidth`): twelve columns, from tablets up. */
 export const grid = stylex.defineConsts({
   gutter: `${gutter}px`,
@@ -116,13 +121,17 @@ export const grid = stylex.defineConsts({
   span7: span(7, "100%"),
   span8: span(8, "100%"),
   span10: span(10, "100%"),
+  /** Six columns of the page at its widest: the most that leads & forms take (`ui.textWidth`). */
+  span6Widest: widest(6),
+  /** Five columns of the page at its widest: about 70 characters of running text (`ui.prose`). */
+  span5Widest: widest(5),
   /*
    * Widths in viewport units and px, for an image's `sizes`, which cannot take `%`: six columns
    * on a tablet, where the page fills the window inside its margins, and four of the page at its
    * widest.
    */
   span6Tablet: span(6, `100vw - ${2 * margin}px`),
-  span4Widest: `${((page - 11 * gutter) * 4) / 12 + 3 * gutter}px`,
+  span4Widest: widest(4),
 });
 
 /** Font sizes in rem, so text follows the reader's own default size, named by role. */

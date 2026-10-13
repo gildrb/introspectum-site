@@ -121,9 +121,10 @@ const sitePlugin: Plugin = {
 
 export default defineConfig({
   staged: { "*": "vp check --fix" },
-  fmt: { ignorePatterns: ["src/content/**", "public/**"] },
+  // The anatomy kit in `scripts/anatomy/kit/` is vendored as published (MIT), not our code.
+  fmt: { ignorePatterns: ["src/content/**", "public/**", "scripts/anatomy/kit/**"] },
   lint: {
-    ignorePatterns: ["public/**"],
+    ignorePatterns: ["public/**", "scripts/anatomy/kit/**"],
     plugins: ["typescript", "unicorn", "oxc", "import"],
     jsPlugins: [{ name: "vite-plus", specifier: "vite-plus/oxlint-plugin" }],
     categories: { correctness: "error", suspicious: "error" },

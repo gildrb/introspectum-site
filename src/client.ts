@@ -13,6 +13,21 @@ const modelContext: unknown =
   Reflect.get(document, "modelContext") ?? Reflect.get(navigator, "modelContext");
 if (typeof modelContext === "object" && modelContext !== null) registerTools(modelContext);
 
+// Pages with a drawn machine: the code that runs it on a loop, slower under the pointer. Imported on
+// demand, like the islands, so pages without one never download it.
+const figures = document.querySelectorAll<HTMLElement>("[data-machine]");
+if (figures.length > 0) {
+  const [{ run }, { isMachineName, machines }] = await Promise.all([
+    import("./figures/live.ts"),
+    import("./figures/machines.ts"),
+  ]);
+  for (const figure of figures) {
+    const name = figure.dataset.machine;
+    if (!isMachineName(name)) throw new Error(`Unknown machine: ${name}`);
+    run(figure, machines[name]);
+  }
+}
+
 // The islands are server-rendered and work without JavaScript. Only pages that have one load
 // Preact & the island's code: let the first frame paint, then hydrate each one in its own task
 // with the props `Island` recorded on the server.

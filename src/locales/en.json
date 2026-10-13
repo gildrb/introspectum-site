@@ -376,6 +376,31 @@
     "description": "Heading above what of a product works today, what was measured and what is not built yet, on its own page.",
     "maxLength": 40
   },
+  "mint_caption": {
+    "message": "The press is the model, the sealed weight the specification, the balance the proof.",
+    "description": "Caption of the Software Factory's figure, a drawn mint, beside 'How it works': what its three main parts stand for. Keep it one short line.",
+    "maxLength": 100
+  },
+  "balance_caption": {
+    "message": "Each piece is weighed against what it must be, under glass.",
+    "description": "Caption of the homepage's opening figure, a drawn assay balance in a glass case. Keep it one short line.",
+    "maxLength": 80
+  },
+  "pantograph_caption": {
+    "message": "Every line of the copy traces back to a line of the original.",
+    "description": "Caption of the figure in the homepage's 'How we work', a drawn pantograph copying a drawing: the original is the requirement, the copy the code. Keep it one short line.",
+    "maxLength": 80
+  },
+  "ledger_caption": {
+    "message": "Entries numbered without gaps, posted under lock, read but never written by the assistant.",
+    "description": "Caption of the ERP & CRM's figure, a drawn bookkeeper's desk with a numbering stamp, a locked glazed ledger and a reading glass. Keep it one short line.",
+    "maxLength": 100
+  },
+  "recorder_caption": {
+    "message": "One recorder per stock, each following its trend at its own time scale, on paper.",
+    "description": "Caption of the Trading Platform's figure, a drawn bank of chart recorders. 'On paper' also means simulated trading. Keep it one short line.",
+    "maxLength": 100
+  },
   "product_waitlist_link": {
     "message": "Join the waiting list",
     "description": "Link on a product card and button on a product page that lead to the product's waiting list.",

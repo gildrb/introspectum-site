@@ -44,7 +44,7 @@ export function BlogPage({ assets, locale, path, alternates, shareImage }: PageP
       </Hero>
       <Content>
         {list.length === 0 ? (
-          <p {...stylex.props(ui.prose, ui.label, ui.textWidth)}>{t.text("blog_empty")}</p>
+          <p {...stylex.props(ui.prose, ui.label)}>{t.text("blog_empty")}</p>
         ) : (
           <Cards columns={3}>
             {list.map((post) => (

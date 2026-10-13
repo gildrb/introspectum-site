@@ -56,12 +56,15 @@ export const ui = stylex.create({
       [media.wide]: grid.span8,
     },
   },
-  /** Running text, leads and forms: eight columns on tablets, seven on wide screens. */
+  /**
+   * Leads and forms: eight columns on tablets, seven on wide screens, but never more than six of
+   * the page at its widest. Running text inside keeps its own, narrower measure (`prose`).
+   */
   textWidth: {
     maxWidth: {
       default: "100%",
       [media.desktop]: grid.span8,
-      [media.wide]: grid.span7,
+      [media.wide]: `min(${grid.span7}, ${grid.span6Widest})`,
     },
   },
   /** Interface text: navigation, buttons, form fields. */
@@ -84,7 +87,7 @@ export const ui = stylex.create({
   strong: { fontWeight: weights.medium, color: colors.primary },
   /*
    * Titles and leads grow with the window, from their size on a 360px phone to their size where
-   * the page stops growing (1264px, the container and its margins), so no width makes them jump.
+   * the page stops growing (1464px, the container and its margins), so no width makes them jump.
    * Their line height follows, rounded to whole half units so lines keep to the 4px grid, with
    * ratios that round to the same heights as before at both ends. A browser without `round()`
    * takes the plain ratio.
@@ -92,7 +95,7 @@ export const ui = stylex.create({
   /** A page's title: Newsreader at a medium weight, so the display cut keeps its body. 40-64px. */
   display: {
     fontFamily: serif,
-    fontSize: "clamp(2.5rem, 1.9rem + 2.65vw, 4rem)",
+    fontSize: "clamp(2.5rem, 2.01rem + 2.17vw, 4rem)",
     fontWeight: weights.medium,
     lineHeight: stylex.firstThatWorks(`round(nearest, 1.15em, ${space.half})`, "1.15"),
     letterSpacing: tracking.tightest,
@@ -102,7 +105,7 @@ export const ui = stylex.create({
   /** A section's title. 32-44px. */
   heading: {
     fontFamily: serif,
-    fontSize: "clamp(2rem, 1.7rem + 1.33vw, 2.75rem)",
+    fontSize: "clamp(2rem, 1.76rem + 1.09vw, 2.75rem)",
     fontWeight: weights.medium,
     lineHeight: stylex.firstThatWorks(`round(nearest, 1.2em, ${space.half})`, "1.2"),
     letterSpacing: tracking.tighter,
@@ -126,14 +129,15 @@ export const ui = stylex.create({
    */
   lead: {
     fontFamily: serif,
-    fontSize: "clamp(1.25rem, 1.15rem + 0.44vw, 1.5rem)",
+    fontSize: "clamp(1.25rem, 1.17rem + 0.36vw, 1.5rem)",
     fontWeight: weights.regular,
     lineHeight: stylex.firstThatWorks(`round(nearest, 1.45em, ${space.half})`, "1.45"),
     color: colors.primary,
     textWrap: "balance",
   },
-  /** Running text. */
+  /** Running text, never wider than about 70 characters a line, even in a wide card. */
   prose: {
+    maxWidth: grid.span5Widest,
     fontFamily: serif,
     fontSize: type.prose,
     fontWeight: weights.regular,

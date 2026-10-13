@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import * as stylex from "@stylexjs/stylex";
 import type { ComponentChildren } from "preact";
 import { schemeToken } from "./color.ts";
+import { engravingCss } from "./figures/engraving.ts";
 import { translators } from "./i18n.ts";
 import { href, type Locale, localeInfo, locales, type Route, sourceLocale } from "./locale.ts";
 import { Logo } from "./logo.tsx";
@@ -119,6 +120,8 @@ const globalCss = [
   // The phone menu's toggle is a button, without the disclosure triangle.
   "summary{list-style:none}summary::-webkit-details-marker{display:none}",
   "@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}",
+  // The drawn machines (`figures/`): ink on paper, like the page.
+  engravingCss(colors.primary, colors.bg),
 ].join("\n");
 
 /**

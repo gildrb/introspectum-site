@@ -1,4 +1,5 @@
 import type { MessageId, Values } from "./i18n.ts";
+import type { MachineName } from "./figures/machines.ts";
 
 /**
  * The site's facts and structure. Text lives in `src/locales/`: everything here that a visitor
@@ -278,6 +279,12 @@ export type Product = {
   illustration: Illustration;
   /** How it works, one paragraph each. */
   how: readonly Paragraph[];
+  /**
+   * The drawn machine beside "How it works", where it has one (see `figures/machine.tsx`): it
+   * stands beside the paragraphs it shows, from paragraph `from` to the end of "How it works", or
+   * `through` "Where it stands" as well where that part is what it shows too.
+   */
+  machine?: { name: MachineName; from: number; through: "how" | "state" };
   /** Where it stands: what works, what was measured, what is not built yet. */
   state: readonly Paragraph[];
   /** The works its page cites, in the order the page first cites them. */
@@ -292,6 +299,8 @@ export const products: readonly Product[] = [
     what: "product_software_factory_what",
     audience: "product_software_factory_audience",
     illustration: illustrations.frege,
+    // The press, the proof & the way back to the model, beside both parts, as on every product.
+    machine: { name: "mint", from: 0, through: "state" },
     how: [
       { text: "product_software_factory_how_1" },
       { text: "product_software_factory_how_2" },
@@ -335,6 +344,8 @@ export const products: readonly Product[] = [
     what: "product_erp_crm_what",
     audience: "product_erp_crm_audience",
     illustration: illustrations.pacioli,
+    // Own data, the exact ledger & the read-only assistant, beside both parts.
+    machine: { name: "ledger", from: 0, through: "state" },
     how: [
       { text: "product_erp_crm_how_1" },
       { text: "product_erp_crm_how_2" },
@@ -355,6 +366,8 @@ export const products: readonly Product[] = [
     what: "product_trading_platform_what",
     audience: "product_trading_platform_audience",
     illustration: illustrations.playfair,
+    // Many stocks in parallel, each at its own time scale, & all of it on paper: both parts.
+    machine: { name: "recorder", from: 0, through: "state" },
     how: [{ text: "product_trading_platform_how_1" }, { text: "product_trading_platform_how_2" }],
     state: [
       { text: "product_trading_platform_state_1" },

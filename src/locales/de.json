@@ -287,6 +287,26 @@
     "source": "Where it stands",
     "message": "Stand der Entwicklung"
   },
+  "mint_caption": {
+    "source": "The press is the model, the sealed weight the specification, the balance the proof.",
+    "message": "Die Presse ist das Modell, das versiegelte Gewicht die Spezifikation, die Waage der Beweis."
+  },
+  "balance_caption": {
+    "source": "Each piece is weighed against what it must be, under glass.",
+    "message": "Jedes Stück wird unter Glas gegen das gewogen, was es sein muss."
+  },
+  "pantograph_caption": {
+    "source": "Every line of the copy traces back to a line of the original.",
+    "message": "Jede Linie der Kopie führt auf eine Linie des Originals zurück."
+  },
+  "ledger_caption": {
+    "source": "Entries numbered without gaps, posted under lock, read but never written by the assistant.",
+    "message": "Buchungen lückenlos nummeriert, unter Verschluss gebucht, vom Assistenten gelesen, nie geschrieben."
+  },
+  "recorder_caption": {
+    "source": "One recorder per stock, each following its trend at its own time scale, on paper.",
+    "message": "Ein Schreiber je Aktie, jeder folgt seinem Trend in seinem eigenen Zeitmaßstab, auf Papier."
+  },
   "product_waitlist_link": {
     "source": "Join the waiting list",
     "message": "Auf die Warteliste"

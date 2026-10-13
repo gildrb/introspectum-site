@@ -11,12 +11,13 @@ import { imageSize, versioned } from "./versioned.ts";
  * call to action. Pages lay them out; `layout.tsx` wraps them in the header and footer.
  *
  * They keep one grid and one rhythm. Everything starts on the container's left edge, the first
- * column line; titles are eight columns wide and text seven (`ui.titleWidth`, `ui.textWidth`);
- * cards run two or three to a row on the same gutter; a figure takes the last four columns beside
- * the text. Vertically, space grows with distance in meaning, so what belongs together reads as
- * one: a lead sits three units under its title, the buttons four units under the lead, a
- * section's content six units under its intro, and one part of the page twenty units under the
- * part before (twelve on phones).
+ * column line; titles are eight columns wide, leads at most seven & running text about 70
+ * characters (`ui.titleWidth`, `ui.textWidth`, `ui.prose`); cards run two or three to a row on
+ * the same gutter; figures and drawn machines stand centred in the last six columns, on one axis
+ * down the page, with their legends centred under them. Vertically, space grows with distance in
+ * meaning, so what belongs together reads as one: a lead sits three units under
+ * its title, the buttons four units under the lead, a section's content six units under its
+ * intro, and one part of the page twenty units under the part before (twelve on phones).
  */
 
 /**
@@ -37,7 +38,11 @@ export function Hero({
   return (
     <header {...stylex.props(ui.container, styles.opening, figure !== undefined && styles.beside)}>
       <div {...stylex.props(styles.besideText)}>
-        <h1 {...stylex.props(ui.display, ui.titleWidth)}>{title}</h1>
+        <h1
+          {...stylex.props(ui.display, ui.titleWidth, figure !== undefined && styles.besideTitle)}
+        >
+          {title}
+        </h1>
         {lead !== undefined && <p {...stylex.props(ui.lead, ui.textWidth, styles.lead)}>{lead}</p>}
         {children !== undefined && (
           <div {...stylex.props(ui.textWidth, styles.stack, styles.afterHeroLead)}>{children}</div>
@@ -71,7 +76,10 @@ export function Section({
       aria-labelledby={id}
     >
       <div {...stylex.props(styles.besideText)}>
-        <h2 {...stylex.props(ui.heading, ui.titleWidth)} id={id}>
+        <h2
+          {...stylex.props(ui.heading, ui.titleWidth, figure !== undefined && styles.besideTitle)}
+          id={id}
+        >
           {title}
         </h2>
         {intro !== undefined && (
@@ -80,6 +88,124 @@ export function Section({
         {children !== undefined && <div {...stylex.props(styles.afterLead)}>{children}</div>}
       </div>
       {figure !== undefined && <div {...stylex.props(styles.besideFigure)}>{figure}</div>}
+    </section>
+  );
+}
+
+/** A part of a page beside a machine: its title, an intro, and its blocks (paragraphs or a list). */
+export type MachinePart = {
+  id: string;
+  title: ComponentChildren;
+  intro?: ComponentChildren;
+  blocks: readonly ComponentChildren[];
+  /** The blocks are the items of a list, further apart than paragraphs. */
+  list?: boolean;
+};
+
+/**
+ * One or two parts of a page with a drawn machine (`figures/machine.tsx`, given `fill`) beside
+ * what it shows. On wide screens the titles, intros and blocks take the first five columns, a
+ * row each, and the machine stands in the last six, in the band from part `from.part`'s title
+ * (`from.block` "title"), or from the first line of its block `from.block`, to the last line of
+ * part `to`: drawn into it, centred and shrunk to its height, so it sits beside what it shows.
+ * The band is never shorter than a machine still reads; where the text is, one row after the
+ * band's last part takes the difference, so the blocks keep their spacing. Narrower, the machine
+ * follows the part it starts in.
+ */
+export function MachineSection({
+  parts,
+  from,
+  to,
+  machine,
+}: {
+  parts: readonly [MachinePart] | readonly [MachinePart, MachinePart];
+  from: { part: number; block: number | "title" };
+  to: number;
+  machine: ComponentChildren;
+}) {
+  const start = parts[from.part];
+  if (
+    start === undefined ||
+    (from.block !== "title" && (from.block < 0 || from.block >= start.blocks.length))
+  )
+    throw new Error(`A machine stands beside block ${from.block} of part ${from.part}.`);
+  if (to < from.part || to >= parts.length) throw new Error(`A machine's band ends in part ${to}.`);
+  const counts = parts.map((part) => 1 + (part.intro === undefined ? 0 : 1) + part.blocks.length);
+  const before = (index: number) => counts.slice(0, index).reduce((sum, count) => sum + count, 0);
+  // Grid lines count from 1: the band starts at its part's title row, or at block `from.block`'s
+  // row after the title and intro, and ends with the filler row that comes right after part `to`.
+  const first =
+    before(from.part) +
+    1 +
+    (from.block === "title" ? 0 : 1 + (start.intro === undefined ? 0 : 1) + from.block);
+  const filler = before(to + 1) + 1;
+  const tracks = counts.flatMap((count, index) => [
+    ...Array.from({ length: count }, () => "auto"),
+    ...(index === to ? ["1fr"] : []),
+  ]);
+  const style = {
+    "--machine-rows": tracks.join(" "),
+    "--machine-band": `${first} / ${filler + 1}`,
+  };
+  const band =
+    from.block === "title"
+      ? from.part === 0
+        ? styles.bandTitle
+        : styles.bandLaterTitle
+      : from.block === 0
+        ? styles.bandFirst
+        : start.list === true
+          ? styles.bandList
+          : styles.bandText;
+  return (
+    <div
+      {...stylex.props(ui.container, styles.part, styles.beside, styles.machineRows)}
+      style={style}
+    >
+      {parts.map((part, index) => (
+        <>
+          <Part part={part} later={index > 0} />
+          {index === from.part && <div {...stylex.props(styles.machineBand, band)}>{machine}</div>}
+        </>
+      ))}
+    </div>
+  );
+}
+
+function Part({ part, later }: { part: MachinePart; later: boolean }) {
+  const { id, title, intro, blocks, list = false } = part;
+  const Wrap = list ? "ul" : "div";
+  const Item = list ? "li" : "div";
+  return (
+    <section {...stylex.props(styles.contents)} aria-labelledby={id}>
+      <h2
+        {...stylex.props(
+          ui.heading,
+          ui.titleWidth,
+          styles.machineTitle,
+          later && styles.laterTitle,
+        )}
+        id={id}
+      >
+        {title}
+      </h2>
+      {intro !== undefined && (
+        <p {...stylex.props(ui.lead, styles.machineLead, styles.machineText, styles.lead)}>
+          {intro}
+        </p>
+      )}
+      <Wrap {...stylex.props(styles.contents, styles.blocks)}>
+        {blocks.map((block, index) => (
+          <Item
+            {...stylex.props(
+              styles.machineText,
+              index === 0 ? styles.afterLead : list ? styles.blockList : styles.blockText,
+            )}
+          >
+            {block}
+          </Item>
+        ))}
+      </Wrap>
     </section>
   );
 }
@@ -159,8 +285,12 @@ export function Measure({ children }: { children: ComponentChildren }) {
   return <div {...stylex.props(ui.textWidth, styles.stack)}>{children}</div>;
 }
 
-/** Where a figure stands: beside a text, with its credit under it, or atop a card, without. */
-type Placement = "beside" | "card";
+/**
+ * Where a figure stands: in the band beside an opening's or a section's text (`band`, drawn into
+ * the text's height on wide screens), beside an article's text, both with their credit under
+ * them, or atop a card, without.
+ */
+type Placement = "band" | "beside" | "card";
 
 /** A `@media` rule's query alone, for an image's `sizes`. */
 const query = (rule: string) => rule.replace(/^@media /, "");
@@ -194,12 +324,17 @@ export function Figure({
     widths.map((width) => `${versioned(path(width, format))} ${width}w`).join(", ");
   const [small, large] = widths;
   const { width, height } = imageSize(path(large, "jpg"));
+  const band = placement === "band";
   const picture = (
-    <picture>
+    <picture {...stylex.props(band && styles.drawingInBand)}>
       <source type="image/avif" srcset={srcset("avif")} sizes={sizes} />
       <source type="image/webp" srcset={srcset("webp")} sizes={sizes} />
       <img
-        {...stylex.props(styles.ink, placement === "card" ? styles.inCard : styles.inText)}
+        {...stylex.props(
+          styles.ink,
+          placement === "card" ? styles.inCard : styles.inText,
+          band && styles.imageInBand,
+        )}
         src={versioned(path(small, "jpg"))}
         srcset={srcset("jpg")}
         sizes={sizes}
@@ -216,11 +351,12 @@ export function Figure({
   switch (placement) {
     case "card":
       return picture;
+    case "band":
     case "beside":
       return (
-        <figure>
+        <figure {...stylex.props(band && styles.fillBand)}>
           {picture}
-          <figcaption {...stylex.props(ui.small, ui.note, styles.caption)}>
+          <figcaption {...stylex.props(ui.small, ui.note, styles.caption, styles.credit)}>
             {`${by}, `}
             <a
               {...stylex.props(ui.link, ui.focusRing)}
@@ -380,10 +516,13 @@ export function CallToAction({
 const styles = stylex.create({
   /** The page's first part, under the header. */
   opening: { paddingTop: { default: space.x8, [media.desktop]: space.x12 } },
-  /** Every later part: twenty units below the part before, twelve on phones. */
-  part: { paddingTop: { default: space.x12, [media.desktop]: space.x20 } },
+  /**
+   * Every later part: twelve units below the part before, eight on phones. Close, like a page that
+   * moves fast; each part still reads as one by its title and the tight spacing inside it.
+   */
+  part: { paddingTop: { default: space.x8, [media.desktop]: space.x12 } },
   /** The sources belong to the whole page, not to the part above: closer than a new part. */
-  endMatter: { paddingTop: { default: space.x8, [media.desktop]: space.x12 } },
+  endMatter: { paddingTop: { default: space.x6, [media.desktop]: space.x8 } },
   lead: { marginTop: { default: space.x2, [media.desktop]: space.x3 } },
   /** The opening's buttons and notes belong to its lead. */
   afterHeroLead: { marginTop: { default: space.x3, [media.desktop]: space.x4 } },
@@ -394,8 +533,8 @@ const styles = stylex.create({
   stack: { display: "flex", flexDirection: "column", alignItems: "flex-start", rowGap: space.x2 },
   /**
    * A part with a figure, from wide screens: twelve columns, whose first row holds the text across
-   * all of them and the figure over the last four. The text keeps its own widths, eight columns
-   * at most, so the two never meet.
+   * all of them and the figure in the last six. The title keeps to six columns beside it and the
+   * text to its own widths, so the two never meet.
    */
   beside: {
     display: { default: null, [media.wide]: "grid" },
@@ -406,16 +545,20 @@ const styles = stylex.create({
     gridColumn: { default: null, [media.wide]: "1 / -1" },
     gridRow: { default: null, [media.wide]: "1" },
   },
-  /** Its top on the title's on wide screens; under the text, six columns wide, on tablets. */
+  besideTitle: { maxWidth: { default: null, [media.wide]: grid.span6 } },
+  /**
+   * A band in the last six columns beside the text, from the title's top to the text's last line
+   * on wide screens: the figure is drawn into it (`Figure` in a band, `Machine` with `fill`), so
+   * the part is as tall as its text. Figures and machines share its axis down the page. Under the
+   * text, six columns wide, on tablets.
+   */
   besideFigure: {
-    gridColumn: { default: null, [media.wide]: "9 / -1" },
+    gridColumn: { default: null, [media.wide]: "7 / -1" },
     gridRow: { default: null, [media.wide]: "1" },
-    alignSelf: "start",
-    maxWidth: {
-      default: "100%",
-      [media.desktop]: grid.span6,
-      [media.wide]: "none",
-    },
+    alignSelf: "stretch",
+    position: { default: null, [media.wide]: "relative" },
+    minHeight: { default: null, [media.wide]: space.band },
+    maxWidth: { default: "100%", [media.desktop]: grid.span6, [media.wide]: "none" },
     marginTop: { default: space.x6, [media.desktop]: space.x8, [media.wide]: 0 },
   },
   /** An article's title row, across all columns. */
@@ -448,12 +591,81 @@ const styles = stylex.create({
       [media.wide]: `calc(${space.x8} + (${leading.x3_5} - ${type.prose}) / 2)`,
     },
   },
+  /** A machine section's rows on wide screens, set per section (`MachineSection`). */
+  machineRows: { gridTemplateRows: { default: null, [media.wide]: "var(--machine-rows)" } },
+  /** Its titles in the text's five columns, clear of the band that may run beside a later one. */
+  machineTitle: { gridColumn: { default: null, [media.wide]: "1 / 6" } },
+  /** Its intro and blocks in the first five columns, a row each, in order. */
+  machineText: {
+    gridColumn: { default: null, [media.wide]: "1 / 6" },
+    alignSelf: "start",
+  },
+  /** A part's own wrappers (`section`, `ul`, `div`) give way, so each block is a row of the grid. */
+  contents: { display: { default: null, [media.wide]: "contents" } },
+  blocks: { listStyle: "none" },
+  /** Paragraphs two units apart, list items four. */
+  blockText: { marginTop: space.x2 },
+  blockList: { marginTop: space.x4 },
+  /** The second part's title, as far below the first part as one part of a page below another. */
+  laterTitle: { marginTop: { default: space.x8, [media.desktop]: space.x12 } },
+  /**
+   * The band beside the blocks it shows, in the last six columns from the first's row to the end
+   * of its last part, at least as tall as a machine still reads; under the text, narrower.
+   */
+  machineBand: {
+    gridColumn: { default: null, [media.wide]: "7 / -1" },
+    gridRow: { default: null, [media.wide]: "var(--machine-band)" },
+    alignSelf: "stretch",
+    position: { default: null, [media.wide]: "relative" },
+    minHeight: { default: null, [media.wide]: space.band },
+  },
+  /** An intro beside a machine: as wide as its five columns, and no wider than a lead anywhere. */
+  machineLead: { maxWidth: grid.span6Widest },
+  /** A band from a title: level with the title's top, the first part's or a later one's. */
+  bandTitle: { marginTop: { default: space.x6, [media.desktop]: space.x8, [media.wide]: 0 } },
+  bandLaterTitle: {
+    marginTop: { default: space.x6, [media.desktop]: space.x8, [media.wide]: space.x12 },
+  },
+  /** The band's top, on wide screens level with its first block's first line. */
+  bandFirst: {
+    marginTop: { default: space.x6, [media.desktop]: space.x8, [media.wide]: space.x6 },
+  },
+  bandText: {
+    marginTop: { default: space.x6, [media.desktop]: space.x8, [media.wide]: space.x2 },
+  },
+  bandList: {
+    marginTop: { default: space.x6, [media.desktop]: space.x8, [media.wide]: space.x4 },
+  },
   /** The lines in ink on the paper, or inverted, in paper on the umber (see `Figure`). */
   ink: {
     mixBlendMode: { default: "screen", [media.light]: "multiply" },
     filter: { default: "invert(1)", [media.light]: "none" },
   },
   inText: { display: "block", width: "100%", height: "auto" },
+  /**
+   * A figure in a band (`besideFigure`): on wide screens it fills the band, its picture and credit
+   * centred in it and the picture shrunk to the band's height, so it never makes the part taller.
+   */
+  fillBand: {
+    display: { default: null, [media.wide]: "flex" },
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    rowGap: space.x2,
+    position: { default: null, [media.wide]: "absolute" },
+    inset: { default: null, [media.wide]: 0 },
+  },
+  /** The `<picture>` gives way to its image, which is then the band's flex item. */
+  drawingInBand: { display: { default: null, [media.wide]: "contents" } },
+  imageInBand: {
+    width: { default: "100%", [media.wide]: "auto" },
+    maxWidth: "100%",
+    minHeight: 0,
+    flex: "0 1 auto",
+    objectFit: "contain",
+  },
+  /** A figure's credit, centred under it like a machine's legend. */
+  credit: { textAlign: "center", textWrap: "balance" },
   /** Every card's figure in the same 4:3 field, fitted inside it whatever its own shape. */
   inCard: {
     display: "block",

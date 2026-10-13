@@ -1,10 +1,9 @@
 import * as stylex from "@stylexjs/stylex";
 import {
   Actions,
+  MachineSection,
   ButtonLink,
   CallToAction,
-  Card,
-  Cards,
   citeTags,
   Figure,
   Hero,
@@ -14,6 +13,7 @@ import {
   Text,
 } from "../blocks.tsx";
 import { type MessageId, translators } from "../i18n.ts";
+import { Machine } from "../figures/machine.tsx";
 import { type Assets, Page } from "../layout.tsx";
 import { href, type Locale, localeInfo, locales } from "../locale.ts";
 import {
@@ -95,7 +95,11 @@ export function Home({
         },
       }}
     >
-      <Hero title={t.text("tagline")} lead={t.text("home_lead")}>
+      <Hero
+        title={t.text("tagline")}
+        lead={t.text("home_lead")}
+        figure={<Machine name="balance" locale={locale} fill />}
+      >
         <Actions>
           <ButtonLink href={mailto(t.text("consulting_subject"))} kind="primary">
             {t.text("nav_contact")}
@@ -116,7 +120,7 @@ export function Home({
           <Figure
             illustration={illustrations.euclid}
             alt={t.text(illustrations.euclid.alt)}
-            placement="beside"
+            placement="band"
           />
         }
       >
@@ -129,20 +133,29 @@ export function Home({
         <ProductCards locale={locale} heading="h3" />
       </Section>
       <Consulting locale={locale} />
-      <Section
-        id="how"
-        title={t.text("home_how_label")}
-        intro={t.text("home_methods", { methods: t.list(methods.map((method) => t.text(method))) })}
-      >
-        <Cards columns={3}>
-          {principles.map(({ name, text }) => (
-            <Card>
-              <h3 {...stylex.props(ui.title)}>{t.text(name)}</h3>
-              <p {...stylex.props(ui.prose)}>{t.text(text)}</p>
-            </Card>
-          ))}
-        </Cards>
-      </Section>
+      <MachineSection
+        parts={[
+          {
+            id: "how",
+            title: t.text("home_how_label"),
+            intro: t.text("home_methods", {
+              methods: t.list(methods.map((method) => t.text(method))),
+            }),
+            // The principles as a list beside the pantograph that shows them, not cards under it.
+            list: true,
+            blocks: principles.map(({ name, text }) => (
+              <>
+                <h3 {...stylex.props(ui.title)}>{t.text(name)}</h3>
+                <p {...stylex.props(ui.prose, styles.principle)}>{t.text(text)}</p>
+              </>
+            )),
+          },
+        ]}
+        // The pantograph shows how we work as a whole: it stands beside the whole part.
+        from={{ part: 0, block: "title" }}
+        to={0}
+        machine={<Machine name="pantograph" locale={locale} fill />}
+      />
       <Section id="who" title={t.text("home_who_label")} intro={t.text("home_who_text")}>
         <ul {...stylex.props(styles.team)}>
           {team.map(({ name, role }) => (
@@ -196,4 +209,6 @@ const styles = stylex.create({
   },
   member: { display: "flex", flexDirection: "column", rowGap: space.x1, textWrap: "balance" },
   after: { marginTop: { default: space.x5, [media.desktop]: space.x6 } },
+  /** A principle's sentence, one unit under its name. */
+  principle: { marginTop: space.x1 },
 });
