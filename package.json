@@ -21,6 +21,7 @@
     "@stylexjs/unplugin": "^0.19.1",
     "@types/node": "^26.6.5",
     "cf": "1.0.0-beta.14",
+    "node-html-markdown": "^2.0.0",
     "preact-render-to-string": "^6.8.0",
     "satori": "^0.47.1",
     "vite": "npm:@voidzero-dev/vite-plus-core@1.1.0",

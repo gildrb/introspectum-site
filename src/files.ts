@@ -1,3 +1,4 @@
+import { NodeHtmlMarkdown } from "node-html-markdown";
 import { posts } from "./content.ts";
 import { day, translators } from "./i18n.ts";
 import { href, type Locale, localeInfo, locales, sourceLocale } from "./locale.ts";
@@ -5,8 +6,9 @@ import { favicon } from "./logo.tsx";
 import { authors, company, email, origin, products, roles } from "./site.ts";
 
 /**
- * The feeds, the sitemap, llms.txt and the favicon. Everything comes from the catalogs, `site.ts`,
- * the posts and the logo, so a new post, product, translation or mark reaches all of them at once.
+ * The feeds, the sitemap, llms.txt, the favicon and the Markdown copies of the pages. Everything
+ * comes from the catalogs, `site.ts`, the posts and the logo, so a new post, product, translation
+ * or mark reaches all of them at once.
  */
 
 const url = (path: string) => `${origin}${path}`;
@@ -17,6 +19,37 @@ const escape = (text: string) =>
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;");
+
+/**
+ * The Markdown copy of a built page, which the Worker answers with when a client asks for
+ * `text/markdown`: the page's title, description and address, then its `<main>`. Header,
+ * navigation and footer stay out; the last lines point to llms.txt and the sitemap.
+ */
+export function pageMarkdown(html: string): string {
+  const main = /<main[^>]*>([\s\S]*)<\/main>/.exec(html)?.[1];
+  if (main === undefined) throw new Error("A page has no <main>.");
+  const title = /<title>([\s\S]*?)<\/title>/.exec(html)?.[1];
+  const description = /<meta name="description" content="([^"]*)"/.exec(html)?.[1];
+  const canonical = /<link rel="canonical" href="([^"]*)"/.exec(html)?.[1];
+  const front = [
+    ["title", title],
+    ["description", description],
+    ["url", canonical],
+  ].flatMap(([key, value]) =>
+    value === undefined ? [] : [`${key}: ${JSON.stringify(NodeHtmlMarkdown.translate(value))}`],
+  );
+  const body = NodeHtmlMarkdown.translate(main).replaceAll("](/", `](${origin}/`);
+  return `---
+${front.join("\n")}
+---
+
+${body}
+
+---
+
+Guide for agents: ${url("/llms.txt")}. Every page: ${url("/sitemap.xml")}.
+`;
+}
 
 /** The blog's RSS feed in one language: `/feed.xml`, `/de/feed.xml`. */
 function feed(locale: Locale): string {

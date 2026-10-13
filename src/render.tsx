@@ -1,7 +1,7 @@
 import type { VNode } from "preact";
 import { renderToString } from "preact-render-to-string";
 import { docs, posts } from "./content.ts";
-import { files, type Listing, sitemap } from "./files.ts";
+import { files, type Listing, pageMarkdown, sitemap } from "./files.ts";
 import { day, translators } from "./i18n.ts";
 import { checkTranslations } from "./i18n-check.ts";
 import type { Assets } from "./layout.tsx";
@@ -263,5 +263,11 @@ export function render(
   const listings: Listing[] = routes.flatMap(({ path, alternates, index, changed }) =>
     index && alternates ? [{ path, alternates, ...(changed !== undefined && { changed }) }] : [],
   );
-  return { ...pages, ...files(assets.css), "sitemap.xml": sitemap(listings) };
+  const markdown = Object.fromEntries(
+    Object.entries(pages).map(([file, html]) => [
+      file.replace(/\.html$/, ".md"),
+      pageMarkdown(html),
+    ]),
+  );
+  return { ...pages, ...markdown, ...files(assets.css), "sitemap.xml": sitemap(listings) };
 }
