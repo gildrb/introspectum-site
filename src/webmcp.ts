@@ -25,6 +25,7 @@ export function registerTools(context: object): void {
               params: { name: tool.name, arguments: input ?? {} },
             }),
           });
+          if (!response.ok) throw new Error(`${mcpPath} answered HTTP ${response.status}`);
           const reply: unknown = await response.json();
           const error: unknown =
             typeof reply === "object" && reply !== null ? Reflect.get(reply, "error") : undefined;

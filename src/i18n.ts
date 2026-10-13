@@ -59,6 +59,16 @@ export type Translator = {
   list(items: readonly string[]): string;
 };
 
+/** Each locale's names of languages, & its list format joining items with "and". */
+const languageNames: Readonly<Record<Locale, Intl.DisplayNames>> = {
+  en: new Intl.DisplayNames([localeInfo.en.tag], { type: "language" }),
+  de: new Intl.DisplayNames([localeInfo.de.tag], { type: "language" }),
+};
+const listFormats: Readonly<Record<Locale, Intl.ListFormat>> = {
+  en: new Intl.ListFormat(localeInfo.en.tag, { type: "conjunction" }),
+  de: new Intl.ListFormat(localeInfo.de.tag, { type: "conjunction" }),
+};
+
 function translator(locale: Locale): Translator {
   const tag = localeInfo[locale].tag;
   // Rich-text tags render to Preact elements; plain messages still format to strings.
@@ -73,8 +83,8 @@ function translator(locale: Locale): Translator {
       throw error;
     },
   });
-  const names = new Intl.DisplayNames([tag], { type: "language" });
-  const lists = new Intl.ListFormat(tag, { type: "conjunction" });
+  const names = languageNames[locale];
+  const lists = listFormats[locale];
   return {
     locale,
     text: (id, values) => intl.formatMessage({ id }, values),

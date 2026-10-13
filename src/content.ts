@@ -131,6 +131,10 @@ export type Post = {
 };
 
 const fields = ["title", "date", "author", "description", "source"] as const;
+/** Each front-matter field by its name, to look a line's key up. */
+const fieldNames: ReadonlyMap<string, (typeof fields)[number]> = new Map(
+  fields.map((name) => [name, name]),
+);
 
 function post(locale: Locale, slug: string, text: string): Post {
   const file = `src/content/${locale}/blog/${slug}.md`;
@@ -145,7 +149,7 @@ function post(locale: Locale, slug: string, text: string): Post {
   const values: Partial<Record<(typeof fields)[number], string>> = {};
   for (const [index, line] of head.split("\n").entries()) {
     const entry = line.match(/^(\w+):\s*(.*\S)\s*$/);
-    const key = fields.find((name) => name === entry?.[1]);
+    const key = entry === null ? undefined : fieldNames.get(entry[1] ?? "");
     if (entry === null || key === undefined)
       throw new Error(
         `${file}:${index + 2}: expected one of ${fields.join(", ")} as "key: value".`,

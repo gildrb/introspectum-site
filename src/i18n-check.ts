@@ -115,6 +115,7 @@ export function checkTranslations(): void {
         );
       const translated = parsed(`${locale}:${id}`, target.message);
       if (translated === undefined) continue;
+      const translatedText = fold(translated.text);
       const want = [...new Set(english.slots)].toSorted().join(" ");
       const have = [...new Set(translated.slots)].toSorted().join(" ");
       if (want !== have)
@@ -128,10 +129,7 @@ export function checkTranslations(): void {
         problems.push(`${locale}:${id}: same as en, translate it`);
       for (const term of terms) {
         const used = new RegExp(`(^|[^\\p{L}])${escapeRegExp(fold(term.en))}`, "u");
-        if (
-          used.test(fold(english.text)) &&
-          !fold(translated.text).includes(fold(term.match ?? term.de))
-        )
+        if (used.test(fold(english.text)) && !translatedText.includes(fold(term.match ?? term.de)))
           problems.push(`${locale}:${id}: use the glossary term "${term.de}" for "${term.en}"`);
       }
     }

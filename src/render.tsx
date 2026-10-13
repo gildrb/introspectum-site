@@ -265,8 +265,9 @@ export function render(
       return [fileName(route), `<!doctype html>\n${renderToString(route.page(assets, image))}\n`];
     }),
   );
+  const byPath = new Map(routes.map((route) => [route.path, route]));
   for (const locale of locales) {
-    const home = routes.find((route) => route.path === href(locale, "home"));
+    const home = byPath.get(href(locale, "home"));
     if (home === undefined) throw new Error(`No ${locale} homepage`);
     const words = visibleWords(pages[fileName(home)] ?? "");
     if (words > homeWordLimit)

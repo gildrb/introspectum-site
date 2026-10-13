@@ -47,14 +47,12 @@ export function Waitlist({ product, locale, text }: WaitlistProps) {
 
   async function submit(form: HTMLFormElement) {
     setState({ $: "sending" });
-    let response: Response;
-    try {
-      response = await fetch(form.action, {
-        method: "POST",
-        body: new FormData(form),
-        headers: { Accept: "application/json" },
-      });
-    } catch {
+    const response = await fetch(form.action, {
+      method: "POST",
+      body: new FormData(form),
+      headers: { Accept: "application/json" },
+    }).catch(() => null);
+    if (response === null) {
       setState({ $: "failed", reason: text.failedConnection });
       return;
     }

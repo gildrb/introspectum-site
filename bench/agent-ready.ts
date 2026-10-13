@@ -70,8 +70,10 @@ async function rpc(url: string, method: string, params: unknown): Promise<unknow
 }
 
 async function markdownPage(path: string): Promise<boolean> {
-  const md = await get(path, { headers: { Accept: "text/markdown" } });
-  const html = await get(path, { headers: { Accept: "text/html" } });
+  const [md, html] = await Promise.all([
+    get(path, { headers: { Accept: "text/markdown" } }),
+    get(path, { headers: { Accept: "text/html" } }),
+  ]);
   const varyAccept = [md, html].every(({ headers }) =>
     (headers.get("vary") ?? "").split(",").some((name) => name.trim().toLowerCase() === "accept"),
   );
