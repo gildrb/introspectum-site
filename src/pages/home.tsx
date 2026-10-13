@@ -99,6 +99,7 @@ export function Home({
         title={t.text("tagline")}
         lead={t.text("home_lead")}
         figure={<Machine name="balance" locale={locale} fill />}
+        stage
       >
         <Actions>
           <ButtonLink href={mailto(t.text("consulting_subject"))} kind="primary">

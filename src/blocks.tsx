@@ -22,22 +22,33 @@ import { imageSize, versioned } from "./versioned.ts";
 
 /**
  * A page's opening: the title, the lead under it, then whatever follows (more text, actions). A
- * `figure` stands beside it on wide screens and under it on narrower ones.
+ * `figure` stands beside it on wide screens and under it on narrower ones. On a `stage` the
+ * figure is the opening's centre of interest: drawn tall, the text centred beside it, and the
+ * page's first part further below than parts are from each other.
  */
 export function Hero({
   title,
   lead,
   figure,
+  stage = false,
   children,
 }: {
   title: ComponentChildren;
   lead?: ComponentChildren;
   figure?: ComponentChildren;
+  stage?: boolean;
   children?: ComponentChildren;
 }) {
   return (
-    <header {...stylex.props(ui.container, styles.opening, figure !== undefined && styles.beside)}>
-      <div {...stylex.props(styles.besideText)}>
+    <header
+      {...stylex.props(
+        ui.container,
+        styles.opening,
+        figure !== undefined && styles.beside,
+        stage && styles.stage,
+      )}
+    >
+      <div {...stylex.props(styles.besideText, stage && styles.stageText)}>
         <h1
           {...stylex.props(ui.display, ui.titleWidth, figure !== undefined && styles.besideTitle)}
         >
@@ -48,7 +59,9 @@ export function Hero({
           <div {...stylex.props(ui.textWidth, styles.stack, styles.afterHeroLead)}>{children}</div>
         )}
       </div>
-      {figure !== undefined && <div {...stylex.props(styles.besideFigure)}>{figure}</div>}
+      {figure !== undefined && (
+        <div {...stylex.props(styles.besideFigure, stage && styles.stageFigure)}>{figure}</div>
+      )}
     </header>
   );
 }
@@ -546,6 +559,11 @@ const styles = stylex.create({
     gridRow: { default: null, [media.wide]: "1" },
   },
   besideTitle: { maxWidth: { default: null, [media.wide]: grid.span6 } },
+  /** A stage opening: its figure's part twice as far from the page's first part as parts are. */
+  stage: { paddingBottom: { default: space.x4, [media.desktop]: space.x12 } },
+  stageText: { alignSelf: { default: null, [media.wide]: "center" } },
+  /** Drawn as tall as the stage, whatever the text beside it needs. */
+  stageFigure: { minHeight: { default: null, [media.wide]: space.stage } },
   /**
    * A band in the last six columns beside the text, from the title's top to the text's last line
    * on wide screens: the figure is drawn into it (`Figure` in a band, `Machine` with `fill`), so

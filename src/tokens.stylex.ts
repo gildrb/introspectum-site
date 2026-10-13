@@ -95,6 +95,8 @@ export const space = stylex.defineConsts({
   bar: `${8 * unit}px`,
   /** The least height a drawn machine is drawn at beside text: forty units. */
   band: `${40 * unit}px`,
+  /** The height of an opening whose figure is its centre of interest: eighty units. */
+  stage: `${80 * unit}px`,
   /** The widest column, twelve grid columns: header, sections and footer. */
   page: `${page}px`,
 });
