@@ -781,6 +781,21 @@
     "description": "Large line on the imprint's link-preview image.",
     "maxLength": 90
   },
+  "contact_title": {
+    "message": "Contact",
+    "description": "Small line above the title on the contact page's link-preview image.",
+    "maxLength": 24
+  },
+  "contact_description": {
+    "message": "How to reach Introspectum: one email address for consulting, products, applications & your data.",
+    "description": "Meta description of the contact page.",
+    "maxLength": 160
+  },
+  "contact_share_title": {
+    "message": "One address for every message",
+    "description": "Large line on the contact page's link-preview image.",
+    "maxLength": 90
+  },
   "not_found_title": {
     "message": "Page not found",
     "description": "Title of the error page for a missing page.",

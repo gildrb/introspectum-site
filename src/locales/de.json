@@ -643,6 +643,18 @@
     "source": "Who is responsible for this site",
     "message": "Wer für diese Website verantwortlich ist"
   },
+  "contact_title": {
+    "source": "Contact",
+    "message": "Kontakt"
+  },
+  "contact_description": {
+    "source": "How to reach Introspectum: one email address for consulting, products, applications & your data.",
+    "message": "So erreichen Sie Introspectum: eine E-Mail-Adresse für Beratung, Produkte, Bewerbungen & Ihre Daten."
+  },
+  "contact_share_title": {
+    "source": "One address for every message",
+    "message": "Eine Adresse für jede Nachricht"
+  },
   "not_found_title": {
     "source": "Page not found",
     "message": "Seite nicht gefunden"

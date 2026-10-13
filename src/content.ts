@@ -51,7 +51,7 @@ function checkSource(
     );
 }
 
-export const docSlugs = ["about", "privacy", "imprint"] as const;
+export const docSlugs = ["about", "privacy", "imprint", "contact"] as const;
 export type DocSlug = (typeof docSlugs)[number];
 
 /**
@@ -99,6 +99,7 @@ export const docs: Readonly<Record<Locale, Readonly<Record<DocSlug, Doc>>>> = pe
     about: doc(locale, "about"),
     privacy: doc(locale, "privacy"),
     imprint: doc(locale, "imprint"),
+    contact: doc(locale, "contact"),
   }),
 );
 

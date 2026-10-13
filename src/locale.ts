@@ -38,6 +38,7 @@ const segments = {
   about: { en: "about", de: "ueber-uns" },
   privacy: { en: "privacy", de: "datenschutz" },
   imprint: { en: "imprint", de: "impressum" },
+  contact: { en: "contact", de: "kontakt" },
   joined: { en: "joined", de: "angemeldet" },
 } as const satisfies Record<string, Record<Locale, string>>;
 

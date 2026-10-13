@@ -171,6 +171,19 @@ const routes: readonly Route[] = [
       />
     ),
   }),
+  ...translated("contact", [], {
+    share: (locale) => ({
+      kicker: translators[locale].text("contact_title"),
+      title: translators[locale].text("contact_share_title"),
+    }),
+    build: (props) => (
+      <DocPage
+        {...props}
+        doc={docs[props.locale].contact}
+        description={translators[props.locale].text("contact_description")}
+      />
+    ),
+  }),
   ...translated("joined", [], {
     index: false,
     share: (locale) => ({

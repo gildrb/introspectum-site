@@ -189,6 +189,7 @@ ${forAgents}
 - ${link(t.text("nav_about"), href("en", "about"))}: ${t.text("about_share_title")}
 - ${link(t.text("footer_privacy"), href("en", "privacy"))}: ${t.text("privacy_description")}
 - ${link(t.text("footer_imprint"), href("en", "imprint"))}: ${t.text("imprint_description")}
+- ${link(t.text("contact_title"), href("en", "contact"))}: ${t.text("contact_description")}
 
 ${locales
   .filter((locale) => locale !== sourceLocale)
