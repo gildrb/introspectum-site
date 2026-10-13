@@ -59,9 +59,11 @@ const latin =
   "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD";
 const latinExtended =
   "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF";
-// Inter is subset to Latin-1, Latin Extended-A, punctuation and arrows: one file, these ranges.
-const interRanges =
-  "U+0020-007E,U+00A0-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2010-205E,U+20AC,U+2122,U+2190-21FF,U+2212,U+0100-017F";
+// Inter, subset by `scripts/inter.py`: Latin-1 and punctuation in one file; Latin Extended-A and
+// arrows, which only names and rare signs need, in a second the browser fetches only for them.
+const interLatin =
+  "U+0020-007E,U+00A0-00FF,U+0131,U+0152-0153,U+02C6,U+02DA,U+02DC,U+2010-205E,U+20AC,U+2122,U+2212";
+const interLatinExtended = "U+0100-0130,U+0132-0151,U+0154-017F,U+2190-21FF";
 
 // One URL per face, shared by its @font-face and its preload so the browser fetches it once.
 // Newsreader and Inter wait for their files (`font-display: block`) instead of showing a fallback
@@ -69,7 +71,7 @@ const interRanges =
 // come from the cache. Only a file that takes longer than the browser's block period (about 3s)
 // lets the metric-matched fallback below show.
 const serifUrl = versioned("/fonts/newsreader-latin.woff2");
-const interUrl = versioned("/fonts/inter.woff2");
+const interUrl = versioned("/fonts/inter-latin.woff2");
 const monoUrl = versioned("/fonts/jetbrains-mono-latin.woff2");
 const serifItalicUrl = versioned("/fonts/newsreader-italic-latin.woff2");
 
@@ -101,7 +103,8 @@ const monoFaces = (
 const globalCss = [
   "@layer reset;",
   ...serifFaces,
-  `@font-face{font-family:"Inter";font-weight:400 630;font-display:block;src:url("${interUrl}") format("woff2");unicode-range:${interRanges}}`,
+  `@font-face{font-family:"Inter";font-weight:400 630;font-display:block;src:url("${interUrl}") format("woff2");unicode-range:${interLatin}}`,
+  `@font-face{font-family:"Inter";font-weight:400 630;font-display:block;src:url("${versioned("/fonts/inter-latin-ext.woff2")}") format("woff2");unicode-range:${interLatinExtended}}`,
   ...monoFaces,
   // Local faces scaled to the web fonts' metrics, so text laid out before a web font arrives does
   // not move when it does: Arial (or metric-identical Liberation Sans) for Inter; Georgia, else
