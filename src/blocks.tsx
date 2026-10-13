@@ -339,8 +339,8 @@ export function Figure({
   const band = placement === "band";
   const picture = (
     <picture {...stylex.props(band && styles.drawingInBand)}>
-      <source type="image/avif" srcset={srcset("avif")} sizes={sizes} />
-      <source type="image/webp" srcset={srcset("webp")} sizes={sizes} />
+      <source type="image/avif" srcSet={srcset("avif")} sizes={sizes} />
+      <source type="image/webp" srcSet={srcset("webp")} sizes={sizes} />
       <img
         {...stylex.props(
           styles.ink,
@@ -348,13 +348,13 @@ export function Figure({
           band && styles.imageInBand,
         )}
         src={versioned(path(small, "jpg"))}
-        srcset={srcset("jpg")}
+        srcSet={srcset("jpg")}
         sizes={sizes}
         width={width}
         height={height}
         alt={alt}
         loading={priority ? "eager" : "lazy"}
-        fetchpriority={priority ? "high" : "auto"}
+        fetchPriority={priority ? "high" : "auto"}
         decoding="async"
         draggable={false}
       />

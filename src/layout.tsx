@@ -248,10 +248,10 @@ export function Page({
           href={`${origin}${localeInfo[locale].prefix}/feed.xml`}
           title={t.text("feed_title", { brand: company.name })}
         />
-        <link rel="preload" href={serifUrl} as="font" type="font/woff2" crossorigin="anonymous" />
-        <link rel="preload" href={interUrl} as="font" type="font/woff2" crossorigin="anonymous" />
+        <link rel="preload" href={serifUrl} as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href={interUrl} as="font" type="font/woff2" crossOrigin="anonymous" />
         {meta.mono && (
-          <link rel="preload" href={monoUrl} as="font" type="font/woff2" crossorigin="anonymous" />
+          <link rel="preload" href={monoUrl} as="font" type="font/woff2" crossOrigin="anonymous" />
         )}
         {meta.italic && (
           <link
@@ -259,7 +259,7 @@ export function Page({
             href={serifItalicUrl}
             as="font"
             type="font/woff2"
-            crossorigin="anonymous"
+            crossOrigin="anonymous"
           />
         )}
         <script type="speculationrules" dangerouslySetInnerHTML={{ __html: speculationRules }} />
