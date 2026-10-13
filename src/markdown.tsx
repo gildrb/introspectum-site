@@ -160,7 +160,10 @@ export function usesItalic(blocks: readonly Block[]): boolean {
 
 /** Plain text with its hard line breaks rendered as `<br>`. */
 function withBreaks(text: string): ComponentChildren[] {
-  return text.split("\n").flatMap((part, index) => (index === 0 ? [part] : [<br />, part]));
+  // A line break's place among the lines is all that tells it apart.
+  return text
+    .split("\n")
+    .flatMap((part, index) => (index === 0 ? [part] : [<br key={index} />, part]));
 }
 
 /** Inline Markdown: code, links, strong and emphasis. */

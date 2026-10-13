@@ -74,7 +74,7 @@ function besideWheel(part: Chapter, id: string): MachinePart {
       if (block.type !== "p")
         throw new Error(`about.md: ${part.title} is paragraphs or one list, not a ${block.type}.`);
       return (
-        <Text>
+        <Text key={block.text}>
           <Inline text={block.text} />
         </Text>
       );
@@ -145,7 +145,7 @@ export function AboutPage({
         }
       >
         {rest.map((text) => (
-          <Text>
+          <Text key={text}>
             <Inline text={text} />
           </Text>
         ))}
@@ -161,7 +161,7 @@ export function AboutPage({
         const id = `part-${index + 3}`;
         const team = teamOf(part.blocks);
         return (
-          <Section id={id} title={<Inline text={part.title} />}>
+          <Section key={part.title} id={id} title={<Inline text={part.title} />}>
             {team === null ? (
               <div {...stylex.props(ui.textWidth)}>
                 <Markdown blocks={part.blocks} />
@@ -169,7 +169,7 @@ export function AboutPage({
             ) : (
               <ul {...stylex.props(styles.team)}>
                 {team.map(({ name, role, about }) => (
-                  <li {...stylex.props(styles.member)}>
+                  <li key={name} {...stylex.props(styles.member)}>
                     <h3 {...stylex.props(ui.title)}>{name}</h3>
                     <p {...stylex.props(ui.text, ui.label)}>{role}</p>
                     <p {...stylex.props(ui.prose, styles.bio)}>

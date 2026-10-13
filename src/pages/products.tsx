@@ -53,7 +53,10 @@ export function ProductCards({ locale, heading }: { locale: Locale; heading: "h2
         const page = href(locale, "products", product.slug);
         const name = t.text(product.name);
         return (
-          <Card figure={<Figure illustration={product.illustration} alt="" placement="card" />}>
+          <Card
+            key={product.slug}
+            figure={<Figure illustration={product.illustration} alt="" placement="card" />}
+          >
             <Heading {...stylex.props(ui.title)}>
               <a {...stylex.props(ui.entry, ui.focusRing)} href={page}>
                 {name}
@@ -87,7 +90,7 @@ export function Consulting({ locale }: { locale: Locale }) {
     <Section id="consulting" title={t.text("consulting_title")} intro={t.text("consulting_what")}>
       <Cards columns={2}>
         {offers.map(({ title, text }) => (
-          <Card>
+          <Card key={title}>
             <h3 {...stylex.props(ui.title)}>{t.text(title)}</h3>
             <p {...stylex.props(ui.prose)}>{t.text(text)}</p>
           </Card>
@@ -198,14 +201,14 @@ export function ProductPage({
               id: "how",
               title: t.text("product_how_label"),
               blocks: product.how.map(({ text, values }) => (
-                <Text>{t.rich(text, cite, values)}</Text>
+                <Text key={text}>{t.rich(text, cite, values)}</Text>
               )),
             },
             {
               id: "state",
               title: t.text("product_state_label"),
               blocks: product.state.map(({ text, values }) => (
-                <Text>{t.rich(text, cite, values)}</Text>
+                <Text key={text}>{t.rich(text, cite, values)}</Text>
               )),
             },
           ]}
@@ -262,7 +265,7 @@ function Paragraphs({
   return (
     <Measure>
       {paragraphs.map(({ text, values }) => (
-        <Text>{t.rich(text, cite, values)}</Text>
+        <Text key={text}>{t.rich(text, cite, values)}</Text>
       ))}
     </Measure>
   );

@@ -48,7 +48,7 @@ export function BlogPage({ assets, locale, path, alternates, shareImage }: PageP
         ) : (
           <Cards columns={3}>
             {list.map((post) => (
-              <Card>
+              <Card key={post.slug}>
                 <p {...stylex.props(ui.small, ui.note)}>
                   <time dateTime={post.date}>{t.text("blog_date", { date: day(post.date) })}</time>
                 </p>

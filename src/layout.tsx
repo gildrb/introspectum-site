@@ -210,7 +210,12 @@ export function Page({
           <>
             <link rel="canonical" href={`${origin}${path}`} />
             {locales.map((other) => (
-              <link rel="alternate" hreflang={other} href={`${origin}${alternates[other]}`} />
+              <link
+                key={other}
+                rel="alternate"
+                hreflang={other}
+                href={`${origin}${alternates[other]}`}
+              />
             ))}
             <link
               rel="alternate"
@@ -226,7 +231,7 @@ export function Page({
         <meta property="og:site_name" content={company.name} />
         <meta property="og:locale" content={ogLocale(locale)} />
         {others.map((other) => (
-          <meta property="og:locale:alternate" content={ogLocale(other)} />
+          <meta key={other} property="og:locale:alternate" content={ogLocale(other)} />
         ))}
         <meta property="og:url" content={`${origin}${path}`} />
         <meta property="og:title" content={meta.title} />
@@ -488,11 +493,11 @@ function Footer({ meta }: { meta: Meta }) {
             </a>
           </div>
           {groups.map(({ title, place, links }) => (
-            <div {...stylex.props(place)}>
+            <div key={title} {...stylex.props(place)}>
               <h2 {...stylex.props(ui.small, ui.strong)}>{title}</h2>
               <ul {...stylex.props(styles.footerList)}>
                 {links.map(({ target, label }) => (
-                  <li>
+                  <li key={target}>
                     <a
                       {...stylex.props(
                         ui.small,

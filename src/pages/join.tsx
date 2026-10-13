@@ -43,17 +43,19 @@ export function JoinPage({
           {roles.map((role) => {
             const apply = mailto(t.text(role.subject));
             return (
-              <Card>
+              <Card key={role.title}>
                 <h2 {...stylex.props(ui.title)}>{t.text(role.title)}</h2>
                 {role.intro.map((paragraph) => (
-                  <p {...stylex.props(ui.prose)}>{t.text(paragraph)}</p>
+                  <p key={paragraph} {...stylex.props(ui.prose)}>
+                    {t.text(paragraph)}
+                  </p>
                 ))}
                 {role.lists.map(({ label, items }) => (
-                  <div {...stylex.props(styles.list)}>
+                  <div key={label} {...stylex.props(styles.list)}>
                     <h3 {...stylex.props(ui.text, ui.strong)}>{t.text(label)}</h3>
                     <ul {...stylex.props(ui.prose, styles.items)}>
                       {items.map((item) => (
-                        <li>{t.text(item)}</li>
+                        <li key={item}>{t.text(item)}</li>
                       ))}
                     </ul>
                   </div>
