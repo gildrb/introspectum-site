@@ -15,7 +15,7 @@ import {
 } from "../blocks.tsx";
 import { type MessageId, translators } from "../i18n.ts";
 import { type Assets, Page } from "../layout.tsx";
-import { href, type Locale } from "../locale.ts";
+import { href, type Locale, localeInfo, locales } from "../locale.ts";
 import {
   company,
   email,
@@ -86,6 +86,12 @@ export function Home({
           description: t.text("home_description"),
           founder: { "@type": "Person", name: company.founder },
           address: { "@type": "PostalAddress", addressCountry: "IM" },
+          contactPoint: {
+            "@type": "ContactPoint",
+            contactType: "sales",
+            email,
+            availableLanguage: locales.map((code) => localeInfo[code].tag),
+          },
         },
       }}
     >
