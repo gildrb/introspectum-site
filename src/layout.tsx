@@ -319,7 +319,7 @@ export function Page({
             </nav>
             <div {...stylex.props(styles.actions)}>
               <Globe meta={meta} />
-              <a {...stylex.props(ui.button, ui.primary, ui.focusRing)} href={contact}>
+              <a {...stylex.props(ui.button, ui.secondary, ui.focusRing)} href={contact}>
                 {t.text("nav_contact")}
               </a>
             </div>
@@ -348,7 +348,7 @@ export function Page({
                 <div {...stylex.props(styles.panelFoot)}>
                   <Globe meta={meta} />
                   <a
-                    {...stylex.props(ui.button, ui.primary, ui.focusRing, styles.panelContact)}
+                    {...stylex.props(ui.button, ui.secondary, ui.focusRing, styles.panelContact)}
                     href={contact}
                   >
                     {t.text("nav_contact")}
@@ -398,17 +398,17 @@ function Globe({ meta }: { meta: Meta }) {
         .filter((other) => other !== meta.locale)
         .map((other) => (
           <a
-            {...stylex.props(ui.quiet, ui.control, ui.focusRing, styles.globe)}
+            {...stylex.props(ui.control, ui.focusRing, styles.globe)}
             href={meta.alternates?.[other] ?? href(other, "home")}
             hreflang={other}
             aria-label={t.text("language_switch", { language: t.language(other) })}
           >
-            {/* Centred on a half pixel, so its one-pixel lines fall on whole pixels. */}
+            {/* Lines as heavy as the nav's text, so the meridian and the equator stay apart. */}
             <svg {...stylex.props(styles.globeIcon)} viewBox="0 0 20 20" aria-hidden="true">
-              <g fill="none" stroke="currentColor" stroke-width={1}>
-                <circle cx={9.5} cy={9.5} r={8} />
-                <ellipse cx={9.5} cy={9.5} rx={3} ry={8} />
-                <path d="M1.5 9.5h16" />
+              <g fill="none" stroke="currentColor" stroke-width={1.25}>
+                <circle cx={10} cy={10} r={8.375} />
+                <ellipse cx={10} cy={10} rx={3.75} ry={8.375} />
+                <path d="M1.625 10h16.75" />
               </g>
             </svg>
           </a>
@@ -669,7 +669,10 @@ const styles = stylex.create({
     marginTop: space.x2,
   },
   panelContact: { flexGrow: 1 },
-  /** A square as tall as the button beside it, all of it answering the pointer. */
+  /**
+   * A square as tall as the button beside it, all of it answering the pointer. In the text's ink,
+   * fading to secondary under the pointer as the button does.
+   */
   globe: {
     display: "inline-flex",
     flexShrink: 0,
@@ -678,6 +681,8 @@ const styles = stylex.create({
     width: { default: space.x6, [media.desktop]: space.x5 },
     height: { default: space.x6, [media.desktop]: space.x5 },
     borderRadius: space.x1,
+    color: { default: colors.primary, ":hover": { [media.hover]: colors.secondary } },
+    touchAction: "manipulation",
   },
   globeIcon: {
     display: "block",
