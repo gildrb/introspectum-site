@@ -144,14 +144,17 @@ const speculationRules = JSON.stringify({
   prerender: [{ where: pageLinks, eagerness: "moderate" }],
 });
 
+/** JSON safe inside a `<script>`: `<`, `>` & `&` as Unicode escapes, which JSON reads back as is. */
+function scriptJson(value: unknown): string {
+  return JSON.stringify(value, null, 2).replace(
+    /[<>&]/g,
+    (char) => `\\u${char.charCodeAt(0).toString(16).padStart(4, "0")}`,
+  );
+}
+
 function JsonLd({ value }: { value: unknown }) {
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{
-        __html: JSON.stringify(value, null, 2).replaceAll("<", "\\u003c"),
-      }}
-    />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: scriptJson(value) }} />
   );
 }
 

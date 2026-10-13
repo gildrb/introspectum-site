@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
-import type { ComponentChildren } from "preact";
+import { type ComponentChildren, Fragment } from "preact";
 import type { Tag, Translator } from "./i18n.ts";
 import type { Citation, Illustration } from "./site.ts";
 import { colors, grid, media, space, weights } from "./tokens.stylex.ts";
@@ -132,10 +132,35 @@ export function MachineSection({
   machine,
 }: {
   parts: readonly [MachinePart] | readonly [MachinePart, MachinePart];
-  from: { part: number; block: number | "title" };
+  from: BandStart;
   to: number;
   machine: ComponentChildren;
 }) {
+  const { style, band } = machineBand(parts, from, to);
+  return (
+    <div
+      {...stylex.props(ui.container, styles.part, styles.beside, styles.machineRows)}
+      style={style}
+    >
+      {parts.map((part, index) => (
+        <Fragment key={part.id}>
+          <Part part={part} later={index > 0} />
+          {index === from.part && <div {...stylex.props(styles.machineBand, band)}>{machine}</div>}
+        </Fragment>
+      ))}
+    </div>
+  );
+}
+
+/** Where a machine's band starts: part `part`'s title, or its block `block`. */
+type BandStart = { part: number; block: number | "title" };
+
+/**
+ * The grid rows of a `MachineSection` & the band its machine stands in: grid lines count from 1;
+ * the band starts at its part's title row, or at block `from.block`'s row after the title and
+ * intro, and ends with the filler row that comes right after part `to`.
+ */
+function machineBand(parts: readonly MachinePart[], from: BandStart, to: number) {
   const start = parts[from.part];
   if (
     start === undefined ||
@@ -145,8 +170,6 @@ export function MachineSection({
   if (to < from.part || to >= parts.length) throw new Error(`A machine's band ends in part ${to}.`);
   const counts = parts.map((part) => 1 + (part.intro === undefined ? 0 : 1) + part.blocks.length);
   const before = (index: number) => counts.slice(0, index).reduce((sum, count) => sum + count, 0);
-  // Grid lines count from 1: the band starts at its part's title row, or at block `from.block`'s
-  // row after the title and intro, and ends with the filler row that comes right after part `to`.
   const first =
     before(from.part) +
     1 +
@@ -156,33 +179,17 @@ export function MachineSection({
     ...Array.from({ length: count }, () => "auto"),
     ...(index === to ? ["1fr"] : []),
   ]);
-  const style = {
-    "--machine-rows": tracks.join(" "),
-    "--machine-band": `${first} / ${filler + 1}`,
+  return {
+    style: { "--machine-rows": tracks.join(" "), "--machine-band": `${first} / ${filler + 1}` },
+    band: bandSpacing(from, start),
   };
-  const band =
-    from.block === "title"
-      ? from.part === 0
-        ? styles.bandTitle
-        : styles.bandLaterTitle
-      : from.block === 0
-        ? styles.bandFirst
-        : start.list === true
-          ? styles.bandList
-          : styles.bandText;
-  return (
-    <div
-      {...stylex.props(ui.container, styles.part, styles.beside, styles.machineRows)}
-      style={style}
-    >
-      {parts.map((part, index) => (
-        <>
-          <Part part={part} later={index > 0} />
-          {index === from.part && <div {...stylex.props(styles.machineBand, band)}>{machine}</div>}
-        </>
-      ))}
-    </div>
-  );
+}
+
+/** The band's top margin: on wide screens level with the title or line it starts beside. */
+function bandSpacing(from: BandStart, start: MachinePart) {
+  if (from.block === "title") return from.part === 0 ? styles.bandTitle : styles.bandLaterTitle;
+  if (from.block === 0) return styles.bandFirst;
+  return start.list === true ? styles.bandList : styles.bandText;
 }
 
 function Part({ part, later }: { part: MachinePart; later: boolean }) {
