@@ -1,4 +1,5 @@
 import { balance } from "./balance.ts";
+import { bookwheel } from "./bookwheel.ts";
 import { ledger } from "./ledger.ts";
 import type { Machine } from "./live.ts";
 import { mint } from "./mint.ts";
@@ -6,10 +7,14 @@ import { pantograph } from "./pantograph.ts";
 import { recorder } from "./recorder.ts";
 
 /** Every drawn machine's motion, by name; `machine.tsx` holds their drawings under the same names. */
-export const machines = { balance, ledger, mint, pantograph, recorder } satisfies Record<
-  string,
-  Machine
->;
+export const machines = {
+  balance,
+  bookwheel,
+  ledger,
+  mint,
+  pantograph,
+  recorder,
+} satisfies Record<string, Machine>;
 
 export type MachineName = keyof typeof machines;
 

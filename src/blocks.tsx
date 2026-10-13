@@ -2,7 +2,7 @@ import * as stylex from "@stylexjs/stylex";
 import type { ComponentChildren } from "preact";
 import type { Tag, Translator } from "./i18n.ts";
 import type { Citation, Illustration } from "./site.ts";
-import { colors, grid, leading, media, space, type, weights } from "./tokens.stylex.ts";
+import { colors, grid, media, space, weights } from "./tokens.stylex.ts";
 import { type Style, ui } from "./ui.tsx";
 import { imageSize, versioned } from "./versioned.ts";
 
@@ -15,9 +15,9 @@ import { imageSize, versioned } from "./versioned.ts";
  * characters (`ui.titleWidth`, `ui.textWidth`, `ui.prose`); cards run two or three to a row on
  * the same gutter; figures and drawn machines stand centred in the last six columns, on one axis
  * down the page, with their legends centred under them. Vertically, space grows with distance in
- * meaning, so what belongs together reads as one: a lead sits three units under
- * its title, the buttons four units under the lead, a section's content six units under its
- * intro, and one part of the page twenty units under the part before (twelve on phones).
+ * meaning, so what belongs together reads as one: a lead sits three units under its title, the
+ * buttons four units under the lead, a section's content six units under its intro, and one part
+ * of the page twelve units under the part before (eight on phones).
  */
 
 /**
@@ -299,11 +299,10 @@ export function Measure({ children }: { children: ComponentChildren }) {
 }
 
 /**
- * Where a figure stands: in the band beside an opening's or a section's text (`band`, drawn into
- * the text's height on wide screens), beside an article's text, both with their credit under
- * them, or atop a card, without.
+ * Where a figure stands: in the band beside an opening's or a section's text, drawn into the
+ * text's height on wide screens, with its credit under it; or atop a card, without.
  */
-type Placement = "band" | "beside" | "card";
+type Placement = "band" | "card";
 
 /** A `@media` rule's query alone, for an image's `sizes`. */
 const query = (rule: string) => rule.replace(/^@media /, "");
@@ -365,9 +364,8 @@ export function Figure({
     case "card":
       return picture;
     case "band":
-    case "beside":
       return (
-        <figure {...stylex.props(band && styles.fillBand)}>
+        <figure {...stylex.props(styles.fillBand)}>
           {picture}
           <figcaption {...stylex.props(ui.small, ui.note, styles.caption, styles.credit)}>
             {`${by}, `}
@@ -470,30 +468,21 @@ export function Sources({
   );
 }
 
-/**
- * A long text, a post or a legal page, in the text width under its title. A `figure` stands
- * beside the text on wide screens, its top on the text's first line, and between the title and
- * the text on narrower ones.
- */
+/** A long text, a post or a legal page, in the text width under its title. */
 export function Article({
   title,
   note,
-  figure,
   children,
 }: {
   title: ComponentChildren;
   note?: ComponentChildren;
-  figure?: ComponentChildren;
   children: ComponentChildren;
 }) {
   return (
-    <article {...stylex.props(ui.container, styles.opening, figure !== undefined && styles.beside)}>
-      <div {...stylex.props(styles.articleHead)}>
-        <h1 {...stylex.props(ui.display, ui.titleWidth)}>{title}</h1>
-        {note !== undefined && <p {...stylex.props(ui.small, ui.note, styles.lead)}>{note}</p>}
-      </div>
-      {figure !== undefined && <div {...stylex.props(styles.articleFigure)}>{figure}</div>}
-      <div {...stylex.props(ui.textWidth, styles.afterOpening, styles.articleText)}>{children}</div>
+    <article {...stylex.props(ui.container, styles.opening)}>
+      <h1 {...stylex.props(ui.display, ui.titleWidth)}>{title}</h1>
+      {note !== undefined && <p {...stylex.props(ui.small, ui.note, styles.lead)}>{note}</p>}
+      <div {...stylex.props(ui.textWidth, styles.afterOpening)}>{children}</div>
     </article>
   );
 }
@@ -578,36 +567,6 @@ const styles = stylex.create({
     minHeight: { default: null, [media.wide]: space.band },
     maxWidth: { default: "100%", [media.desktop]: grid.span6, [media.wide]: "none" },
     marginTop: { default: space.x6, [media.desktop]: space.x8, [media.wide]: 0 },
-  },
-  /** An article's title row, across all columns. */
-  articleHead: {
-    gridColumn: { default: null, [media.wide]: "1 / -1" },
-    gridRow: { default: null, [media.wide]: "1" },
-  },
-  /** An article's text, the row under its title; its own width keeps it clear of the figure. */
-  articleText: {
-    gridColumn: { default: null, [media.wide]: "1 / -1" },
-    gridRow: { default: null, [media.wide]: "2" },
-  },
-  /**
-   * In the text's row on wide screens, its top on the capitals of the text's first line: as far
-   * under the title as the text, plus half the leading of running text (`ui.prose`, 18px on 28px)
-   * that sits above them. Between the title and the text on narrower screens.
-   */
-  articleFigure: {
-    gridColumn: { default: null, [media.wide]: "9 / -1" },
-    gridRow: { default: null, [media.wide]: "2" },
-    alignSelf: "start",
-    maxWidth: {
-      default: "100%",
-      [media.desktop]: grid.span6,
-      [media.wide]: "none",
-    },
-    marginTop: {
-      default: space.x6,
-      [media.desktop]: space.x8,
-      [media.wide]: `calc(${space.x8} + (${leading.x3_5} - ${type.prose}) / 2)`,
-    },
   },
   /** A machine section's rows on wide screens, set per section (`MachineSection`). */
   machineRows: { gridTemplateRows: { default: null, [media.wide]: "var(--machine-rows)" } },

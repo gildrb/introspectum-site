@@ -381,6 +381,11 @@
     "description": "Caption of the Software Factory's figure, a drawn mint, beside 'How it works': what its three main parts stand for. Keep it one short line.",
     "maxLength": 100
   },
+  "bookwheel_caption": {
+    "message": "One reader, every source in turn: we read before we built.",
+    "description": "Caption of the About page's figure beside 'Research': a drawn book wheel (Ramelli, 1588) turning many books past one reader. Keep it one short line.",
+    "maxLength": 80
+  },
   "balance_caption": {
     "message": "Each piece is weighed against what it must be, under glass.",
     "description": "Caption of the homepage's opening figure, a drawn assay balance in a glass case. Keep it one short line.",

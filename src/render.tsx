@@ -15,11 +15,12 @@ import {
 } from "./locale.ts";
 import type { ShareCard } from "./og.tsx";
 import { BlogPage, PostPage } from "./pages/blog.tsx";
+import { AboutPage } from "./pages/about.tsx";
 import { DocPage, JoinedPage, NotFoundPage } from "./pages/doc.tsx";
 import { Home } from "./pages/home.tsx";
 import { JoinPage } from "./pages/join.tsx";
 import { ProductPage, ProductsPage } from "./pages/products.tsx";
-import { authors, illustrations, products } from "./site.ts";
+import { authors, products } from "./site.ts";
 
 // For the build (`vite.config.ts`): share images first, since the pages link them by stamped
 // names, then the pages, then the stamped copies of `public/` files the pages named.
@@ -137,11 +138,10 @@ const routes: readonly Route[] = [
       title: translators[locale].text("about_share_title"),
     }),
     build: (props) => (
-      <DocPage
+      <AboutPage
         {...props}
         doc={docs[props.locale].about}
         description={translators[props.locale].text("home_who_text")}
-        illustration={illustrations.tabula}
       />
     ),
   }),

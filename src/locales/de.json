@@ -291,6 +291,10 @@
     "source": "The press is the model, the sealed weight the specification, the balance the proof.",
     "message": "Die Presse ist das Modell, das versiegelte Gewicht die Spezifikation, die Waage der Beweis."
   },
+  "bookwheel_caption": {
+    "source": "One reader, every source in turn: we read before we built.",
+    "message": "Ein Leser, jede Quelle der Reihe nach: erst gelesen, dann gebaut."
+  },
   "balance_caption": {
     "source": "Each piece is weighed against what it must be, under glass.",
     "message": "Jedes Stück wird unter Glas gegen das gewogen, was es sein muss."

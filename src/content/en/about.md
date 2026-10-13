@@ -12,18 +12,18 @@ We studied the problem: we read 17 industry reports & interviewed 15 engineers, 
 
 The idea goes back to Fabian Klopfer’s work on graph databases at the University of Konstanz, where he wrote his bachelor’s thesis on inferring type hierarchies in property graph databases.
 
+## Publications
+
+- Baltabayev et al.: [Virtual Reality for Sensor Data Visualization and Analysis](https://doi.org/10.2352/ISSN.2470-1173.2018.03.ERVR-451). Electronic Imaging, 2018.
+- Layer et al.: [Axonopathy and altered synaptic development in early hippocampal epileptogenesis of Dravet syndrome](https://doi.org/10.1101/2023.10.04.560735). bioRxiv, 2023.
+
 ## Team
 
 **Fabian Klopfer**, Managing Director. Computer scientist (M.Sc., University of Konstanz) & neuroscientist (M.Sc., University of Tübingen). Previously a software engineer in Db2 development at IBM Germany Research & Development. Earlier research at the University of Konstanz, the Max Planck Institute for Biological Cybernetics, OpenCog & Hanson Robotics.
 
 **Marc Gsell**, ERP & CRM, infrastructure. Previously head of engineering for a team of 70.
 
-**Gil Rodrigues**, Founding Designer: [gildrb.com](https://gildrb.com).
-
-## Publications
-
-- Baltabayev et al.: [Virtual Reality for Sensor Data Visualization and Analysis](https://doi.org/10.2352/ISSN.2470-1173.2018.03.ERVR-451). Electronic Imaging, 2018.
-- Layer et al.: [Axonopathy and altered synaptic development in early hippocampal epileptogenesis of Dravet syndrome](https://doi.org/10.1101/2023.10.04.560735). bioRxiv, 2023.
+**Gil Rodrigues**, Founding Designer. Designed the local AI plugin for Omarchy; his posts about it reached more than a million impressions on X within a month. Previously worked for EXO Labs. He also designed the brand & website of Local Studio, which runs AI privately on your Mac, & has designed logos, identities & typefaces since 2018: [gildrb.com](https://gildrb.com).
 
 ## Contact
 
