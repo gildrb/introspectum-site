@@ -1,4 +1,7 @@
-import { animate, inView } from "motion";
+import { inView } from "motion";
+// The browser's own animations (WAAPI), without Motion's JavaScript engine: a fraction of the code,
+// so the cards' script never competes with the page's fonts for the first paint.
+import { animate } from "motion/mini";
 
 /**
  * The homepage's measurement cards (`data-stat-card`) come into sight as the reader reaches them,
@@ -22,31 +25,12 @@ export const riseEvent = "statrise";
 
 /**
  * One second per card on CSS `ease`, as the opening (`Hero`); cards 150 ms apart. A card rises
- * once a quarter of it is in view, and waits for its figures a third of a second at most.
+ * once a quarter of it is in view, and waits for its figures a third of a second at most. The
+ * stylesheet's own fallback (`stat-cards.css`) rises the same way.
  */
 const entrance = { rise: 1, stagger: 0.15, wait: 0.3, ease: [0.25, 0.1, 0.25, 1] } as const;
 
-/**
- * How long the stylesheet waits for this script, in milliseconds, before it brings the cards in
- * by itself, with the same rise and stagger and real values standing still.
- */
-const patience = 3000;
-
-/**
- * The stylesheet the homepage carries for its cards: served, they wait out of sight for this
- * script. Without JavaScript (`noscriptCss`) and with reduced motion they stand there from the
- * start; if this script is later than `patience`, the stylesheet brings them in itself, the same
- * way. Either way a card rises; it never pops into sight.
- */
-export const pendingCss = [
-  "@keyframes stat-rise{from{opacity:0;transform:translateY(16px);filter:blur(10px)}to{opacity:1;transform:none;filter:none}}",
-  `[data-stat-card]{animation:stat-rise ${entrance.rise}s cubic-bezier(${entrance.ease.join(",")}) ${patience}ms both}`,
-  ...[1, 2, 3].map(
-    (step) =>
-      `[data-stat-card]:nth-child(${step + 1}){animation-delay:${patience + step * entrance.stagger * 1000}ms}`,
-  ),
-  "@media (prefers-reduced-motion:reduce){[data-stat-card]{animation:none}}",
-].join("");
+/** Without JavaScript the cards stand there from the start (`stat-cards.css` holds the rest). */
 export const noscriptCss = "[data-stat-card]{animation:none}";
 
 /** Takes the cards over from the stylesheet and brings each in as the reader reaches it. */
@@ -97,15 +81,18 @@ function rise(card: HTMLElement, order: number): void {
   card.dispatchEvent(new CustomEvent<number>(riseEvent, { detail: delay }));
   const rising = animate(
     card,
-    { opacity: [0, 1], y: [16, 0], filter: ["blur(10px)", "blur(0px)"] },
+    {
+      opacity: [0, 1],
+      transform: ["translateY(16px)", "none"],
+      filter: ["blur(10px)", "blur(0px)"],
+    },
     { duration: entrance.rise, delay, ease: entrance.ease },
   );
-  // Settled, the card keeps no trace of its entrance: no blur layer, no transform. Motion writes
-  // the final values as it finishes, so they go a frame later.
-  void rising.finished.then(() =>
-    requestAnimationFrame(() => {
-      card.style.removeProperty("filter");
-      card.style.removeProperty("transform");
-    }),
-  );
+  // Settled, the card stays in sight and keeps no trace of its entrance: no blur layer, no
+  // transform.
+  void rising.finished.then(() => {
+    card.style.opacity = "1";
+    card.style.removeProperty("filter");
+    card.style.removeProperty("transform");
+  });
 }

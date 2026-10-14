@@ -1,6 +1,7 @@
 import * as Select from "@radix-ui/react-select";
 import * as stylex from "@stylexjs/stylex";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useLayoutEffect, useRef, useState } from "preact/hooks";
+import { useHydrated } from "./hydrated.ts";
 import { isLocale, type Locale } from "../locale.ts";
 import {
   type InquiryTopic,
@@ -71,13 +72,11 @@ export function Contact({ locale, text, topics }: ContactProps) {
   const [state, setState] = useState<State>({ $: "idle" });
   const [team, setTeam] = useState<TeamSize | "">("");
   const [topic, setTopic] = useState<InquiryTopic | "">("");
-  // The browser's lists until hydration, so the first render matches the server's; Radix's after.
-  const [hydrated, setHydrated] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
 
-  // After hydration: keep what was chosen in the browser's lists before it, else the topic the
-  // link named, which the server cannot see.
-  useEffect(() => {
+  // On hydration, while the browser's lists are still in place: keep what was chosen in them
+  // before it, else the topic the link named, which the server cannot see.
+  useLayoutEffect(() => {
     const chosen = (name: string) => {
       const list = formRef.current?.elements.namedItem(name);
       return list instanceof HTMLSelectElement ? list.value : "";
@@ -88,8 +87,10 @@ export function Contact({ locale, text, topics }: ContactProps) {
     const requested = new URLSearchParams(window.location.search).get("topic") ?? "";
     if (isInquiryTopic(picked)) setTopic(picked);
     else if (isInquiryTopic(requested)) setTopic(requested);
-    setHydrated(true);
   }, []);
+  // The browser's lists until hydration, so the first render matches the server's; Radix's after.
+  // After the effect above, so it reads the browser's lists before they change.
+  const hydrated = useHydrated();
 
   async function submit(form: HTMLFormElement) {
     setState({ $: "sending" });

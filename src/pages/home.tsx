@@ -16,7 +16,8 @@ import {
 import { type MessageId, type NumberPart, type Translator, translators } from "../i18n.ts";
 import { Island } from "../island.tsx";
 import { Stat } from "../islands/stat.tsx";
-import { noscriptCss, pendingCss } from "../stat-cards.ts";
+import pendingCss from "../stat-cards.css?inline";
+import { noscriptCss } from "../stat-cards.ts";
 import { Machine } from "../figures/machine.tsx";
 import { type Assets, Page } from "../layout.tsx";
 import { href, type Locale, localeInfo, locales } from "../locale.ts";

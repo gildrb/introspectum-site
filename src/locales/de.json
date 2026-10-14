@@ -215,6 +215,10 @@
     "source": "This page in {language}",
     "message": "Diese Seite auf {language}"
   },
+  "language_code_switch": {
+    "source": "{code}: this page in {language}",
+    "message": "{code}: diese Seite auf {language}"
+  },
   "cite_label": {
     "source": "Source {number}",
     "message": "Quelle {number}"

@@ -47,51 +47,18 @@ export function Hero({
   reveal?: boolean;
   children?: ComponentChildren;
 }) {
-  // Each title word with where it starts in the title, which keys it.
-  let at = 0;
-  const words =
-    reveal && typeof title === "string"
-      ? title.split(" ").map((word) => {
-          const start = at;
-          at += word.length + 1;
-          return { word, start };
-        })
-      : null;
+  const beside = figure !== undefined;
   return (
     <header
       {...stylex.props(
         ui.container,
         styles.opening,
-        figure !== undefined && styles.beside,
+        beside && styles.beside,
         stage && styles.stage,
       )}
     >
       <div {...stylex.props(styles.besideText, stage && styles.stageText)}>
-        <h1
-          {...stylex.props(
-            ui.display,
-            ui.titleWidth,
-            figure !== undefined && styles.besideTitle,
-            reveal && words === null && styles.reveal,
-          )}
-        >
-          {words === null
-            ? title
-            : words.map(({ word, start }, index) => (
-                <Fragment key={start}>
-                  {index > 0 && " "}
-                  <span
-                    {...stylex.props(
-                      styles.reveal,
-                      styles.word,
-                      styles.revealAfter(reveals.start + index * reveals.word),
-                    )}
-                  >
-                    {word}
-                  </span>
-                </Fragment>
-              ))}
-        </h1>
+        <HeroTitle title={title} beside={beside} reveal={reveal} />
         {lead !== undefined && (
           <p
             {...stylex.props(
@@ -119,10 +86,52 @@ export function Hero({
           </div>
         )}
       </div>
-      {figure !== undefined && (
+      {beside && (
         <div {...stylex.props(styles.besideFigure, stage && styles.stageFigure)}>{figure}</div>
       )}
     </header>
+  );
+}
+
+/**
+ * An opening's title. Revealed, a plain-text title rises word by word, each word keyed by where it
+ * starts in the title; any other title rises as one.
+ */
+function HeroTitle({
+  title,
+  beside,
+  reveal,
+}: {
+  title: ComponentChildren;
+  beside: boolean;
+  reveal: boolean;
+}) {
+  const style = [ui.display, ui.titleWidth, beside && styles.besideTitle];
+  if (!reveal) return <h1 {...stylex.props(style)}>{title}</h1>;
+  if (typeof title !== "string") return <h1 {...stylex.props(style, styles.reveal)}>{title}</h1>;
+  let at = 0;
+  const words = title.split(" ").map((word) => {
+    const start = at;
+    at += word.length + 1;
+    return { word, start };
+  });
+  return (
+    <h1 {...stylex.props(style)}>
+      {words.map(({ word, start }, index) => (
+        <Fragment key={start}>
+          {index > 0 && " "}
+          <span
+            {...stylex.props(
+              styles.reveal,
+              styles.word,
+              styles.revealAfter(reveals.start + index * reveals.word),
+            )}
+          >
+            {word}
+          </span>
+        </Fragment>
+      ))}
+    </h1>
   );
 }
 

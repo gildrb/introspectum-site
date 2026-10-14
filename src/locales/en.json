@@ -281,6 +281,11 @@
     "description": "Accessible name of the link to the same page in another language. {language} is that language's own name, e.g. Deutsch.",
     "maxLength": 48
   },
+  "language_code_switch": {
+    "message": "{code}: this page in {language}",
+    "description": "Accessible name of the header's language code link (EN, DE). {code} is the code the link shows; {language} is that language's name in the page's language.",
+    "maxLength": 48
+  },
   "cite_label": {
     "message": "Source {number}",
     "description": "Accessible name of a source's number after a claim; the number links to the source in the page's list of sources.",

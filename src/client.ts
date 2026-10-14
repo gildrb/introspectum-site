@@ -103,10 +103,10 @@ if (document.readyState === "loading") {
 // the logo opens the browser's own menu.
 const islands = Array.from(document.querySelectorAll<HTMLElement>("[data-island]"));
 // The homepage's figures were hydrated with their cards, above.
-const later = islands.filter((element) => element.dataset.island === "logo");
 const now = islands.filter(
-  (element) => !later.includes(element) && element.dataset.island !== "stat",
+  (element) => element.dataset.island !== "logo" && element.dataset.island !== "stat",
 );
+const later = islands.filter((element) => element.dataset.island === "logo");
 if (now.length > 0) void hydrateIslands(now);
 if (later.length > 0) whenIdle(() => void hydrateIslands(later));
 

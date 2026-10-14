@@ -45,7 +45,7 @@ const rollLength = 1400;
 export function Stat({ locale, parts }: StatProps) {
   const root = useRef<HTMLSpanElement>(null);
   const [phase, setPhase] = useState<Phase>({ $: "Served" });
-  const format = new Intl.NumberFormat(localeInfo[locale].tag);
+  const format = formats[locale];
 
   useLayoutEffect(() => {
     const card = root.current?.closest<HTMLElement>("[data-stat-card]");
@@ -73,7 +73,7 @@ export function Stat({ locale, parts }: StatProps) {
 
   return (
     <span ref={root}>
-      {parts.map((part, index) => {
+      {keyed(parts).map(({ part, key }) => {
         switch (part.$) {
           case "Text":
             return part.text;
@@ -81,7 +81,7 @@ export function Stat({ locale, parts }: StatProps) {
             // A screen reader always hears the real value, whatever the digits show.
             return (
               <Numbers
-                key={index}
+                key={key}
                 value={zero ? 0 : part.value}
                 // At zero, every column the value needs shows a 0, so each one turns up to its
                 // digit, as on an odometer, rather than new columns simply appearing.
@@ -100,6 +100,25 @@ export function Stat({ locale, parts }: StatProps) {
       })}
     </span>
   );
+}
+
+/** Each language's plain number format, made once. */
+const formats: Readonly<Record<Locale, Intl.NumberFormat>> = {
+  en: new Intl.NumberFormat(localeInfo.en.tag),
+  de: new Intl.NumberFormat(localeInfo.de.tag),
+};
+
+/**
+ * Each part with a key: where it starts in the measurement as written, which no two parts share
+ * and which stays put, as the parts never move.
+ */
+function keyed(parts: readonly NumberPart[]): { part: NumberPart; key: string }[] {
+  let at = 0;
+  return parts.map((part) => {
+    const key = `at-${at}`;
+    at += part.$ === "Text" ? part.text.length : String(part.value).length;
+    return { part, key };
+  });
 }
 
 /** The real values' format: the locale's plain one. */

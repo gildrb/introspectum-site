@@ -1,0 +1,41 @@
+/*
+ * The homepage's measurement cards, as served: out of sight, waiting for `stat-cards.ts` to bring
+ * each in as the reader reaches it. If the script is 3 s late, this sheet brings them in itself:
+ * the same rise as the script's (1 s on CSS `ease`, out of a 10px blur), 150 ms apart, figures at
+ * their real values. Without JavaScript (`noscriptCss`) and with reduced motion they stand there
+ * from the start. Either way a card rises; it never pops into sight.
+ */
+@keyframes stat-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+[data-stat-card] {
+  animation: stat-rise 1s cubic-bezier(0.25, 0.1, 0.25, 1) 3000ms both;
+}
+
+[data-stat-card]:nth-child(2) {
+  animation-delay: 3150ms;
+}
+
+[data-stat-card]:nth-child(3) {
+  animation-delay: 3300ms;
+}
+
+[data-stat-card]:nth-child(4) {
+  animation-delay: 3450ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-stat-card] {
+    animation: none;
+  }
+}

@@ -1,6 +1,7 @@
 import * as Checkbox from "@radix-ui/react-checkbox";
 import * as stylex from "@stylexjs/stylex";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useLayoutEffect, useRef, useState } from "preact/hooks";
+import { useHydrated } from "./hydrated.ts";
 import { isLocale, type Locale } from "../locale.ts";
 import { isProductSlug, type ProductSlug } from "../site.ts";
 import { colors, fontFeatures, leading, media, space, stroke } from "../tokens.stylex.ts";
@@ -47,17 +48,17 @@ type State = { $: "idle" } | { $: "sending" } | { $: "joined" } | { $: "failed";
 export function Waitlist({ product, locale, text }: WaitlistProps) {
   const [state, setState] = useState<State>({ $: "idle" });
   const [consent, setConsent] = useState(false);
-  // The browser's checkbox until hydration, so the first render matches the server's; Radix's after.
-  const [hydrated, setHydrated] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const box = useRef<HTMLButtonElement>(null);
 
-  // After hydration: keep a tick given before it.
-  useEffect(() => {
+  // On hydration, while the browser's checkbox is still in place: keep a tick given before it.
+  useLayoutEffect(() => {
     const given = formRef.current?.elements.namedItem("consent");
     if (given instanceof HTMLInputElement) setConsent(given.checked);
-    setHydrated(true);
   }, []);
+  // The browser's checkbox until hydration, so the first render matches the server's; Radix's
+  // after. After the effect above, so it reads the browser's box before it changes.
+  const hydrated = useHydrated();
 
   async function submit(form: HTMLFormElement) {
     setState({ $: "sending" });

@@ -418,7 +418,11 @@ function LanguageSwitch({ meta }: { meta: Meta }) {
             href={meta.alternates?.[code] ?? href(code, "home")}
             hreflang={code}
             lang={code}
-            aria-label={t.text("language_switch", { language: t.language(code) })}
+            // Starts with the code it shows, so voice control finds it by what it says.
+            aria-label={t.text("language_code_switch", {
+              code: code.toUpperCase(),
+              language: t.language(code),
+            })}
           >
             {code.toUpperCase()}
           </a>
