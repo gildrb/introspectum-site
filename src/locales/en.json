@@ -661,8 +661,8 @@
     "description": "Founding engineer: the focus of the role."
   },
   "role_founding_engineer_status": {
-    "message": "We do not hire for this role yet. We read every application now & talk to exceptional people right away.",
-    "description": "Founding engineer: hiring status. Exceptional applicants are screened now."
+    "message": "Apply now: we read every application ourselves & talk to strong candidates right away. When the role opens, we start with the people we already know.",
+    "description": "Founding engineer: an invitation to apply now. The role is not open yet, so the text says what happens when it opens, without saying 'we are not hiring'."
   },
   "role_founding_engineer_work_label": {
     "message": "You would work on",
