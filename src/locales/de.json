@@ -89,7 +89,7 @@
   },
   "illustration_playfair_alt": {
     "source": "William Playfair’s line chart of England’s trade with Denmark & Norway: exports & imports as two lines that cross where the balance turns.",
-    "message": "William Playfairs Liniendiagramm des englischen Handels mit Dänemark & Norwegen: Ausfuhren & Einfuhren als zwei Linien, die sich dort kreuzen, wo sich die Handelsbilanz umkehrt."
+    "message": "William Playfairs Liniendiagramm des englischen Handels mit Dänemark und Norwegen: Ausfuhren und Einfuhren als zwei Linien, die sich dort kreuzen, wo sich die Handelsbilanz umkehrt."
   },
   "illustration_euclid_alt": {
     "source": "Euclid’s figure for the theorem of Pythagoras: a right triangle with a square on each side, crossed by the lines of the proof.",
@@ -105,11 +105,11 @@
   },
   "home_description": {
     "source": "Introspectum builds software you can check: a verified software factory, an open-data ERP & CRM, & research in systematic trading.",
-    "message": "Introspectum entwickelt prüfbare Software: eine verifizierte Software Factory, ein ERP & CRM mit offenen Daten & Forschung zum systematischen Börsenhandel."
+    "message": "Introspectum entwickelt prüfbare Software: eine verifizierte Software Factory, ein ERP & CRM mit offenen Daten und Forschung zum systematischen Börsenhandel."
   },
   "home_lead": {
     "source": "We build tools that trace code to its requirements & prove it correct where it matters, so teams can write code with AI & still stand behind it.",
-    "message": "Wir bauen Werkzeuge, die Code bis zu seinen Anforderungen zurückverfolgen & seine Korrektheit beweisen, wo es darauf ankommt. So können Teams Code mit KI schreiben & trotzdem dafür geradestehen."
+    "message": "Wir bauen Werkzeuge, die Code bis zu seinen Anforderungen zurückverfolgen und seine Korrektheit beweisen, wo es darauf ankommt. So können Teams Code mit KI schreiben und trotzdem dafür geradestehen."
   },
   "home_cta_products": {
     "source": "See the products",
@@ -121,15 +121,15 @@
   },
   "home_why_evidence": {
     "source": "<sonar>{distrust, number, ::percent} of developers do not fully trust AI-generated code, & only {verify, number, ::percent} always check it before they commit.</sonar>",
-    "message": "<sonar>{distrust, number, ::percent} der Entwicklerinnen & Entwickler vertrauen KI-generiertem Code nicht vollständig, & nur {verify, number, ::percent} prüfen ihn immer, bevor sie ihn einchecken.</sonar>"
+    "message": "<sonar>{distrust, number, ::percent} der Entwicklerinnen und Entwickler vertrauen KI-generiertem Code nicht vollständig, und nur {verify, number, ::percent} prüfen ihn immer, bevor sie ihn einchecken.</sonar>"
   },
   "home_why_review": {
     "source": "Review is harder, too: <sonar>{effort, number, ::percent} say that AI-generated code takes more effort to review than code written by their colleagues.</sonar>",
-    "message": "Auch die Prüfung ist aufwendiger: <sonar>{effort, number, ::percent} sagen, dass KI-generierter Code mehr Prüfaufwand verursacht als Code ihrer Kolleginnen & Kollegen.</sonar>"
+    "message": "Auch die Prüfung ist aufwendiger: <sonar>{effort, number, ::percent} sagen, dass KI-generierter Code mehr Prüfaufwand verursacht als Code ihrer Kolleginnen und Kollegen.</sonar>"
   },
   "home_why_text": {
     "source": "We build software that is checked instead of trusted: traced from requirement to code, proven where it matters, & open to the people who answer for it.",
-    "message": "Wir bauen Software, die man prüft, statt ihr zu vertrauen: von der Anforderung bis zum Code nachvollziehbar, bewiesen, wo es darauf ankommt, & offen für die Menschen, die für sie geradestehen."
+    "message": "Wir bauen Software, die man prüft, statt ihr zu vertrauen: von der Anforderung bis zum Code nachvollziehbar, bewiesen, wo es darauf ankommt, und offen für die Menschen, die für sie geradestehen."
   },
   "home_what_label": {
     "source": "What we build",
@@ -149,7 +149,7 @@
   },
   "home_who_text": {
     "source": "Introspectum Limited is registered in the Isle of Man & led by Fabian Klopfer, a computer scientist & former software engineer at IBM Germany Research & Development.",
-    "message": "Introspectum Limited ist auf der Isle of Man registriert & wird von Fabian Klopfer geleitet, einem Informatiker & früheren Softwareentwickler bei IBM Deutschland Research & Development."
+    "message": "Introspectum Limited ist auf der Isle of Man registriert und wird von Fabian Klopfer geleitet, einem Informatiker und früheren Softwareentwickler bei IBM Deutschland Research & Development."
   },
   "home_who_more": {
     "source": "Read about us",
@@ -221,7 +221,7 @@
   },
   "principle_data_text": {
     "source": "Each customer gets its own installation, & all data stays in open formats in one place.",
-    "message": "Jeder Kunde erhält eine eigene Installation, & alle Daten bleiben in offenen Formaten an einem Ort."
+    "message": "Jeder Kunde erhält eine eigene Installation, und alle Daten bleiben in offenen Formaten an einem Ort."
   },
   "principle_traceability": {
     "source": "Traceability from requirement to code",
@@ -229,7 +229,7 @@
   },
   "principle_traceability_text": {
     "source": "Requirements, design, tests & bug reports, each linked to the code it concerns.",
-    "message": "Anforderungen, Entwurf, Tests & Fehlerberichte, jeweils verknüpft mit dem Code, den sie betreffen."
+    "message": "Anforderungen, Entwurf, Tests und Fehlerberichte, jeweils verknüpft mit dem Code, den sie betreffen."
   },
   "consulting_name": {
     "source": "Consulting",
@@ -241,7 +241,7 @@
   },
   "consulting_what": {
     "source": "Until our products ship, we help companies bring AI into their software development & set up CRM & ERP.",
-    "message": "Bis unsere Produkte erscheinen, helfen wir Unternehmen, KI in ihre Softwareentwicklung einzuführen & CRM & ERP einzurichten."
+    "message": "Bis unsere Produkte erscheinen, helfen wir Unternehmen, KI in ihre Softwareentwicklung einzuführen und CRM & ERP einzurichten."
   },
   "consulting_audience": {
     "source": "For companies that want to use AI without losing control of their code or their data.",
@@ -333,39 +333,39 @@
   },
   "product_software_factory_what": {
     "source": "Builds one graph from your code & documents, lets AI agents work on it, & checks their changes with formal verification.",
-    "message": "Baut aus Ihrem Code & Ihren Dokumenten einen Graphen, lässt KI-Agenten darauf arbeiten & prüft ihre Änderungen mit formaler Verifikation."
+    "message": "Baut aus Ihrem Code und Ihren Dokumenten einen Graphen, lässt KI-Agenten darauf arbeiten und prüft ihre Änderungen mit formaler Verifikation."
   },
   "product_software_factory_audience": {
     "source": "For software teams that use AI to write code & must stand behind it, starting with startups & small IT companies.",
-    "message": "Für Softwareteams, die Code mit KI schreiben & dafür geradestehen müssen, zuerst für Start-ups & kleine IT-Unternehmen."
+    "message": "Für Softwareteams, die Code mit KI schreiben und dafür geradestehen müssen, zuerst für Start-ups und kleine IT-Unternehmen."
   },
   "product_software_factory_how_1": {
     "source": "The Software Factory reads your code & its documents into one graph: requirements, design, tests, bug reports & analysis results, each linked to the code it concerns. The graph builds on the <cpg>code property graph</cpg>, which joins the syntax, control flow & data flow of a program. You see it as architecture maps in the <c4>C4 model</c4>, from the whole system down to single functions.",
-    "message": "Die Software Factory liest Ihren Code & die zugehörigen Dokumente in einen Graphen ein: Anforderungen, Entwurf, Tests, Fehlerberichte & Analyseergebnisse, jeweils verknüpft mit dem Code, den sie betreffen. Der Graph baut auf dem <cpg>Code-Property-Graph</cpg> auf, der Syntax, Kontrollfluss & Datenfluss eines Programms verbindet. Sie sehen ihn als Architekturkarten nach dem <c4>C4-Modell</c4>, vom ganzen System bis zu einzelnen Funktionen."
+    "message": "Die Software Factory liest Ihren Code und die zugehörigen Dokumente in einen Graphen ein: Anforderungen, Entwurf, Tests, Fehlerberichte und Analyseergebnisse, jeweils verknüpft mit dem Code, den sie betreffen. Der Graph baut auf dem <cpg>Code-Property-Graph</cpg> auf, der Syntax, Kontrollfluss und Datenfluss eines Programms verbindet. Sie sehen ihn als Architekturkarten nach dem <c4>C4-Modell</c4>, vom ganzen System bis zu einzelnen Funktionen."
   },
   "product_software_factory_how_2": {
     "source": "On top of the graph, AI agents work in steps modelled on <iso-15288>ISO/IEC/IEEE 15288</iso-15288>, the standard for system life cycle processes. A language model writes only what a proof can check: function bodies, against specifications that people approve. Skeletons, tests & documents come from the graph without a model, the same way every time.",
-    "message": "Auf dem Graphen arbeiten KI-Agenten in Schritten nach <iso-15288>ISO/IEC/IEEE 15288</iso-15288>, der Norm für Prozesse im Systemlebenszyklus. Ein Sprachmodell schreibt nur, was ein Beweis prüfen kann: Funktionsrümpfe zu Spezifikationen, die Menschen freigeben. Codegerüste, Tests & Dokumente entstehen ohne Modell aus dem Graphen, jedes Mal auf dieselbe Weise."
+    "message": "Auf dem Graphen arbeiten KI-Agenten in Schritten nach <iso-15288>ISO/IEC/IEEE 15288</iso-15288>, der Norm für Prozesse im Systemlebenszyklus. Ein Sprachmodell schreibt nur, was ein Beweis prüfen kann: Funktionsrümpfe zu Spezifikationen, die Menschen freigeben. Codegerüste, Tests und Dokumente entstehen ohne Modell aus dem Graphen, jedes Mal auf dieselbe Weise."
   },
   "product_software_factory_how_3": {
     "source": "Formal verification checks each function against its specification, with the <prusti>Prusti</prusti> & <verus>Verus</verus> verifiers. When a proof or a test fails, the counterexample goes back to the model, until both pass or a person takes over. Every step leaves an audit trail.",
-    "message": "Formale Verifikation prüft jede Funktion gegen ihre Spezifikation, mit den Verifizierern <prusti>Prusti</prusti> & <verus>Verus</verus>. Schlägt ein Beweis oder ein Test fehl, geht das Gegenbeispiel zurück an das Modell, bis beide bestehen oder ein Mensch übernimmt. Jeder Schritt hinterlässt einen Prüfpfad."
+    "message": "Formale Verifikation prüft jede Funktion gegen ihre Spezifikation, mit den Verifizierern <prusti>Prusti</prusti> und <verus>Verus</verus>. Schlägt ein Beweis oder ein Test fehl, geht das Gegenbeispiel zurück an das Modell, bis beide bestehen oder ein Mensch übernimmt. Jeder Schritt hinterlässt einen Prüfpfad."
   },
   "product_software_factory_state_1": {
     "source": "It reads Rust, C & TypeScript. On {date, date, long}, it read its own code, {ownFiles, number} Rust files, into a graph of {ownNodes, number} nodes in {ownSeconds, number} seconds, & the {otherFiles, number} files of <ripgrep>ripgrep</ripgrep> into {otherNodes, number} nodes in {otherSeconds, number} seconds. Repeated runs on the same code gave the same result.",
-    "message": "Sie liest Rust, C & TypeScript. Am {date, date, long} las sie ihren eigenen Code, {ownFiles, number} Rust-Dateien, in {ownSeconds, number} Sekunden in einen Graphen mit {ownNodes, number} Knoten ein, & die {otherFiles, number} Dateien von <ripgrep>ripgrep</ripgrep> in {otherSeconds, number} Sekunden in {otherNodes, number} Knoten. Wiederholte Läufe mit demselben Code ergaben dasselbe Ergebnis."
+    "message": "Sie liest Rust, C und TypeScript. Am {date, date, long} las sie ihren eigenen Code, {ownFiles, number} Rust-Dateien, in {ownSeconds, number} Sekunden in einen Graphen mit {ownNodes, number} Knoten ein, und die {otherFiles, number} Dateien von <ripgrep>ripgrep</ripgrep> in {otherSeconds, number} Sekunden in {otherNodes, number} Knoten. Wiederholte Läufe mit demselben Code ergaben dasselbe Ergebnis."
   },
   "product_software_factory_state_2": {
     "source": "Verification runs end to end with Prusti & Verus, so far on small programs such as a ring buffer & the alarm logic of a smoke detector.",
-    "message": "Die Verifikation läuft durchgängig mit Prusti & Verus, bisher an kleinen Programmen wie einem Ringpuffer & der Alarmlogik eines Rauchmelders."
+    "message": "Die Verifikation läuft durchgängig mit Prusti und Verus, bisher an kleinen Programmen wie einem Ringpuffer und der Alarmlogik eines Rauchmelders."
   },
   "product_software_factory_state_3": {
     "source": "For an audit, it exports a traceability matrix & a safety case in the <gsn>Goal Structuring Notation</gsn>. It issues a certificate only when the verifiers ran, every proof obligation holds, every test passes & every requirement is traced.",
-    "message": "Für ein Audit exportiert sie eine Rückverfolgbarkeitsmatrix & einen Sicherheitsnachweis in der <gsn>Goal Structuring Notation</gsn>. Ein Zertifikat stellt sie nur aus, wenn die Verifizierer gelaufen sind, jede Beweisverpflichtung erfüllt ist, jeder Test besteht & jede Anforderung rückverfolgt ist."
+    "message": "Für ein Audit exportiert sie eine Rückverfolgbarkeitsmatrix und einen Sicherheitsnachweis in der <gsn>Goal Structuring Notation</gsn>. Ein Zertifikat stellt sie nur aus, wenn die Verifizierer gelaufen sind, jede Beweisverpflichtung erfüllt ist, jeder Test besteht und jede Anforderung rückverfolgt ist."
   },
   "product_software_factory_state_4": {
     "source": "It reads & writes requirements in the form of <ieee-830>IEEE 830</ieee-830> & design descriptions in the form of <ieee-1016>IEEE 1016</ieee-1016>, & draws UML, SysML & Mermaid diagrams from the code.",
-    "message": "Sie liest & schreibt Anforderungen nach <ieee-830>IEEE 830</ieee-830> & Entwurfsbeschreibungen nach <ieee-1016>IEEE 1016</ieee-1016> & erzeugt aus dem Code UML-, SysML- & Mermaid-Diagramme."
+    "message": "Sie liest und schreibt Anforderungen nach <ieee-830>IEEE 830</ieee-830> und Entwurfsbeschreibungen nach <ieee-1016>IEEE 1016</ieee-1016> und erzeugt aus dem Code UML-, SysML- und Mermaid-Diagramme."
   },
   "product_software_factory_state_5": {
     "source": "Next, we build the agent process on top of it.",
@@ -373,35 +373,35 @@
   },
   "product_erp_crm_what": {
     "source": "Customers, sales, accounting & HR in one open-data system, with an AI assistant that works on the same data.",
-    "message": "Kunden, Vertrieb, Buchhaltung & Personal in einem System mit offenen Daten & einem KI-Assistenten, der mit denselben Daten arbeitet."
+    "message": "Kunden, Vertrieb, Buchhaltung und Personal in einem System mit offenen Daten und einem KI-Assistenten, der mit denselben Daten arbeitet."
   },
   "product_erp_crm_audience": {
     "source": "For small businesses that still run on paper & spreadsheets.",
-    "message": "Für kleine Unternehmen, die noch mit Papier & Tabellen arbeiten."
+    "message": "Für kleine Unternehmen, die noch mit Papier und Tabellen arbeiten."
   },
   "product_erp_crm_how_1": {
     "source": "An ERP & CRM built on <twenty>Twenty</twenty>, the open-source CRM, which we extend with accounting, tax, purchasing, sales, payments, inventory & HR.",
-    "message": "Ein ERP & CRM auf Basis von <twenty>Twenty</twenty>, dem Open-Source-CRM, das wir um Buchhaltung, Steuern, Einkauf, Vertrieb, Zahlungsverkehr, Lagerhaltung & Personalwesen erweitern."
+    "message": "Ein ERP & CRM auf Basis von <twenty>Twenty</twenty>, dem Open-Source-CRM, das wir um Buchhaltung, Steuern, Einkauf, Vertrieb, Zahlungsverkehr, Lagerhaltung und Personalwesen erweitern."
   },
   "product_erp_crm_how_2": {
     "source": "Each customer gets its own installation, & all data stays in open formats in one place. An AI assistant works on the same data as your team: it can keep records in order, prepare analyses & draft documents.",
-    "message": "Jeder Kunde erhält eine eigene Installation, & alle Daten bleiben in offenen Formaten an einem Ort. Ein KI-Assistent arbeitet mit denselben Daten wie Ihr Team: Er kann Datensätze ordnen, Analysen vorbereiten & Dokumente entwerfen."
+    "message": "Jeder Kunde erhält eine eigene Installation, und alle Daten bleiben in offenen Formaten an einem Ort. Ein KI-Assistent arbeitet mit denselben Daten wie Ihr Team: Er kann Datensätze ordnen, Analysen vorbereiten und Dokumente entwerfen."
   },
   "product_erp_crm_how_3": {
     "source": "The ledger keeps amounts as exact decimals in the minor units of <iso-4217>ISO 4217</iso-4217>, never as floating-point numbers. Both the application & the database enforce the rules of bookkeeping: a posted entry never changes, a correction is a reversal entry, & entry numbers have no gaps.",
-    "message": "Das Hauptbuch führt Beträge als exakte Dezimalzahlen in der kleinsten Währungseinheit nach <iso-4217>ISO 4217</iso-4217>, nie als Gleitkommazahlen. Sowohl die Anwendung als auch die Datenbank setzen die Regeln der Buchführung durch: Ein gebuchter Buchungssatz wird nie geändert, eine Korrektur erfolgt als Stornobuchung, & Buchungsnummern sind lückenlos."
+    "message": "Das Hauptbuch führt Beträge als exakte Dezimalzahlen in der kleinsten Währungseinheit nach <iso-4217>ISO 4217</iso-4217>, nie als Gleitkommazahlen. Sowohl die Anwendung als auch die Datenbank setzen die Regeln der Buchführung durch: Ein gebuchter Buchungssatz wird nie geändert, eine Korrektur erfolgt als Stornobuchung, und Buchungsnummern sind lückenlos."
   },
   "product_erp_crm_how_4": {
     "source": "The AI assistant reads the books through read-only database roles & cannot post to them. Every approval & every closed period is committed to a versioned archive, so each figure can be traced to who approved it & when.",
-    "message": "Der KI-Assistent liest die Bücher über Datenbankrollen mit reinem Lesezugriff & kann nicht buchen. Jede Freigabe & jede abgeschlossene Buchungsperiode wird in einem versionierten Archiv festgehalten, sodass sich bei jeder Zahl nachvollziehen lässt, wer sie wann freigegeben hat."
+    "message": "Der KI-Assistent liest die Bücher über Datenbankrollen mit reinem Lesezugriff und kann nicht buchen. Jede Freigabe und jede abgeschlossene Buchungsperiode wird in einem versionierten Archiv festgehalten, sodass sich bei jeder Zahl nachvollziehen lässt, wer sie wann freigegeben hat."
   },
   "product_erp_crm_state_1": {
     "source": "The specification has about {requirements, number} requirements in {modules, number} modules, written to <iso-29148>ISO/IEC/IEEE 29148</iso-29148>. About a quarter of them are built: the ledger & its rules, the installation per customer, the versioned archive & the assistant’s read-only access.",
-    "message": "Die Spezifikation umfasst rund {requirements, number} Anforderungen in {modules, number} Modulen, geschrieben nach <iso-29148>ISO/IEC/IEEE 29148</iso-29148>. Etwa ein Viertel davon ist umgesetzt: das Hauptbuch mit seinen Regeln, die Installation je Kunde, das versionierte Archiv & der reine Lesezugriff des Assistenten."
+    "message": "Die Spezifikation umfasst rund {requirements, number} Anforderungen in {modules, number} Modulen, geschrieben nach <iso-29148>ISO/IEC/IEEE 29148</iso-29148>. Etwa ein Viertel davon ist umgesetzt: das Hauptbuch mit seinen Regeln, die Installation je Kunde, das versionierte Archiv und der reine Lesezugriff des Assistenten."
   },
   "product_erp_crm_state_2": {
     "source": "Reports, tax returns & bank reconciliation are not built yet. Our own company is its first user.",
-    "message": "Berichte, Steuererklärungen & Bankabgleich sind noch nicht umgesetzt. Unser eigenes Unternehmen ist der erste Nutzer des Systems."
+    "message": "Berichte, Steuererklärungen und Bankabgleich sind noch nicht umgesetzt. Unser eigenes Unternehmen ist der erste Nutzer des Systems."
   },
   "product_trading_platform_what": {
     "source": "Runs trend-following strategies on many stocks at once, with reinforcement learning tuning each stock’s settings.",
@@ -409,7 +409,7 @@
   },
   "product_trading_platform_audience": {
     "source": "For investors from real estate, banking & IT who want to test a strategy before they trust it.",
-    "message": "Für Anlegerinnen & Anleger aus Immobilien, Banken & IT, die eine Strategie testen wollen, bevor sie ihr vertrauen."
+    "message": "Für Anlegerinnen und Anleger aus Immobilien, Banken und IT, die eine Strategie testen wollen, bevor sie ihr vertrauen."
   },
   "product_trading_platform_how_1": {
     "source": "The Trading Platform runs trend-following strategies, such as the <turtle>Turtle rules</turtle>, on many stocks in parallel.",
@@ -421,11 +421,11 @@
   },
   "product_trading_platform_state_1": {
     "source": "A first prototype tested trend following, mean reversion & order-flow strategies. We are now rebuilding it from the requirements & the design that prototype taught us.",
-    "message": "Ein erster Prototyp hat Strategien der Trendfolge, der Rückkehr zum Mittelwert & des Orderflows getestet. Jetzt bauen wir die Plattform neu auf, ausgehend von den Anforderungen & dem Entwurf, die wir aus diesem Prototyp gewonnen haben."
+    "message": "Ein erster Prototyp hat Strategien der Trendfolge, der Rückkehr zum Mittelwert und des Orderflows getestet. Jetzt bauen wir die Plattform neu auf, ausgehend von den Anforderungen und dem Entwurf, die wir aus diesem Prototyp gewonnen haben."
   },
   "product_trading_platform_state_2": {
     "source": "It trades on paper only, & nothing here is investment advice.",
-    "message": "Sie handelt nur simuliert, & nichts hier ist Anlageberatung."
+    "message": "Sie handelt nur simuliert, und nichts hier ist Anlageberatung."
   },
   "waitlist_label": {
     "source": "Waiting list",
@@ -453,7 +453,7 @@
   },
   "waitlist_privacy": {
     "source": "Read what we store & why in the <link>privacy policy</link>.",
-    "message": "Was wir speichern & warum, steht in der <link>Datenschutzerklärung</link>."
+    "message": "Was wir speichern und warum, steht in der <link>Datenschutzerklärung</link>."
   },
   "waitlist_submit": {
     "source": "Join the waitlist",
@@ -525,7 +525,7 @@
   },
   "join_share_title": {
     "source": "Founding engineer & internships",
-    "message": "Founding Engineer & Praktika"
+    "message": "Founding Engineer und Praktika"
   },
   "role_founding_engineer_title": {
     "source": "Founding engineer",
@@ -533,7 +533,7 @@
   },
   "role_founding_engineer_focus": {
     "source": "Formal methods & code generation.",
-    "message": "Formale Methoden & Codegenerierung."
+    "message": "Formale Methoden und Codegenerierung."
   },
   "role_founding_engineer_status": {
     "source": "Apply now: we read every application ourselves & talk to strong candidates right away. When the role opens, we start with the people we already know.",
@@ -545,7 +545,7 @@
   },
   "role_founding_engineer_work_1": {
     "source": "Formal verification of Rust code with Prusti & Verus",
-    "message": "Formale Verifikation von Rust-Code mit Prusti & Verus"
+    "message": "Formale Verifikation von Rust-Code mit Prusti und Verus"
   },
   "role_founding_engineer_work_2": {
     "source": "The agent harness that generates code from specifications",
@@ -557,7 +557,7 @@
   },
   "role_founding_engineer_work_4": {
     "source": "Connectors to GitHub & to SARIF tools",
-    "message": "Anbindungen an GitHub & an SARIF-Werkzeuge"
+    "message": "Anbindungen an GitHub und an SARIF-Werkzeuge"
   },
   "role_founding_engineer_profile_label": {
     "source": "We look for",
@@ -569,7 +569,7 @@
   },
   "role_founding_engineer_profile_2": {
     "source": "Interest in compiler construction & formal methods; experience helps but is not required",
-    "message": "Interesse an Compilerbau & formalen Methoden; Erfahrung hilft, ist aber keine Voraussetzung"
+    "message": "Interesse an Compilerbau und formalen Methoden; Erfahrung hilft, ist aber keine Voraussetzung"
   },
   "role_founding_engineer_profile_3": {
     "source": "Fluent English",
@@ -577,7 +577,7 @@
   },
   "role_founding_engineer_apply": {
     "source": "Send your CV or LinkedIn profile & links to your work to <link>{email}</link>.",
-    "message": "Senden Sie Ihren Lebenslauf oder Ihr LinkedIn-Profil & Links zu Ihren Arbeiten an <link>{email}</link>."
+    "message": "Senden Sie Ihren Lebenslauf oder Ihr LinkedIn-Profil und Links zu Ihren Arbeiten an <link>{email}</link>."
   },
   "role_founding_engineer_subject": {
     "source": "Application: founding engineer",
@@ -597,7 +597,7 @@
   },
   "role_internships_topic_1": {
     "source": "Formal verification & compilers",
-    "message": "Formale Verifikation & Compiler"
+    "message": "Formale Verifikation und Compiler"
   },
   "role_internships_topic_2": {
     "source": "AI agents",
@@ -613,7 +613,7 @@
   },
   "role_internships_apply": {
     "source": "Send your CV, the topic you want to work on & the months you are free to <link>{email}</link>.",
-    "message": "Senden Sie Ihren Lebenslauf, Ihr Wunschthema & die Monate, in denen Sie Zeit haben, an <link>{email}</link>."
+    "message": "Senden Sie Ihren Lebenslauf, Ihr Wunschthema und die Monate, in denen Sie Zeit haben, an <link>{email}</link>."
   },
   "role_internships_subject": {
     "source": "Application: internship",
@@ -625,7 +625,7 @@
   },
   "blog_intro": {
     "source": "Weekly writing on AI, software engineering & regulation.",
-    "message": "Jede Woche Neues zu KI, Softwareentwicklung & Regulierung."
+    "message": "Jede Woche Neues zu KI, Softwareentwicklung und Regulierung."
   },
   "blog_feed": {
     "source": "Follow it by <link>RSS</link>.",
@@ -653,11 +653,11 @@
   },
   "privacy_description": {
     "source": "What the Introspectum site stores, why, & your rights.",
-    "message": "Was die Website von Introspectum speichert, warum, & welche Rechte Sie haben."
+    "message": "Was die Website von Introspectum speichert, warum, und welche Rechte Sie haben."
   },
   "privacy_share_title": {
     "source": "What this site stores & why",
-    "message": "Was diese Website speichert & warum"
+    "message": "Was diese Website speichert und warum"
   },
   "imprint_description": {
     "source": "Who is responsible for the Introspectum site.",
@@ -673,7 +673,7 @@
   },
   "contact_description": {
     "source": "How to reach Introspectum: one email address for consulting, products, applications & your data.",
-    "message": "So erreichen Sie Introspectum: eine E-Mail-Adresse für Beratung, Produkte, Bewerbungen & Ihre Daten."
+    "message": "So erreichen Sie Introspectum: eine E-Mail-Adresse für Beratung, Produkte, Bewerbungen und Ihre Daten."
   },
   "contact_share_title": {
     "source": "One address for every message",

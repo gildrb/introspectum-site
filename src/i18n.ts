@@ -55,7 +55,7 @@ export type Translator = {
   rich(id: MessageId, tags: Readonly<Record<string, Tag>>, values?: Values): ComponentChildren;
   /** The name of a language, written in this one: "German" in English, "Englisch" in German. */
   language(of: Locale): string;
-  /** Items as one list, the last two joined by "&", as the brand writes it: "A, B & C". */
+  /** Items as one list. English joins the last two with "&", as the brand writes it: "A, B & C"; German with "und", which is more formal. */
   list(items: readonly string[]): string;
 };
 
@@ -95,7 +95,8 @@ function translator(locale: Locale): Translator {
       return name;
     },
     list: (items) => {
-      // The language's separators, except the one before the last item, which is always "&".
+      if (locale === "de") return lists.format(items);
+      // The language's separators, except the one before the last item, which is "&".
       const parts = lists.formatToParts(items);
       const last = parts.findLastIndex((part) => part.type === "literal");
       return parts.map((part, index) => (index === last ? " & " : part.value)).join("");
