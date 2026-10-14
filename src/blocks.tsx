@@ -511,7 +511,7 @@ export function CallToAction({
 }) {
   return (
     <section {...stylex.props(ui.container, styles.part)} aria-labelledby={id}>
-      <div {...stylex.props(styles.panel, ui.edge)}>
+      <div {...stylex.props(styles.panel)}>
         <h2 {...stylex.props(ui.heading, ui.titleWidth)} id={id}>
           {title}
         </h2>

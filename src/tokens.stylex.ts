@@ -37,17 +37,20 @@ export const fontFeatures = stylex.defineConsts({
  *
  * Every text color meets APCA's Bronze level on the page and on `surface`, the ground of cards.
  * Body text, a block of more than two lines, needs at least Lc 75: `primary` (Lc 95 light, Lc 100
- * dark), `article` (Lc 90, Lc 92) and `secondary` (Lc 81, Lc 78; on cards Lc 76, Lc 77), which
+ * dark), `article` (Lc 90, Lc 92) and `secondary` (Lc 81, Lc 78; on cards Lc 76, Lc 75.7), which
  * may run that long. Other content text, such as labels, navigation, notes and the footer, needs
- * at least Lc 60: `tertiary` (Lc 72 light, Lc 62 dark; on cards Lc 67, Lc 61), which therefore
+ * at least Lc 60: `tertiary` (Lc 72 light, Lc 62 dark; on cards Lc 67, Lc 60.2), which therefore
  * never sets running text. In light, `tertiary` also meets WCAG 2's 4.5:1 (5.3:1, on cards 4.9:1),
  * which Lighthouse checks. Buttons are ink on parchment in light and parchment on umber in dark,
  * like the text. Emerald, the brand color, stays a trace: the form's checkbox.
  */
 export const colors = stylex.defineVars({
   bg: { default: "oklch(18.5% 0.014 70)", [light]: "oklch(96% 0.02 85)" },
-  /** Cards and the form: a shade further into the paper, or the ink. */
-  surface: { default: "oklch(22.5% 0.016 70)", [light]: "oklch(93.5% 0.025 85)" },
+  /**
+   * Cards and the form: a shade further into the paper, or out of the umber. Dark is as light as
+   * `secondary` & `tertiary` allow on it (Lc 75 & Lc 60).
+   */
+  surface: { default: "oklch(26% 0.016 70)", [light]: "oklch(93.5% 0.025 85)" },
   primary: { default: "oklch(96.74% 0.022 85)", [light]: "oklch(24.9% 0.02 65)" },
   secondary: { default: "oklch(86.06% 0.03 80)", [light]: "oklch(42.55% 0.03 65)" },
   tertiary: { default: "oklch(77.62% 0.035 75)", [light]: "oklch(50.5% 0.035 70)" },
@@ -55,7 +58,8 @@ export const colors = stylex.defineVars({
   /** Emerald, the brand color, used sparingly: the form's checkbox. */
   accent: { default: "oklch(44% 0.1 160)", [light]: "oklch(40% 0.09 160)" },
   /**
-   * The edge of what stands off the page: panels, code, images and the menus. Cards have none.
+   * The edge of what stands off the page: the form, code, images and the menus. Cards and the
+   * closing panel have none.
    * Translucent, so one edge sharpens every ground it lies on. Decoration only: each reads the
    * same without it, so it may stay below APCA's Lc 15 for meaningful non-text.
    */
