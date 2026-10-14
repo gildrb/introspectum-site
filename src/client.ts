@@ -66,6 +66,13 @@ if (document.readyState === "loading") {
   await promise;
 }
 
+// The homepage's measurement cards: their entrance runs here, before the islands, so a card rises
+// as the reader reaches it however late its figures' island hydrates (`stat-cards.ts`).
+if (document.querySelector("[data-stat-card]") !== null) {
+  const { stageCards } = await import("./stat-cards.ts");
+  stageCards();
+}
+
 // The islands are server-rendered and work without JavaScript. Only pages that have one load
 // Preact & the code of the islands they have: let the first frame paint, then hydrate each one in
 // its own task with the props `Island` recorded on the server. The header logo's menu is an island

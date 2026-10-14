@@ -15,7 +15,8 @@ import {
 } from "../blocks.tsx";
 import { type MessageId, type NumberPart, type Translator, translators } from "../i18n.ts";
 import { Island } from "../island.tsx";
-import { noscriptCss, pendingCss, Stat } from "../islands/stat.tsx";
+import { Stat } from "../islands/stat.tsx";
+import { noscriptCss, pendingCss } from "../stat-cards.ts";
 import { Machine } from "../figures/machine.tsx";
 import { type Assets, Page } from "../layout.tsx";
 import { href, type Locale, localeInfo, locales } from "../locale.ts";
@@ -164,11 +165,11 @@ export function Home({
         intro={t.text("home_measured_intro", { date: graphRuns.date })}
       >
         <dl {...stylex.props(styles.stats)}>
-          {stats.map(({ id, value, label }, order) => (
-            // Held out of sight until it rises in (`pendingCss`), its figures rolling up.
+          {stats.map(({ id, value, label }) => (
+            // Held out of sight until it rises in (`stat-cards.ts`), its figures rolling up.
             <div key={id} {...stylex.props(styles.stat)} data-stat-card="">
               <dt {...stylex.props(ui.serif, styles.value)}>
-                <Island name="stat" component={Stat} props={{ locale, parts: value, order }} />
+                <Island name="stat" component={Stat} props={{ locale, parts: value }} />
               </dt>
               <dd {...stylex.props(ui.text, ui.label)}>{label}</dd>
             </div>
