@@ -165,7 +165,8 @@ export function Home({
       >
         <dl {...stylex.props(styles.stats)}>
           {stats.map(({ id, value, label }, order) => (
-            <div key={id} {...stylex.props(styles.stat)}>
+            // Held out of sight until it rises in (`pendingCss`), its figures rolling up.
+            <div key={id} {...stylex.props(styles.stat)} data-stat-card="">
               <dt {...stylex.props(ui.serif, styles.value)}>
                 <Island name="stat" component={Stat} props={{ locale, parts: value, order }} />
               </dt>

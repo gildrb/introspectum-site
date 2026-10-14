@@ -1,5 +1,5 @@
 import { Numbers } from "@sfinterface/numbers";
-import { inView } from "motion";
+import { type AnimationPlaybackControls, animate, inView } from "motion";
 import { useLayoutEffect, useRef, useState } from "preact/hooks";
 import type { NumberPart } from "../i18n.ts";
 import { isLocale, type Locale, localeInfo } from "../locale.ts";
@@ -30,37 +30,39 @@ export function isStatProps(value: unknown): value is StatProps {
 }
 
 /**
- * Where the figures stand. `Pending`: as served, the real values, kept out of sight by the page's
- * stylesheet (`pendingCss`) until the script takes over, or shown by it as they are if the script
- * is late. `Served`: the real values in sight, still. `Hidden`: zeros, out of sight, waiting to be
- * seen. `Rolling`: coming into sight while rolling up from the zeros to the real values.
+ * Where the figures stand. `Pending`: as served, the real values, their card kept out of sight by
+ * the page's stylesheet (`pendingCss`) until the script takes over, or shown by it as it is if the
+ * script is late. `Served`: the real values in sight, still. `Hidden`: zeros, the card out of
+ * sight, waiting to be seen. `Rolling`: the card rising into sight while its figures roll up from
+ * the zeros to the real values.
  */
 type Phase = { $: "Pending" } | { $: "Served" } | { $: "Hidden" } | { $: "Rolling" };
 
 /**
- * How long the figures take to roll up and to come into sight, and how far apart the measurements
- * of the row start.
+ * How long a card takes to rise into sight (as the homepage's opening does, on Linear's measured
+ * rhythm), how long its figures take to roll up, and how far apart the cards of the row start,
+ * from left to right.
  */
-const roll = { length: 1400, fade: 700, stagger: 140 };
+const motion = { rise: 1, roll: 1400, stagger: 0.15 };
 
-/** How long the stylesheet waits for the script before it shows the real values as they are. */
+/** How long the stylesheet waits for the script before it shows the cards as they are. */
 const patience = 3000;
 
 /**
- * The stylesheet the homepage carries for its measurements: served, they wait out of sight for
- * this island, which brings them in rolling. Shown at once with reduced motion and without
- * JavaScript (`noscriptCss`), and after `patience` when the script is late, so a figure is never
- * missing for long and never shows anything but its real value or a roll up to it.
+ * The stylesheet the homepage carries for its measurement cards (`data-stat-card`): served, they
+ * wait out of sight for this island, which brings them in. Shown at once with reduced motion and
+ * without JavaScript (`noscriptCss`), and after `patience` when the script is late, so a card is
+ * never missing for long and never shows anything but its real value or a roll up to it.
  */
-export const pendingCss = `[data-stat-pending]{opacity:0;animation:stat-patience 0s ${patience}ms both}@keyframes stat-patience{to{opacity:1}}@media (prefers-reduced-motion:reduce){[data-stat-pending]{opacity:1;animation:none}}`;
-export const noscriptCss = "[data-stat-pending]{opacity:1;animation:none}";
+export const pendingCss = `[data-stat-card]{opacity:0;animation:stat-patience 0s ${patience}ms both}@keyframes stat-patience{to{opacity:1}}@media (prefers-reduced-motion:reduce){[data-stat-card]{opacity:1;animation:none}}`;
+export const noscriptCss = "[data-stat-card]{opacity:1;animation:none}";
 
 /**
  * One of the homepage's measurements, its figures set by `@sfinterface/numbers` in the page's
- * language. Its figures first appear rolling up from zeros, slowly and one measurement after
- * another, once most of the row is in view; they are never shown at their values and then taken
- * back. With reduced motion, without JavaScript, or with a script later than `patience`, they
- * show their real values, still.
+ * language. Once most of its card is in view, the card rises into sight out of a blur, a little
+ * after the card to its left, while its figures roll up from zeros: the figures are never shown at
+ * their values and then taken back. With reduced motion, without JavaScript, or with a script
+ * later than `patience`, the cards stand there with their real values.
  */
 export function Stat({ locale, parts, order }: StatProps) {
   const root = useRef<HTMLSpanElement>(null);
@@ -68,56 +70,56 @@ export function Stat({ locale, parts, order }: StatProps) {
   const format = new Intl.NumberFormat(localeInfo[locale].tag);
 
   useLayoutEffect(() => {
-    const element = root.current;
-    if (element === null) throw new Error("The measurement's figures are missing.");
-    // Already in sight, through reduced motion or a late script: they stay as they are.
+    const card = root.current?.closest<HTMLElement>("[data-stat-card]");
+    if (card === null || card === undefined) throw new Error("The measurement has no card.");
+    // Already in sight, through reduced motion or a late script: it stays as it is.
     if (
       matchMedia("(prefers-reduced-motion: reduce)").matches ||
-      getComputedStyle(element).opacity === "1"
+      getComputedStyle(card).opacity === "1"
     ) {
       setPhase({ $: "Served" });
       return undefined;
     }
+    // Held out of sight by the script from here on, not by the stylesheet's patience.
+    card.style.opacity = "0";
+    card.style.animation = "none";
     setPhase({ $: "Hidden" });
+    let rising: AnimationPlaybackControls | null = null;
     let timer = 0;
-    // Returning nothing from the callback makes Motion stop watching: the roll plays once.
+    // Returning nothing from the callback makes Motion stop watching: the card comes in once.
     const stop = inView(
-      element,
+      card,
       () => {
-        timer = window.setTimeout(() => setPhase({ $: "Rolling" }), order * roll.stagger);
+        const delay = order * motion.stagger;
+        rising = animate(
+          card,
+          { opacity: [0, 1], y: [16, 0], filter: ["blur(10px)", "blur(0px)"] },
+          { duration: motion.rise, delay, ease: [0.25, 0.1, 0.25, 1] },
+        );
+        // The figures start turning as the card starts rising.
+        timer = window.setTimeout(() => setPhase({ $: "Rolling" }), delay * 1000);
+        // Settled, the card keeps no trace of its entrance: no blur layer, no transform. Motion
+        // writes the final values as it finishes, so they go a frame later.
+        void rising.finished.then(() =>
+          requestAnimationFrame(() => {
+            card.style.removeProperty("filter");
+            card.style.removeProperty("transform");
+          }),
+        );
       },
       { amount: 0.6 },
     );
     return () => {
       stop();
       window.clearTimeout(timer);
+      rising?.stop();
     };
   }, [order]);
 
-  let zero: boolean;
-  let style: Record<string, string | number> | undefined;
-  switch (phase.$) {
-    case "Pending":
-    case "Served":
-      zero = false;
-      style = undefined;
-      break;
-    case "Hidden":
-      zero = true;
-      style = { opacity: 0 };
-      break;
-    case "Rolling":
-      zero = false;
-      style = { opacity: 1, transition: `opacity ${roll.fade}ms cubic-bezier(0.25, 0.1, 0.25, 1)` };
-      break;
-    default: {
-      const _: never = phase;
-      return _;
-    }
-  }
+  const zero = phase.$ === "Hidden";
 
   return (
-    <span ref={root} data-stat-pending={phase.$ === "Pending" ? "" : undefined} style={style}>
+    <span ref={root}>
       {parts.map((part, index) => {
         switch (part.$) {
           case "Text":
@@ -133,7 +135,7 @@ export function Stat({ locale, parts, order }: StatProps) {
                 format={zero ? zeros(part.value) : plain}
                 locale={localeInfo[locale].tag}
                 label={format.format(part.value)}
-                duration={zero ? 0 : roll.length}
+                duration={zero ? 0 : motion.roll}
                 style={figures}
               />
             );
