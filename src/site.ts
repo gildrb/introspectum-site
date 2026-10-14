@@ -9,7 +9,7 @@ import type { MachineName } from "./figures/machines.ts";
 
 export const origin = "https://introspectum.eu";
 /** One address for inquiries, applications and the waiting lists. */
-export const email = "fabian.klopfer@introspectum.io";
+export const email = "fabian.klopfer@introspectum.eu";
 
 export const company = {
   name: "Introspectum",
