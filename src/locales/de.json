@@ -75,10 +75,6 @@
     "source": "{weeks, plural, one {# week} other {# weeks}}",
     "message": "{weeks, plural, one {# Woche} other {# Wochen}}"
   },
-  "offer_duration_open": {
-    "source": "— weeks",
-    "message": "— Wochen"
-  },
   "offer_price_label": {
     "source": "Price",
     "message": "Preis"
@@ -86,10 +82,6 @@
   "offer_price": {
     "source": "From {price, number, ::currency/EUR precision-integer}, before VAT",
     "message": "Ab {price, number, ::currency/EUR precision-integer} zzgl. USt."
-  },
-  "offer_price_open": {
-    "source": "From € —",
-    "message": "Ab — €"
   },
   "offer_ask": {
     "source": "Ask about this",

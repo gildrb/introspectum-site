@@ -98,11 +98,6 @@
     "message": "{weeks, plural, one {# week} other {# weeks}}",
     "description": "A consulting offer's duration in weeks."
   },
-  "offer_duration_open": {
-    "message": "— weeks",
-    "description": "Shown while an offer's duration is not decided yet: a visible gap, to be filled before release.",
-    "maxLength": 20
-  },
   "offer_price_label": {
     "message": "Price",
     "description": "Label above a consulting offer's starting price.",
@@ -111,11 +106,6 @@
   "offer_price": {
     "message": "From {price, number, ::currency/EUR precision-integer}, before VAT",
     "description": "A consulting offer's starting price in euros, before VAT."
-  },
-  "offer_price_open": {
-    "message": "From € —",
-    "description": "Shown while an offer's price is not decided yet: a visible gap, to be filled before release.",
-    "maxLength": 20
   },
   "offer_ask": {
     "message": "Ask about this",

@@ -60,7 +60,7 @@ export function contactHref(locale: Locale, topic: InquiryTopic): string {
 /**
  * A consulting offer people can say yes to: a name, what we do, what you get, how long it takes,
  * and what it costs from. `weeks` and `priceFrom` (whole euros, before VAT) are `null` while not
- * decided; the page then shows a visible gap, never a guess.
+ * decided; the card then leaves them out.
  */
 export type Offer = {
   topic: Extract<InquiryTopic, "ai-code-audit" | "erp-setup">;

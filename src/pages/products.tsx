@@ -108,24 +108,23 @@ export function Consulting({ locale }: { locale: Locale }) {
             <h3 {...stylex.props(ui.title)}>{t.text(offer.title)}</h3>
             <p {...stylex.props(ui.prose)}>{t.text(offer.text)}</p>
             <p {...stylex.props(ui.prose, ui.label)}>{t.text(offer.result)}</p>
-            <dl {...stylex.props(ui.text, styles.terms)}>
-              <div {...stylex.props(styles.term)}>
-                <dt {...stylex.props(ui.label)}>{t.text("offer_duration_label")}</dt>
-                <dd>
-                  {offer.weeks === null
-                    ? t.text("offer_duration_open")
-                    : t.text("offer_duration", { weeks: offer.weeks })}
-                </dd>
-              </div>
-              <div {...stylex.props(styles.term)}>
-                <dt {...stylex.props(ui.label)}>{t.text("offer_price_label")}</dt>
-                <dd>
-                  {offer.priceFrom === null
-                    ? t.text("offer_price_open")
-                    : t.text("offer_price", { price: offer.priceFrom })}
-                </dd>
-              </div>
-            </dl>
+            {/* Duration & price only once decided: no placeholder stands in for them. */}
+            {(offer.weeks !== null || offer.priceFrom !== null) && (
+              <dl {...stylex.props(ui.text, styles.terms)}>
+                {offer.weeks !== null && (
+                  <div {...stylex.props(styles.term)}>
+                    <dt {...stylex.props(ui.label)}>{t.text("offer_duration_label")}</dt>
+                    <dd>{t.text("offer_duration", { weeks: offer.weeks })}</dd>
+                  </div>
+                )}
+                {offer.priceFrom !== null && (
+                  <div {...stylex.props(styles.term)}>
+                    <dt {...stylex.props(ui.label)}>{t.text("offer_price_label")}</dt>
+                    <dd>{t.text("offer_price", { price: offer.priceFrom })}</dd>
+                  </div>
+                )}
+              </dl>
+            )}
             <div {...stylex.props(styles.cardLink)}>
               <ButtonLink href={contactHref(locale, offer.topic)} kind="secondary">
                 {t.text("offer_ask")}
