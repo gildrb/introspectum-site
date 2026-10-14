@@ -114,7 +114,7 @@ export function Waitlist({ product, locale, text }: WaitlistProps) {
                 required
                 maxLength={254}
                 autoComplete="email"
-                spellcheck={false}
+                spellCheck="false"
               />
             </label>
             <label {...stylex.props(ui.text, styles.field)}>
@@ -125,7 +125,7 @@ export function Waitlist({ product, locale, text }: WaitlistProps) {
                 name="company"
                 maxLength={200}
                 autoComplete="organization"
-                spellcheck={false}
+                spellCheck="false"
               />
             </label>
           </div>
