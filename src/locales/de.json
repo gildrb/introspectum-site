@@ -167,6 +167,10 @@
     "source": "Founding Designer",
     "message": "Founding Designer"
   },
+  "team_linkedin": {
+    "source": "{name} on LinkedIn",
+    "message": "{name} auf LinkedIn"
+  },
   "cta_title": {
     "source": "Tell us what you are working on",
     "message": "Erzählen Sie uns, woran Sie arbeiten"

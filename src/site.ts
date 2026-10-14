@@ -16,6 +16,21 @@ export const company = {
   founder: "Fabian Klopfer",
 } as const;
 
+/** A member of the team, by the name pages show, with their public profile. */
+export type Person = { linkedin: `https://www.linkedin.com/in/${string}/` };
+
+export const people = {
+  "Fabian Klopfer": { linkedin: "https://www.linkedin.com/in/someusername1/" },
+  "Marc Gsell": { linkedin: "https://www.linkedin.com/in/marc-gsell/" },
+  "Gil Rodrigues": { linkedin: "https://www.linkedin.com/in/gildrb/" },
+} as const satisfies Record<string, Person>;
+
+export type PersonName = keyof typeof people;
+
+export function isPersonName(value: string): value is PersonName {
+  return Object.hasOwn(people, value);
+}
+
 /** A `mailto:` link to the company address with the subject filled in. */
 export function mailto(subject: string): string {
   return `mailto:${email}?subject=${encodeURIComponent(subject)}`;

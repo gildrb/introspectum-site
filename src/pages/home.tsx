@@ -8,6 +8,7 @@ import {
   Figure,
   Hero,
   Measure,
+  ProfileLink,
   Section,
   Sources,
   Text,
@@ -24,6 +25,8 @@ import {
   methods,
   numbered,
   origin,
+  people,
+  type PersonName,
   principles,
 } from "../site.ts";
 import { grid, media, space } from "../tokens.stylex.ts";
@@ -35,7 +38,7 @@ const survey = { distrust: 0.96, verify: 0.48, effort: 0.38 };
 
 const citations = numbered(["sonar"]);
 
-const team: readonly { name: string; role: MessageId }[] = [
+const team: readonly { name: PersonName; role: MessageId }[] = [
   { name: "Fabian Klopfer", role: "team_role_fabian" },
   { name: "Marc Gsell", role: "team_role_marc" },
   { name: "Gil Rodrigues", role: "team_role_gil" },
@@ -84,7 +87,14 @@ export function Home({
           url: `${origin}/`,
           email,
           description: t.text("home_description"),
-          founder: { "@type": "Person", name: company.founder },
+          founder: {
+            "@type": "Person",
+            name: company.founder,
+            sameAs: people[company.founder].linkedin,
+          },
+          member: team
+            .filter(({ name }) => name !== company.founder)
+            .map(({ name }) => ({ "@type": "Person", name, sameAs: people[name].linkedin })),
           address: { "@type": "PostalAddress", addressCountry: "IM" },
           contactPoint: {
             "@type": "ContactPoint",
@@ -165,6 +175,7 @@ export function Home({
                 {name}
               </h3>
               <p {...stylex.props(ui.text, ui.label)}>{t.text(role)}</p>
+              <ProfileLink href={people[name].linkedin} label={t.text("team_linkedin", { name })} />
             </li>
           ))}
         </ul>

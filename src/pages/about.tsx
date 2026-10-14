@@ -1,12 +1,20 @@
 import * as stylex from "@stylexjs/stylex";
-import { Figure, Hero, MachineSection, type MachinePart, Section, Text } from "../blocks.tsx";
+import {
+  Figure,
+  Hero,
+  MachineSection,
+  type MachinePart,
+  ProfileLink,
+  Section,
+  Text,
+} from "../blocks.tsx";
 import { Machine } from "../figures/machine.tsx";
 import type { Doc } from "../content.ts";
 import { translators } from "../i18n.ts";
 import { type Assets, Page } from "../layout.tsx";
 import type { Locale } from "../locale.ts";
 import { type Block, Inline, Markdown, usesItalic } from "../markdown.tsx";
-import { company, illustrations } from "../site.ts";
+import { company, illustrations, isPersonName, people, type PersonName } from "../site.ts";
 import { grid, media, space } from "../tokens.stylex.ts";
 import { ui } from "../ui.tsx";
 
@@ -82,15 +90,17 @@ function besideWheel(part: Chapter, id: string): MachinePart {
   };
 }
 
+/** A team part's members, each of whom must be in `people`; `null` for any other part. */
 function teamOf(blocks: readonly Block[]) {
-  const people = blocks.map((block) =>
+  const members = blocks.map((block) =>
     block.type === "p" ? member.exec(block.text)?.groups : undefined,
   );
-  if (people.length === 0) return null;
-  const team: { name: string; role: string; about: string }[] = [];
-  for (const person of people) {
-    const { name, role, about } = person ?? {};
+  if (members.length === 0) return null;
+  const team: { name: PersonName; role: string; about: string }[] = [];
+  for (const found of members) {
+    const { name, role, about } = found ?? {};
     if (name === undefined || role === undefined || about === undefined) return null;
+    if (!isPersonName(name)) throw new Error(`about.md: ${name} is not in \`people\` (site.ts).`);
     team.push({ name, role, about });
   }
   return team;
@@ -175,6 +185,10 @@ export function AboutPage({
                     <p {...stylex.props(ui.prose, styles.bio)}>
                       <Inline text={about} />
                     </p>
+                    <ProfileLink
+                      href={people[name].linkedin}
+                      label={t.text("team_linkedin", { name })}
+                    />
                   </li>
                 ))}
               </ul>
