@@ -156,10 +156,10 @@ export function Home({
         intro={t.text("home_measured_intro", { date: graphRuns.date })}
       >
         <dl {...stylex.props(styles.stats)}>
-          {stats.map(({ id, value, label }) => (
+          {stats.map(({ id, value, label }, order) => (
             <div key={id} {...stylex.props(styles.stat)}>
               <dt {...stylex.props(ui.serif, styles.value)}>
-                <Island name="stat" component={Stat} props={{ locale, parts: value }} />
+                <Island name="stat" component={Stat} props={{ locale, parts: value, order }} />
               </dt>
               <dd {...stylex.props(ui.text, ui.label)}>{label}</dd>
             </div>
