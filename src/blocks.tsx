@@ -3,7 +3,7 @@ import { type ComponentChildren, Fragment } from "preact";
 import type { Tag, Translator } from "./i18n.ts";
 import type { Citation, Illustration } from "./site.ts";
 import { colors, grid, media, space, weights } from "./tokens.stylex.ts";
-import { type Style, ui } from "./ui.tsx";
+import { type Style, ui, untranslated } from "./ui.tsx";
 import { imageSize, versioned } from "./versioned.ts";
 
 /**
@@ -369,6 +369,27 @@ export function ButtonLink({
     <a {...stylex.props(ui.button, buttonKinds[kind], ui.focusRing)} href={href}>
       {children}
     </a>
+  );
+}
+
+/**
+ * A team member's public profile, under what they have done: the network's name as the link,
+ * `label` (the member's name with it) as what screen readers say.
+ */
+export function ProfileLink({ href, label }: { href: string; label: string }) {
+  return (
+    <p {...stylex.props(ui.text, ui.label)}>
+      <a
+        {...stylex.props(ui.link, ui.focusRing)}
+        href={href}
+        aria-label={label}
+        target="_blank"
+        rel="noopener noreferrer"
+        {...untranslated}
+      >
+        LinkedIn
+      </a>
+    </p>
   );
 }
 

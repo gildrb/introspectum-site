@@ -17,6 +17,21 @@ export const company = {
   founder: "Fabian Klopfer",
 } as const;
 
+/** A member of the team, by the name pages show, with their public profile. */
+export type Person = { linkedin: `https://www.linkedin.com/in/${string}/` };
+
+export const people = {
+  "Fabian Klopfer": { linkedin: "https://www.linkedin.com/in/someusername1/" },
+  "Marc Gsell": { linkedin: "https://www.linkedin.com/in/marc-gsell/" },
+  "Gil Rodrigues": { linkedin: "https://www.linkedin.com/in/gildrb/" },
+} as const satisfies Record<string, Person>;
+
+export type PersonName = keyof typeof people;
+
+export function isPersonName(value: string): value is PersonName {
+  return Object.hasOwn(people, value);
+}
+
 /** A `mailto:` link to the company address with the subject filled in. */
 export function mailto(subject: string): string {
   return `mailto:${email}?subject=${encodeURIComponent(subject)}`;
@@ -27,10 +42,10 @@ export function mailto(subject: string): string {
  * sends one of these as `topic`; the Worker accepts no other.
  */
 export const inquiryTopics = [
-  "ai-code-audit",
+  "erp-crm",
   "erp-setup",
   "software-factory",
-  "erp-crm",
+  "ai-code-audit",
   "general",
 ] as const;
 
@@ -73,18 +88,18 @@ export type Offer = {
 
 export const offers: readonly Offer[] = [
   {
-    topic: "ai-code-audit",
-    title: "offer_audit_title",
-    text: "offer_audit_text",
-    result: "offer_audit_result",
-    weeks: null,
-    priceFrom: null,
-  },
-  {
     topic: "erp-setup",
     title: "offer_erp_title",
     text: "offer_erp_text",
     result: "offer_erp_result",
+    weeks: null,
+    priceFrom: null,
+  },
+  {
+    topic: "ai-code-audit",
+    title: "offer_audit_title",
+    text: "offer_audit_text",
+    result: "offer_audit_result",
     weeks: null,
     priceFrom: null,
   },
@@ -362,8 +377,11 @@ export const principles: readonly { name: MessageId; text: MessageId }[] = [
   { name: "principle_traceability", text: "principle_traceability_text" },
 ];
 
-/** Kept apart from `products` so the browser bundle can check a slug without the rest. */
-export const productSlugs = ["software-factory", "erp-crm", "trading-platform"] as const;
+/**
+ * Kept apart from `products` so the browser bundle can check a slug without the rest. The ERP &
+ * CRM comes first: it has the largest market.
+ */
+export const productSlugs = ["erp-crm", "software-factory", "trading-platform"] as const;
 
 export type ProductSlug = (typeof productSlugs)[number];
 
@@ -416,6 +434,29 @@ export type Product = {
 
 export const products: readonly Product[] = [
   {
+    slug: "erp-crm",
+    shelf: "products",
+    name: "product_erp_crm_name",
+    status: "status_in_development",
+    what: "product_erp_crm_what",
+    audience: "product_erp_crm_audience",
+    illustration: illustrations.pacioli,
+    // Own data, the exact ledger & the read-only assistant, beside both parts.
+    machine: { name: "ledger", from: 0, through: "state" },
+    how: [
+      { text: "product_erp_crm_how_1" },
+      { text: "product_erp_crm_how_2" },
+      { text: "product_erp_crm_how_3" },
+      { text: "product_erp_crm_how_4" },
+    ],
+    state: [
+      // The specification's draft 2.1 and its progress review of 28 September 2026.
+      { text: "product_erp_crm_state_1", values: { requirements: 120, modules: 17 } },
+      { text: "product_erp_crm_state_2" },
+    ],
+    sources: ["twenty", "iso-4217", "iso-29148"],
+  },
+  {
     slug: "software-factory",
     shelf: "products",
     name: "product_software_factory_name",
@@ -453,29 +494,6 @@ export const products: readonly Product[] = [
       "ieee-830",
       "ieee-1016",
     ],
-  },
-  {
-    slug: "erp-crm",
-    shelf: "products",
-    name: "product_erp_crm_name",
-    status: "status_in_development",
-    what: "product_erp_crm_what",
-    audience: "product_erp_crm_audience",
-    illustration: illustrations.pacioli,
-    // Own data, the exact ledger & the read-only assistant, beside both parts.
-    machine: { name: "ledger", from: 0, through: "state" },
-    how: [
-      { text: "product_erp_crm_how_1" },
-      { text: "product_erp_crm_how_2" },
-      { text: "product_erp_crm_how_3" },
-      { text: "product_erp_crm_how_4" },
-    ],
-    state: [
-      // The specification's draft 2.1 and its progress review of 28 September 2026.
-      { text: "product_erp_crm_state_1", values: { requirements: 120, modules: 17 } },
-      { text: "product_erp_crm_state_2" },
-    ],
-    sources: ["twenty", "iso-4217", "iso-29148"],
   },
   {
     slug: "trading-platform",

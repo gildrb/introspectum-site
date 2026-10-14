@@ -11,6 +11,10 @@
     "source": "Research we publish but do not sell. None of it is a product or investment advice.",
     "message": "Forschung, die wir veröffentlichen, aber nicht verkaufen. Nichts davon ist ein Produkt oder eine Anlageberatung."
   },
+  "home_cta_erp": {
+    "source": "See the product",
+    "message": "Produkt sehen"
+  },
   "home_cta_factory": {
     "source": "See how it works",
     "message": "So funktioniert es"
@@ -248,8 +252,16 @@
     "message": "Software, die man prüft, statt ihr zu vertrauen"
   },
   "home_description": {
-    "source": "Introspectum’s Software Factory lets AI write code that is traced to its requirements & proven against its specification before anyone trusts it.",
-    "message": "In der Software Factory von Introspectum schreibt KI Code, der auf Anforderungen zurückgeführt und bewiesen ist, bevor man ihm vertraut."
+    "source": "Introspectum builds an open-data ERP & CRM for small businesses, & a Software Factory that proves AI-written code against its specification.",
+    "message": "Introspectum entwickelt ERP & CRM mit offenen Daten für kleine Unternehmen und die Software Factory, die KI-Code gegen seine Spezifikation beweist."
+  },
+  "home_erp_title": {
+    "source": "Customers, sales & accounting in one system, on your own server",
+    "message": "Kunden, Vertrieb und Buchhaltung in einem System, auf Ihrem eigenen Server"
+  },
+  "home_erp_lead": {
+    "source": "The ERP & CRM keeps all your data, HR included, in open formats. Its AI assistant reads the books but can never post to them.",
+    "message": "ERP & CRM hält alle Ihre Daten, auch das Personalwesen, in offenen Formaten. Der KI-Assistent liest die Bücher, kann aber nie darin buchen."
   },
   "home_lead": {
     "source": "The Software Factory lets AI write the function bodies & checks each one against a specification people approved. A failed proof goes back to the model until it passes; then you get a certificate for the audit.",
@@ -303,13 +315,17 @@
     "source": "Founding Designer",
     "message": "Founding Designer"
   },
+  "team_linkedin": {
+    "source": "{name} on LinkedIn",
+    "message": "{name} auf LinkedIn"
+  },
   "cta_title": {
     "source": "Tell us what you are working on",
     "message": "Erzählen Sie uns, woran Sie arbeiten"
   },
   "cta_text": {
-    "source": "Ask for a consulting offer to work with us now, or join the Software Factory’s waiting list to test it before its release.",
-    "message": "Fragen Sie ein Beratungsangebot an, um schon jetzt mit uns zu arbeiten, oder tragen Sie sich in die Warteliste der Software Factory ein, um sie vor dem Start zu testen."
+    "source": "Ask for a consulting offer to work with us now, or join the ERP & CRM’s waiting list to test it before its release.",
+    "message": "Fragen Sie ein Beratungsangebot an, um schon jetzt mit uns zu arbeiten, oder tragen Sie sich in die Warteliste von ERP & CRM ein, um es vor dem Start zu testen."
   },
   "cta_waitlist": {
     "source": "Join the waitlist",

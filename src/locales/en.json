@@ -14,9 +14,14 @@
     "description": "Opening line of the research page; also its meta description and link-preview title.",
     "maxLength": 160
   },
+  "home_cta_erp": {
+    "message": "See the product",
+    "description": "Homepage opening, button beside the contact button: leads to the ERP & CRM's page. Verb first. Both buttons must fit side by side on a 360px phone.",
+    "maxLength": 32
+  },
   "home_cta_factory": {
     "message": "See how it works",
-    "description": "Homepage button beside the contact button: leads to the Software Factory's page.",
+    "description": "Homepage, Software Factory part: button that leads to the Software Factory's page.",
     "maxLength": 32
   },
   "home_measured_title": {
@@ -322,13 +327,23 @@
     "maxLength": 90
   },
   "home_description": {
-    "message": "Introspectum’s Software Factory lets AI write code that is traced to its requirements & proven against its specification before anyone trusts it.",
-    "description": "Meta description of the homepage, shown in search results and link previews.",
+    "message": "Introspectum builds an open-data ERP & CRM for small businesses, & a Software Factory that proves AI-written code against its specification.",
+    "description": "Meta description of the homepage, shown in search results and link previews. Names both products, the ERP & CRM first.",
     "maxLength": 160
+  },
+  "home_erp_title": {
+    "message": "Customers, sales & accounting in one system, on your own server",
+    "description": "Homepage title: what the ERP & CRM gives a small business. The ledger figure stands beside it.",
+    "maxLength": 90
+  },
+  "home_erp_lead": {
+    "message": "The ERP & CRM keeps all your data, HR included, in open formats. Its AI assistant reads the books but can never post to them.",
+    "description": "Paragraph under the homepage title: what the ERP & CRM does, as the ledger figure beside it shows it. 'ERP & CRM' is the product name.",
+    "maxLength": 240
   },
   "home_lead": {
     "message": "The Software Factory lets AI write the function bodies & checks each one against a specification people approved. A failed proof goes back to the model until it passes; then you get a certificate for the audit.",
-    "description": "Paragraph under the homepage title: what the Software Factory does, as the figure beside it shows it.",
+    "description": "Homepage, intro of the Software Factory part, under its name: what it does, as the figure beside it shows it.",
     "maxLength": 240
   },
   "home_why_title": {
@@ -390,19 +405,24 @@
     "description": "Role of Gil Rodrigues in the homepage's team list: a job title, like 'Managing Director' for Fabian Klopfer.",
     "maxLength": 40
   },
+  "team_linkedin": {
+    "message": "{name} on LinkedIn",
+    "description": "What screen readers say for the link 'LinkedIn' under a team member, on the homepage and the About page. {name} is the person's name. LinkedIn is a product name.",
+    "maxLength": 60
+  },
   "cta_title": {
     "message": "Tell us what you are working on",
     "description": "Heading of the closing panel on the homepage and under each blog post.",
     "maxLength": 60
   },
   "cta_text": {
-    "message": "Ask for a consulting offer to work with us now, or join the Software Factory’s waiting list to test it before its release.",
-    "description": "Text of the closing panel: the two ways to work with the company.",
+    "message": "Ask for a consulting offer to work with us now, or join the ERP & CRM’s waiting list to test it before its release.",
+    "description": "Text of the closing panel: the two ways to work with the company. 'ERP & CRM' is the product name.",
     "maxLength": 200
   },
   "cta_waitlist": {
     "message": "Join the waitlist",
-    "description": "Button in the closing panel that leads to the Software Factory's waiting list.",
+    "description": "Button in the closing panel that leads to the ERP & CRM's waiting list.",
     "maxLength": 32
   },
   "method_formal_methods": {

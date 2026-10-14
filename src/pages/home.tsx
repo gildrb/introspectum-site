@@ -8,7 +8,9 @@ import {
   citeTags,
   Figure,
   Hero,
+  MachineSection,
   Measure,
+  ProfileLink,
   Section,
   Sources,
   Text,
@@ -29,6 +31,8 @@ import {
   illustrations,
   numbered,
   origin,
+  people,
+  type PersonName,
   proofRuns,
   trust,
   type TrustFact,
@@ -42,18 +46,22 @@ const survey = { distrust: 0.96, verify: 0.48, effort: 0.38 };
 
 const citations = numbered(["sonar", "ripgrep"]);
 
-/** The Software Factory's page: the homepage leads to it, and to its waiting list. */
+/** The ERP & CRM's page: the homepage opens with it, and its closing leads to its waiting list. */
+const erp = "erp-crm";
+
+/** The Software Factory's page: the homepage's second product leads to it. */
 const factory = "software-factory";
 
-const team: readonly { name: string; role: MessageId }[] = [
+const team: readonly { name: PersonName; role: MessageId }[] = [
   { name: "Marc Gsell", role: "team_role_marc" },
   { name: "Gil Rodrigues", role: "team_role_gil" },
 ];
 
 /**
  * The elevator pitch, under three minutes of reading in every language (checked at build, see
- * `render.tsx`): the Software Factory at work, what it has measured, why it matters, what we offer
- * now, how customer data is kept, who we are, and what to do next.
+ * `render.tsx`): the ERP & CRM, which has the largest market, & how customer data is kept; then
+ * the Software Factory at work, what it has measured & why it matters; what we offer now, who we
+ * are, and what to do next.
  */
 export function Home({
   assets,
@@ -70,6 +78,7 @@ export function Home({
 }) {
   const t = translators[locale];
   const cite = citeTags(t, citations);
+  const erpPage = href(locale, "products", erp);
   const factoryPage = href(locale, "products", factory);
   const stats: readonly { id: string; value: readonly NumberPart[]; label: ComponentChildren }[] = [
     {
@@ -122,7 +131,16 @@ export function Home({
           url: `${origin}/`,
           email,
           description: t.text("home_description"),
-          founder: { "@type": "Person", name: company.founder },
+          founder: {
+            "@type": "Person",
+            name: company.founder,
+            sameAs: people[company.founder].linkedin,
+          },
+          member: team.map(({ name }) => ({
+            "@type": "Person",
+            name,
+            sameAs: people[name].linkedin,
+          })),
           address: { "@type": "PostalAddress", addressCountry: "IM" },
           contactPoint: {
             "@type": "ContactPoint",
@@ -154,21 +172,50 @@ export function Home({
       }}
     >
       <Hero
-        title={t.text("tagline")}
-        lead={t.text("home_lead")}
-        figure={<Machine name="proof" locale={locale} fill />}
+        title={t.text("home_erp_title")}
+        lead={t.text("home_erp_lead")}
+        figure={<Machine name="ledger" locale={locale} fill />}
         stage
         reveal
       >
         <Actions>
-          <ButtonLink href={contactHref(locale, factory)} kind="primary">
+          <ButtonLink href={contactHref(locale, erp)} kind="primary">
             {t.text("nav_contact")}
           </ButtonLink>
-          <ButtonLink href={factoryPage} kind="secondary">
-            {t.text("home_cta_factory")}
+          <ButtonLink href={erpPage} kind="secondary">
+            {t.text("home_cta_erp")}
           </ButtonLink>
         </Actions>
       </Hero>
+      <Section id="trust" title={t.text("trust_title")} intro={t.text("trust_intro")}>
+        <dl {...stylex.props(styles.facts)}>
+          {trust.map(({ term, fact }) => (
+            <div key={term} {...stylex.props(styles.fact)}>
+              <dt {...stylex.props(ui.title)}>{t.text(term)}</dt>
+              <dd {...stylex.props(ui.prose, ui.label)}>{trustText(t, locale, fact)}</dd>
+            </div>
+          ))}
+        </dl>
+      </Section>
+      <MachineSection
+        parts={[
+          {
+            id: "factory",
+            title: <span {...untranslated}>{t.text("product_software_factory_name")}</span>,
+            intro: t.text("home_lead"),
+            blocks: [
+              <Actions key="actions">
+                <ButtonLink href={factoryPage} kind="secondary">
+                  {t.text("home_cta_factory")}
+                </ButtonLink>
+              </Actions>,
+            ],
+          },
+        ]}
+        from={{ part: 0, block: "title" }}
+        to={0}
+        machine={<Machine name="proof" locale={locale} fill />}
+      />
       <Section
         id="measured"
         title={t.text("home_measured_title")}
@@ -207,16 +254,6 @@ export function Home({
         </Measure>
       </Section>
       <Consulting locale={locale} />
-      <Section id="trust" title={t.text("trust_title")} intro={t.text("trust_intro")}>
-        <dl {...stylex.props(styles.facts)}>
-          {trust.map(({ term, fact }) => (
-            <div key={term} {...stylex.props(styles.fact)}>
-              <dt {...stylex.props(ui.title)}>{t.text(term)}</dt>
-              <dd {...stylex.props(ui.prose, ui.label)}>{trustText(t, locale, fact)}</dd>
-            </div>
-          ))}
-        </dl>
-      </Section>
       <Section id="who" title={t.text("home_who_label")}>
         <div {...stylex.props(styles.founder)}>
           <h3 {...stylex.props(ui.title)} {...untranslated}>
@@ -224,6 +261,10 @@ export function Home({
           </h3>
           <p {...stylex.props(ui.text, ui.label)}>{t.text("team_role_fabian")}</p>
           <p {...stylex.props(ui.lead, styles.bio)}>{t.text("home_who_text")}</p>
+          <ProfileLink
+            href={people[company.founder].linkedin}
+            label={t.text("team_linkedin", { name: company.founder })}
+          />
         </div>
         <ul {...stylex.props(styles.team)}>
           {team.map(({ name, role }) => (
@@ -232,6 +273,7 @@ export function Home({
                 {name}
               </h3>
               <p {...stylex.props(ui.text, ui.label)}>{t.text(role)}</p>
+              <ProfileLink href={people[name].linkedin} label={t.text("team_linkedin", { name })} />
             </li>
           ))}
         </ul>
@@ -256,7 +298,7 @@ export function Closing({ locale }: { locale: Locale }) {
         <ButtonLink href={contactHref(locale, "general")} kind="primary">
           {t.text("nav_contact")}
         </ButtonLink>
-        <ButtonLink href={`${href(locale, "products", factory)}#waitlist`} kind="secondary">
+        <ButtonLink href={`${href(locale, "products", erp)}#waitlist`} kind="secondary">
           {t.text("cta_waitlist")}
         </ButtonLink>
       </Actions>
