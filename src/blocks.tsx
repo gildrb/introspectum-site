@@ -253,7 +253,7 @@ export function Card({
   children: ComponentChildren;
 }) {
   return (
-    <li {...stylex.props(styles.card, ui.edge)}>
+    <li {...stylex.props(styles.card)}>
       {figure !== undefined && <div {...stylex.props(styles.cardFigure)}>{figure}</div>}
       {children}
     </li>

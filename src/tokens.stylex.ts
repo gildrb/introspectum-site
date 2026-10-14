@@ -55,7 +55,7 @@ export const colors = stylex.defineVars({
   /** Emerald, the brand color, used sparingly: the form's checkbox. */
   accent: { default: "oklch(44% 0.1 160)", [light]: "oklch(40% 0.09 160)" },
   /**
-   * The edge of everything that stands off the page: cards, panels, code, images and the menus.
+   * The edge of what stands off the page: panels, code, images and the menus. Cards have none.
    * Translucent, so one edge sharpens every ground it lies on. Decoration only: each reads the
    * same without it, so it may stay below APCA's Lc 15 for meaningful non-text.
    */
