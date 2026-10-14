@@ -133,12 +133,21 @@ export function Home({
         },
         // The moving figures' own stylesheet, in its own `@layer arc`, and the measurements'
         // waiting rules: out of sight until they roll in, in sight at once without JavaScript.
+        // Their code is named up front, so it arrives with the page's script, not after it.
         head: (
           <>
             <style dangerouslySetInnerHTML={{ __html: `${numbersCss}\n${pendingCss}` }} />
             <noscript>
               <style dangerouslySetInnerHTML={{ __html: noscriptCss }} />
             </noscript>
+            {[
+              ...new Set([
+                ...assets.preload("src/stat-cards.ts"),
+                ...assets.preload("src/islands/stat.tsx"),
+              ]),
+            ].map((url) => (
+              <link key={url} rel="modulepreload" href={url} />
+            ))}
           </>
         ),
       }}

@@ -59,18 +59,40 @@ const modelContext: unknown =
 if (typeof modelContext === "object" && modelContext !== null)
   void import("./webmcp.ts").then(({ registerTools }) => registerTools(modelContext));
 
+// The homepage's measurement cards: their entrance runs here, before the islands, so a card rises
+// as the reader reaches it however late its figures' island hydrates (`stat-cards.ts`). The page
+// names that code up front (`modulepreload`); the cards are staged the moment the parser is past
+// them, not once the whole page has been read.
+if (document.querySelector('link[rel="modulepreload"][href*="stat-cards"]') !== null) {
+  const cards = import("./stat-cards.ts");
+  const parsed = () => {
+    const last = Array.from(document.querySelectorAll("[data-stat-card]")).at(-1);
+    return last !== undefined && parsedPast(last);
+  };
+  if (!parsed()) {
+    const { promise, resolve } = Promise.withResolvers<void>();
+    const watcher = new MutationObserver(() => {
+      if (!parsed()) return;
+      watcher.disconnect();
+      resolve();
+    });
+    watcher.observe(document, { childList: true, subtree: true });
+    document.addEventListener("DOMContentLoaded", () => resolve(), { once: true });
+    await promise;
+    watcher.disconnect();
+  }
+  (await cards).stageCards();
+  // Their figures too, at once: a card waits for them only briefly before it rises without a roll.
+  void hydrateIslands(
+    Array.from(document.querySelectorAll<HTMLElement>('[data-stat-card] [data-island="stat"]')),
+  );
+}
+
 // Everything below works on the whole page: wait until it has been read.
 if (document.readyState === "loading") {
   const { promise, resolve } = Promise.withResolvers<void>();
   document.addEventListener("DOMContentLoaded", () => resolve(), { once: true });
   await promise;
-}
-
-// The homepage's measurement cards: their entrance runs here, before the islands, so a card rises
-// as the reader reaches it however late its figures' island hydrates (`stat-cards.ts`).
-if (document.querySelector("[data-stat-card]") !== null) {
-  const { stageCards } = await import("./stat-cards.ts");
-  stageCards();
 }
 
 // The islands are server-rendered and work without JavaScript. Only pages that have one load
@@ -80,8 +102,11 @@ if (document.querySelector("[data-stat-card]") !== null) {
 // holds up the first paint, the machines or the page's own islands. Until then, a right click on
 // the logo opens the browser's own menu.
 const islands = Array.from(document.querySelectorAll<HTMLElement>("[data-island]"));
+// The homepage's figures were hydrated with their cards, above.
 const later = islands.filter((element) => element.dataset.island === "logo");
-const now = islands.filter((element) => !later.includes(element));
+const now = islands.filter(
+  (element) => !later.includes(element) && element.dataset.island !== "stat",
+);
 if (now.length > 0) void hydrateIslands(now);
 if (later.length > 0) whenIdle(() => void hydrateIslands(later));
 

@@ -20,8 +20,11 @@ export const risenAttribute = "data-stat-risen";
 /** Sent to the card as it starts to rise; `detail` is its delay in seconds. */
 export const riseEvent = "statrise";
 
-/** One second per card on CSS `ease`, as the opening (`Hero`); cards 150 ms apart. */
-const entrance = { rise: 1, stagger: 0.15, wait: 1.5, ease: [0.25, 0.1, 0.25, 1] } as const;
+/**
+ * One second per card on CSS `ease`, as the opening (`Hero`); cards 150 ms apart. A card rises
+ * once a quarter of it is in view, and waits for its figures a third of a second at most.
+ */
+const entrance = { rise: 1, stagger: 0.15, wait: 0.3, ease: [0.25, 0.1, 0.25, 1] } as const;
 
 /**
  * How long the stylesheet waits for this script, in milliseconds, before it brings the cards in
@@ -64,7 +67,7 @@ export function stageCards(): void {
       () => {
         void ready(card).then(() => rise(card, order));
       },
-      { amount: 0.6 },
+      { amount: 0.25 },
     );
   });
 }

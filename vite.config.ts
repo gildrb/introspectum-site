@@ -84,14 +84,6 @@ const sitePlugin: Plugin = {
         response.end(await site.shareImage(card, css));
         return true;
       }
-      const shareImages = Object.fromEntries(
-        Object.keys(site.shareCards).map((page) => [page, site.sharePath(page)]),
-      );
-      // Vite serves each source module on its own: preloading one is fetching its own path.
-      const files = site.render(
-        { script: "/src/client.ts", css, preload: (module) => [`/${module}`] },
-        shareImages,
-      );
       // A stamped font, image or archive: served from the public file it copies, cached for good
       // as `public/_headers` caches it in production. Vite would mark it `no-cache`, and the
       // browser would then check every font with the server on every page before showing text.
@@ -104,6 +96,17 @@ const sitePlugin: Plugin = {
         response.end(await readFile(path.join(server.config.publicDir, copy)));
         return true;
       }
+      // Source modules & Vite's own files are never pages: Vite serves them without the whole
+      // site being rendered first, which made every module of a page wait for a full render.
+      if (/^\/(?:@|src\/|node_modules\/)/.test(pathname)) return false;
+      const shareImages = Object.fromEntries(
+        Object.keys(site.shareCards).map((page) => [page, site.sharePath(page)]),
+      );
+      // Vite serves each source module on its own: preloading one is fetching its own path.
+      const files = site.render(
+        { script: "/src/client.ts", css, preload: (module) => [`/${module}`] },
+        shareImages,
+      );
       const file = [pathname.slice(1), `${pathname.slice(1) || "index"}.html`].find(
         (name) => name in files,
       );
@@ -162,7 +165,21 @@ export default defineConfig({
       { find: /^react\/jsx-runtime$/, replacement: "preact/jsx-runtime" },
     ],
   },
-  server: { host: "127.0.0.1", port: 5175, strictPort: false },
+  server: {
+    host: "127.0.0.1",
+    port: 5175,
+    strictPort: false,
+    // Transformed as the server starts, not on the first request: the page's script, the cards'
+    // entrance and the islands arrive at once, so the dev page moves as early as the built one.
+    warmup: {
+      clientFiles: [
+        "./src/client.ts",
+        "./src/stat-cards.ts",
+        "./src/islands/*.tsx",
+        "./src/figures/*.ts",
+      ],
+    },
+  },
   // The Cloudflare plugin runs `worker/` in the Workers runtime under `vp dev`, with local KV, and
   // after the build below writes the Worker and the client output as Build Output for `cf deploy`.
   // Its environment is named `worker`: `ssr` (its default) is the Node prerenderer below.
