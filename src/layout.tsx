@@ -7,7 +7,7 @@ import { translators } from "./i18n.ts";
 import { href, type Locale, localeInfo, locales, type Route, sourceLocale } from "./locale.ts";
 import { Logo } from "./logo.tsx";
 import { shareFrame } from "./og.tsx";
-import { company, email, mailto, origin, products } from "./site.ts";
+import { company, email, origin, shelved } from "./site.ts";
 import {
   colors,
   fontFeatures,
@@ -179,8 +179,8 @@ function currentness(path: string, target: string): "page" | "true" | undefined 
 }
 
 /**
- * The whole document: head, a sticky header with the name, the navigation, the other language (a
- * globe beside the contact button) and the contact button (behind a menu button on phones), the
+ * The whole document: head, a sticky header with the name, the navigation, the languages (beside
+ * the contact button) and the contact button (behind a menu button on phones), the
  * page's content, and the footer.
  */
 export function Page({
@@ -195,7 +195,7 @@ export function Page({
   const { locale, path, alternates } = meta;
   const t = translators[locale];
   const others = locales.filter((other) => other !== locale);
-  const contact = mailto(t.text("consulting_subject"));
+  const contact = href(locale, "contact");
   const links = nav.map(({ route, label }) => {
     const target = href(locale, route);
     return { target, current: currentness(path, target), label: t.text(label) };
@@ -333,7 +333,7 @@ export function Page({
               ))}
             </nav>
             <div {...stylex.props(styles.actions)}>
-              <Globe meta={meta} />
+              <LanguageSwitch meta={meta} />
               <a {...stylex.props(ui.button, ui.secondary, ui.focusRing)} href={contact}>
                 {t.text("nav_contact")}
               </a>
@@ -361,7 +361,7 @@ export function Page({
                   ))}
                 </nav>
                 <div {...stylex.props(styles.panelFoot)}>
-                  <Globe meta={meta} />
+                  <LanguageSwitch meta={meta} />
                   <a
                     {...stylex.props(ui.button, ui.secondary, ui.focusRing, styles.panelContact)}
                     href={contact}
@@ -404,31 +404,38 @@ function Languages({ meta, style }: { meta: Meta; style: Style }) {
   );
 }
 
-/** Links to this page in the other languages, each a globe named for the language it leads to. */
-function Globe({ meta }: { meta: Meta }) {
+/**
+ * Every language by its code, `EN DE`: the page's own in full ink and not a link, each other one
+ * a link to this page in that language, named in full for screen readers.
+ */
+function LanguageSwitch({ meta }: { meta: Meta }) {
   const t = translators[meta.locale];
   return (
-    <>
-      {locales
-        .filter((other) => other !== meta.locale)
-        .map((other) => (
-          <a
-            {...stylex.props(ui.control, ui.focusRing, styles.globe)}
-            href={meta.alternates?.[other] ?? href(other, "home")}
-            hreflang={other}
-            aria-label={t.text("language_switch", { language: t.language(other) })}
+    <span {...stylex.props(ui.text, styles.switch)}>
+      {locales.map((code) =>
+        code === meta.locale ? (
+          <span
+            key={code}
+            {...stylex.props(styles.code, styles.codeCurrent)}
+            lang={code}
+            title={t.language(code)}
           >
-            {/* Lines as heavy as the nav's text, so the meridian and the equator stay apart. */}
-            <svg {...stylex.props(styles.globeIcon)} viewBox="0 0 20 20" aria-hidden="true">
-              <g fill="none" stroke="currentColor" stroke-width={1.25}>
-                <circle cx={10} cy={10} r={8.375} />
-                <ellipse cx={10} cy={10} rx={3.75} ry={8.375} />
-                <path d="M1.625 10h16.75" />
-              </g>
-            </svg>
+            {code.toUpperCase()}
+          </span>
+        ) : (
+          <a
+            key={code}
+            {...stylex.props(ui.quiet, ui.control, ui.focusRing, styles.code)}
+            href={meta.alternates?.[code] ?? href(code, "home")}
+            hreflang={code}
+            lang={code}
+            aria-label={t.text("language_switch", { language: t.language(code) })}
+          >
+            {code.toUpperCase()}
           </a>
-        ))}
-    </>
+        ),
+      )}
+    </span>
   );
 }
 
@@ -450,8 +457,8 @@ function Footer({ meta }: { meta: Meta }) {
     {
       title: t.text("nav_products"),
       place: styles.groupFirst,
-      links: products.map((product) => ({
-        target: href(locale, "products", product.slug),
+      links: shelved("products").map((product) => ({
+        target: href(locale, product.shelf, product.slug),
         label: t.text(product.name),
       })),
     },
@@ -460,6 +467,7 @@ function Footer({ meta }: { meta: Meta }) {
       place: styles.groupSecond,
       links: [
         page("about", t.text("nav_about")),
+        page("research", t.text("research_title")),
         page("join", t.text("nav_join")),
         page("blog", t.text("nav_blog")),
       ],
@@ -650,7 +658,7 @@ const styles = stylex.create({
     marginInlineStart: `calc(-1 * ${space.x2})`,
   },
   navLink: { paddingInline: space.x2, paddingBlock: space.x1 },
-  /** Desktop: the language globe & the contact button, on the right. */
+  /** Desktop: the languages & the contact button, on the right. */
   actions: {
     display: { default: "none", [media.desktop]: "flex" },
     alignItems: "center",
@@ -685,7 +693,7 @@ const styles = stylex.create({
     fontSize: type.menu,
     lineHeight: leading.x3_5,
   },
-  /** The globe, then the contact button across the rest of the row. */
+  /** The languages, then the contact button across the rest of the row. */
   panelFoot: {
     display: "flex",
     alignItems: "center",
@@ -693,26 +701,19 @@ const styles = stylex.create({
     marginTop: space.x2,
   },
   panelContact: { flexGrow: 1 },
-  /**
-   * A square as tall as the button beside it, all of it answering the pointer. In the text's ink,
-   * fading to secondary under the pointer as the button does.
-   */
-  globe: {
+  /** The language codes side by side, each as tall as the button beside them. */
+  switch: { display: "inline-flex", flexShrink: 0, alignItems: "center" },
+  code: {
     display: "inline-flex",
-    flexShrink: 0,
     alignItems: "center",
     justifyContent: "center",
-    width: { default: space.x6, [media.desktop]: space.x5 },
+    minWidth: { default: space.x6, [media.desktop]: space.x5 },
     height: { default: space.x6, [media.desktop]: space.x5 },
-    borderRadius: space.x1,
-    color: { default: colors.primary, ":hover": { [media.hover]: colors.secondary } },
+    fontWeight: weights.medium,
+    letterSpacing: "0.02em",
     touchAction: "manipulation",
   },
-  globeIcon: {
-    display: "block",
-    width: `calc(${space.x2} + ${space.half})`,
-    height: `calc(${space.x2} + ${space.half})`,
-  },
+  codeCurrent: { color: colors.primary },
   main: {
     flexGrow: 1,
     paddingBottom: { default: space.x12, [media.desktop]: space.x20 },

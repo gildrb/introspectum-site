@@ -8,6 +8,7 @@ Applies to `en.json`, `de.json` and the Markdown files in `src/content/<locale>/
 - Keep within `maxLength` (characters of text, placeholders not counted). The build checks this.
 - Use the terms in `glossary.json`. The build checks them.
 - Write short, plain sentences. No marketing words. No `·` separator.
+- German uses "und" in sentences. Keep "&" only in names and fixed terms, such as "ERP & CRM" or "IBM Deutschland Research & Development".
 - Write numbers, dates and lists through placeholders. Never type a date or a percent sign into a message.
 
 ## When the English changes

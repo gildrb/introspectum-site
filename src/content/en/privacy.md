@@ -12,6 +12,12 @@ When you join a product’s waiting list, we store your email address, your comp
 
 We keep an entry until the product’s waiting list closes or until you withdraw your consent, whichever comes first. To withdraw it, write to [{email}](mailto:{email}); we then delete your entry.
 
+## Contact form
+
+When you send the contact form, we store your name, your email address, your company name if you give one, the size of your team, the topic you chose, what you tell us you are building with AI, the language of the page & the time you sent it. We use them only to answer your inquiry & to prepare an offer if you ask for one. The legal basis is taking steps at your request before entering into a contract (Art. 6(1)(b) GDPR); where your message is not about a contract, it is our legitimate interest in answering the messages sent to us (Art. 6(1)(f) GDPR). The messages are stored with Cloudflare.
+
+Each message is deleted automatically one year after it arrives. If it leads to a contract, we keep what the contract needs for as long as the law requires.
+
 ## Email
 
 When you write to us, we use your message & address only to answer you.

@@ -4,21 +4,23 @@ import type { Locale } from "../locale.ts";
 import { grid, media, space } from "../tokens.stylex.ts";
 import { ui } from "../ui.tsx";
 import type { MachineName } from "./machines.ts";
-import balanceSvg from "./balance.svg?raw";
 import bookwheelSvg from "./bookwheel.svg?raw";
 import ledgerSvg from "./ledger.svg?raw";
 import mintSvg from "./mint.svg?raw";
 import pantographSvg from "./pantograph.svg?raw";
+import proofSvg from "./proof.svg?raw";
 import recorderSvg from "./recorder.svg?raw";
+import traceSvg from "./trace.svg?raw";
 
 /** Each machine's drawing, built by its script in `scripts/figures/`, and its one-line caption. */
 const drawings: Readonly<Record<MachineName, { svg: string; caption: MessageId }>> = {
-  balance: { svg: balanceSvg, caption: "balance_caption" },
   bookwheel: { svg: bookwheelSvg, caption: "bookwheel_caption" },
   ledger: { svg: ledgerSvg, caption: "ledger_caption" },
   mint: { svg: mintSvg, caption: "mint_caption" },
   pantograph: { svg: pantographSvg, caption: "pantograph_caption" },
+  proof: { svg: proofSvg, caption: "proof_caption" },
   recorder: { svg: recorderSvg, caption: "recorder_caption" },
+  trace: { svg: traceSvg, caption: "trace_caption" },
 };
 
 /**

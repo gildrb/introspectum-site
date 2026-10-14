@@ -1,10 +1,12 @@
 import * as stylex from "@stylexjs/stylex";
 import type { FunctionComponent } from "preact";
+import type { Contact } from "./islands/contact.tsx";
 import type { Waitlist } from "./islands/waitlist.tsx";
 
 /** Components that `client.ts` hydrates in the browser; everything else stays static HTML. */
 export type Islands = {
   waitlist: typeof Waitlist;
+  contact: typeof Contact;
 };
 
 const styles = stylex.create({ island: { display: "contents" } });

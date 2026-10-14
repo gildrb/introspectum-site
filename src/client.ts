@@ -29,20 +29,25 @@ if (figures.length > 0) {
 }
 
 // The islands are server-rendered and work without JavaScript. Only pages that have one load
-// Preact & the island's code: let the first frame paint, then hydrate each one in its own task
-// with the props `Island` recorded on the server.
+// Preact & the code of the islands they have: let the first frame paint, then hydrate each one in
+// its own task with the props `Island` recorded on the server.
 const islands = document.querySelectorAll<HTMLElement>("[data-island]");
 if (islands.length > 0) {
-  const [{ h, hydrate }, { isWaitlistProps, Waitlist }] = await Promise.all([
+  const names = new Set(Array.from(islands, (element) => element.dataset.island));
+  const [{ h, hydrate }, waitlist, contact] = await Promise.all([
     import("preact"),
-    import("./islands/waitlist.tsx"),
+    names.has("waitlist") ? import("./islands/waitlist.tsx") : null,
+    names.has("contact") ? import("./islands/contact.tsx") : null,
   ]);
   requestAnimationFrame(() => {
     for (const element of islands) {
+      const name = element.dataset.island;
       const props: unknown = JSON.parse(element.dataset.props ?? "null");
-      if (element.dataset.island !== "waitlist" || !isWaitlistProps(props))
-        throw new Error(`Unknown island or props: ${element.dataset.island}`);
-      setTimeout(() => hydrate(h(Waitlist, props), element));
+      if (name === "waitlist" && waitlist !== null && waitlist.isWaitlistProps(props))
+        setTimeout(() => hydrate(h(waitlist.Waitlist, props), element));
+      else if (name === "contact" && contact !== null && contact.isContactProps(props))
+        setTimeout(() => hydrate(h(contact.Contact, props), element));
+      else throw new Error(`Unknown island or props: ${name}`);
     }
   });
 }

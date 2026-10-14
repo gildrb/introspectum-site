@@ -1,6 +1,6 @@
 # About
 
-Introspectum Limited is a software company registered in the Isle of Man. We build tools that make software, & the businesses that run on it, checkable: a verified [Software Factory](/products/software-factory), an open-data [ERP & CRM](/products/erp-crm), & research on a [Trading Platform](/products/trading-platform).
+Introspectum Limited is a software company registered in the Isle of Man. We build tools that make software, & the businesses that run on it, checkable: a verified [Software Factory](/products/software-factory), an open-data [ERP & CRM](/products/erp-crm), & research on a [Trading Platform](/research/trading-platform).
 
 We are our own first customer: our development is the first to run on the Software Factory, & our business the first to run on the ERP & CRM.
 
