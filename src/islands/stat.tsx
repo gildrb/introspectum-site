@@ -30,31 +30,55 @@ export function isStatProps(value: unknown): value is StatProps {
 }
 
 /**
- * Where the figures stand: the real values as served; at zero, set without motion; or rolling up
- * to the real values.
+ * Where the figures stand. `Pending`: as served, the real values, kept out of sight by the page's
+ * stylesheet (`pendingCss`) until the script takes over, or shown by it as they are if the script
+ * is late. `Served`: the real values in sight, still. `Hidden`: zeros, out of sight, waiting to be
+ * seen. `Rolling`: coming into sight while rolling up from the zeros to the real values.
  */
-type Phase = { $: "Served" } | { $: "Zero" } | { $: "Rolling" };
+type Phase = { $: "Pending" } | { $: "Served" } | { $: "Hidden" } | { $: "Rolling" };
 
-/** How long the figures take to roll up, and how far apart the measurements of the row start. */
-const roll = { length: 1400, stagger: 140 };
+/**
+ * How long the figures take to roll up and to come into sight, and how far apart the measurements
+ * of the row start.
+ */
+const roll = { length: 1400, fade: 700, stagger: 140 };
+
+/** How long the stylesheet waits for the script before it shows the real values as they are. */
+const patience = 3000;
+
+/**
+ * The stylesheet the homepage carries for its measurements: served, they wait out of sight for
+ * this island, which brings them in rolling. Shown at once with reduced motion and without
+ * JavaScript (`noscriptCss`), and after `patience` when the script is late, so a figure is never
+ * missing for long and never shows anything but its real value or a roll up to it.
+ */
+export const pendingCss = `[data-stat-pending]{opacity:0;animation:stat-patience 0s ${patience}ms both}@keyframes stat-patience{to{opacity:1}}@media (prefers-reduced-motion:reduce){[data-stat-pending]{opacity:1;animation:none}}`;
+export const noscriptCss = "[data-stat-pending]{opacity:1;animation:none}";
 
 /**
  * One of the homepage's measurements, its figures set by `@sfinterface/numbers` in the page's
- * language. The server sets the real values, which is all a page without JavaScript, or a visitor
- * who asks for reduced motion, ever sees. Hydrated, the figures go to zero at once and roll up to
- * their values, slowly and one measurement after another, once most of the row is in view; a row
- * already in view rolls at once.
+ * language. Its figures first appear rolling up from zeros, slowly and one measurement after
+ * another, once most of the row is in view; they are never shown at their values and then taken
+ * back. With reduced motion, without JavaScript, or with a script later than `patience`, they
+ * show their real values, still.
  */
 export function Stat({ locale, parts, order }: StatProps) {
   const root = useRef<HTMLSpanElement>(null);
-  const [phase, setPhase] = useState<Phase>({ $: "Served" });
+  const [phase, setPhase] = useState<Phase>({ $: "Pending" });
   const format = new Intl.NumberFormat(localeInfo[locale].tag);
 
   useLayoutEffect(() => {
     const element = root.current;
     if (element === null) throw new Error("The measurement's figures are missing.");
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
-    setPhase({ $: "Zero" });
+    // Already in sight, through reduced motion or a late script: they stay as they are.
+    if (
+      matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      getComputedStyle(element).opacity === "1"
+    ) {
+      setPhase({ $: "Served" });
+      return undefined;
+    }
+    setPhase({ $: "Hidden" });
     let timer = 0;
     // Returning nothing from the callback makes Motion stop watching: the roll plays once.
     const stop = inView(
@@ -70,14 +94,21 @@ export function Stat({ locale, parts, order }: StatProps) {
     };
   }, [order]);
 
-  let duration: number;
+  let zero: boolean;
+  let style: Record<string, string | number> | undefined;
   switch (phase.$) {
+    case "Pending":
     case "Served":
-    case "Rolling":
-      duration = roll.length;
+      zero = false;
+      style = undefined;
       break;
-    case "Zero":
-      duration = 0;
+    case "Hidden":
+      zero = true;
+      style = { opacity: 0 };
+      break;
+    case "Rolling":
+      zero = false;
+      style = { opacity: 1, transition: `opacity ${roll.fade}ms cubic-bezier(0.25, 0.1, 0.25, 1)` };
       break;
     default: {
       const _: never = phase;
@@ -86,7 +117,7 @@ export function Stat({ locale, parts, order }: StatProps) {
   }
 
   return (
-    <span ref={root}>
+    <span ref={root} data-stat-pending={phase.$ === "Pending" ? "" : undefined} style={style}>
       {parts.map((part, index) => {
         switch (part.$) {
           case "Text":
@@ -96,13 +127,13 @@ export function Stat({ locale, parts, order }: StatProps) {
             return (
               <Numbers
                 key={index}
-                value={phase.$ === "Zero" ? 0 : part.value}
+                value={zero ? 0 : part.value}
                 // At zero, every column the value needs shows a 0, so each one turns up to its
                 // digit, as on an odometer, rather than new columns simply appearing.
-                format={phase.$ === "Zero" ? zeros(part.value) : plain}
+                format={zero ? zeros(part.value) : plain}
                 locale={localeInfo[locale].tag}
                 label={format.format(part.value)}
-                duration={duration}
+                duration={zero ? 0 : roll.length}
                 style={figures}
               />
             );

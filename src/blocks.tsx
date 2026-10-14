@@ -26,11 +26,11 @@ import { imageSize, versioned } from "./versioned.ts";
  * figure is the opening's centre of interest: drawn tall, the text centred beside it, and the
  * page's first part further below than parts are from each other.
  *
- * With `reveal`, the opening arrives as the page first paints, in Linear's measured rhythm: the
+ * With `reveal`, the text arrives as the page first paints, in Linear's measured rhythm: the
  * title word by word (a title that is not plain text as one), then the lead, then what follows,
- * each rising a quarter of its type size out of a 10px blur over one second; the figure last,
- * fading up over a second and a half. CSS alone runs it, so it never waits for the script; it
- * moves and fades only, so nothing shifts; with reduced motion everything simply stands there.
+ * each rising a quarter of its type size out of a 10px blur over one second. The figure stands
+ * still in place from the start. CSS alone runs it, so it never waits for the script; it moves
+ * and fades only, so nothing shifts; with reduced motion the text simply stands there.
  */
 export function Hero({
   title,
@@ -120,16 +120,7 @@ export function Hero({
         )}
       </div>
       {figure !== undefined && (
-        <div
-          {...stylex.props(
-            styles.besideFigure,
-            stage && styles.stageFigure,
-            reveal && styles.appear,
-            reveal && styles.revealAfter(reveals.figure),
-          )}
-        >
-          {figure}
-        </div>
+        <div {...stylex.props(styles.besideFigure, stage && styles.stageFigure)}>{figure}</div>
       )}
     </header>
   );
@@ -138,29 +129,15 @@ export function Hero({
 /**
  * An opening's reveal, in milliseconds, measured on linear.app (14 October 2026): each part takes
  * one second on `ease`, title lines 33 ms apart, the description 200 ms after the title, the
- * button 450 ms after it, the product picture 900 ms after it over 1.5 s. Ours starts 100 ms after
- * the first paint and ends about 2.2 s after it, the figure settling last.
+ * button 450 ms after it. Ours starts 100 ms after the first paint and ends about 1.6 s after it.
+ * The figure takes no part: a machine is there from the first paint and runs.
  */
-const reveals = {
-  start: 100,
-  word: 33,
-  lead: 300,
-  rest: 550,
-  figure: 1000,
-  length: 1000,
-  figureLength: 1500,
-};
+const reveals = { start: 100, word: 33, lead: 300, rest: 550, length: 1000 };
 
 /** A part of the opening rising into place: lower and blurred, then sharp and in place. */
 const rise = stylex.keyframes({
   from: { opacity: 0, transform: "translateY(0.25em)", filter: "blur(10px)" },
   to: { opacity: 1, transform: "none", filter: "none" },
-});
-
-/** The opening's figure: too large to blur cheaply, it fades up from a little lower instead. */
-const surface = stylex.keyframes({
-  from: { opacity: 0, transform: "translateY(1.5rem)" },
-  to: { opacity: 1, transform: "none" },
 });
 
 /**
@@ -640,12 +617,6 @@ const styles = stylex.create({
     animationDuration: `${reveals.length}ms`,
     // CSS `ease`, as Linear's: a soft start, a long settle.
     animationTimingFunction: "cubic-bezier(0.25, 0.1, 0.25, 1)",
-    animationFillMode: "both",
-  },
-  appear: {
-    animationName: { default: null, "@media (prefers-reduced-motion: no-preference)": surface },
-    animationDuration: `${reveals.figureLength}ms`,
-    animationTimingFunction: "cubic-bezier(0.455, 0.03, 0.515, 0.955)",
     animationFillMode: "both",
   },
   revealAfter: (delay: number) => ({ animationDelay: `${delay}ms` }),

@@ -15,7 +15,7 @@ import {
 } from "../blocks.tsx";
 import { type MessageId, type NumberPart, type Translator, translators } from "../i18n.ts";
 import { Island } from "../island.tsx";
-import { Stat } from "../islands/stat.tsx";
+import { noscriptCss, pendingCss, Stat } from "../islands/stat.tsx";
 import { Machine } from "../figures/machine.tsx";
 import { type Assets, Page } from "../layout.tsx";
 import { href, type Locale, localeInfo, locales } from "../locale.ts";
@@ -130,8 +130,16 @@ export function Home({
             availableLanguage: locales.map((code) => localeInfo[code].tag),
           },
         },
-        // The moving figures' own stylesheet, in its own `@layer arc`; only this page has them.
-        head: <style dangerouslySetInnerHTML={{ __html: numbersCss }} />,
+        // The moving figures' own stylesheet, in its own `@layer arc`, and the measurements'
+        // waiting rules: out of sight until they roll in, in sight at once without JavaScript.
+        head: (
+          <>
+            <style dangerouslySetInnerHTML={{ __html: `${numbersCss}\n${pendingCss}` }} />
+            <noscript>
+              <style dangerouslySetInnerHTML={{ __html: noscriptCss }} />
+            </noscript>
+          </>
+        ),
       }}
     >
       <Hero
