@@ -258,7 +258,7 @@ export function Markdown({ blocks }: { blocks: readonly Block[] }) {
           }
           case "code":
             return (
-              <pre {...stylex.props(ui.mono, styles.pre, ui.edge, spacing)}>
+              <pre {...stylex.props(ui.mono, styles.pre, spacing)}>
                 <code>{block.code}</code>
               </pre>
             );

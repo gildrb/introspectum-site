@@ -19,8 +19,10 @@ export type Style = stylex.StyleXArray<stylex.CompiledStyles | boolean | null | 
 /**
  * Keeps names out of browser translation. Preact types `translate` as a boolean and drops `false`
  * from the server HTML; the HTML attribute is the string "no", so it is spread as a plain attribute.
+ * Written in capitals, which HTML reads the same (its keywords ignore case): preact/compat, which
+ * Radix needs, turns the exact string "no" into `false`, which the server would drop again.
  */
-export const untranslated: Readonly<Record<string, string>> = { translate: "no" };
+export const untranslated: Readonly<Record<string, string>> = { translate: "NO" };
 
 /** Interface: navigation, buttons, labels, forms and the footer. */
 const sans = 'Inter, "Inter Fallback", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
@@ -35,8 +37,6 @@ export const ui = stylex.create({
     outline: { default: null, ":focus-visible": `${stroke.width} solid ${colors.primary}` },
     outlineOffset: space.half,
   },
-  /** The edge of a filled block, the form or code: a hairline inside it, taking no room. */
-  edge: { boxShadow: `inset 0 0 0 ${stroke.width} ${colors.hairline}` },
   /** An image's edge, drawn over its outer pixels, so it shows on light & dark pictures alike. */
   imageEdge: {
     outline: `${stroke.width} solid ${colors.hairline}`,

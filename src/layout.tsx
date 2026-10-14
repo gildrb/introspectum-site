@@ -1,11 +1,13 @@
 import { readFileSync } from "node:fs";
 import * as stylex from "@stylexjs/stylex";
-import type { ComponentChildren } from "preact";
+import { type ComponentChildren, createContext } from "preact";
 import { schemeToken } from "./color.ts";
 import { engravingCss } from "./figures/engraving.ts";
 import { translators } from "./i18n.ts";
 import { href, type Locale, localeInfo, locales, type Route, sourceLocale } from "./locale.ts";
-import { Logo } from "./logo.tsx";
+import { Island } from "./island.tsx";
+import { LogoMenu } from "./islands/logo.tsx";
+import { mark } from "./logo.tsx";
 import { shareFrame } from "./og.tsx";
 import { company, email, origin, shelved } from "./site.ts";
 import {
@@ -17,7 +19,6 @@ import {
   media,
   shadows,
   space,
-  stroke,
   tracking,
   type,
   weights,
@@ -25,8 +26,15 @@ import {
 import { type Style, ui, untranslated } from "./ui.tsx";
 import { versioned } from "./versioned.ts";
 
-/** What the build hands every page: the client script and the stylesheet StyleX collected. */
-export type Assets = { script: string; css: string };
+/**
+ * What the build hands every page: the client script, the stylesheet StyleX collected, and for a
+ * module the client imports on demand (`src/figures/proof.ts`) the URLs of its code and of what it
+ * imports, so a page can name them in `<link rel="modulepreload">` before the script asks.
+ */
+export type Assets = { script: string; css: string; preload: (module: string) => string[] };
+
+/** The page's assets, for the parts deep in it that preload their own code (`Machine`). */
+export const PageAssets = createContext<Assets | null>(null);
 
 /** What a page tells the document head. */
 export type Meta = {
@@ -267,8 +275,9 @@ export function Page({
         )}
         <script type="speculationrules" dangerouslySetInnerHTML={{ __html: speculationRules }} />
         <style dangerouslySetInnerHTML={{ __html: `${globalCss}\n${assets.css}` }} />
-        {/* Preact's typings lack `fetchpriority` on <script>, hence the spread. */}
-        <script type="module" src={assets.script} {...{ fetchpriority: "low" }} />
+        {/* `async`: it runs as soon as it arrives, while the page may still be streaming in, so a
+            drawn machine starts as soon as its figure is in (see `client.ts`). */}
+        <script type="module" src={assets.script} async />
         {meta.jsonLd !== undefined && <JsonLd value={meta.jsonLd} />}
         {meta.head}
       </head>
@@ -278,42 +287,22 @@ export function Page({
         </a>
         <header {...stylex.props(styles.header)}>
           <div {...stylex.props(ui.container, styles.bar)}>
-            <a
-              {...stylex.props(ui.focusRing, styles.home)}
-              href={href(locale, "home")}
-              aria-current={currentness(path, href(locale, "home")) === "page" ? "page" : undefined}
-              data-logo-menu="logo-menu"
-            >
-              <Logo style={styles.logo} />
-              <span {...stylex.props(ui.srOnly)} {...untranslated}>
-                {company.name}
-              </span>
-            </a>
-            <div
-              {...stylex.props(styles.logoMenu)}
-              id="logo-menu"
-              popover="auto"
-              role="menu"
-              tabIndex={-1}
-              aria-label={t.text("logo_menu_label")}
-            >
-              <button
-                {...stylex.props(ui.text, ui.control, styles.logoMenuItem)}
-                type="button"
-                role="menuitem"
-                data-copy-logo=""
-              >
-                {t.text("logo_menu_copy")}
-              </button>
-              <a
-                {...stylex.props(ui.text, ui.control, styles.logoMenuItem)}
-                role="menuitem"
-                href={brandAssetsUrl}
-                download="introspectum-brand.zip"
-              >
-                {t.text("logo_menu_download")}
-              </a>
-            </div>
+            <Island
+              name="logo"
+              component={LogoMenu}
+              props={{
+                home: href(locale, "home"),
+                current: currentness(path, href(locale, "home")) === "page",
+                name: company.name,
+                mark: { viewBox: mark.viewBox, path: mark.path },
+                brandAssets: brandAssetsUrl,
+                text: {
+                  label: t.text("logo_menu_label"),
+                  copy: t.text("logo_menu_copy"),
+                  download: t.text("logo_menu_download"),
+                },
+              }}
+            />
             <nav {...stylex.props(styles.nav)} aria-label={t.text("nav_label")}>
               {links.map(({ target, current, label }) => (
                 <a
@@ -374,7 +363,7 @@ export function Page({
           </div>
         </header>
         <main {...stylex.props(styles.main)} id="content" tabIndex={-1}>
-          {children}
+          <PageAssets.Provider value={assets}>{children}</PageAssets.Provider>
         </main>
         <Footer meta={meta} />
       </body>
@@ -445,7 +434,7 @@ function LanguageSwitch({ meta }: { meta: Meta }) {
  */
 const emblemUrl = `data:image/webp;base64,${readFileSync("src/emblem.webp").toString("base64")}`;
 
-/** The logo in black & white in every format, for the logo's menu (see `styles.logoMenu`). */
+/** The logo in black & white in every format, for the logo's menu (`islands/logo.tsx`). */
 const brandAssetsUrl = versioned("/brand/introspectum-brand.zip");
 
 /** The name and address, every page by group, the legal pages, and the other languages. */
@@ -604,50 +593,6 @@ const styles = stylex.create({
     color: colors.primary,
     textDecoration: "none",
   },
-  /** The header's link home: the mark alone, in the color of the text. */
-  home: { display: "flex", flexShrink: 0, color: colors.primary },
-  /** Four and a half units tall; its width follows from the mark's own proportions (its viewBox). */
-  logo: { display: "block", height: `calc(${space.x4} + ${space.half})`, width: "auto" },
-  /**
-   * The logo's own menu, opened by a right click or a long press on it (`src/logo-menu.ts`),
-   * always just under the logo, its left edge on the logo's, one unit below it. A card over the
-   * page, edged & raised like the phone menu; it sits over everything else.
-   */
-  logoMenu: {
-    inset: "auto",
-    margin: 0,
-    marginTop: space.x1,
-    // Focus rests on the menu only until an item takes it; the items show their own.
-    outline: "none",
-    minWidth: `calc(${space.x20} + ${space.x12})`,
-    padding: space.x1,
-    borderWidth: stroke.width,
-    borderStyle: "solid",
-    borderColor: colors.hairline,
-    borderRadius: space.x1,
-    boxShadow: shadows.raised,
-    backgroundColor: colors.surface,
-    color: colors.primary,
-  },
-  /** One line of the menu: the whole width answers the pointer, in the page's own ground. */
-  logoMenuItem: {
-    display: "block",
-    width: "100%",
-    paddingInline: space.x2,
-    paddingBlock: space.x1,
-    borderWidth: 0,
-    borderRadius: space.half,
-    outline: "none",
-    backgroundColor: {
-      default: "transparent",
-      ":hover": { [media.hover]: colors.bg },
-      ":focus-visible": colors.bg,
-    },
-    color: colors.primary,
-    textAlign: "start",
-    textDecoration: "none",
-    cursor: "pointer",
-  },
   /**
    * Desktop: the links sit on the left, next to the logo. Each link's padding fills the gap between
    * them, so the pointer finds no dead space along the row; the row reaches back by one padding at
@@ -680,9 +625,6 @@ const styles = stylex.create({
     paddingBlock: space.x2,
     paddingInline: space.x3,
     backgroundColor: colors.bg,
-    borderBottomWidth: stroke.width,
-    borderBottomStyle: "solid",
-    borderBottomColor: colors.hairline,
     boxShadow: shadows.raised,
   },
   panelNav: { display: "flex", flexDirection: "column" },

@@ -303,7 +303,7 @@ export function ProductPage({
               </li>
             </ol>
           </div>
-          <div {...stylex.props(ui.textWidth, styles.form, styles.formAfter, ui.edge)}>
+          <div {...stylex.props(ui.textWidth, styles.form, styles.formAfter)}>
             <Island
               name="waitlist"
               component={Waitlist}

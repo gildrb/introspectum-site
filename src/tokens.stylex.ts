@@ -58,8 +58,8 @@ export const colors = stylex.defineVars({
   /** Emerald, the brand color, used sparingly: the form's checkbox. */
   accent: { default: "oklch(44% 0.1 160)", [light]: "oklch(40% 0.09 160)" },
   /**
-   * The edge of what stands off the page: the form, code, images and the menus. Cards and the
-   * closing panel have none.
+   * The edge of an image, so a white scan does not melt into the page. Only inputs and buttons
+   * have edges besides; cards, panels, the form, code and the menus have none.
    * Translucent, so one edge sharpens every ground it lies on. Decoration only: each reads the
    * same without it, so it may stay below APCA's Lc 15 for meaningful non-text.
    */
@@ -73,8 +73,8 @@ export const colors = stylex.defineVars({
 });
 
 /**
- * The menus over the page, with `colors.hairline` as their edge: a close shadow under the edge &
- * a wide one under the menu, the page's ink at low strength, so the menu lifts off what it covers.
+ * The menus over the page, without an edge: a close shadow & a wide one under the menu, the page's
+ * ink at low strength, so the menu lifts off what it covers.
  */
 export const shadows = stylex.defineVars({
   raised: {
@@ -199,4 +199,6 @@ export const layer = stylex.defineConsts({
   header: 10,
   /** The skip link, once focused, over the header. */
   skip: 20,
+  /** Menus & a list's choices, opened over everything, the header & the skip link included. */
+  popover: 30,
 });

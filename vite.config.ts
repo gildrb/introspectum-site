@@ -87,7 +87,11 @@ const sitePlugin: Plugin = {
       const shareImages = Object.fromEntries(
         Object.keys(site.shareCards).map((page) => [page, site.sharePath(page)]),
       );
-      const files = site.render({ script: "/src/client.ts", css }, shareImages);
+      // Vite serves each source module on its own: preloading one is fetching its own path.
+      const files = site.render(
+        { script: "/src/client.ts", css, preload: (module) => [`/${module}`] },
+        shareImages,
+      );
       // A stamped font, image or archive: served from the public file it copies, cached for good
       // as `public/_headers` caches it in production. Vite would mark it `no-cache`, and the
       // browser would then check every font with the server on every page before showing text.
@@ -146,6 +150,18 @@ export default defineConfig({
     options: { typeAware: true, typeCheck: true },
   },
   appType: "custom",
+  // Radix, `@sfinterface/numbers` and Motion are written for React: they get Preact's compatibility
+  // layer in its place, in the browser bundle and the prerenderer alike (preactjs.com, "Aliasing
+  // React to Preact"). `package.json` installs `react` & `react-dom` as `@preact/compat`, so
+  // whatever this misses, Node's resolution finds the same layer.
+  resolve: {
+    alias: [
+      { find: /^react$/, replacement: "preact/compat" },
+      { find: /^react-dom$/, replacement: "preact/compat" },
+      { find: /^react-dom\/test-utils$/, replacement: "preact/test-utils" },
+      { find: /^react\/jsx-runtime$/, replacement: "preact/jsx-runtime" },
+    ],
+  },
   server: { host: "127.0.0.1", port: 5175, strictPort: false },
   // The Cloudflare plugin runs `worker/` in the Workers runtime under `vp dev`, with local KV, and
   // after the build below writes the Worker and the client output as Build Output for `cf deploy`.
@@ -196,7 +212,36 @@ export default defineConfig({
           }),
         ),
       );
-      const files = site.render({ script: `/${entry.fileName}`, css }, shareImages);
+      // For each module the client imports on its own (a machine's code), its chunk and every
+      // chunk that one imports: what a page names for `modulepreload` (`Machine`).
+      type Chunk = Extract<(typeof client.output)[number], { type: "chunk" }>;
+      const chunks = new Map<string, Chunk>();
+      for (const chunk of client.output)
+        if (chunk.type === "chunk") chunks.set(chunk.fileName, chunk);
+      const modules = new Map<string, string[]>();
+      for (const chunk of chunks.values()) {
+        if (chunk.facadeModuleId === null) continue;
+        const files = new Set<string>();
+        const add = (file: string) => {
+          if (files.has(file)) return;
+          files.add(file);
+          const imported = chunks.get(file);
+          assert(imported, `The client imports ${file}, which it did not build.`);
+          for (const next of imported.imports) add(next);
+        };
+        add(chunk.fileName);
+        const module = path.relative(browser.config.root, chunk.facadeModuleId);
+        modules.set(
+          module,
+          Array.from(files, (file) => `/${file}`),
+        );
+      }
+      const preload = (module: string) => {
+        const urls = modules.get(module);
+        assert(urls, `The client has no chunk of its own for ${module}.`);
+        return urls;
+      };
+      const files = site.render({ script: `/${entry.fileName}`, css, preload }, shareImages);
       await Promise.all(Object.entries(files).map(([file, body]) => write(file, body)));
       // Rendering named every stamped font and image; copy each public file to its stamped name.
       await Promise.all(

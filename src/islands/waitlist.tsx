@@ -1,5 +1,6 @@
+import * as Checkbox from "@radix-ui/react-checkbox";
 import * as stylex from "@stylexjs/stylex";
-import { useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { isLocale, type Locale } from "../locale.ts";
 import { isProductSlug, type ProductSlug } from "../site.ts";
 import { colors, fontFeatures, leading, media, space, stroke } from "../tokens.stylex.ts";
@@ -40,10 +41,23 @@ type State = { $: "idle" } | { $: "sending" } | { $: "joined" } | { $: "failed";
 
 /**
  * A product's waiting-list form. Without JavaScript it posts to `/api/waitlist`, which redirects to
- * the confirmation page; hydrated, it posts in the background and answers in place.
+ * the confirmation page, and its consent box is the browser's own; hydrated, the box is Radix's,
+ * the same size & look, and the form posts in the background and answers in place.
  */
 export function Waitlist({ product, locale, text }: WaitlistProps) {
   const [state, setState] = useState<State>({ $: "idle" });
+  const [consent, setConsent] = useState(false);
+  // The browser's checkbox until hydration, so the first render matches the server's; Radix's after.
+  const [hydrated, setHydrated] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const box = useRef<HTMLButtonElement>(null);
+
+  // After hydration: keep a tick given before it.
+  useEffect(() => {
+    const given = formRef.current?.elements.namedItem("consent");
+    if (given instanceof HTMLInputElement) setConsent(given.checked);
+    setHydrated(true);
+  }, []);
 
   async function submit(form: HTMLFormElement) {
     setState({ $: "sending" });
@@ -94,6 +108,7 @@ export function Waitlist({ product, locale, text }: WaitlistProps) {
     <div {...stylex.props(styles.waitlist)}>
       {state.$ !== "joined" && (
         <form
+          ref={formRef}
           {...stylex.props(styles.form)}
           method="post"
           action="/api/waitlist"
@@ -137,13 +152,40 @@ export function Waitlist({ product, locale, text }: WaitlistProps) {
             </label>
           </div>
           <label {...stylex.props(ui.text, styles.consent)}>
-            <input
-              {...stylex.props(styles.checkbox)}
-              type="checkbox"
-              name="consent"
-              value="yes"
-              required
-            />
+            <span {...stylex.props(styles.box)}>
+              {hydrated && (
+                <Checkbox.Root
+                  {...stylex.props(ui.focusRing, styles.checkbox, consent && styles.checked)}
+                  ref={box}
+                  checked={consent}
+                  onCheckedChange={(checked) => setConsent(checked === true)}
+                />
+              )}
+              {hydrated ? (
+                // The form's own box, under Radix's: it posts the tick & checks one was given. The
+                // browser's message then points at the box, & the focus it gives passes on.
+                <input
+                  {...stylex.props(styles.unseen)}
+                  type="checkbox"
+                  name="consent"
+                  value="yes"
+                  required
+                  checked={consent}
+                  tabIndex={-1}
+                  aria-hidden="true"
+                  onFocus={() => box.current?.focus()}
+                />
+              ) : (
+                // Uncontrolled, so a tick given before hydration survives it (see above).
+                <input
+                  {...stylex.props(ui.focusRing, styles.checkbox, styles.native)}
+                  type="checkbox"
+                  name="consent"
+                  value="yes"
+                  required
+                />
+              )}
+            </span>
             <span {...stylex.props(ui.label)}>{text.consent}</span>
           </label>
           <button
@@ -165,6 +207,12 @@ export function Waitlist({ product, locale, text }: WaitlistProps) {
     </div>
   );
 }
+
+/**
+ * The tick, drawn in cream (`colors.primary` dark, as light as `colors.bg` light): an image cannot
+ * read the page's colors, and cream reads on emerald in both schemes.
+ */
+const tick = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5 5.5-6' fill='none' stroke='%23fbf4e4' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`;
 
 const styles = stylex.create({
   waitlist: { display: "flex", flexDirection: "column" },
@@ -204,14 +252,49 @@ const styles = stylex.create({
     columnGap: space.x1,
     cursor: "pointer",
   },
-  checkbox: {
+  /** Holds the box, centred on the first line of the sentence beside it. */
+  box: {
+    position: "relative",
+    display: "flex",
     flexShrink: 0,
+    marginTop: `calc((${leading.x3} - ${space.x2}) / 2)`,
+  },
+  /**
+   * Two units square, edged like the fields; ticked, filled with emerald & checked in cream. The
+   * browser's box & Radix's look the same, so hydration swaps one for the other unseen.
+   */
+  checkbox: {
+    boxSizing: "border-box",
     width: space.x2,
     height: space.x2,
-    // Centred on the first line of the sentence beside it.
-    marginTop: `calc((${leading.x3} - ${space.x2}) / 2)`,
-    accentColor: colors.accent,
+    margin: 0,
+    padding: 0,
+    borderWidth: stroke.width,
+    borderStyle: "solid",
+    borderColor: colors.tertiary,
+    borderRadius: space.half,
+    backgroundColor: "transparent",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "100% 100%",
     cursor: "pointer",
+  },
+  native: {
+    appearance: "none",
+    borderColor: { default: colors.tertiary, ":checked": colors.accent },
+    backgroundColor: { default: "transparent", ":checked": colors.accent },
+    backgroundImage: { default: null, ":checked": tick },
+  },
+  checked: { borderColor: colors.accent, backgroundColor: colors.accent, backgroundImage: tick },
+  /** The form's own box once Radix's shows: over it, unseen & untouchable. */
+  unseen: {
+    position: "absolute",
+    inset: 0,
+    width: "100%",
+    height: "100%",
+    margin: 0,
+    opacity: 0,
+    pointerEvents: "none",
   },
   button: {
     cursor: { default: "pointer", ":disabled": "progress" },

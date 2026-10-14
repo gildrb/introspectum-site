@@ -25,20 +25,37 @@ import { imageSize, versioned } from "./versioned.ts";
  * `figure` stands beside it on wide screens and under it on narrower ones. On a `stage` the
  * figure is the opening's centre of interest: drawn tall, the text centred beside it, and the
  * page's first part further below than parts are from each other.
+ *
+ * With `reveal`, the text arrives as the page first paints: the title word by word (a title that
+ * is not plain text as one), then the lead, then what follows, each rising a little out of a blur
+ * (`rise`). CSS alone runs it, so it never waits for the script; it moves and fades only, so
+ * nothing shifts; with reduced motion the text simply stands there.
  */
 export function Hero({
   title,
   lead,
   figure,
   stage = false,
+  reveal = false,
   children,
 }: {
   title: ComponentChildren;
   lead?: ComponentChildren;
   figure?: ComponentChildren;
   stage?: boolean;
+  reveal?: boolean;
   children?: ComponentChildren;
 }) {
+  // Each title word with where it starts in the title, which keys it.
+  let at = 0;
+  const words =
+    reveal && typeof title === "string"
+      ? title.split(" ").map((word) => {
+          const start = at;
+          at += word.length + 1;
+          return { word, start };
+        })
+      : null;
   return (
     <header
       {...stylex.props(
@@ -50,13 +67,55 @@ export function Hero({
     >
       <div {...stylex.props(styles.besideText, stage && styles.stageText)}>
         <h1
-          {...stylex.props(ui.display, ui.titleWidth, figure !== undefined && styles.besideTitle)}
+          {...stylex.props(
+            ui.display,
+            ui.titleWidth,
+            figure !== undefined && styles.besideTitle,
+            reveal && words === null && styles.reveal,
+          )}
         >
-          {title}
+          {words === null
+            ? title
+            : words.map(({ word, start }, index) => (
+                <Fragment key={start}>
+                  {index > 0 && " "}
+                  <span
+                    {...stylex.props(
+                      styles.reveal,
+                      styles.word,
+                      styles.revealAfter(index * reveals.word),
+                    )}
+                  >
+                    {word}
+                  </span>
+                </Fragment>
+              ))}
         </h1>
-        {lead !== undefined && <p {...stylex.props(ui.lead, ui.textWidth, styles.lead)}>{lead}</p>}
+        {lead !== undefined && (
+          <p
+            {...stylex.props(
+              ui.lead,
+              ui.textWidth,
+              styles.lead,
+              reveal && styles.reveal,
+              reveal && styles.revealAfter(reveals.lead),
+            )}
+          >
+            {lead}
+          </p>
+        )}
         {children !== undefined && (
-          <div {...stylex.props(ui.textWidth, styles.stack, styles.afterHeroLead)}>{children}</div>
+          <div
+            {...stylex.props(
+              ui.textWidth,
+              styles.stack,
+              styles.afterHeroLead,
+              reveal && styles.reveal,
+              reveal && styles.revealAfter(reveals.rest),
+            )}
+          >
+            {children}
+          </div>
         )}
       </div>
       {figure !== undefined && (
@@ -65,6 +124,18 @@ export function Hero({
     </header>
   );
 }
+
+/**
+ * An opening's reveal, in milliseconds: when each title word, the lead and what follows start to
+ * rise, and how long each takes. The last ends about 0.6 s after the first paint.
+ */
+const reveals = { word: 30, lead: 180, rest: 240, length: 360 };
+
+/** A part of the opening rising into place: a little lower and blurred, then sharp and in place. */
+const rise = stylex.keyframes({
+  from: { opacity: 0, transform: "translateY(0.4rem)", filter: "blur(6px)" },
+  to: { opacity: 1, transform: "none", filter: "none" },
+});
 
 /**
  * A part of a page under its own heading. A `figure` stands beside it on wide screens, so its
@@ -533,6 +604,20 @@ const styles = stylex.create({
   /** The sources belong to the whole page, not to the part above: closer than a new part. */
   endMatter: { paddingTop: { default: space.x6, [media.desktop]: space.x8 } },
   lead: { marginTop: { default: space.x2, [media.desktop]: space.x3 } },
+  /**
+   * A part of an opening that rises into place as the page first paints (`Hero` with `reveal`),
+   * eased out, so it settles softly. Held in the first frame until its own start; with reduced
+   * motion there is no animation, so it stands there from the start.
+   */
+  reveal: {
+    animationName: { default: null, "@media (prefers-reduced-motion: no-preference)": rise },
+    animationDuration: `${reveals.length}ms`,
+    animationTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
+    animationFillMode: "both",
+  },
+  revealAfter: (delay: number) => ({ animationDelay: `${delay}ms` }),
+  /** A title word moves on its own only as a box of its own; it still breaks lines like a word. */
+  word: { display: "inline-block" },
   /** The opening's buttons and notes belong to its lead. */
   afterHeroLead: { marginTop: { default: space.x3, [media.desktop]: space.x4 } },
   /** A section's content under its intro. */

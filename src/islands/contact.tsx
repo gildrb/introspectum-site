@@ -1,14 +1,17 @@
+import * as Select from "@radix-ui/react-select";
 import * as stylex from "@stylexjs/stylex";
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import { isLocale, type Locale } from "../locale.ts";
 import {
   type InquiryTopic,
   inquiryMaxLength,
   inquiryTopics,
   isInquiryTopic,
+  isTeamSize,
+  type TeamSize,
   teamSizes,
 } from "../site.ts";
-import { colors, fontFeatures, media, space, stroke } from "../tokens.stylex.ts";
+import { colors, fontFeatures, layer, media, shadows, space, stroke } from "../tokens.stylex.ts";
 import { ui } from "../ui.tsx";
 
 /** The form's words, translated on the server so the browser loads no message catalog. */
@@ -60,17 +63,32 @@ type State =
 
 /**
  * The contact form. Without JavaScript it posts to `/api/contact`, which redirects to the
- * confirmation page; hydrated, it sets the topic the link to the page named (`?topic=`), posts in
- * the background and answers in place.
+ * confirmation page, and its lists are the browser's own. Hydrated, its lists open the site's own
+ * choices in place of the system's, it sets the topic the link to the page named (`?topic=`),
+ * posts in the background and answers in place.
  */
 export function Contact({ locale, text, topics }: ContactProps) {
   const [state, setState] = useState<State>({ $: "idle" });
+  const [team, setTeam] = useState<TeamSize | "">("");
   const [topic, setTopic] = useState<InquiryTopic | "">("");
+  // The browser's lists until hydration, so the first render matches the server's; Radix's after.
+  const [hydrated, setHydrated] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
-  // After hydration, so the first render matches the server's, which cannot see the query.
+  // After hydration: keep what was chosen in the browser's lists before it, else the topic the
+  // link named, which the server cannot see.
   useEffect(() => {
-    const requested = new URLSearchParams(window.location.search).get("topic");
-    if (requested !== null && isInquiryTopic(requested)) setTopic(requested);
+    const chosen = (name: string) => {
+      const list = formRef.current?.elements.namedItem(name);
+      return list instanceof HTMLSelectElement ? list.value : "";
+    };
+    const size = chosen("team");
+    if (isTeamSize(size)) setTeam(size);
+    const picked = chosen("topic");
+    const requested = new URLSearchParams(window.location.search).get("topic") ?? "";
+    if (isInquiryTopic(picked)) setTopic(picked);
+    else if (isInquiryTopic(requested)) setTopic(requested);
+    setHydrated(true);
   }, []);
 
   async function submit(form: HTMLFormElement) {
@@ -101,8 +119,11 @@ export function Contact({ locale, text, topics }: ContactProps) {
     }
     const field = "field" in problem && typeof problem.field === "string" ? problem.field : null;
     setState({ $: "failed", reason: problem.detail, field });
-    const control = field === null ? null : form.elements.namedItem(field);
-    if (control instanceof HTMLElement) control.focus();
+    // Each control names its field, Radix's lists included, whose own form value is hidden.
+    const control = Array.from(form.querySelectorAll<HTMLElement>("[data-field]")).find(
+      (element) => element.dataset.field === field,
+    );
+    control?.focus();
   }
 
   let status: string;
@@ -128,6 +149,7 @@ export function Contact({ locale, text, topics }: ContactProps) {
     <div {...stylex.props(styles.contact)}>
       {state.$ !== "sent" && (
         <form
+          ref={formRef}
           {...stylex.props(styles.form)}
           method="post"
           action="/api/contact"
@@ -141,6 +163,7 @@ export function Contact({ locale, text, topics }: ContactProps) {
             <label {...stylex.props(ui.text, styles.field)}>
               <span {...stylex.props(ui.label)}>{text.name}</span>
               <input
+                data-field="name"
                 {...stylex.props(ui.text, styles.control)}
                 type="text"
                 name="name"
@@ -154,6 +177,7 @@ export function Contact({ locale, text, topics }: ContactProps) {
             <label {...stylex.props(ui.text, styles.field)}>
               <span {...stylex.props(ui.label)}>{text.email}</span>
               <input
+                data-field="email"
                 {...stylex.props(ui.text, styles.control)}
                 type="email"
                 name="email"
@@ -167,6 +191,7 @@ export function Contact({ locale, text, topics }: ContactProps) {
             <label {...stylex.props(ui.text, styles.field)}>
               <span {...stylex.props(ui.label)}>{text.company}</span>
               <input
+                data-field="company"
                 {...stylex.props(ui.text, styles.control)}
                 type="text"
                 name="company"
@@ -178,44 +203,32 @@ export function Contact({ locale, text, topics }: ContactProps) {
             </label>
             <label {...stylex.props(ui.text, styles.field)}>
               <span {...stylex.props(ui.label)}>{text.team}</span>
-              <select
-                {...stylex.props(ui.text, styles.control)}
+              <Choice
                 name="team"
-                required
-                aria-invalid={invalid("team")}
-              >
-                <option value="">{text.choose}</option>
-                {teamSizes.map((size) => (
-                  <option key={size} value={size}>
-                    {size.replace("-", "–")}
-                  </option>
-                ))}
-              </select>
+                placeholder={text.choose}
+                options={teamSizes.map((size) => ({ value: size, label: size.replace("-", "–") }))}
+                value={team}
+                onChange={setTeam}
+                interactive={hydrated}
+                invalid={invalid("team")}
+              />
             </label>
             <label {...stylex.props(ui.text, styles.field, styles.wide)}>
               <span {...stylex.props(ui.label)}>{text.topic}</span>
-              <select
-                {...stylex.props(ui.text, styles.control)}
+              <Choice
                 name="topic"
-                required
+                placeholder={text.choose}
+                options={inquiryTopics.map((option) => ({ value: option, label: topics[option] }))}
                 value={topic}
-                onChange={(event) => {
-                  const chosen = event.currentTarget.value;
-                  setTopic(isInquiryTopic(chosen) ? chosen : "");
-                }}
-                aria-invalid={invalid("topic")}
-              >
-                <option value="">{text.choose}</option>
-                {inquiryTopics.map((option) => (
-                  <option key={option} value={option}>
-                    {topics[option]}
-                  </option>
-                ))}
-              </select>
+                onChange={setTopic}
+                interactive={hydrated}
+                invalid={invalid("topic")}
+              />
             </label>
             <label {...stylex.props(ui.text, styles.field, styles.wide)}>
               <span {...stylex.props(ui.label)}>{text.building}</span>
               <textarea
+                data-field="building"
                 {...stylex.props(ui.text, styles.control, styles.textarea)}
                 name="building"
                 required
@@ -249,6 +262,128 @@ export function Contact({ locale, text, topics }: ContactProps) {
         {status}
       </p>
     </div>
+  );
+}
+
+/**
+ * A required list, the same box before & after hydration. Its value is always a `<select>` of the
+ * browser's: before hydration it is the list itself, which posts without JavaScript; after, it lies
+ * unseen over Radix's list, whose choices open on the site's own surface instead of the system's
+ * picker. It still posts the value & checks that one was chosen: the browser's message then points
+ * at the list's box, and the focus the browser gives it passes on to Radix's list. The chevron is
+ * drawn over either, in the same place.
+ */
+function Choice<Value extends string>({
+  name,
+  placeholder,
+  options,
+  value,
+  onChange,
+  interactive,
+  invalid,
+}: {
+  name: string;
+  placeholder: string;
+  options: readonly { value: Value; label: string }[];
+  value: Value | "";
+  onChange: (value: Value) => void;
+  interactive: boolean;
+  invalid: boolean;
+}) {
+  const trigger = useRef<HTMLButtonElement>(null);
+  return (
+    <span {...stylex.props(styles.choice)}>
+      {interactive && (
+        <Select.Root
+          value={value}
+          onValueChange={(chosen) => {
+            const option = options.find((candidate) => candidate.value === chosen);
+            if (option === undefined) throw new Error(`Not a choice of ${name}: ${chosen}`);
+            onChange(option.value);
+          }}
+        >
+          <Select.Trigger
+            {...stylex.props(ui.text, styles.control, styles.list, styles.trigger)}
+            ref={trigger}
+            data-field={name}
+            aria-invalid={invalid}
+          >
+            <Select.Value {...stylex.props(styles.value)} placeholder={placeholder} />
+          </Select.Trigger>
+          <Select.Portal>
+            <Select.Content {...stylex.props(styles.popover)} position="popper" sideOffset={4}>
+              <Select.Viewport>
+                {options.map((option) => (
+                  <Select.Item
+                    key={option.value}
+                    {...stylex.props(ui.text, ui.control, styles.option)}
+                    value={option.value}
+                  >
+                    <Select.ItemText>{option.label}</Select.ItemText>
+                    <Select.ItemIndicator {...stylex.props(styles.check)}>
+                      <svg viewBox="0 0 16 16" aria-hidden="true">
+                        <path
+                          d="M3.5 8.5l3 3 6-7"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </Select.ItemIndicator>
+                  </Select.Item>
+                ))}
+              </Select.Viewport>
+            </Select.Content>
+          </Select.Portal>
+        </Select.Root>
+      )}
+      {interactive ? (
+        <select
+          {...stylex.props(styles.unseen)}
+          name={name}
+          required
+          value={value}
+          tabIndex={-1}
+          aria-hidden="true"
+          onFocus={() => trigger.current?.focus()}
+        >
+          <option value="" />
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      ) : (
+        // Uncontrolled, so a choice made before hydration survives it (see `Contact`).
+        <select
+          {...stylex.props(ui.text, styles.control, styles.list, styles.native)}
+          name={name}
+          required
+          data-field={name}
+          aria-invalid={invalid}
+        >
+          <option value="">{placeholder}</option>
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      )}
+      <svg {...stylex.props(styles.chevron)} viewBox="0 0 16 16" aria-hidden="true">
+        <path
+          d="M4 6l4 4 4-4"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </span>
   );
 }
 
@@ -291,6 +426,76 @@ const styles = stylex.create({
     minHeight: space.x6,
     paddingBlock: space.x1,
     resize: "vertical",
+  },
+  /** The list's box, so the chevron can sit at its end. */
+  choice: { position: "relative", display: "block" },
+  /** Room at the end for the chevron, over the browser's list & Radix's alike. */
+  list: { paddingInlineEnd: space.x5, cursor: "pointer" },
+  native: { appearance: "none" },
+  /** The form's own `<select>` once Radix's list shows: over the list's box, unseen & untouchable. */
+  unseen: {
+    position: "absolute",
+    inset: 0,
+    width: "100%",
+    height: "100%",
+    margin: 0,
+    opacity: 0,
+    pointerEvents: "none",
+  },
+  /** Laid out like the browser's list: the choice at the start, centred in the box's height. */
+  trigger: {
+    display: "flex",
+    alignItems: "center",
+    fontSize: "inherit",
+    lineHeight: "inherit",
+    textAlign: "start",
+  },
+  value: { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" },
+  chevron: {
+    position: "absolute",
+    insetInlineEnd: space.x2,
+    top: "50%",
+    width: space.x2,
+    height: space.x2,
+    transform: "translateY(-50%)",
+    color: colors.tertiary,
+    pointerEvents: "none",
+  },
+  /** The choices: a card over the page, at least the list's width, raised, without an edge. */
+  popover: {
+    zIndex: layer.popover,
+    boxSizing: "border-box",
+    minWidth: "var(--radix-select-trigger-width)",
+    maxHeight: "var(--radix-select-content-available-height)",
+    padding: space.x1,
+    borderRadius: space.x1,
+    boxShadow: shadows.raised,
+    backgroundColor: colors.surface,
+    color: colors.primary,
+    overflowY: "auto",
+  },
+  /** One choice, as tall as the list; the pointer and the arrow keys move focus over them. */
+  option: {
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    height: { default: space.x5, [media.mobile]: space.x6 },
+    paddingInlineStart: space.x2,
+    paddingInlineEnd: space.x5,
+    borderRadius: space.half,
+    outline: "none",
+    backgroundColor: { default: "transparent", ":focus": colors.bg },
+    color: colors.primary,
+    fontFeatureSettings: fontFeatures.prose,
+    cursor: "pointer",
+  },
+  /** The chosen one's check, where the list's chevron sits. */
+  check: {
+    position: "absolute",
+    insetInlineEnd: space.x2,
+    display: "flex",
+    width: space.x2,
+    height: space.x2,
   },
   button: {
     cursor: { default: "pointer", ":disabled": "progress" },

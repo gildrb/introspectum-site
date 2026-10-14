@@ -1,8 +1,6 @@
 import { readFileSync } from "node:fs";
-import * as stylex from "@stylexjs/stylex";
 import { schemeToken } from "./color.ts";
 import { colors } from "./tokens.stylex.ts";
-import type { Style } from "./ui.tsx";
 
 /**
  * Introspectum's mark: an eye, the O with its pupil, between two chevrons. `logo.svg` is the
@@ -26,16 +24,8 @@ function readMark(): { viewBox: string; width: number; height: number; path: str
   };
 }
 
-const mark = readMark();
-
-/** The mark in the color of the text around it, so it follows the light and dark schemes. */
-export function Logo({ style }: { style: Style }) {
-  return (
-    <svg {...stylex.props(style)} viewBox={mark.viewBox} aria-hidden="true">
-      <path d={mark.path} fill="currentColor" fill-rule="evenodd" />
-    </svg>
-  );
-}
+/** The mark's drawing, for the header logo (`islands/logo.tsx`), which draws it in the text's color. */
+export const mark = readMark();
 
 /**
  * The favicon: the mark centred in a square, in the ink of the text where the browser is light and

@@ -51,7 +51,7 @@ export function ContactPage({ doc, ...props }: PageProps & { doc: Doc }) {
     >
       <Hero title={doc.title} lead={t.text("contact_form_intro")} />
       <Content>
-        <div {...stylex.props(ui.textWidth, styles.form, ui.edge)}>
+        <div {...stylex.props(ui.textWidth, styles.form)}>
           <Island
             name="contact"
             component={Contact}

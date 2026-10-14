@@ -1,3 +1,4 @@
+import numbersCss from "@sfinterface/numbers/styles.css?inline";
 import * as stylex from "@stylexjs/stylex";
 import type { ComponentChildren } from "preact";
 import {
@@ -12,7 +13,9 @@ import {
   Sources,
   Text,
 } from "../blocks.tsx";
-import { type MessageId, type Translator, translators } from "../i18n.ts";
+import { type MessageId, type NumberPart, type Translator, translators } from "../i18n.ts";
+import { Island } from "../island.tsx";
+import { Stat } from "../islands/stat.tsx";
 import { Machine } from "../figures/machine.tsx";
 import { type Assets, Page } from "../layout.tsx";
 import { href, type Locale, localeInfo, locales } from "../locale.ts";
@@ -66,10 +69,10 @@ export function Home({
   const t = translators[locale];
   const cite = citeTags(t, citations);
   const factoryPage = href(locale, "products", factory);
-  const stats: readonly { id: string; value: string; label: ComponentChildren }[] = [
+  const stats: readonly { id: string; value: readonly NumberPart[]; label: ComponentChildren }[] = [
     {
       id: "own",
-      value: t.text("stat_number", { value: graphRuns.ownNodes }),
+      value: t.numbers("stat_number", { value: graphRuns.ownNodes }),
       label: t.rich("stat_own_label", cite, {
         files: graphRuns.ownFiles,
         seconds: graphRuns.ownSeconds,
@@ -77,7 +80,7 @@ export function Home({
     },
     {
       id: "other",
-      value: t.text("stat_number", { value: graphRuns.otherNodes }),
+      value: t.numbers("stat_number", { value: graphRuns.otherNodes }),
       label: t.rich("stat_other_label", cite, {
         files: graphRuns.otherFiles,
         seconds: graphRuns.otherSeconds,
@@ -85,12 +88,12 @@ export function Home({
     },
     {
       id: "repeat",
-      value: t.text("stat_ratio", { passed: graphRuns.repeats, runs: graphRuns.repeats }),
+      value: t.numbers("stat_ratio", { passed: graphRuns.repeats, runs: graphRuns.repeats }),
       label: t.rich("stat_repeat_label", cite),
     },
     {
       id: "proof",
-      value: t.text("stat_ratio", proofRuns),
+      value: t.numbers("stat_ratio", proofRuns),
       label: t.rich("stat_proof_label", cite),
     },
   ];
@@ -127,6 +130,8 @@ export function Home({
             availableLanguage: locales.map((code) => localeInfo[code].tag),
           },
         },
+        // The moving figures' own stylesheet, in its own `@layer arc`; only this page has them.
+        head: <style dangerouslySetInnerHTML={{ __html: numbersCss }} />,
       }}
     >
       <Hero
@@ -134,6 +139,7 @@ export function Home({
         lead={t.text("home_lead")}
         figure={<Machine name="proof" locale={locale} fill />}
         stage
+        reveal
       >
         <Actions>
           <ButtonLink href={contactHref(locale, factory)} kind="primary">
@@ -152,7 +158,9 @@ export function Home({
         <dl {...stylex.props(styles.stats)}>
           {stats.map(({ id, value, label }) => (
             <div key={id} {...stylex.props(styles.stat)}>
-              <dt {...stylex.props(ui.serif, styles.value)}>{value}</dt>
+              <dt {...stylex.props(ui.serif, styles.value)}>
+                <Island name="stat" component={Stat} props={{ locale, parts: value }} />
+              </dt>
               <dd {...stylex.props(ui.text, ui.label)}>{label}</dd>
             </div>
           ))}
@@ -272,12 +280,17 @@ const styles = stylex.create({
     backgroundColor: colors.surface,
     textWrap: "balance",
   },
-  /** A measurement as large as a section title, in its figures. */
+  /**
+   * A measurement as large as a section title, in its figures. The digits passing by as the figures
+   * roll (`islands/stat.tsx`) stay within its line, off the label under it.
+   */
   value: {
     fontSize: "clamp(2rem, 1.76rem + 1.09vw, 2.75rem)",
     fontVariantNumeric: "lining-nums tabular-nums",
     lineHeight: 1.1,
     color: colors.primary,
+    overflowY: "clip",
+    overflowClipMargin: space.half,
   },
   facts: {
     display: "grid",
