@@ -188,6 +188,30 @@ export function Section({
   );
 }
 
+/**
+ * A homepage title whose words turn from `colors.tertiary` to the ink one after another, as if
+ * read, once the reader reaches it (`rise.ts`, `rise-css.ts`): it leads the eye into the part it
+ * opens. Each word is keyed by where it starts in the title. `untranslated` for a product's name.
+ */
+export function Sweep({ text, translate = true }: { text: string; translate?: boolean }) {
+  let at = 0;
+  const words = text.split(" ").map((word) => {
+    const start = at;
+    at += word.length + 1;
+    return { word, start };
+  });
+  return (
+    <span data-sweep="" {...(translate ? {} : untranslated)}>
+      {words.map(({ word, start }, index) => (
+        <Fragment key={start}>
+          {index > 0 && " "}
+          <span style={{ "--word": index }}>{word}</span>
+        </Fragment>
+      ))}
+    </span>
+  );
+}
+
 /** A part of a page beside a machine: its title, an intro, and its blocks (paragraphs or a list). */
 export type MachinePart = {
   id: string;
@@ -327,16 +351,22 @@ export function Cards({ columns, children }: { columns: 2 | 3; children: Compone
   );
 }
 
-/** One card: a panel on the card ground whose parts stack two units apart, under its figure. */
+/**
+ * One card: a panel on the card ground whose parts stack two units apart, under its figure. A
+ * card that `rises`, on the homepage only, is served out of sight & rises in as the reader
+ * reaches it (`rise.ts`); the page must load that script & its stylesheet.
+ */
 export function Card({
   figure,
+  rises = false,
   children,
 }: {
   figure?: ComponentChildren;
+  rises?: boolean;
   children: ComponentChildren;
 }) {
   return (
-    <li {...stylex.props(styles.card)}>
+    <li {...stylex.props(styles.card)} data-rise={rises ? "" : undefined}>
       {figure !== undefined && <div {...stylex.props(styles.cardFigure)}>{figure}</div>}
       {children}
     </li>
@@ -600,7 +630,7 @@ export function Article({
 
 /**
  * The closing call to action: a panel on the card ground across the whole grid, with the
- * section's title, lead and buttons inside it.
+ * section's title, lead and buttons inside it. The panel rises in as one (`rise.ts`).
  */
 export function CallToAction({
   id,

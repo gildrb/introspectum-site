@@ -174,7 +174,7 @@ export default defineConfig({
     warmup: {
       clientFiles: [
         "./src/client.ts",
-        "./src/stat-cards.ts",
+        "./src/rise.ts",
         "./src/islands/*.tsx",
         "./src/figures/*.ts",
       ],

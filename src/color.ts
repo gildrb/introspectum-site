@@ -1,10 +1,13 @@
-/** Every declaration of a token's CSS variable in the built stylesheet, in order. */
+/**
+ * Every declaration of a token's CSS variable in the built stylesheet, in order: the token's own,
+ * in a rule whose selector starts at `:root`, not a theme's (such as `otherColors`), whose rule
+ * StyleX starts at the theme's class.
+ */
 function declarations(css: string, variable: string): string[] {
   const name = variable.match(/^var\((--[\w-]+)\)$/)?.[1];
   if (name === undefined) throw new Error(`Not a CSS variable: ${variable}`);
-  const values = [...css.matchAll(new RegExp(`${name}:([^;}]+)`, "g"))].map(([, value = ""]) =>
-    value.trim(),
-  );
+  const rule = new RegExp(`(?:^|[{}])\\s*:root[^{]*\\{[^}]*?${name}:([^;}]+)`, "g");
+  const values = [...css.matchAll(rule)].map(([, value = ""]) => value.trim());
   if (values.length === 0) throw new Error(`No value for ${name} in the built CSS.`);
   return values;
 }

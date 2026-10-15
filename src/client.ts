@@ -59,33 +59,55 @@ const modelContext: unknown =
 if (typeof modelContext === "object" && modelContext !== null)
   void import("./webmcp.ts").then(({ registerTools }) => registerTools(modelContext));
 
-// The homepage's measurement cards: their entrance runs here, before the islands, so a card rises
-// as the reader reaches it however late its figures' island hydrates (`stat-cards.ts`). The page
-// names that code up front (`modulepreload`); the cards are staged the moment the parser is past
-// them, not once the whole page has been read.
-if (document.querySelector('link[rel="modulepreload"][href*="stat-cards"]') !== null) {
-  const cards = import("./stat-cards.ts");
-  const parsed = () => {
-    const last = Array.from(document.querySelectorAll("[data-stat-card]")).at(-1);
+// The homepage's motion (`rise.ts`): rising cards & sweeping titles. It runs here, before the
+// islands, so a card rises as the reader reaches it however late its figures' island hydrates.
+// The page names that code up front (`modulepreload`); each part is staged the moment the parser
+// is past it, not once the whole page has been read.
+if (document.querySelector('link[rel="modulepreload"][href*="rise"]') !== null) {
+  // Dynamic, as the machines': its code (& Motion's) stays out of this script, so the first paint
+  // never waits for it; the `modulepreload` has it on its way already.
+  const { stageRise, stageSweep } = await import("./rise.ts");
+  const parsed = (selector: string) =>
+    Array.from(document.querySelectorAll<HTMLElement>(selector)).filter(parsedPast);
+  const stageParsed = () => {
+    stageSweep(parsed("[data-sweep]"));
+    stageRise(parsed("[data-rise]"));
+  };
+  stageParsed();
+  if (document.readyState === "loading") {
+    const parser = new MutationObserver(stageParsed);
+    parser.observe(document, { childList: true, subtree: true });
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => {
+        parser.disconnect();
+        stageParsed();
+      },
+      { once: true },
+    );
+  }
+  // The homepage's measurements: their figures are hydrated as soon as the last is in, so a card
+  // waits for them as little as it can before it rises with them rolling.
+  const lastParsed = () => {
+    const last = measurementFigures().at(-1);
     return last !== undefined && parsedPast(last);
   };
-  if (!parsed()) {
+  if (!lastParsed() && document.readyState === "loading") {
     const { promise, resolve } = Promise.withResolvers<void>();
     const watcher = new MutationObserver(() => {
-      if (!parsed()) return;
-      watcher.disconnect();
-      resolve();
+      if (lastParsed()) resolve();
     });
     watcher.observe(document, { childList: true, subtree: true });
     document.addEventListener("DOMContentLoaded", () => resolve(), { once: true });
     await promise;
     watcher.disconnect();
   }
-  (await cards).stageCards();
-  // Their figures too, at once: a card waits for them only briefly before it rises without a roll.
-  void hydrateIslands(
-    Array.from(document.querySelectorAll<HTMLElement>('[data-stat-card] [data-island="stat"]')),
-  );
+  if (measurementFigures().length > 0) void hydrateIslands(measurementFigures());
+}
+
+/** The homepage's measurements' figures, each an island inside its rising card. */
+function measurementFigures(): HTMLElement[] {
+  return Array.from(document.querySelectorAll<HTMLElement>('[data-rise] [data-island="stat"]'));
 }
 
 // Everything below works on the whole page: wait until it has been read.

@@ -30,46 +30,73 @@ export const fontFeatures = stylex.defineConsts({
   prose: '"liga" 1, "calt" 1',
 });
 
+/** Each color as the dark scheme (the default) & the light one set it; see `colors`. */
+const tabula = {
+  bg: { dark: "oklch(18.5% 0.008 85)", light: "oklch(98.8% 0.004 85)" },
+  surface: { dark: "oklch(26% 0.009 85)", light: "oklch(96.2% 0.006 85)" },
+  primary: { dark: "oklch(96.74% 0.006 85)", light: "oklch(24.9% 0.01 85)" },
+  secondary: { dark: "oklch(86.06% 0.01 85)", light: "oklch(42.55% 0.012 85)" },
+  tertiary: { dark: "oklch(77.62% 0.012 85)", light: "oklch(50.5% 0.014 85)" },
+  article: { dark: "oklch(93.09% 0.007 85)", light: "oklch(33% 0.01 85)" },
+  accent: { dark: "oklch(44% 0.1 160)", light: "oklch(40% 0.09 160)" },
+  hairline: { dark: "oklch(96.74% 0.006 85 / 0.16)", light: "oklch(24.9% 0.01 85 / 0.14)" },
+  codeBg: { dark: "oklch(24% 0.009 85)", light: "oklch(95.4% 0.006 85)" },
+} as const;
+
 /**
  * The colors of the Tabula Smaragdina, the "emerald tablet", as Heinrich Khunrath's 1609
- * engraving shows it: iron-gall ink on aged paper, sepia between them, and the emerald of its
- * name. Light is ink on parchment, dark is parchment on umber; both follow the system setting.
+ * engraving shows it: iron-gall ink on paper, and the emerald of its name. Every neutral, grounds,
+ * text, edges & shadows, shares one warm hue (85) at low chroma, 0.004 to 0.014, so no part of the
+ * page reads as dyed beside another, in either scheme or the footer's other one: light is ink on
+ * paper all but white, dark is that paper on umber; both follow the system setting.
  *
  * Every text color meets APCA's Bronze level on the page and on `surface`, the ground of cards.
- * Body text, a block of more than two lines, needs at least Lc 75: `primary` (Lc 95 light, Lc 100
- * dark), `article` (Lc 90, Lc 92) and `secondary` (Lc 81, Lc 78; on cards Lc 76, Lc 75.7), which
+ * Body text, a block of more than two lines, needs at least Lc 75: `primary` (Lc 100 light, Lc 100
+ * dark), `article` (Lc 96, Lc 92) and `secondary` (Lc 86, Lc 78; on cards Lc 81, Lc 75.7), which
  * may run that long. Other content text, such as labels, navigation, notes and the footer, needs
- * at least Lc 60: `tertiary` (Lc 72 light, Lc 62 dark; on cards Lc 67, Lc 60.2), which therefore
- * never sets running text. In light, `tertiary` also meets WCAG 2's 4.5:1 (5.3:1, on cards 4.9:1),
- * which Lighthouse checks. Buttons are ink on parchment in light and parchment on umber in dark,
- * like the text. Emerald, the brand color, stays a trace: the form's checkbox.
+ * at least Lc 60: `tertiary` (Lc 77 light, Lc 62 dark; on cards Lc 72, Lc 60.2), which therefore
+ * never sets running text. In light, `tertiary` also meets WCAG 2's 4.5:1 (5.7:1, on cards 5.3:1),
+ * which Lighthouse checks. Buttons are ink on paper in light and paper on umber in dark, like the
+ * text. Emerald, the brand color, stays a trace: the form's checkbox.
  */
 export const colors = stylex.defineVars({
-  bg: { default: "oklch(18.5% 0.014 70)", [light]: "oklch(96% 0.02 85)" },
+  bg: { default: tabula.bg.dark, [light]: tabula.bg.light },
   /**
    * Cards and the form: a shade further into the paper, or out of the umber. Dark is as light as
    * `secondary` & `tertiary` allow on it (Lc 75 & Lc 60).
    */
-  surface: { default: "oklch(26% 0.016 70)", [light]: "oklch(93.5% 0.025 85)" },
-  primary: { default: "oklch(96.74% 0.022 85)", [light]: "oklch(24.9% 0.02 65)" },
-  secondary: { default: "oklch(86.06% 0.03 80)", [light]: "oklch(42.55% 0.03 65)" },
-  tertiary: { default: "oklch(77.62% 0.035 75)", [light]: "oklch(50.5% 0.035 70)" },
-  article: { default: "oklch(93.09% 0.02 85)", [light]: "oklch(33% 0.022 65)" },
+  surface: { default: tabula.surface.dark, [light]: tabula.surface.light },
+  primary: { default: tabula.primary.dark, [light]: tabula.primary.light },
+  secondary: { default: tabula.secondary.dark, [light]: tabula.secondary.light },
+  tertiary: { default: tabula.tertiary.dark, [light]: tabula.tertiary.light },
+  article: { default: tabula.article.dark, [light]: tabula.article.light },
   /** Emerald, the brand color, used sparingly: the form's checkbox. */
-  accent: { default: "oklch(44% 0.1 160)", [light]: "oklch(40% 0.09 160)" },
+  accent: { default: tabula.accent.dark, [light]: tabula.accent.light },
   /**
    * The edge of an image, so a white scan does not melt into the page. Only inputs and buttons
    * have edges besides; cards, panels, the form, code and the menus have none.
    * Translucent, so one edge sharpens every ground it lies on. Decoration only: each reads the
    * same without it, so it may stay below APCA's Lc 15 for meaningful non-text.
    */
-  hairline: { default: "oklch(96.74% 0.022 85 / 0.16)", [light]: "oklch(24.9% 0.02 65 / 0.14)" },
-  /**
-   * The footer's emblem, the mark drawn in chalk: one solid color between the page and `tertiary`,
-   * so it reads as a drawing behind the text, not as text. Decoration only, like `hairline`.
-   */
-  chalk: { default: "oklch(50% 0.03 75)", [light]: "oklch(66% 0.035 75)" },
-  codeBg: { default: "oklch(24% 0.016 70)", [light]: "oklch(92% 0.025 85)" },
+  hairline: { default: tabula.hairline.dark, [light]: tabula.hairline.light },
+  codeBg: { default: tabula.codeBg.dark, [light]: tabula.codeBg.light },
+});
+
+/**
+ * The other scheme's colors, for a part of the page set apart from it: the footer, a card in the
+ * light scheme's colors on the dark page, and in the dark scheme's on the light page. Each pair
+ * keeps the contrast `colors` promises, as it is the same pair.
+ */
+export const otherColors = stylex.createTheme(colors, {
+  bg: { default: tabula.bg.light, [light]: tabula.bg.dark },
+  surface: { default: tabula.surface.light, [light]: tabula.surface.dark },
+  primary: { default: tabula.primary.light, [light]: tabula.primary.dark },
+  secondary: { default: tabula.secondary.light, [light]: tabula.secondary.dark },
+  tertiary: { default: tabula.tertiary.light, [light]: tabula.tertiary.dark },
+  article: { default: tabula.article.light, [light]: tabula.article.dark },
+  accent: { default: tabula.accent.light, [light]: tabula.accent.dark },
+  hairline: { default: tabula.hairline.light, [light]: tabula.hairline.dark },
+  codeBg: { default: tabula.codeBg.light, [light]: tabula.codeBg.dark },
 });
 
 /**
@@ -78,8 +105,8 @@ export const colors = stylex.defineVars({
  */
 export const shadows = stylex.defineVars({
   raised: {
-    default: "0 1px 2px oklch(0% 0 0 / 0.32), 0 8px 24px oklch(0% 0 0 / 0.4)",
-    [light]: "0 1px 2px oklch(24.9% 0.02 65 / 0.08), 0 8px 24px oklch(24.9% 0.02 65 / 0.1)",
+    default: "0 1px 2px oklch(8% 0.006 85 / 0.32), 0 8px 24px oklch(8% 0.006 85 / 0.4)",
+    [light]: "0 1px 2px oklch(24.9% 0.01 85 / 0.08), 0 8px 24px oklch(24.9% 0.01 85 / 0.1)",
   },
 });
 
@@ -92,6 +119,13 @@ export const weights = stylex.defineVars({
   regular: { default: 400, [light]: 430 },
   medium: { default: 500, [light]: 530 },
   semibold: { default: 600, [light]: 630 },
+});
+
+/** The other scheme's weights, for the parts in `otherColors`. */
+export const otherWeights = stylex.createTheme(weights, {
+  regular: { default: 430, [light]: 400 },
+  medium: { default: 530, [light]: 500 },
+  semibold: { default: 630, [light]: 600 },
 });
 
 /** Multiples of the unit, named by their factor: `x3` is three units. */
@@ -193,8 +227,6 @@ export const stroke = stylex.defineConsts({
 
 /** The stacking order, bottom to top. */
 export const layer = stylex.defineConsts({
-  /** Behind its section's content: the footer's emblem. */
-  behind: -1,
   /** The sticky header over the page. */
   header: 10,
   /** The skip link, once focused, over the header. */

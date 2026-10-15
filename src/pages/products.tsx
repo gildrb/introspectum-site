@@ -12,6 +12,7 @@ import {
   Measure,
   Section,
   Sources,
+  Sweep,
   Text,
 } from "../blocks.tsx";
 import { type Tag, type Translator, translators, waitlistConsent } from "../i18n.ts";
@@ -96,18 +97,26 @@ export function ProductCards({
 
 /**
  * What the company offers clients now, before its products ship: fixed-scope offers, each with
- * what it delivers, how long it takes, what it costs from, and a way to ask for it.
+ * what it delivers, how long it takes, what it costs from, and a way to ask for it. `brief`, as on
+ * the homepage, leaves out the section's intro, each offer's description & who it is for: each
+ * offer keeps its name, its result, its terms & the way to ask for it; its title sweeps
+ * (`Sweep`) like the homepage's others.
  */
-export function Consulting({ locale }: { locale: Locale }) {
+export function Consulting({ locale, brief = false }: { locale: Locale; brief?: boolean }) {
   const t = translators[locale];
+  const title = t.text("consulting_title");
   return (
-    <Section id="consulting" title={t.text("consulting_title")} intro={t.text("consulting_what")}>
+    <Section
+      id="consulting"
+      title={brief ? <Sweep text={title} /> : title}
+      intro={brief ? undefined : t.text("consulting_what")}
+    >
       <Cards columns={2}>
         {offers.map((offer) => (
           <Card key={offer.topic}>
             <h3 {...stylex.props(ui.title)}>{t.text(offer.title)}</h3>
-            <p {...stylex.props(ui.prose)}>{t.text(offer.text)}</p>
-            <p {...stylex.props(ui.prose, ui.label)}>{t.text(offer.result)}</p>
+            {!brief && <p {...stylex.props(ui.prose)}>{t.text(offer.text)}</p>}
+            <p {...stylex.props(ui.prose, !brief && ui.label)}>{t.text(offer.result)}</p>
             {/* Duration & price only once decided: no placeholder stands in for them. */}
             {(offer.weeks !== null || offer.priceFrom !== null) && (
               <dl {...stylex.props(ui.text, styles.terms)}>
@@ -133,9 +142,11 @@ export function Consulting({ locale }: { locale: Locale }) {
           </Card>
         ))}
       </Cards>
-      <div {...stylex.props(ui.textWidth, styles.after)}>
-        <Text quiet>{t.text("consulting_audience")}</Text>
-      </div>
+      {!brief && (
+        <div {...stylex.props(ui.textWidth, styles.after)}>
+          <Text quiet>{t.text("consulting_audience")}</Text>
+        </div>
+      )}
     </Section>
   );
 }

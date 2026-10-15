@@ -243,10 +243,14 @@ const homeWordLimit = 3 * 200;
 function visibleWords(html: string): number {
   const main = html.match(/<main[^>]*>([\s\S]*)<\/main>/)?.[1];
   if (main === undefined) throw new Error("A page has no <main>.");
-  return main
-    .replace(/<[^>]+>/g, " ")
-    .split(/\s+/)
-    .filter((word) => /\p{L}/u.test(word)).length;
+  return (
+    main
+      // A figure's stylesheet & a script are never read.
+      .replace(/<(style|script)\b[^>]*>[\s\S]*?<\/\1>/g, " ")
+      .replace(/<[^>]+>/g, " ")
+      .split(/\s+/)
+      .filter((word) => /\p{L}/u.test(word)).length
+  );
 }
 
 /** Every link to a page of this site must reach one: a moved or misspelt path fails the build. */

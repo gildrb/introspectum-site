@@ -15,6 +15,42 @@
     "source": "See the product",
     "message": "Produkt sehen"
   },
+  "home_trading_lead": {
+    "source": "Trend-following strategies on many stocks, tested on paper before anyone trusts them. Research, not investment advice.",
+    "message": "Trendfolgende Strategien für viele Aktien, simuliert getestet, bevor ihnen jemand vertraut. Forschung, keine Anlageberatung."
+  },
+  "home_cta_trading": {
+    "source": "Read the research",
+    "message": "Zur Forschung"
+  },
+  "home_trading_title": {
+    "source": "How it tests a strategy",
+    "message": "So testet sie eine Strategie"
+  },
+  "home_trading_parallel_title": {
+    "source": "Many stocks at once",
+    "message": "Viele Aktien zugleich"
+  },
+  "home_trading_parallel_text": {
+    "source": "The <turtle>Turtle rules</turtle> & other trend-following strategies run on every stock.",
+    "message": "Die <turtle>Turtle-Regeln</turtle> und andere trendfolgende Strategien laufen für jede Aktie."
+  },
+  "home_trading_scale_title": {
+    "source": "A time scale per stock",
+    "message": "Eine Zeitskala je Aktie"
+  },
+  "home_trading_scale_text": {
+    "source": "Reinforcement learning tunes each stock to the time scale where its signals hold best.",
+    "message": "Reinforcement Learning stimmt jede Aktie auf die Zeitskala ab, auf der ihre Signale am besten halten."
+  },
+  "home_trading_prototype_title": {
+    "source": "Rebuilt from a prototype",
+    "message": "Neu gebaut aus einem Prototyp"
+  },
+  "home_trading_prototype_text": {
+    "source": "What a first prototype taught us shapes the rebuild.",
+    "message": "Was uns ein erster Prototyp gezeigt hat, prägt den Neubau."
+  },
   "home_cta_factory": {
     "source": "See how it works",
     "message": "So funktioniert es"

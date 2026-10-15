@@ -84,9 +84,10 @@ export function engraver(name, { width, height, azimuth, elevation, points, pad 
         console.log(`wrote src/figures/${name}.svg (${Math.round(svg.length / 1024)} KB)`);
       }
       if (process.argv.includes("--preview")) {
+        // `colors.primary` & `colors.bg` (src/tokens.stylex.ts), dark & light.
         const schemes = {
-          dark: { ink: "oklch(96.74% 0.022 85)", paper: "oklch(18.5% 0.014 70)" },
-          light: { ink: "oklch(24.9% 0.02 65)", paper: "oklch(96% 0.02 85)" },
+          dark: { ink: "oklch(96.74% 0.006 85)", paper: "oklch(18.5% 0.008 85)" },
+          light: { ink: "oklch(24.9% 0.01 85)", paper: "oklch(98.8% 0.004 85)" },
         };
         for (const [scheme, { ink, paper }] of Object.entries(schemes)) {
           const file = `/tmp/introspectum-${name}${scheme === "light" ? "-light" : ""}.html`;

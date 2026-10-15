@@ -19,6 +19,51 @@
     "description": "Homepage opening, button beside the contact button: leads to the ERP & CRM's page. Verb first. Both buttons must fit side by side on a 360px phone.",
     "maxLength": 32
   },
+  "home_trading_lead": {
+    "message": "Trend-following strategies on many stocks, tested on paper before anyone trusts them. Research, not investment advice.",
+    "description": "Homepage, intro of the Trading Platform part, under its name: what it does, & that it is simulated research, not investment advice.",
+    "maxLength": 200
+  },
+  "home_cta_trading": {
+    "message": "Read the research",
+    "description": "Homepage, Trading Platform part: button that leads to the Trading Platform's research page.",
+    "maxLength": 32
+  },
+  "home_trading_title": {
+    "message": "How it tests a strategy",
+    "description": "Heading of the homepage's row of cards on how the Trading Platform tests a strategy.",
+    "maxLength": 60
+  },
+  "home_trading_parallel_title": {
+    "message": "Many stocks at once",
+    "description": "Homepage Trading Platform card 1 of 3, title.",
+    "maxLength": 40
+  },
+  "home_trading_parallel_text": {
+    "message": "The <turtle>Turtle rules</turtle> & other trend-following strategies run on every stock.",
+    "description": "Homepage Trading Platform card 1 of 3, text. The Turtle rules are a known trading system; the tag cites the book that describes them.",
+    "maxLength": 120
+  },
+  "home_trading_scale_title": {
+    "message": "A time scale per stock",
+    "description": "Homepage Trading Platform card 2 of 3, title.",
+    "maxLength": 40
+  },
+  "home_trading_scale_text": {
+    "message": "Reinforcement learning tunes each stock to the time scale where its signals hold best.",
+    "description": "Homepage Trading Platform card 2 of 3, text.",
+    "maxLength": 120
+  },
+  "home_trading_prototype_title": {
+    "message": "Rebuilt from a prototype",
+    "description": "Homepage Trading Platform card 3 of 3, title.",
+    "maxLength": 40
+  },
+  "home_trading_prototype_text": {
+    "message": "What a first prototype taught us shapes the rebuild.",
+    "description": "Homepage Trading Platform card 3 of 3, text: the earlier prototype and the rebuild.",
+    "maxLength": 120
+  },
   "home_cta_factory": {
     "message": "See how it works",
     "description": "Homepage, Software Factory part: button that leads to the Software Factory's page.",

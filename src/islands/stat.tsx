@@ -1,5 +1,5 @@
 import { Numbers } from "@sfinterface/numbers";
-import { readyAttribute, riseEvent, risenAttribute } from "../stat-cards.ts";
+import { readyAttribute, riseEvent, risenAttribute } from "../rise.ts";
 import { useLayoutEffect, useRef, useState } from "preact/hooks";
 import type { NumberPart } from "../i18n.ts";
 import { isLocale, type Locale, localeInfo } from "../locale.ts";
@@ -37,7 +37,7 @@ const rollLength = 1400;
 
 /**
  * One of the homepage's measurements, its figures set by `@sfinterface/numbers` in the page's
- * language. The card's entrance belongs to the page's script (`stat-cards.ts`): this island only
+ * language. The card's entrance belongs to the page's script (`rise.ts`): this island only
  * sets the figures to zero while the card is out of sight and rolls them up as it rises, so they
  * are never shown at their values and then taken back. A card that rose before the island
  * arrived, reduced motion, and no JavaScript all keep the real values standing still.
@@ -48,25 +48,16 @@ export function Stat({ locale, parts }: StatProps) {
   const format = formats[locale];
 
   useLayoutEffect(() => {
-    const card = root.current?.closest<HTMLElement>("[data-stat-card]");
+    const card = root.current?.closest<HTMLElement>("[data-rise]");
     if (card === null || card === undefined) throw new Error("The measurement has no card.");
     if (matchMedia("(prefers-reduced-motion: reduce)").matches || card.hasAttribute(risenAttribute))
       return undefined;
     setPhase({ $: "Zero" });
-    let timer = 0;
-    const onRise = (event: Event) => {
-      if (!(event instanceof CustomEvent) || typeof event.detail !== "number")
-        throw new Error("A card rose without its delay.");
-      const delay = event.detail;
-      // The figures start turning as the card starts rising.
-      timer = window.setTimeout(() => setPhase({ $: "Rolling" }), delay * 1000);
-    };
+    // The figures start turning as the card starts rising.
+    const onRise = () => setPhase({ $: "Rolling" });
     card.addEventListener(riseEvent, onRise, { once: true });
     card.setAttribute(readyAttribute, "");
-    return () => {
-      card.removeEventListener(riseEvent, onRise);
-      window.clearTimeout(timer);
-    };
+    return () => card.removeEventListener(riseEvent, onRise);
   }, []);
 
   const zero = phase.$ === "Zero";
