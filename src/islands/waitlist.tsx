@@ -166,7 +166,7 @@ export function Waitlist({ product, locale, text }: WaitlistProps) {
                 // The form's own box, under Radix's: it posts the tick & checks one was given. The
                 // browser's message then points at the box, & the focus it gives passes on.
                 <input
-                  {...stylex.props(styles.unseen)}
+                  {...stylex.props(stylex.defaultMarker(), styles.unseen)}
                   type="checkbox"
                   name="consent"
                   value="yes"
@@ -179,13 +179,29 @@ export function Waitlist({ product, locale, text }: WaitlistProps) {
               ) : (
                 // Uncontrolled, so a tick given before hydration survives it (see above).
                 <input
-                  {...stylex.props(ui.focusRing, styles.checkbox, styles.native)}
+                  {...stylex.props(
+                    stylex.defaultMarker(),
+                    ui.focusRing,
+                    styles.checkbox,
+                    styles.native,
+                  )}
                   type="checkbox"
                   name="consent"
                   value="yes"
                   required
                 />
               )}
+              {/* Drawn over the box once the form's own box is checked, before & after hydration. */}
+              <svg {...stylex.props(styles.tick)} viewBox="0 0 16 16" aria-hidden="true">
+                <path
+                  d="M4 8.5l2.5 2.5 5.5-6"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
             </span>
             <span {...stylex.props(ui.label)}>{text.consent}</span>
           </label>
@@ -208,12 +224,6 @@ export function Waitlist({ product, locale, text }: WaitlistProps) {
     </div>
   );
 }
-
-/**
- * The tick, drawn in cream (`colors.primary` dark, as light as `colors.bg` light): an image cannot
- * read the page's colors, and cream reads on emerald in both schemes.
- */
-const tick = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.5 2.5 5.5-6' fill='none' stroke='%23fbf4e4' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`;
 
 const styles = stylex.create({
   waitlist: { display: "flex", flexDirection: "column" },
@@ -261,7 +271,7 @@ const styles = stylex.create({
     marginTop: `calc((${leading.x3} - ${space.x2}) / 2)`,
   },
   /**
-   * Two units square, edged like the fields; ticked, filled with emerald & checked in cream. The
+   * Two units square, edged like the fields; ticked, filled with emerald & checked in paper. The
    * browser's box & Radix's look the same, so hydration swaps one for the other unseen.
    */
   checkbox: {
@@ -275,18 +285,28 @@ const styles = stylex.create({
     borderColor: colors.tertiary,
     borderRadius: space.half,
     backgroundColor: "transparent",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "100% 100%",
     cursor: "pointer",
   },
   native: {
     appearance: "none",
     borderColor: { default: colors.tertiary, ":checked": colors.accent },
     backgroundColor: { default: "transparent", ":checked": colors.accent },
-    backgroundImage: { default: null, ":checked": tick },
   },
-  checked: { borderColor: colors.accent, backgroundColor: colors.accent, backgroundImage: tick },
+  checked: { borderColor: colors.accent, backgroundColor: colors.accent },
+  /**
+   * The tick over the box, shown while the form's box before it is checked. In paper, the light
+   * scheme's ground, which reads on emerald in both schemes: `colors.bg` in light, `colors.primary`
+   * (the same paper) in dark.
+   */
+  tick: {
+    position: "absolute",
+    inset: 0,
+    display: { default: "none", [stylex.when.siblingBefore(":checked")]: "block" },
+    width: "100%",
+    height: "100%",
+    color: { default: colors.primary, [media.light]: colors.bg },
+    pointerEvents: "none",
+  },
   /** The form's own box once Radix's shows: over it, unseen & untouchable. */
   unseen: {
     position: "absolute",
