@@ -6,9 +6,10 @@ import { translators } from "./i18n.ts";
 import { href, type Locale, localeInfo, locales, type Route, sourceLocale } from "./locale.ts";
 import { Island } from "./island.tsx";
 import { LogoMenu } from "./islands/logo.tsx";
-import { mark } from "./logo.tsx";
+import { ProductsMenu } from "./islands/products.tsx";
+import { mark, markImage } from "./logo.tsx";
 import { shareFrame } from "./og.tsx";
-import { company, email, origin, shelved } from "./site.ts";
+import { company, email, origin, type Shelf, shelved } from "./site.ts";
 import {
   colors,
   fontFeatures,
@@ -179,6 +180,9 @@ const nav: readonly {
   { route: "about", label: "nav_about" },
 ];
 
+/** The shelves the products menu lists, in order: what we sell, then what we research. */
+const menuShelves: readonly Shelf[] = ["products", "research"];
+
 /** `aria-current` for a link to `target` from `path`: the page itself, or a page below it. */
 function currentness(path: string, target: string): "page" | "true" | undefined {
   if (path === target) return "page";
@@ -206,7 +210,22 @@ export function Page({
   const contact = href(locale, "contact");
   const links = nav.map(({ route, label }) => {
     const target = href(locale, route);
-    return { target, current: currentness(path, target), label: t.text(label) };
+    return { route, target, current: currentness(path, target), label: t.text(label) };
+  });
+  // The products menu (`islands/products.tsx`): each shelf's overview, then its pages.
+  const productGroups = menuShelves.map((shelf) => {
+    const overview = href(locale, shelf);
+    return {
+      title: {
+        href: overview,
+        label: t.text(shelf === "products" ? "products_title" : "research_title"),
+        current: path === overview,
+      },
+      links: shelved(shelf).map((product) => {
+        const target = href(locale, product.shelf, product.slug);
+        return { href: target, label: t.text(product.name), current: path === target };
+      }),
+    };
   });
   const page = schemeToken(assets.css, colors.bg);
   return (
@@ -286,6 +305,9 @@ export function Page({
           {t.text("skip_to_content")}
         </a>
         <header {...stylex.props(styles.header)}>
+          {/* The page inverted, under the ground; the ground's mark-shaped hole shows it. */}
+          <div {...stylex.props(styles.inverted)} />
+          <div {...stylex.props(styles.ground(markImage))} />
           <div {...stylex.props(ui.container, styles.bar)}>
             <Island
               name="logo"
@@ -304,26 +326,43 @@ export function Page({
               }}
             />
             <nav {...stylex.props(styles.nav)} aria-label={t.text("nav_label")}>
-              {links.map(({ target, current, label }) => (
-                <a
-                  {...stylex.props(
-                    ui.text,
-                    ui.entry,
-                    ui.control,
-                    ui.focusRing,
-                    styles.navLink,
-                    current !== undefined && ui.current,
-                  )}
-                  href={target}
-                  aria-current={current}
-                >
-                  {label}
-                </a>
-              ))}
+              {links.map(({ route, target, current, label }) =>
+                route === "products" ? (
+                  <Island
+                    key={route}
+                    name="products"
+                    component={ProductsMenu}
+                    props={{
+                      label,
+                      current:
+                        current !== undefined ||
+                        currentness(path, href(locale, "research")) !== undefined,
+                      overview: target,
+                      groups: productGroups,
+                    }}
+                  />
+                ) : (
+                  <a
+                    key={route}
+                    {...stylex.props(
+                      ui.small,
+                      ui.quiet,
+                      ui.control,
+                      ui.focusRing,
+                      ui.navLink,
+                      current !== undefined && styles.navCurrent,
+                    )}
+                    href={target}
+                    aria-current={current}
+                  >
+                    {label}
+                  </a>
+                ),
+              )}
             </nav>
             <div {...stylex.props(styles.actions)}>
-              <LanguageSwitch meta={meta} />
-              <a {...stylex.props(ui.button, ui.secondary, ui.focusRing)} href={contact}>
+              <LanguageSwitch meta={meta} size={ui.small} />
+              <a {...stylex.props(ui.button, ui.compact, ui.primary, ui.focusRing)} href={contact}>
                 {t.text("nav_contact")}
               </a>
             </div>
@@ -350,9 +389,9 @@ export function Page({
                   ))}
                 </nav>
                 <div {...stylex.props(styles.panelFoot)}>
-                  <LanguageSwitch meta={meta} />
+                  <LanguageSwitch meta={meta} size={ui.text} />
                   <a
-                    {...stylex.props(ui.button, ui.secondary, ui.focusRing, styles.panelContact)}
+                    {...stylex.props(ui.button, ui.primary, ui.focusRing, styles.panelContact)}
                     href={contact}
                   >
                     {t.text("nav_contact")}
@@ -394,13 +433,14 @@ function Languages({ meta, style }: { meta: Meta; style: Style }) {
 }
 
 /**
- * Every language by its code, `EN DE`: the page's own in full ink and not a link, each other one
- * a link to this page in that language, named in full for screen readers.
+ * Every language by its code, `EN DE`, at `size`: the page's own in the header's gray & not a
+ * link, each other one a quieter link to this page in that language, in full ink only under the
+ * pointer or the keyboard, named in full for screen readers.
  */
-function LanguageSwitch({ meta }: { meta: Meta }) {
+function LanguageSwitch({ meta, size }: { meta: Meta; size: Style }) {
   const t = translators[meta.locale];
   return (
-    <span {...stylex.props(ui.text, styles.switch)}>
+    <span {...stylex.props(size, styles.switch)}>
       {locales.map((code) =>
         code === meta.locale ? (
           <span
@@ -414,7 +454,7 @@ function LanguageSwitch({ meta }: { meta: Meta }) {
         ) : (
           <a
             key={code}
-            {...stylex.props(ui.quiet, ui.control, ui.focusRing, styles.code)}
+            {...stylex.props(ui.quiet, ui.control, ui.focusRing, styles.code, styles.codeOther)}
             href={meta.alternates?.[code] ?? href(code, "home")}
             hreflang={code}
             lang={code}
@@ -574,12 +614,54 @@ const styles = stylex.create({
     backgroundColor: colors.bg,
     clipPath: { default: "inset(50%)", ":focus-visible": "none" },
   },
+  /** Sticky over the page; its ground is `ground`, under the bar. */
   header: {
     position: "sticky",
     top: 0,
     zIndex: layer.header,
-    backgroundColor: colors.bg,
   },
+  /**
+   * The page under the logo, inverted, like palantir.com's logo: what passes under it shows in
+   * negative. Only the ground's hole shows it, so one mask (`ground`) splits each pixel at the
+   * mark's edge between this & the ground: no sliver of the page, or of a blend of the two, rings
+   * the mark. Past the plain inversion, the filter turns the umber ground into the dark scheme's
+   * paper text & the paper ground into the light scheme's ink (within 6 of 255 in each channel),
+   * so the mark at rest keeps the palette. Clipped to the logo's box & a unit round it, so the
+   * browser inverts no more than that.
+   */
+  inverted: {
+    position: "absolute",
+    inset: 0,
+    zIndex: -2,
+    backdropFilter: "invert(1) contrast(0.8) sepia(0.125) brightness(1.11)",
+    WebkitBackdropFilter: "invert(1) contrast(0.8) sepia(0.125) brightness(1.11)",
+    clipPath: {
+      default: `inset(0 calc(100% - max(${space.x3}, (100% - ${space.page}) / 2) - ${space.x5}) 0 calc(max(${space.x3}, (100% - ${space.page}) / 2) - ${space.x1}))`,
+      [media.desktop]: `inset(0 calc(100% - max(${grid.margin}, (100% - ${space.page}) / 2) - ${space.x5}) 0 calc(max(${grid.margin}, (100% - ${space.page}) / 2) - ${space.x1}))`,
+    },
+  },
+  /**
+   * The page's ground, solid, except under the logo: there it leaves a hole of the mark's own
+   * shape, which shows the inverted page (`inverted`). Its start padding is the container's
+   * (`ui.container`), so the hole's content-box origin is where the logo starts.
+   */
+  ground: (hole: string) => ({
+    position: "absolute",
+    inset: 0,
+    zIndex: -1,
+    paddingInlineStart: {
+      default: `max(${space.x3}, (100% - ${space.page}) / 2)`,
+      [media.desktop]: `max(${grid.margin}, (100% - ${space.page}) / 2)`,
+    },
+    backgroundColor: colors.bg,
+    maskImage: `${hole}, linear-gradient(#000 0 0)`,
+    maskOrigin: "content-box, border-box",
+    maskClip: "border-box",
+    maskPosition: "left center, 0 0",
+    maskSize: `auto calc(${space.x4} + ${space.half}), 100% 100%`,
+    maskRepeat: "no-repeat",
+    maskComposite: "exclude",
+  }),
   bar: {
     display: "flex",
     alignItems: "center",
@@ -603,9 +685,10 @@ const styles = stylex.create({
    */
   nav: {
     display: { default: "none", [media.desktop]: "flex" },
-    marginInlineStart: `calc(-1 * ${space.x2})`,
+    marginInlineStart: `calc(-1 * (${space.x1} + ${space.half}))`,
   },
-  navLink: { paddingInline: space.x2, paddingBlock: space.x1 },
+  /** The page it is on: underlined, in the same gray; full ink is for the pointer alone. */
+  navCurrent: { textDecorationLine: "underline" },
   /** Desktop: the languages & the contact button, on the right. */
   actions: {
     display: { default: "none", [media.desktop]: "flex" },
@@ -658,7 +741,14 @@ const styles = stylex.create({
     letterSpacing: "0.02em",
     touchAction: "manipulation",
   },
-  codeCurrent: { color: colors.primary },
+  codeCurrent: { color: colors.secondary },
+  codeOther: {
+    color: {
+      default: colors.tertiary,
+      ":hover": { [media.hover]: colors.primary },
+      ":focus-visible": colors.primary,
+    },
+  },
   main: {
     flexGrow: 1,
     paddingBottom: { default: space.x12, [media.desktop]: space.x20 },

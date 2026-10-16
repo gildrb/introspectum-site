@@ -111,6 +111,21 @@ export const shadows = stylex.defineVars({
 });
 
 /**
+ * The main button's lens (`ui.primary`): shown & turning only while the pointer rests on the
+ * button or the keyboard is on it, so the button sets both on itself & its lens reads them.
+ */
+export const lens = stylex.defineVars({ play: "paused", show: "0" });
+
+/**
+ * Rings seen down a bore, as a mask: radius 100 & each next one 0.85 of the last, every stroke an
+ * 80th of its radius, so the set is its own image at 0.85 its size & a lens drawn from it turns
+ * without a seam (`ui.primary`).
+ */
+export const rings = stylex.defineConsts({
+  image: `url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-100 -100 200 200' fill='none' stroke='black'><circle r='100' stroke-width='1.25'/><circle r='85' stroke-width='1.0625'/><circle r='72.25' stroke-width='0.9031'/><circle r='61.4125' stroke-width='0.7677'/><circle r='52.2006' stroke-width='0.6525'/><circle r='44.3705' stroke-width='0.5546'/><circle r='37.715' stroke-width='0.4714'/><circle r='32.0577' stroke-width='0.4007'/><circle r='27.2491' stroke-width='0.3406'/><circle r='23.1617' stroke-width='0.2895'/><circle r='19.6874' stroke-width='0.2461'/><circle r='16.7343' stroke-width='0.2092'/><circle r='14.2242' stroke-width='0.1778'/><circle r='12.0906' stroke-width='0.1511'/><circle r='10.277' stroke-width='0.1285'/><circle r='8.7354' stroke-width='0.1092'/><circle r='7.4251' stroke-width='0.0928'/><circle r='6.3114' stroke-width='0.0789'/><circle r='5.3647' stroke-width='0.0671'/><circle r='4.56' stroke-width='0.057'/><circle r='3.876' stroke-width='0.0485'/><circle r='3.2946' stroke-width='0.0412'/><circle r='2.8004' stroke-width='0.035'/><circle r='2.3803' stroke-width='0.0298'/><circle r='2.0233' stroke-width='0.0253'/><circle r='1.7198' stroke-width='0.0215'/></svg>")`,
+});
+
+/**
  * Font weights. Light text on a dark ground looks heavier than the same weight of dark text on a
  * light ground, so the light scheme sets every weight 30 heavier: both schemes then look equally
  * bold. Dark is the reference. Every face is declared up to 630 (src/layout.tsx).
@@ -211,11 +226,14 @@ export const leading = stylex.defineConsts({
   x4_5: `${(4.5 * unit) / 16}rem`,
 });
 
-/** Letter spacing: the larger the text, the tighter. */
+/**
+ * Letter spacing: the larger the text, the tighter. Newsreader's text cut sets loosely for a
+ * title's size, so the serif titles & leads close up enough to read as one firm line.
+ */
 export const tracking = stylex.defineConsts({
   tight: "-0.01em",
-  tighter: "-0.015em",
-  tightest: "-0.02em",
+  tighter: "-0.025em",
+  tightest: "-0.03em",
 });
 
 /** Every rule on the page, borders, outlines and underlines, is one pixel wide. */

@@ -24,8 +24,16 @@ function readMark(): { viewBox: string; width: number; height: number; path: str
   };
 }
 
-/** The mark's drawing, for the header logo (`islands/logo.tsx`), which draws it in the text's color. */
+/** The mark's drawing, for the header logo (`islands/logo.tsx`) and the footer's. */
 export const mark = readMark();
+
+/**
+ * The mark as a CSS image, for the hole the header's ground leaves under the header logo, which
+ * shows the page inverted there (`src/layout.tsx`).
+ */
+export const markImage = `url("data:image/svg+xml,${encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${mark.viewBox}"><path fill-rule="evenodd" d="${mark.path}"/></svg>`,
+)}")`;
 
 /**
  * The favicon: the mark almost as large as the square, a twentieth of it free on each side, on a

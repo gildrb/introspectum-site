@@ -248,7 +248,7 @@
   },
   "nav_products": {
     "message": "Products",
-    "description": "Main navigation link to the product overview. Sidebar on desktop, one row on phones.",
+    "description": "Main navigation entry for the products: on desktop it opens a menu of every product & the research; on phones it links to the product overview.",
     "maxLength": 16
   },
   "nav_join": {

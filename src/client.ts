@@ -134,12 +134,13 @@ if (later.length > 0) whenIdle(() => void hydrateIslands(later));
 
 async function hydrateIslands(elements: readonly HTMLElement[]): Promise<void> {
   const names = new Set(elements.map((element) => element.dataset.island));
-  const [{ h, hydrate }, waitlist, contact, stat, logo] = await Promise.all([
+  const [{ h, hydrate }, waitlist, contact, stat, logo, products] = await Promise.all([
     import("preact"),
     names.has("waitlist") ? import("./islands/waitlist.tsx") : null,
     names.has("contact") ? import("./islands/contact.tsx") : null,
     names.has("stat") ? import("./islands/stat.tsx") : null,
     names.has("logo") ? import("./islands/logo.tsx") : null,
+    names.has("products") ? import("./islands/products.tsx") : null,
   ]);
   requestAnimationFrame(() => {
     for (const element of elements) {
@@ -153,6 +154,8 @@ async function hydrateIslands(elements: readonly HTMLElement[]): Promise<void> {
         setTimeout(() => hydrate(h(stat.Stat, props), element));
       else if (name === "logo" && logo !== null && logo.isLogoMenuProps(props))
         setTimeout(() => hydrate(h(logo.LogoMenu, props), element));
+      else if (name === "products" && products !== null && products.isProductsMenuProps(props))
+        setTimeout(() => hydrate(h(products.ProductsMenu, props), element));
       else throw new Error(`Unknown island or props: ${name}`);
     }
   });
