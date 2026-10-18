@@ -1,7 +1,7 @@
 import * as Menu from "@radix-ui/react-menu";
 import * as stylex from "@stylexjs/stylex";
 import { useEffect, useRef, useState } from "preact/hooks";
-import { colors, layer, media, space, stroke } from "../tokens.stylex.ts";
+import { caps, colors, layer, media, space, stroke } from "../tokens.stylex.ts";
 import { ui, untranslated } from "../ui.tsx";
 
 const textKeys = ["label", "copy", "download"] as const;
@@ -146,13 +146,14 @@ const styles = stylex.create({
     WebkitTouchCallout: "none",
   },
   /**
-   * Four and a half units tall; its width follows from the mark's own proportions (its viewBox).
-   * It only holds the link's place: the mark shows through the header's ground (`src/layout.tsx`),
-   * the page inverted. A browser that cannot cut that hole draws it here, in the text's color.
+   * Three caps tall (36px at 1rem); its width follows from the mark's own proportions (its
+   * viewBox). It only holds the link's place: the mark shows through the header's ground
+   * (`src/layout.tsx`), the page inverted. A browser that cannot cut that hole draws it here, in
+   * the text's color.
    */
   logo: {
     display: "block",
-    height: `calc(${space.x4} + ${space.half})`,
+    height: caps.x3,
     width: "auto",
     visibility: { default: "hidden", "@supports not (mask-composite: exclude)": "visible" },
   },
@@ -196,14 +197,14 @@ const styles = stylex.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    height: space.x6,
+    height: caps.x4_75,
     borderWidth: stroke.width,
     borderStyle: "solid",
     borderColor: colors.hairline,
     borderRadius: "6px",
     backgroundColor: colors.surface,
   },
-  previewMark: { display: "block", height: space.x3, width: "auto" },
+  previewMark: { display: "block", height: caps.x2_5, width: "auto" },
   separator: {
     height: stroke.width,
     marginBlock: "6px",
@@ -215,8 +216,8 @@ const styles = stylex.create({
     display: "flex",
     alignItems: "center",
     columnGap: space.x1,
-    height: `calc(${space.x4} + ${space.half})`,
+    height: caps.x3_5,
     paddingInline: `calc(${space.x1} + ${space.half})`,
   },
-  icon: { display: "block", width: space.x2, height: space.x2, flexShrink: 0 },
+  icon: { display: "block", width: caps.x1_5, height: caps.x1_5, flexShrink: 0 },
 });

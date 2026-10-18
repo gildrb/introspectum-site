@@ -12,7 +12,16 @@ import {
   type TeamSize,
   teamSizes,
 } from "../site.ts";
-import { colors, fontFeatures, layer, media, shadows, space, stroke } from "../tokens.stylex.ts";
+import {
+  caps,
+  colors,
+  fontFeatures,
+  layer,
+  media,
+  shadows,
+  space,
+  stroke,
+} from "../tokens.stylex.ts";
 import { ui } from "../ui.tsx";
 
 /** The form's words, translated on the server so the browser loads no message catalog. */
@@ -407,8 +416,8 @@ const styles = stylex.create({
   control: {
     boxSizing: "border-box",
     width: "100%",
-    // Controls: five units tall, six on phones for a finger.
-    height: { default: space.x5, [media.mobile]: space.x6 },
+    // Controls: three and a half caps tall (40px at 1rem), four on phones for a finger (48px).
+    height: { default: caps.x3_5, [media.mobile]: caps.x4 },
     paddingInline: space.x2,
     borderWidth: stroke.width,
     borderStyle: "solid",
@@ -424,7 +433,7 @@ const styles = stylex.create({
   },
   textarea: {
     height: "auto",
-    minHeight: space.x6,
+    minHeight: caps.x4,
     paddingBlock: space.x1,
     resize: "vertical",
   },
@@ -456,8 +465,8 @@ const styles = stylex.create({
     position: "absolute",
     insetInlineEnd: space.x2,
     top: "50%",
-    width: space.x2,
-    height: space.x2,
+    width: caps.x1_5,
+    height: caps.x1_5,
     transform: "translateY(-50%)",
     color: colors.tertiary,
     pointerEvents: "none",
@@ -480,7 +489,7 @@ const styles = stylex.create({
     position: "relative",
     display: "flex",
     alignItems: "center",
-    height: { default: space.x5, [media.mobile]: space.x6 },
+    height: { default: caps.x3_5, [media.mobile]: caps.x4 },
     paddingInlineStart: space.x2,
     paddingInlineEnd: space.x5,
     borderRadius: space.half,
@@ -495,8 +504,8 @@ const styles = stylex.create({
     position: "absolute",
     insetInlineEnd: space.x2,
     display: "flex",
-    width: space.x2,
-    height: space.x2,
+    width: caps.x1_5,
+    height: caps.x1_5,
   },
   button: {
     cursor: { default: "pointer", ":disabled": "progress" },

@@ -11,6 +11,7 @@ import { mark, markImage } from "./logo.tsx";
 import { shareFrame } from "./og.tsx";
 import { company, email, origin, type Shelf, shelved } from "./site.ts";
 import {
+  caps,
   colors,
   fontFeatures,
   grid,
@@ -229,7 +230,7 @@ export function Page({
   });
   const page = schemeToken(assets.css, colors.bg);
   return (
-    <html lang={locale} dir={localeInfo[locale].dir} {...stylex.props(styles.html)}>
+    <html lang={locale} dir={localeInfo[locale].dir} {...stylex.props(ui.sans, styles.html)}>
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -300,7 +301,7 @@ export function Page({
         {meta.jsonLd !== undefined && <JsonLd value={meta.jsonLd} />}
         {meta.head}
       </head>
-      <body {...stylex.props(ui.sans, styles.body)}>
+      <body {...stylex.props(styles.body)}>
         <a {...stylex.props(ui.text, ui.focusRing, styles.skip)} href="#content">
           {t.text("skip_to_content")}
         </a>
@@ -581,11 +582,12 @@ function Footer({ meta }: { meta: Meta }) {
 }
 
 const styles = stylex.create({
+  /** In Inter, so the header's height in caps (`caps.bar`) is the same here as on the bar. */
   html: {
     backgroundColor: colors.bg,
     colorScheme: "light dark",
     // Anchored sections stop below the sticky header, not under it.
-    scrollPaddingTop: space.bar,
+    scrollPaddingTop: caps.bar,
   },
   body: {
     display: "flex",
@@ -658,7 +660,7 @@ const styles = stylex.create({
     maskOrigin: "content-box, border-box",
     maskClip: "border-box",
     maskPosition: "left center, 0 0",
-    maskSize: `auto calc(${space.x4} + ${space.half}), 100% 100%`,
+    maskSize: `auto ${caps.x3}, 100% 100%`,
     maskRepeat: "no-repeat",
     maskComposite: "exclude",
   }),
@@ -666,7 +668,7 @@ const styles = stylex.create({
     display: "flex",
     alignItems: "center",
     columnGap: space.x4,
-    height: space.bar,
+    height: caps.bar,
   },
   /**
    * The footer's mark, as tall as the header's (`islands/logo.tsx`), in the card's ink, one unit
@@ -674,7 +676,7 @@ const styles = stylex.create({
    */
   footerMark: {
     display: "block",
-    height: `calc(${space.x4} + ${space.half})`,
+    height: caps.x3,
     width: "auto",
     marginBottom: space.x1,
   },
@@ -701,12 +703,12 @@ const styles = stylex.create({
     display: { default: "block", [media.desktop]: "none" },
     marginInlineStart: "auto",
   },
-  toggle: { height: space.x5 },
+  toggle: { height: caps.x3_5 },
   panel: {
     position: "absolute",
     top: "100%",
     insetInline: 0,
-    maxHeight: `calc(100dvh - ${space.bar})`,
+    maxHeight: `calc(100dvh - ${caps.bar})`,
     overflowY: "auto",
     paddingBlock: space.x2,
     paddingInline: space.x3,
@@ -717,7 +719,7 @@ const styles = stylex.create({
   panelLink: {
     display: "flex",
     alignItems: "center",
-    height: space.x6,
+    height: caps.x3_25,
     fontSize: type.menu,
     lineHeight: leading.x3_5,
   },
@@ -729,14 +731,17 @@ const styles = stylex.create({
     marginTop: space.x2,
   },
   panelContact: { flexGrow: 1 },
-  /** The language codes side by side, each as tall as the button beside them. */
+  /**
+   * The language codes side by side, each four caps tall: as tall as the full button beside them
+   * in the phone menu (48px at 1rem), 40px in the header's small text.
+   */
   switch: { display: "inline-flex", flexShrink: 0, alignItems: "center" },
   code: {
     display: "inline-flex",
     alignItems: "center",
     justifyContent: "center",
-    minWidth: { default: space.x6, [media.desktop]: space.x5 },
-    height: { default: space.x6, [media.desktop]: space.x5 },
+    minWidth: caps.x4,
+    height: caps.x4,
     fontWeight: weights.medium,
     letterSpacing: "0.02em",
     touchAction: "manipulation",

@@ -1,7 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import { useEffect, useRef, useState } from "preact/hooks";
 import { useHydrated } from "./hydrated.ts";
-import { colors, grid, media, space, stroke } from "../tokens.stylex.ts";
+import { caps, colors, grid, media, space, stroke } from "../tokens.stylex.ts";
 import { ui } from "../ui.tsx";
 
 type Entry = { href: string; label: string; current: boolean };
@@ -233,5 +233,5 @@ const styles = stylex.create({
   group: { gridColumn: { default: "span 6", [media.wide]: "span 3" } },
   title: { display: "block", width: "fit-content", marginBottom: space.x1 },
   list: { listStyle: "none" },
-  link: { display: "flex", alignItems: "center", height: space.x4, width: "fit-content" },
+  link: { display: "flex", alignItems: "center", height: caps.x2_75, width: "fit-content" },
 });

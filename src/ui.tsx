@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import type { VNode } from "preact";
 import {
+  caps,
   colors,
   fontFeatures,
   grid,
@@ -229,12 +230,15 @@ export const ui = stylex.create({
    * press selects nothing. Links in running text stay selectable, to be copied with it.
    */
   control: { userSelect: "none", WebkitUserSelect: "none" },
-  /** A link or a control shaped as a button. Six units tall on phones, for a finger; five above. */
+  /**
+   * A link or a control shaped as a button, as tall as its text's capitals allow: four caps on
+   * phones, for a finger (48px at 1rem); three and a half above (40px).
+   */
   button: {
     display: "inline-flex",
     alignItems: "center",
     justifyContent: "center",
-    height: { default: space.x6, [media.desktop]: space.x5 },
+    height: { default: caps.x4, [media.desktop]: caps.x3_5 },
     paddingInline: space.x3,
     borderWidth: stroke.width,
     borderStyle: "solid",
@@ -252,11 +256,12 @@ export const ui = stylex.create({
     WebkitUserSelect: "none",
   },
   /**
-   * A button in the header: four units tall, in small text, so the page's own call to action,
-   * full size below it, leads & the header's stays at hand without competing (as on vercel.com).
+   * A button in the header: three caps of small text tall (32px at 0.875rem), so the page's own
+   * call to action, full size below it, leads & the header's stays at hand without competing (as
+   * on vercel.com).
    */
   compact: {
-    height: space.x4,
+    height: caps.x3,
     paddingInline: `calc(${space.x1} + ${space.half})`,
     borderRadius: `calc(${space.x1} * 3 / 4)`,
     fontSize: type.small,

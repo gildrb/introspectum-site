@@ -4,7 +4,7 @@ import { useLayoutEffect, useRef, useState } from "preact/hooks";
 import { useHydrated } from "./hydrated.ts";
 import { isLocale, type Locale } from "../locale.ts";
 import { isProductSlug, type ProductSlug } from "../site.ts";
-import { colors, fontFeatures, leading, media, space, stroke } from "../tokens.stylex.ts";
+import { caps, colors, fontFeatures, leading, media, space, stroke } from "../tokens.stylex.ts";
 import { ui } from "../ui.tsx";
 
 /** The form's words, translated on the server so the browser loads no message catalog. */
@@ -242,8 +242,8 @@ const styles = stylex.create({
   field: { display: "flex", flexDirection: "column", rowGap: space.x1, minWidth: 0 },
   input: {
     width: "100%",
-    // Controls: five units tall, six on phones for a finger.
-    height: { default: space.x5, [media.mobile]: space.x6 },
+    // Controls: three and a half caps tall (40px at 1rem), four on phones for a finger (48px).
+    height: { default: caps.x3_5, [media.mobile]: caps.x4 },
     paddingInline: space.x2,
     borderWidth: stroke.width,
     borderStyle: "solid",
@@ -268,16 +268,20 @@ const styles = stylex.create({
     position: "relative",
     display: "flex",
     flexShrink: 0,
-    marginTop: `calc((${leading.x3} - ${space.x2}) / 2)`,
+    marginTop: `calc((${leading.x3} - ${caps.x1_5}) / 2)`,
   },
   /**
-   * Two units square, edged like the fields; ticked, filled with emerald & checked in paper. The
-   * browser's box & Radix's look the same, so hydration swaps one for the other unseen.
+   * One and a half caps square (16px at 1rem), edged like the fields; ticked, filled with emerald
+   * & checked in paper. The browser's box & Radix's look the same, so hydration swaps one for the
+   * other unseen.
    */
   checkbox: {
     boxSizing: "border-box",
-    width: space.x2,
-    height: space.x2,
+    width: caps.x1_5,
+    height: caps.x1_5,
+    // The sentence's font, not the browser's control font, so its caps size the box.
+    fontFamily: "inherit",
+    fontSize: "inherit",
     margin: 0,
     padding: 0,
     borderWidth: stroke.width,

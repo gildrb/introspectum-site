@@ -3,8 +3,9 @@ import * as stylex from "@stylexjs/stylex";
 const light = "@media (prefers-color-scheme: light)";
 
 /**
- * The layout's one unit, in px. Every gap, margin, padding, control height and layout width is a
- * whole multiple of it; line heights are multiples of half a unit.
+ * The layout's one unit, in px. Every gap, margin, padding and layout width is a whole multiple of
+ * it; line heights are multiples of half a unit. Boxes that hold text take their height from the
+ * text instead (`caps`), rounded to half a unit.
  */
 const unit = 8;
 
@@ -156,14 +157,32 @@ export const space = stylex.defineConsts({
   x12: `${12 * unit}px`,
   x16: `${16 * unit}px`,
   x20: `${20 * unit}px`,
-  /** The header's height. */
-  bar: `${8 * unit}px`,
   /** The least height a drawn machine is drawn at beside text: forty units. */
   band: `${40 * unit}px`,
   /** The height of an opening whose figure is its centre of interest: eighty units. */
   stage: `${80 * unit}px`,
   /** The widest column, twelve grid columns: header, sections and footer. */
   page: `${page}px`,
+});
+
+/**
+ * Heights of boxes that hold text or sit in a line of it (controls, rows, icons, the header), in
+ * the cap height of their own text (`cap`): they grow with the text and the reader's default size.
+ * Each rounds to the nearest half unit, so it stays on the grid. Named by their factor: `x3_5` is
+ * 3.5 caps. Inter's capitals are 0.7275 em: at 1rem `x3_5` is 40px, at 0.875rem `x3` is 32px. A
+ * box takes the cap of its own font, so set the font on it or above it, not only on its children.
+ */
+export const caps = stylex.defineConsts({
+  x1_5: `round(nearest, 1.5cap, ${unit / 2}px)`,
+  x2_5: `round(nearest, 2.5cap, ${unit / 2}px)`,
+  x2_75: `round(nearest, 2.75cap, ${unit / 2}px)`,
+  x3: `round(nearest, 3cap, ${unit / 2}px)`,
+  x3_25: `round(nearest, 3.25cap, ${unit / 2}px)`,
+  x3_5: `round(nearest, 3.5cap, ${unit / 2}px)`,
+  x4: `round(nearest, 4cap, ${unit / 2}px)`,
+  x4_75: `round(nearest, 4.75cap, ${unit / 2}px)`,
+  /** The header's height: 5.5 caps of interface text, 64px at 1rem. */
+  bar: `round(nearest, 5.5cap, ${unit / 2}px)`,
 });
 
 /** The grid's gutter: three units, between its twelve columns and between cards. */
