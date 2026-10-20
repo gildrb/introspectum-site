@@ -48,8 +48,8 @@ const tabula = {
  * The colors of the Tabula Smaragdina, the "emerald tablet", as Heinrich Khunrath's 1609
  * engraving shows it: iron-gall ink on paper, and the emerald of its name. Every neutral, grounds,
  * text, edges & shadows, shares one warm hue (85) at low chroma, 0.004 to 0.014, so no part of the
- * page reads as dyed beside another, in either scheme or the footer's other one: light is ink on
- * paper all but white, dark is that paper on umber; both follow the system setting.
+ * page reads as dyed beside another, in either scheme: light is ink on paper all but white, dark
+ * is that paper on umber; both follow the system setting.
  *
  * Every text color meets APCA's Bronze level on the page and on `surface`, the ground of cards.
  * Body text, a block of more than two lines, needs at least Lc 75: `primary` (Lc 100 light, Lc 100
@@ -81,23 +81,6 @@ export const colors = stylex.defineVars({
    */
   hairline: { default: tabula.hairline.dark, [light]: tabula.hairline.light },
   codeBg: { default: tabula.codeBg.dark, [light]: tabula.codeBg.light },
-});
-
-/**
- * The other scheme's colors, for a part of the page set apart from it: the footer, a card in the
- * light scheme's colors on the dark page, and in the dark scheme's on the light page. Each pair
- * keeps the contrast `colors` promises, as it is the same pair.
- */
-export const otherColors = stylex.createTheme(colors, {
-  bg: { default: tabula.bg.light, [light]: tabula.bg.dark },
-  surface: { default: tabula.surface.light, [light]: tabula.surface.dark },
-  primary: { default: tabula.primary.light, [light]: tabula.primary.dark },
-  secondary: { default: tabula.secondary.light, [light]: tabula.secondary.dark },
-  tertiary: { default: tabula.tertiary.light, [light]: tabula.tertiary.dark },
-  article: { default: tabula.article.light, [light]: tabula.article.dark },
-  accent: { default: tabula.accent.light, [light]: tabula.accent.dark },
-  hairline: { default: tabula.hairline.light, [light]: tabula.hairline.dark },
-  codeBg: { default: tabula.codeBg.light, [light]: tabula.codeBg.dark },
 });
 
 /**
@@ -135,13 +118,6 @@ export const weights = stylex.defineVars({
   regular: { default: 400, [light]: 430 },
   medium: { default: 500, [light]: 530 },
   semibold: { default: 600, [light]: 630 },
-});
-
-/** The other scheme's weights, for the parts in `otherColors`. */
-export const otherWeights = stylex.createTheme(weights, {
-  regular: { default: 430, [light]: 400 },
-  medium: { default: 530, [light]: 500 },
-  semibold: { default: 630, [light]: 600 },
 });
 
 /** Multiples of the unit, named by their factor: `x3` is three units. */

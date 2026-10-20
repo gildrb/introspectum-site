@@ -18,8 +18,6 @@ import {
   layer,
   leading,
   media,
-  otherColors,
-  otherWeights,
   shadows,
   space,
   type,
@@ -477,9 +475,8 @@ function LanguageSwitch({ meta, size }: { meta: Meta; size: Style }) {
 const brandAssetsUrl = versioned("/brand/introspectum-brand.zip");
 
 /**
- * The name and address, every page by group, the legal pages, and the other languages, on a card
- * of their own in the other scheme's colors (`otherColors`): paper on the umber page, umber on
- * the paper one.
+ * The name and address, every page by group, the legal pages, and the other languages, on the
+ * page's own ground & in its quieter grays, so the footer stays behind the page's content.
  */
 function Footer({ meta }: { meta: Meta }) {
   const { locale, path } = meta;
@@ -513,71 +510,69 @@ function Footer({ meta }: { meta: Meta }) {
     },
   ];
   return (
-    // A block of its own first: the body is a flex column, where the container's auto margins
-    // would shrink the card to its content.
-    <div {...stylex.props(styles.footerFrame)}>
+    // The footer is a block of its own: the body is a flex column, where the container's auto
+    // margins would shrink the container to its content.
+    <footer>
       <div {...stylex.props(ui.container)}>
-        <footer {...stylex.props(otherColors, otherWeights, styles.footer)}>
-          <div {...stylex.props(styles.footerInner, styles.footerColumns, styles.footerGrid)}>
-            <div {...stylex.props(styles.footerBrand)}>
-              <p>
-                <svg {...stylex.props(styles.footerMark)} viewBox={mark.viewBox} aria-hidden="true">
-                  <path d={mark.path} fill="currentColor" fill-rule="evenodd" />
-                </svg>
-                <span {...stylex.props(ui.srOnly)} {...untranslated}>
-                  {company.name}
-                </span>
-              </p>
-              <p {...stylex.props(ui.small, ui.label)}>{t.text("tagline")}</p>
-              <a
-                {...stylex.props(ui.small, ui.quiet, ui.focusRing, styles.email)}
-                href={`mailto:${email}`}
-                {...untranslated}
-              >
-                {email}
-              </a>
+        <div {...stylex.props(styles.footerColumns, styles.footerGrid)}>
+          <div {...stylex.props(styles.footerBrand)}>
+            <p>
+              <svg {...stylex.props(styles.footerMark)} viewBox={mark.viewBox} aria-hidden="true">
+                <path d={mark.path} fill="currentColor" fill-rule="evenodd" />
+              </svg>
+              <span {...stylex.props(ui.srOnly)} {...untranslated}>
+                {company.name}
+              </span>
+            </p>
+            <p {...stylex.props(ui.small, ui.label)}>{t.text("tagline")}</p>
+            <a
+              {...stylex.props(ui.small, ui.quiet, ui.focusRing, styles.email)}
+              href={`mailto:${email}`}
+              {...untranslated}
+            >
+              {email}
+            </a>
+          </div>
+          {groups.map(({ title, place, links }) => (
+            <div key={title} {...stylex.props(place)}>
+              <h2 {...stylex.props(ui.small, ui.strong)}>{title}</h2>
+              <ul {...stylex.props(styles.footerList)}>
+                {links.map(({ target, label }) => (
+                  <li key={target}>
+                    <a
+                      {...stylex.props(
+                        ui.small,
+                        ui.quiet,
+                        ui.control,
+                        ui.focusRing,
+                        styles.footerLink,
+                        path === target && ui.current,
+                      )}
+                      href={target}
+                      aria-current={path === target ? "page" : undefined}
+                    >
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
-            {groups.map(({ title, place, links }) => (
-              <div key={title} {...stylex.props(place)}>
-                <h2 {...stylex.props(ui.small, ui.strong)}>{title}</h2>
-                <ul {...stylex.props(styles.footerList)}>
-                  {links.map(({ target, label }) => (
-                    <li key={target}>
-                      <a
-                        {...stylex.props(
-                          ui.small,
-                          ui.quiet,
-                          ui.control,
-                          ui.focusRing,
-                          styles.footerLink,
-                          path === target && ui.current,
-                        )}
-                        href={target}
-                        aria-current={path === target ? "page" : undefined}
-                      >
-                        {label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-          {/* The other language sits on the column line of the first group of links, Products. */}
-          <div {...stylex.props(styles.footerInner, styles.footerColumns, styles.footerBase)}>
-            <p {...stylex.props(ui.small, ui.note, styles.copyright)}>
-              {t.text("footer_copyright", {
-                year: String(new Date().getUTCFullYear()),
-                company: company.legalName,
-              })}
-            </p>
-            <p {...stylex.props(styles.otherLanguage)}>
-              <Languages meta={meta} style={ui.small} />
-            </p>
-          </div>
-        </footer>
+          ))}
+        </div>
+        {/* The other language sits on the column line of the first group of links, Products. */}
+        <div {...stylex.props(styles.footerColumns, styles.footerBase)}>
+          <p {...stylex.props(ui.small, ui.note, styles.copyright)}>
+            {t.text("footer_copyright", {
+              year: String(new Date().getUTCFullYear()),
+              company: company.legalName,
+            })}
+          </p>
+          <p {...stylex.props(styles.otherLanguage)}>
+            <Languages meta={meta} style={ui.small} />
+          </p>
+        </div>
       </div>
-    </div>
+    </footer>
   );
 }
 
@@ -671,13 +666,14 @@ const styles = stylex.create({
     height: caps.bar,
   },
   /**
-   * The footer's mark, as tall as the header's (`islands/logo.tsx`), in the card's ink, one unit
+   * The footer's mark, as tall as the header's (`islands/logo.tsx`), in a quieter gray, one unit
    * further from the tagline than the tagline from the address.
    */
   footerMark: {
     display: "block",
     height: caps.x3,
     width: "auto",
+    color: colors.tertiary,
     marginBottom: space.x1,
   },
   /**
@@ -759,22 +755,6 @@ const styles = stylex.create({
     paddingBottom: { default: space.x12, [media.desktop]: space.x20 },
     outline: "none",
   },
-  /** The footer card's place: the page's column, clear of the window's bottom edge. */
-  footerFrame: { paddingBottom: { default: space.x2, [media.desktop]: space.x3 } },
-  /**
-   * A card in the other scheme, so it sets its own ground, ink, weight & controls: the links on
-   * top, the copyright line under them.
-   */
-  footer: {
-    overflow: "clip",
-    borderRadius: space.x1,
-    backgroundColor: colors.bg,
-    color: colors.primary,
-    fontWeight: weights.regular,
-    colorScheme: { default: "light", [media.light]: "dark" },
-  },
-  /** The card's content, as far from its edges as a card's (`Card`). */
-  footerInner: { paddingInline: { default: space.x3, [media.desktop]: space.x4 } },
   /**
    * The footer on the page grid: on wide screens the name over six columns and each group of
    * links over two, from the seventh column line on; on tablets the name on its own row and the
@@ -788,9 +768,10 @@ const styles = stylex.create({
     },
     columnGap: grid.gutter,
   },
+  /** The main's bottom padding already parts the footer from the page; no card edge to clear. */
   footerGrid: {
     rowGap: space.x5,
-    paddingBlock: { default: space.x6, [media.desktop]: space.x8 },
+    paddingBottom: { default: space.x6, [media.desktop]: space.x8 },
   },
   footerBrand: {
     display: "flex",
@@ -818,7 +799,7 @@ const styles = stylex.create({
   footerLink: { display: "block", width: "fit-content", paddingBlock: `calc(${space.x1} / 2)` },
   footerBase: {
     rowGap: space.x2,
-    paddingBottom: space.x4,
+    paddingBottom: { default: space.x4, [media.desktop]: space.x6 },
   },
   copyright: { gridColumn: { default: "1 / -1", [media.wide]: "1 / span 6" } },
   otherLanguage: {

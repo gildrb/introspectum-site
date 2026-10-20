@@ -1,7 +1,7 @@
 /**
  * Every declaration of a token's CSS variable in the built stylesheet, in order: the token's own,
- * in a rule whose selector starts at `:root`, not a theme's (such as `otherColors`), whose rule
- * StyleX starts at the theme's class.
+ * in a rule whose selector starts at `:root`, not a theme's, whose rule StyleX starts at the
+ * theme's class.
  */
 function declarations(css: string, variable: string): string[] {
   const name = variable.match(/^var\((--[\w-]+)\)$/)?.[1];
