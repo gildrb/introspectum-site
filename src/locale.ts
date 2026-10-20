@@ -33,6 +33,7 @@ export function perLocale<T>(make: (locale: Locale) => T): Record<Locale, T> {
 const segments = {
   home: { en: "", de: "" },
   products: { en: "products", de: "produkte" },
+  research: { en: "research", de: "forschung" },
   join: { en: "join", de: "karriere" },
   blog: { en: "blog", de: "blog" },
   about: { en: "about", de: "ueber-uns" },
@@ -40,6 +41,7 @@ const segments = {
   imprint: { en: "imprint", de: "impressum" },
   contact: { en: "contact", de: "kontakt" },
   joined: { en: "joined", de: "angemeldet" },
+  sent: { en: "sent", de: "gesendet" },
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type Route = keyof typeof segments;

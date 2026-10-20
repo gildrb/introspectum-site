@@ -1,7 +1,7 @@
 // What every figure script shares: the camera fit, the kit's drawing calls bound to it with the
 // site's hatches, and writing the drawing to `src/figures/<name>.svg` (plus, with --preview, the
 // figure alone in both schemes at /tmp/introspectum-<name>.html and -light.html).
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import * as k from "../anatomy/kit/iso-kit.mjs";
@@ -10,6 +10,17 @@ import { engravingCss, hatches } from "../../src/figures/engraving.ts";
 import { offsetOf, translate } from "../../src/figures/projection.ts";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
+
+/**
+ * A color of the palette (`tabula` in src/tokens.stylex.ts, the one source of every color), in
+ * both schemes. Read from its source: the file cannot run outside StyleX's compiler.
+ */
+function paletteColor(name) {
+  const source = readFileSync(join(HERE, "../../src/tokens.stylex.ts"), "utf8");
+  const found = source.match(new RegExp(`\\b${name}: \\{ dark: "([^"]+)", light: "([^"]+)" \\}`));
+  if (found === null) throw new Error(`No palette color ${name} in src/tokens.stylex.ts.`);
+  return { dark: found[1], light: found[2] };
+}
 
 /**
  * One rule sizes every figure on the page: the same area, as much paper as a figure six columns
@@ -84,9 +95,12 @@ export function engraver(name, { width, height, azimuth, elevation, points, pad 
         console.log(`wrote src/figures/${name}.svg (${Math.round(svg.length / 1024)} KB)`);
       }
       if (process.argv.includes("--preview")) {
+        // The page's ink & paper, `colors.primary` & `colors.bg`, in each scheme.
+        const primary = paletteColor("primary");
+        const bg = paletteColor("bg");
         const schemes = {
-          dark: { ink: "oklch(96.74% 0.022 85)", paper: "oklch(18.5% 0.014 70)" },
-          light: { ink: "oklch(24.9% 0.02 65)", paper: "oklch(96% 0.02 85)" },
+          dark: { ink: primary.dark, paper: bg.dark },
+          light: { ink: primary.light, paper: bg.light },
         };
         for (const [scheme, { ink, paper }] of Object.entries(schemes)) {
           const file = `/tmp/introspectum-${name}${scheme === "light" ? "-light" : ""}.html`;

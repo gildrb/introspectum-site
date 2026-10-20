@@ -14,7 +14,15 @@ import { translators } from "../i18n.ts";
 import { type Assets, Page } from "../layout.tsx";
 import type { Locale } from "../locale.ts";
 import { type Block, Inline, Markdown, usesItalic } from "../markdown.tsx";
-import { company, illustrations, isPersonName, people, type PersonName } from "../site.ts";
+import {
+  company,
+  illustrations,
+  isPersonName,
+  methods,
+  people,
+  type PersonName,
+  principles,
+} from "../site.ts";
 import { grid, media, space } from "../tokens.stylex.ts";
 import { ui } from "../ui.tsx";
 
@@ -167,6 +175,29 @@ export function AboutPage({
         to={1}
         machine={<Machine name="bookwheel" locale={locale} fill />}
       />
+      <MachineSection
+        parts={[
+          {
+            id: "how",
+            title: t.text("home_how_label"),
+            intro: t.text("home_methods", {
+              methods: t.list(methods.map((method) => t.text(method))),
+            }),
+            // The principles as a list beside the pantograph that shows them, not cards under it.
+            list: true,
+            blocks: principles.map(({ name, text }) => (
+              <>
+                <h3 {...stylex.props(ui.title)}>{t.text(name)}</h3>
+                <p {...stylex.props(ui.prose, styles.principle)}>{t.text(text)}</p>
+              </>
+            )),
+          },
+        ]}
+        // The pantograph shows how we work as a whole: it stands beside the whole part.
+        from={{ part: 0, block: "title" }}
+        to={0}
+        machine={<Machine name="pantograph" locale={locale} fill />}
+      />
       {others.map((part, index) => {
         const id = `part-${index + 3}`;
         const team = teamOf(part.blocks);
@@ -214,4 +245,6 @@ const styles = stylex.create({
   member: { display: "flex", flexDirection: "column", rowGap: space.x1 },
   /** What they have done, a little further from their role than the role from their name. */
   bio: { marginTop: space.x1 },
+  /** A principle's sentence, one unit under its name. */
+  principle: { marginTop: space.x1 },
 });

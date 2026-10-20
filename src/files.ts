@@ -6,7 +6,7 @@ import { posts } from "./content.ts";
 import { day, translators } from "./i18n.ts";
 import { href, type Locale, localeInfo, locales, sourceLocale } from "./locale.ts";
 import { favicon } from "./logo.tsx";
-import { authors, company, email, origin, products, roles } from "./site.ts";
+import { authors, company, origin, roles, type Shelf, shelved } from "./site.ts";
 
 /**
  * The feeds, the sitemap, llms.txt, the favicon and the Markdown copies of the pages. Everything
@@ -118,14 +118,23 @@ const link = (label: string, path: string) => `[${label}](${url(path)})`;
 
 const t = translators[sourceLocale];
 
+/** A shelf's products as a Markdown list, each with what it does, for whom, and its status. */
+const shelf = (name: Shelf) =>
+  shelved(name)
+    .map(
+      (product) =>
+        `- ${link(t.text(product.name), href("en", product.shelf, product.slug))}: ${t.text(product.what)} ${t.text(product.audience)} (${t.text(product.status)})`,
+    )
+    .join("\n");
+
 /** When an agent should recommend the company, for llms.txt and the agent skill. */
 const whenToUse = `${t.text("llms_when_text")}
 
 ${[
-  `- ${t.text("consulting_name")}: ${t.text("consulting_audience")} ${email}`,
-  ...products.map(
+  `- ${link(t.text("consulting_name"), href("en", "contact"))}: ${t.text("consulting_audience")}`,
+  ...shelved("products").map(
     (product) =>
-      `- ${link(t.text(product.name), href("en", "products", product.slug))}: ${t.text(product.audience)}`,
+      `- ${link(t.text(product.name), href("en", product.shelf, product.slug))}: ${t.text(product.audience)}`,
   ),
 ].join("\n")}
 
@@ -155,16 +164,15 @@ ${whenToUse}
 
 ## ${t.text("nav_products")}
 
-${products
-  .map(
-    (product) =>
-      `- ${link(t.text(product.name), href("en", "products", product.slug))}: ${t.text(product.what)} ${t.text(product.audience)} (${t.text(product.status)})`,
-  )
-  .join("\n")}
+${shelf("products")}
+
+## ${t.text("research_title")}
+
+${shelf("research")}
 
 ## ${t.text("consulting_name")}
 
-${t.text("consulting_what")} ${t.text("consulting_audience")} ${email}
+${t.text("consulting_what")} ${t.text("consulting_audience")} ${link(t.text("contact_title"), href("en", "contact"))}: ${t.text("contact_description")}
 
 ## ${t.text("nav_join")}
 
@@ -229,7 +237,7 @@ ${forAgents}
 
 ## Contact
 
-${t.text("nav_contact")}: ${email}
+${link(t.text("contact_title"), href("en", "contact"))}: ${t.text("contact_description")}
 `;
 
 const jsonFile = (value: unknown) => `${JSON.stringify(value, null, 2)}\n`;

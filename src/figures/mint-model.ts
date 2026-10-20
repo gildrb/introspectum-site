@@ -3,7 +3,8 @@
  * against a sealed standard weight, and the coin either goes back to the crucible or into the
  * strongbox. The press is the language model writing a function body, the standard weight the
  * specification people approved, the balance the proof, the crucible the counterexample going back
- * to the model, the strongbox's tally the audit trail.
+ * to the model, the strongbox's tally the audit trail: it counts every attempt the balance has
+ * judged, the rejected ones as well as the one that holds, as the product's gate keeps both.
  *
  * One pure model drives everything: `scripts/figures/mint.mjs` draws the static parts and the rest
  * pose with it, `mint.ts` moves the live parts in the browser with the same functions, so the page
@@ -127,6 +128,8 @@ const beat = {
   up: 0.25,
   landed: 0.42,
   release: 0.44,
+  /** The beam has settled: the attempt is judged, and the tally counts it. */
+  weighed: 0.54,
   arrest: 0.64,
   leave: 0.72,
   gone: 0.9,
@@ -164,8 +167,8 @@ export type Pose = {
   /** The coin's bottom centre, or null once the crucible or the strongbox holds it. */
   coin: Point | null;
   layer: Layer;
-  /** Coins in the strongbox, from this cycle. */
-  recorded: number;
+  /** Attempts the balance has judged in this cycle: the tally adds them to the cycles before. */
+  judged: number;
 };
 
 /** The whole machine at model time `t`, from 0 to 2: two attempts at one function. */
@@ -221,9 +224,14 @@ export function pose(t: number): Pose {
     tilt,
     coin: coinAt,
     layer,
-    recorded: holds && tau >= beat.gone ? 1 : 0,
+    judged: index + (tau >= beat.weighed ? 1 : 0),
   };
 }
+
+/** The tally's wheels, and what they read at model time `t` of cycle `cycle` (0 at load). */
+export const wheels = 4;
+export const tallyOf = (t: number, cycle: number) =>
+  String((cycle * length + pose(t).judged) % 10 ** wheels).padStart(wheels, "0");
 
 /** How far the left pan moves from level at a beam angle; the right pan moves the other way. */
 export function panShift(tilt: number): Point {

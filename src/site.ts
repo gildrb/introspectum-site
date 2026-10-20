@@ -1,4 +1,5 @@
 import type { MessageId, Values } from "./i18n.ts";
+import { href, type Locale } from "./locale.ts";
 import type { MachineName } from "./figures/machines.ts";
 
 /**
@@ -35,6 +36,111 @@ export function isPersonName(value: string): value is PersonName {
 export function mailto(subject: string): string {
   return `mailto:${email}?subject=${encodeURIComponent(subject)}`;
 }
+
+/**
+ * What a conversation can be about: a fixed-scope consulting offer or a product. The contact form
+ * sends one of these as `topic`; the Worker accepts no other.
+ */
+export const inquiryTopics = [
+  "erp-crm",
+  "erp-setup",
+  "software-factory",
+  "ai-code-audit",
+  "general",
+] as const;
+
+export type InquiryTopic = (typeof inquiryTopics)[number];
+
+export function isInquiryTopic(value: string): value is InquiryTopic {
+  return inquiryTopics.some((topic) => topic === value);
+}
+
+/** How many people build software at the company that writes; the contact form asks for one. */
+export const teamSizes = ["1", "2-10", "11-50", "51-200", "200+"] as const;
+
+export type TeamSize = (typeof teamSizes)[number];
+
+export function isTeamSize(value: string): value is TeamSize {
+  return teamSizes.some((size) => size === value);
+}
+
+/** The longest answer the contact form takes per field; the form and the Worker both hold to it. */
+export const inquiryMaxLength = { name: 200, email: 254, company: 200, building: 2000 } as const;
+
+/** The contact page with its form set to `topic`. */
+export function contactHref(locale: Locale, topic: InquiryTopic): string {
+  return `${href(locale, "contact")}?topic=${topic}`;
+}
+
+/**
+ * A consulting offer people can say yes to: a name, what we do, what you get, how long it takes,
+ * and what it costs from. `weeks` and `priceFrom` (whole euros, before VAT) are `null` while not
+ * decided; the card then leaves them out.
+ */
+export type Offer = {
+  topic: Extract<InquiryTopic, "ai-code-audit" | "erp-setup">;
+  title: MessageId;
+  text: MessageId;
+  result: MessageId;
+  weeks: number | null;
+  priceFrom: number | null;
+};
+
+export const offers: readonly Offer[] = [
+  {
+    topic: "erp-setup",
+    title: "offer_erp_title",
+    text: "offer_erp_text",
+    result: "offer_erp_result",
+    weeks: null,
+    priceFrom: null,
+  },
+  {
+    topic: "ai-code-audit",
+    title: "offer_audit_title",
+    text: "offer_audit_text",
+    result: "offer_audit_result",
+    weeks: null,
+    priceFrom: null,
+  },
+];
+
+/**
+ * The pilot programme a waiting list leads to. `null` while not decided: the page then shows a
+ * visible gap, never a guess. `opens` is a day at midnight UTC.
+ */
+export const pilot: { spots: number | null; opens: Date | null } = { spots: null, opens: null };
+
+/**
+ * What a buyer asks before handing over data, one term each. `contact` links the contact page
+ * and names `email`.
+ */
+export type TrustFact = { $: "fact"; text: MessageId } | { $: "contact"; text: MessageId };
+
+export const trust: readonly { term: MessageId; fact: TrustFact }[] = [
+  // The ERP & CRM's specification (twenty-erp-srs.md): one VM per customer, no multi-tenancy.
+  { term: "trust_installation", fact: { $: "fact", text: "trust_installation_text" } },
+  { term: "trust_contact", fact: { $: "contact", text: "trust_contact_text" } },
+];
+
+/**
+ * The Software Factory's measured runs, from the product repository's verification logs:
+ * `docs/verification-logs/real-project-scale-2026-09-04.md` (graph builds; four repeated
+ * self-ingestions gave byte-identical summaries) and `docs/smoke-demo.md` (the smoke alarm proven
+ * with Prusti in three consecutive runs, 23 August 2026). Shown on the homepage and its page.
+ */
+export const graphRuns = {
+  date: new Date("2026-09-04T00:00:00Z"),
+  ownFiles: 113,
+  ownNodes: 12_801,
+  ownSeconds: 4.8,
+  otherFiles: 95,
+  otherNodes: 20_049,
+  otherSeconds: 7.3,
+  repeats: 4,
+} as const;
+
+export const proofRuns = { passed: 3, runs: 3 } as const;
 
 /**
  * A published work the site cites. A message cites it with a tag named by its ID around the words
@@ -266,8 +372,11 @@ export const principles: readonly { name: MessageId; text: MessageId }[] = [
   { name: "principle_traceability", text: "principle_traceability_text" },
 ];
 
-/** Kept apart from `products` so the browser bundle can check a slug without the rest. */
-export const productSlugs = ["software-factory", "erp-crm", "trading-platform"] as const;
+/**
+ * Kept apart from `products` so the browser bundle can check a slug without the rest. The ERP &
+ * CRM comes first: it has the largest market.
+ */
+export const productSlugs = ["erp-crm", "software-factory", "trading-platform"] as const;
 
 export type ProductSlug = (typeof productSlugs)[number];
 
@@ -281,8 +390,15 @@ export function isProductSlug(value: string): value is ProductSlug {
  */
 export type Paragraph = { text: MessageId; values?: Values };
 
+/**
+ * Where a product lives: `products` is what we sell or will sell, with a waiting list; `research`
+ * is work we publish but do not sell, kept apart so it never stands beside an offer.
+ */
+export type Shelf = "products" | "research";
+
 export type Product = {
   slug: ProductSlug;
+  shelf: Shelf;
   name: MessageId;
   /** Where it stands; named for language models in `llms.txt`. */
   status: MessageId;
@@ -292,6 +408,11 @@ export type Product = {
   audience: MessageId;
   /** The figure on its card and beside its page's opening. */
   illustration: Illustration;
+  /**
+   * A drawn diagram under the illustration in the page's opening, where it has one: the figure's
+   * lines redrawn and turned into the product's own graph (see `figures/machine.tsx`).
+   */
+  diagram?: MachineName;
   /** How it works, one paragraph each. */
   how: readonly Paragraph[];
   /**
@@ -308,52 +429,8 @@ export type Product = {
 
 export const products: readonly Product[] = [
   {
-    slug: "software-factory",
-    name: "product_software_factory_name",
-    status: "status_prototype",
-    what: "product_software_factory_what",
-    audience: "product_software_factory_audience",
-    illustration: illustrations.frege,
-    // The press, the proof & the way back to the model, beside both parts, as on every product.
-    machine: { name: "mint", from: 0, through: "state" },
-    how: [
-      { text: "product_software_factory_how_1" },
-      { text: "product_software_factory_how_2" },
-      { text: "product_software_factory_how_3" },
-    ],
-    state: [
-      {
-        text: "product_software_factory_state_1",
-        // docs/verification-logs/real-project-scale-2026-09-04.md in the product's repository.
-        values: {
-          date: new Date("2026-09-04T00:00:00Z"),
-          ownFiles: 113,
-          ownNodes: 12_801,
-          ownSeconds: 4.8,
-          otherFiles: 95,
-          otherNodes: 20_049,
-          otherSeconds: 7.3,
-        },
-      },
-      { text: "product_software_factory_state_2" },
-      { text: "product_software_factory_state_3" },
-      { text: "product_software_factory_state_4" },
-      { text: "product_software_factory_state_5" },
-    ],
-    sources: [
-      "cpg",
-      "c4",
-      "iso-15288",
-      "prusti",
-      "verus",
-      "ripgrep",
-      "gsn",
-      "ieee-830",
-      "ieee-1016",
-    ],
-  },
-  {
     slug: "erp-crm",
+    shelf: "products",
     name: "product_erp_crm_name",
     status: "status_in_development",
     what: "product_erp_crm_what",
@@ -375,7 +452,48 @@ export const products: readonly Product[] = [
     sources: ["twenty", "iso-4217", "iso-29148"],
   },
   {
+    slug: "software-factory",
+    shelf: "products",
+    name: "product_software_factory_name",
+    status: "status_prototype",
+    what: "product_software_factory_what",
+    audience: "product_software_factory_audience",
+    illustration: illustrations.frege,
+    // Frege's tree turns into the trace of a real requirement, drawn in his strokes.
+    diagram: "trace",
+    // The press, the proof & the way back to the model, beside both parts, as on every product.
+    machine: { name: "mint", from: 0, through: "state" },
+    how: [
+      { text: "product_software_factory_how_1" },
+      { text: "product_software_factory_how_2" },
+      { text: "product_software_factory_how_3" },
+    ],
+    state: [
+      {
+        text: "product_software_factory_state_1",
+        values: graphRuns,
+      },
+      { text: "product_software_factory_state_2" },
+      { text: "product_software_factory_state_3" },
+      { text: "product_software_factory_state_4" },
+      { text: "product_software_factory_state_5" },
+    ],
+    sources: [
+      "cpg",
+      "c4",
+      "iso-15288",
+      "prusti",
+      "verus",
+      "ripgrep",
+      "gsn",
+      "ieee-830",
+      "ieee-1016",
+    ],
+  },
+  {
     slug: "trading-platform",
+    // Research, not an offer: kept off the homepage & the product overview.
+    shelf: "research",
     name: "product_trading_platform_name",
     status: "status_research",
     what: "product_trading_platform_what",
@@ -391,6 +509,11 @@ export const products: readonly Product[] = [
     sources: ["turtle"],
   },
 ];
+
+/** The products on one shelf, in the order of `products`. */
+export function shelved(shelf: Shelf): readonly Product[] {
+  return products.filter((product) => product.shelf === shelf);
+}
 
 export type Role = {
   title: MessageId;

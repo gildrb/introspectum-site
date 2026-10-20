@@ -1,4 +1,5 @@
 import { createIntl } from "@formatjs/intl";
+import { isLiteralElement, isNumberElement, parse } from "@formatjs/icu-messageformat-parser";
 import type { ComponentChildren, VNode } from "preact";
 import { type Locale, localeInfo, perLocale } from "./locale.ts";
 import type { Product } from "./site.ts";
@@ -47,12 +48,20 @@ export type Values = Readonly<Record<string, string | number | Date>>;
 /** Builds the element for one `<tag>…</tag>` part of a rich message from what it wraps. */
 export type Tag = (chunks: Array<string | VNode>) => VNode;
 
+/** A piece of a message whose numbers move on the page (`Translator.numbers`): words, or a number. */
+export type NumberPart = { $: "Text"; text: string } | { $: "Number"; value: number };
+
 export type Translator = {
   locale: Locale;
   /** A message as plain text. */
   text(id: MessageId, values?: Values): string;
   /** A message whose `<tag>…</tag>` parts each become the element `tags` builds for them. */
   rich(id: MessageId, tags: Readonly<Record<string, Tag>>, values?: Values): ComponentChildren;
+  /**
+   * A message of words & plain `{name, number}` arguments, cut into its parts, so the page can set
+   * each number on its own and let it move. Any other kind of argument fails the build.
+   */
+  numbers(id: MessageId, values: Readonly<Record<string, number>>): readonly NumberPart[];
   /** The name of a language, written in this one: "German" in English, "Englisch" in German. */
   language(of: Locale): string;
   /** Items as one list. English joins the last two with "&", as the brand writes it: "A, B & C"; German with "und", which is more formal. */
@@ -71,11 +80,12 @@ const listFormats: Readonly<Record<Locale, Intl.ListFormat>> = {
 
 function translator(locale: Locale): Translator {
   const tag = localeInfo[locale].tag;
+  const catalog = messages(locale);
   // Rich-text tags render to Preact elements; plain messages still format to strings.
   const intl = createIntl<VNode>({
     locale: tag,
     defaultLocale: localeInfo.en.tag,
-    messages: messages(locale),
+    messages: catalog,
     // Post dates are calendar days, written as midnight UTC.
     timeZone: "UTC",
     // A missing message or value fails the build instead of showing an ID on the page.
@@ -89,6 +99,19 @@ function translator(locale: Locale): Translator {
     locale,
     text: (id, values) => intl.formatMessage({ id }, values),
     rich: (id, tags, values) => intl.formatMessage({ id }, { ...values, ...tags }),
+    numbers: (id, values) => {
+      const message = catalog[id];
+      if (message === undefined) throw new Error(`No ${locale} message ${id}`);
+      return parse(message).map((element): NumberPart => {
+        if (isLiteralElement(element)) return { $: "Text", text: element.value };
+        if (isNumberElement(element) && (element.style ?? null) === null) {
+          const value = values[element.value];
+          if (value === undefined) throw new Error(`${id} needs a value for {${element.value}}`);
+          return { $: "Number", value };
+        }
+        throw new Error(`${id} holds more than words & plain numbers`);
+      });
+    },
     language: (of) => {
       const name = names.of(of);
       if (name === undefined) throw new Error(`No ${locale} name for the language ${of}`);

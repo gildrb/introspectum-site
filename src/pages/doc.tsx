@@ -14,7 +14,7 @@ type PageProps = {
   shareImage: string;
 };
 
-/** A plain page written in Markdown: Privacy, Imprint, Contact. */
+/** A plain page written in Markdown: Privacy, Imprint. */
 export function DocPage({
   doc,
   description,
@@ -71,6 +71,36 @@ export function JoinedPage({ assets, locale, path, alternates, shareImage }: Pag
         <Actions>
           <ButtonLink href={href(locale, "products")} kind="secondary">
             {t.text("back_to_products")}
+          </ButtonLink>
+        </Actions>
+      </Hero>
+    </Page>
+  );
+}
+
+/** Where a message from the contact form lands when it was sent without JavaScript. */
+export function SentPage({ assets, locale, path, alternates, shareImage }: PageProps) {
+  const t = translators[locale];
+  return (
+    <Page
+      assets={assets}
+      meta={{
+        locale,
+        path,
+        alternates,
+        title: t.text("page_title", { brand: company.name, page: t.text("contact_title") }),
+        description: t.text("contact_form_sent"),
+        shareImage,
+        type: "website",
+        index: false,
+        mono: false,
+        italic: false,
+      }}
+    >
+      <Hero title={t.text("contact_form_sent_title")} lead={t.text("contact_form_sent")}>
+        <Actions>
+          <ButtonLink href={href(locale, "home")} kind="secondary">
+            {t.text("contact_form_home")}
           </ButtonLink>
         </Actions>
       </Hero>

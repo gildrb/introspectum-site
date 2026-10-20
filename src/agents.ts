@@ -1,7 +1,7 @@
 import { mcpPath, a2aPath, tools } from "./agent-tools.ts";
 import { translators } from "./i18n.ts";
 import { href, type Locale, sourceLocale } from "./locale.ts";
-import { company, origin, products } from "./site.ts";
+import { company, origin, shelved } from "./site.ts";
 
 /**
  * What the site offers to AI agents, shared by the build (the discovery documents under
@@ -15,17 +15,17 @@ export const agentVersion = "1.0.0";
 const t = translators[sourceLocale];
 const description = t.text("home_description");
 
-/** The products as an agent reads them, in one language. */
+/** The products we sell as an agent reads them, in one language; research is not among them. */
 export function productList(locale: Locale) {
   const local = translators[locale];
-  return products.map((product) => ({
+  return shelved("products").map((product) => ({
     slug: product.slug,
     name: local.text(product.name),
     what: local.text(product.what),
     audience: local.text(product.audience),
     status: local.text(product.status),
-    url: `${origin}${href(locale, "products", product.slug)}`,
-    waitlist: `${origin}${href(locale, "products", product.slug)}#waitlist`,
+    url: `${origin}${href(locale, product.shelf, product.slug)}`,
+    waitlist: `${origin}${href(locale, product.shelf, product.slug)}#waitlist`,
   }));
 }
 

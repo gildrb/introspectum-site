@@ -20,9 +20,13 @@ export function engravingCss(ink: string, paper: string): string {
     '.iso-line[data-tone="mid"]{stroke-width:.7px}',
     '.iso-line[data-tone="faint"]{stroke-width:.4px}',
     '.iso-line[data-tone="lit"]{stroke-width:1.5px}',
+    // A judgement stroke, as heavy as Frege's (the trace's, `trace-model.ts`).
+    '.iso-line[data-tone="bar"]{stroke-width:3px;stroke-linecap:butt}',
     ".iso-solid[data-lit]>.iso-edge{stroke-width:1.5px}",
     `.iso-dots circle{fill:${ink};stroke:none}`,
     `.iso-face-text{fill:${ink};font-family:Inter,sans-serif;font-weight:500;font-variant-numeric:tabular-nums}`,
+    // Names set as code (the trace's), in the site's monospace face.
+    `.iso-code{fill:${ink};font-family:"JetBrains Mono","SFMono-Regular","SF Mono",Menlo,Consolas,monospace;font-weight:500}`,
     `.iso-hatch{fill:none;stroke:${ink}}`,
     `.iso-paper{fill:${paper}}`,
   ].join("");

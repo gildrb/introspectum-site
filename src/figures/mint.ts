@@ -1,5 +1,5 @@
 import type { Machine } from "./live.ts";
-import { type Layer, length, liveParts, panShift, pose, rest } from "./mint-model.ts";
+import { type Layer, length, liveParts, panShift, pose, rest, tallyOf } from "./mint-model.ts";
 import { offsetOf, translate } from "./projection.ts";
 
 const layers: readonly Layer[] = ["rise", "die", "back", "crucible", "free", "box"];
@@ -66,9 +66,11 @@ export const mint: Machine = {
           element.removeAttribute("display");
         } else element.setAttribute("display", "none");
       }
-      const count = String(cycle + p.recorded).padStart(digits.length, "0");
+      const count = tallyOf(t, cycle);
       for (const [index, digit] of digits.entries()) {
-        const shown = count[index] ?? "0";
+        const shown = count[index];
+        if (shown === undefined)
+          throw new Error(`The tally reads ${count}, wider than its wheels.`);
         if (digit.textContent !== shown) digit.textContent = shown;
       }
     };

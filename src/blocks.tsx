@@ -25,46 +25,129 @@ import { imageSize, versioned } from "./versioned.ts";
  * `figure` stands beside it on wide screens and under it on narrower ones. On a `stage` the
  * figure is the opening's centre of interest: drawn tall, the text centred beside it, and the
  * page's first part further below than parts are from each other.
+ *
+ * With `reveal`, the text arrives as the page first paints, in Linear's measured rhythm: the
+ * title word by word (a title that is not plain text as one), then the lead, then what follows,
+ * each rising a quarter of its type size out of a 10px blur over one second. The figure stands
+ * still in place from the start. CSS alone runs it, so it never waits for the script; it moves
+ * and fades only, so nothing shifts; with reduced motion the text simply stands there.
  */
 export function Hero({
   title,
   lead,
   figure,
   stage = false,
+  reveal = false,
   children,
 }: {
   title: ComponentChildren;
   lead?: ComponentChildren;
   figure?: ComponentChildren;
   stage?: boolean;
+  reveal?: boolean;
   children?: ComponentChildren;
 }) {
+  const beside = figure !== undefined;
   return (
     <header
       {...stylex.props(
         ui.container,
         styles.opening,
-        figure !== undefined && styles.beside,
+        beside && styles.beside,
         stage && styles.stage,
       )}
     >
       <div {...stylex.props(styles.besideText, stage && styles.stageText)}>
-        <h1
-          {...stylex.props(ui.display, ui.titleWidth, figure !== undefined && styles.besideTitle)}
-        >
-          {title}
-        </h1>
-        {lead !== undefined && <p {...stylex.props(ui.lead, ui.textWidth, styles.lead)}>{lead}</p>}
+        <HeroTitle title={title} beside={beside} reveal={reveal} />
+        {lead !== undefined && (
+          <p
+            {...stylex.props(
+              ui.lead,
+              ui.textWidth,
+              styles.lead,
+              reveal && styles.reveal,
+              reveal && styles.revealAfter(reveals.lead),
+            )}
+          >
+            {lead}
+          </p>
+        )}
         {children !== undefined && (
-          <div {...stylex.props(ui.textWidth, styles.stack, styles.afterHeroLead)}>{children}</div>
+          <div
+            {...stylex.props(
+              ui.textWidth,
+              styles.stack,
+              styles.afterHeroLead,
+              reveal && styles.reveal,
+              reveal && styles.revealAfter(reveals.rest),
+            )}
+          >
+            {children}
+          </div>
         )}
       </div>
-      {figure !== undefined && (
+      {beside && (
         <div {...stylex.props(styles.besideFigure, stage && styles.stageFigure)}>{figure}</div>
       )}
     </header>
   );
 }
+
+/**
+ * An opening's title. Revealed, a plain-text title rises word by word, each word keyed by where it
+ * starts in the title; any other title rises as one.
+ */
+function HeroTitle({
+  title,
+  beside,
+  reveal,
+}: {
+  title: ComponentChildren;
+  beside: boolean;
+  reveal: boolean;
+}) {
+  const style = [ui.display, ui.titleWidth, beside && styles.besideTitle];
+  if (!reveal) return <h1 {...stylex.props(style)}>{title}</h1>;
+  if (typeof title !== "string") return <h1 {...stylex.props(style, styles.reveal)}>{title}</h1>;
+  let at = 0;
+  const words = title.split(" ").map((word) => {
+    const start = at;
+    at += word.length + 1;
+    return { word, start };
+  });
+  return (
+    <h1 {...stylex.props(style)}>
+      {words.map(({ word, start }, index) => (
+        <Fragment key={start}>
+          {index > 0 && " "}
+          <span
+            {...stylex.props(
+              styles.reveal,
+              styles.word,
+              styles.revealAfter(reveals.start + index * reveals.word),
+            )}
+          >
+            {word}
+          </span>
+        </Fragment>
+      ))}
+    </h1>
+  );
+}
+
+/**
+ * An opening's reveal, in milliseconds, measured on linear.app (14 October 2026): each part takes
+ * one second on `ease`, title lines 33 ms apart, the description 200 ms after the title, the
+ * button 450 ms after it. Ours starts 100 ms after the first paint and ends about 1.6 s after it.
+ * The figure takes no part: a machine is there from the first paint and runs.
+ */
+const reveals = { start: 100, word: 33, lead: 300, rest: 550, length: 1000 };
+
+/** A part of the opening rising into place: lower and blurred, then sharp and in place. */
+const rise = stylex.keyframes({
+  from: { opacity: 0, transform: "translateY(0.25em)", filter: "blur(10px)" },
+  to: { opacity: 1, transform: "none", filter: "none" },
+});
 
 /**
  * A part of a page under its own heading. A `figure` stands beside it on wide screens, so its
@@ -102,6 +185,30 @@ export function Section({
       </div>
       {figure !== undefined && <div {...stylex.props(styles.besideFigure)}>{figure}</div>}
     </section>
+  );
+}
+
+/**
+ * A homepage title whose words turn from `colors.tertiary` to the ink one after another, as if
+ * read, once the reader reaches it (`rise.ts`, `rise-css.ts`): it leads the eye into the part it
+ * opens. Each word is keyed by where it starts in the title. `untranslated` for a product's name.
+ */
+export function Sweep({ text, translate = true }: { text: string; translate?: boolean }) {
+  let at = 0;
+  const words = text.split(" ").map((word) => {
+    const start = at;
+    at += word.length + 1;
+    return { word, start };
+  });
+  return (
+    <span data-sweep="" {...(translate ? {} : untranslated)}>
+      {words.map(({ word, start }, index) => (
+        <Fragment key={start}>
+          {index > 0 && " "}
+          <span style={{ "--word": index }}>{word}</span>
+        </Fragment>
+      ))}
+    </span>
   );
 }
 
@@ -244,16 +351,22 @@ export function Cards({ columns, children }: { columns: 2 | 3; children: Compone
   );
 }
 
-/** One card: a panel on the card ground whose parts stack two units apart, under its figure. */
+/**
+ * One card: a panel on the card ground whose parts stack two units apart, under its figure. A
+ * card that `rises`, on the homepage only, is served out of sight & rises in as the reader
+ * reaches it (`rise.ts`); the page must load that script & its stylesheet.
+ */
 export function Card({
   figure,
+  rises = false,
   children,
 }: {
   figure?: ComponentChildren;
+  rises?: boolean;
   children: ComponentChildren;
 }) {
   return (
-    <li {...stylex.props(styles.card)}>
+    <li {...stylex.props(styles.card)} data-rise={rises ? "" : undefined}>
       {figure !== undefined && <div {...stylex.props(styles.cardFigure)}>{figure}</div>}
       {children}
     </li>
@@ -517,7 +630,7 @@ export function Article({
 
 /**
  * The closing call to action: a panel on the card ground across the whole grid, with the
- * section's title, lead and buttons inside it.
+ * section's title, lead and buttons inside it. The panel rises in as one (`rise.ts`).
  */
 export function CallToAction({
   id,
@@ -554,6 +667,21 @@ const styles = stylex.create({
   /** The sources belong to the whole page, not to the part above: closer than a new part. */
   endMatter: { paddingTop: { default: space.x6, [media.desktop]: space.x8 } },
   lead: { marginTop: { default: space.x2, [media.desktop]: space.x3 } },
+  /**
+   * A part of an opening that rises into place as the page first paints (`Hero` with `reveal`),
+   * eased out, so it settles softly. Held in the first frame until its own start; with reduced
+   * motion there is no animation, so it stands there from the start.
+   */
+  reveal: {
+    animationName: { default: null, "@media (prefers-reduced-motion: no-preference)": rise },
+    animationDuration: `${reveals.length}ms`,
+    // CSS `ease`, as Linear's: a soft start, a long settle.
+    animationTimingFunction: "cubic-bezier(0.25, 0.1, 0.25, 1)",
+    animationFillMode: "both",
+  },
+  revealAfter: (delay: number) => ({ animationDelay: `${delay}ms` }),
+  /** A title word moves on its own only as a box of its own; it still breaks lines like a word. */
+  word: { display: "inline-block" },
   /** The opening's buttons and notes belong to its lead. */
   afterHeroLead: { marginTop: { default: space.x3, [media.desktop]: space.x4 } },
   /** A section's content under its intro. */

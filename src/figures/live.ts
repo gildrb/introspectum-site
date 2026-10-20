@@ -34,15 +34,18 @@ export function projectionOf(svg: Element): Projection {
 
 /** How quickly a machine eases to a new speed, in seconds: it never jumps. */
 const ease = 0.45;
-/** Its speed while the pointer rests on it, to follow a step, and while it is held. */
+/** Its speed while a mouse rests on it, to follow a step, and while it is held. */
 const slow = 0.35;
 const held = 0;
 
 /**
  * Runs a machine on a loop while it is on screen, from its rest pose, always forwards. The reader
- * never moves it, only its pace: with the pointer on it, it eases to a slower pace, to follow a
- * step; held down, it eases to a stop, to look; let go, it eases back. Only its own drawing
- * changes, so nothing on the page moves with it. With reduced motion it stays still.
+ * never moves it, only its pace: with the mouse moved onto it, it eases to a slower pace, to follow
+ * a step; held down (mouse, pen or finger), it eases to a stop, to look; let go, it eases back.
+ * Only a mouse that has moved over it slows it: a touch has no hover, and a mouse that merely sits
+ * where the figure appears has not asked for anything. Once the pointer is gone (left, lifted,
+ * cancelled, or the window lost focus) it runs at full pace again. Only its own drawing changes,
+ * so nothing on the page moves with it. With reduced motion it stays still.
  */
 export function run(figure: HTMLElement, machine: Machine) {
   const svg = figure.querySelector("svg");
@@ -81,12 +84,9 @@ export function run(figure: HTMLElement, machine: Machine) {
     { threshold: 0.25 },
   ).observe(svg);
 
-  svg.addEventListener("pointerenter", () => {
-    hovered = true;
-  });
-  svg.addEventListener("pointerleave", () => {
-    hovered = false;
-    pressed = false;
+  svg.addEventListener("pointermove", (event) => {
+    if (event.pointerType === "mouse" && (event.movementX !== 0 || event.movementY !== 0))
+      hovered = true;
   });
   svg.addEventListener("pointerdown", () => {
     pressed = true;
@@ -96,4 +96,10 @@ export function run(figure: HTMLElement, machine: Machine) {
   };
   svg.addEventListener("pointerup", release);
   svg.addEventListener("pointercancel", release);
+  const gone = () => {
+    hovered = false;
+    pressed = false;
+  };
+  svg.addEventListener("pointerleave", gone);
+  addEventListener("blur", gone);
 }

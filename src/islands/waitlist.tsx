@@ -1,8 +1,10 @@
+import * as Checkbox from "@radix-ui/react-checkbox";
 import * as stylex from "@stylexjs/stylex";
-import { useState } from "preact/hooks";
+import { useLayoutEffect, useRef, useState } from "preact/hooks";
+import { useHydrated } from "./hydrated.ts";
 import { isLocale, type Locale } from "../locale.ts";
 import { isProductSlug, type ProductSlug } from "../site.ts";
-import { colors, fontFeatures, leading, media, space, stroke } from "../tokens.stylex.ts";
+import { caps, colors, fontFeatures, leading, media, space, stroke } from "../tokens.stylex.ts";
 import { ui } from "../ui.tsx";
 
 /** The form's words, translated on the server so the browser loads no message catalog. */
@@ -40,10 +42,23 @@ type State = { $: "idle" } | { $: "sending" } | { $: "joined" } | { $: "failed";
 
 /**
  * A product's waiting-list form. Without JavaScript it posts to `/api/waitlist`, which redirects to
- * the confirmation page; hydrated, it posts in the background and answers in place.
+ * the confirmation page, and its consent box is the browser's own; hydrated, the box is Radix's,
+ * the same size & look, and the form posts in the background and answers in place.
  */
 export function Waitlist({ product, locale, text }: WaitlistProps) {
   const [state, setState] = useState<State>({ $: "idle" });
+  const [consent, setConsent] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+  const box = useRef<HTMLButtonElement>(null);
+
+  // On hydration, while the browser's checkbox is still in place: keep a tick given before it.
+  useLayoutEffect(() => {
+    const given = formRef.current?.elements.namedItem("consent");
+    if (given instanceof HTMLInputElement) setConsent(given.checked);
+  }, []);
+  // The browser's checkbox until hydration, so the first render matches the server's; Radix's
+  // after. After the effect above, so it reads the browser's box before it changes.
+  const hydrated = useHydrated();
 
   async function submit(form: HTMLFormElement) {
     setState({ $: "sending" });
@@ -94,6 +109,7 @@ export function Waitlist({ product, locale, text }: WaitlistProps) {
     <div {...stylex.props(styles.waitlist)}>
       {state.$ !== "joined" && (
         <form
+          ref={formRef}
           {...stylex.props(styles.form)}
           method="post"
           action="/api/waitlist"
@@ -137,13 +153,56 @@ export function Waitlist({ product, locale, text }: WaitlistProps) {
             </label>
           </div>
           <label {...stylex.props(ui.text, styles.consent)}>
-            <input
-              {...stylex.props(styles.checkbox)}
-              type="checkbox"
-              name="consent"
-              value="yes"
-              required
-            />
+            <span {...stylex.props(styles.box)}>
+              {hydrated && (
+                <Checkbox.Root
+                  {...stylex.props(ui.focusRing, styles.checkbox, consent && styles.checked)}
+                  ref={box}
+                  checked={consent}
+                  onCheckedChange={(checked) => setConsent(checked === true)}
+                />
+              )}
+              {hydrated ? (
+                // The form's own box, under Radix's: it posts the tick & checks one was given. The
+                // browser's message then points at the box, & the focus it gives passes on.
+                <input
+                  {...stylex.props(stylex.defaultMarker(), styles.unseen)}
+                  type="checkbox"
+                  name="consent"
+                  value="yes"
+                  required
+                  checked={consent}
+                  tabIndex={-1}
+                  aria-hidden="true"
+                  onFocus={() => box.current?.focus()}
+                />
+              ) : (
+                // Uncontrolled, so a tick given before hydration survives it (see above).
+                <input
+                  {...stylex.props(
+                    stylex.defaultMarker(),
+                    ui.focusRing,
+                    styles.checkbox,
+                    styles.native,
+                  )}
+                  type="checkbox"
+                  name="consent"
+                  value="yes"
+                  required
+                />
+              )}
+              {/* Drawn over the box once the form's own box is checked, before & after hydration. */}
+              <svg {...stylex.props(styles.tick)} viewBox="0 0 16 16" aria-hidden="true">
+                <path
+                  d="M4 8.5l2.5 2.5 5.5-6"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
             <span {...stylex.props(ui.label)}>{text.consent}</span>
           </label>
           <button
@@ -183,8 +242,8 @@ const styles = stylex.create({
   field: { display: "flex", flexDirection: "column", rowGap: space.x1, minWidth: 0 },
   input: {
     width: "100%",
-    // Controls: five units tall, six on phones for a finger.
-    height: { default: space.x5, [media.mobile]: space.x6 },
+    // Controls: three and a half caps tall (40px at 1rem), four on phones for a finger (48px).
+    height: { default: caps.x3_5, [media.mobile]: caps.x4 },
     paddingInline: space.x2,
     borderWidth: stroke.width,
     borderStyle: "solid",
@@ -204,14 +263,63 @@ const styles = stylex.create({
     columnGap: space.x1,
     cursor: "pointer",
   },
-  checkbox: {
+  /** Holds the box, centred on the first line of the sentence beside it. */
+  box: {
+    position: "relative",
+    display: "flex",
     flexShrink: 0,
-    width: space.x2,
-    height: space.x2,
-    // Centred on the first line of the sentence beside it.
-    marginTop: `calc((${leading.x3} - ${space.x2}) / 2)`,
-    accentColor: colors.accent,
+    marginTop: `calc((${leading.x3} - ${caps.x1_5}) / 2)`,
+  },
+  /**
+   * One and a half caps square (16px at 1rem), edged like the fields; ticked, filled with emerald
+   * & checked in paper. The browser's box & Radix's look the same, so hydration swaps one for the
+   * other unseen.
+   */
+  checkbox: {
+    boxSizing: "border-box",
+    width: caps.x1_5,
+    height: caps.x1_5,
+    // The sentence's font, not the browser's control font, so its caps size the box.
+    fontFamily: "inherit",
+    fontSize: "inherit",
+    margin: 0,
+    padding: 0,
+    borderWidth: stroke.width,
+    borderStyle: "solid",
+    borderColor: colors.tertiary,
+    borderRadius: space.half,
+    backgroundColor: "transparent",
     cursor: "pointer",
+  },
+  native: {
+    appearance: "none",
+    borderColor: { default: colors.tertiary, ":checked": colors.accent },
+    backgroundColor: { default: "transparent", ":checked": colors.accent },
+  },
+  checked: { borderColor: colors.accent, backgroundColor: colors.accent },
+  /**
+   * The tick over the box, shown while the form's box before it is checked. In paper, the light
+   * scheme's ground, which reads on emerald in both schemes: `colors.bg` in light, `colors.primary`
+   * (the same paper) in dark.
+   */
+  tick: {
+    position: "absolute",
+    inset: 0,
+    display: { default: "none", [stylex.when.siblingBefore(":checked")]: "block" },
+    width: "100%",
+    height: "100%",
+    color: { default: colors.primary, [media.light]: colors.bg },
+    pointerEvents: "none",
+  },
+  /** The form's own box once Radix's shows: over it, unseen & untouchable. */
+  unseen: {
+    position: "absolute",
+    inset: 0,
+    width: "100%",
+    height: "100%",
+    margin: 0,
+    opacity: 0,
+    pointerEvents: "none",
   },
   button: {
     cursor: { default: "pointer", ":disabled": "progress" },

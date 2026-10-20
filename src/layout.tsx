@@ -1,14 +1,17 @@
-import { readFileSync } from "node:fs";
 import * as stylex from "@stylexjs/stylex";
-import type { ComponentChildren } from "preact";
+import { type ComponentChildren, createContext } from "preact";
 import { schemeToken } from "./color.ts";
 import { engravingCss } from "./figures/engraving.ts";
 import { translators } from "./i18n.ts";
 import { href, type Locale, localeInfo, locales, type Route, sourceLocale } from "./locale.ts";
-import { Logo } from "./logo.tsx";
+import { Island } from "./island.tsx";
+import { LogoMenu } from "./islands/logo.tsx";
+import { ProductsMenu } from "./islands/products.tsx";
+import { mark } from "./logo.tsx";
 import { shareFrame } from "./og.tsx";
-import { company, email, mailto, origin, products } from "./site.ts";
+import { company, email, origin, type Shelf, shelved } from "./site.ts";
 import {
+  caps,
   colors,
   fontFeatures,
   grid,
@@ -17,16 +20,21 @@ import {
   media,
   shadows,
   space,
-  stroke,
-  tracking,
   type,
   weights,
 } from "./tokens.stylex.ts";
 import { type Style, ui, untranslated } from "./ui.tsx";
 import { versioned } from "./versioned.ts";
 
-/** What the build hands every page: the client script and the stylesheet StyleX collected. */
-export type Assets = { script: string; css: string };
+/**
+ * What the build hands every page: the client script, the stylesheet StyleX collected, and for a
+ * module the client imports on demand (`src/figures/proof.ts`) the URLs of its code and of what it
+ * imports, so a page can name them in `<link rel="modulepreload">` before the script asks.
+ */
+export type Assets = { script: string; css: string; preload: (module: string) => string[] };
+
+/** The page's assets, for the parts deep in it that preload their own code (`Machine`). */
+export const PageAssets = createContext<Assets | null>(null);
 
 /** What a page tells the document head. */
 export type Meta = {
@@ -171,6 +179,9 @@ const nav: readonly {
   { route: "about", label: "nav_about" },
 ];
 
+/** The shelves the products menu lists, in order: what we sell, then what we research. */
+const menuShelves: readonly Shelf[] = ["products", "research"];
+
 /** `aria-current` for a link to `target` from `path`: the page itself, or a page below it. */
 function currentness(path: string, target: string): "page" | "true" | undefined {
   if (path === target) return "page";
@@ -179,8 +190,8 @@ function currentness(path: string, target: string): "page" | "true" | undefined 
 }
 
 /**
- * The whole document: head, a sticky header with the name, the navigation, the other language (a
- * globe beside the contact button) and the contact button (behind a menu button on phones), the
+ * The whole document: head, a sticky header with the name, the navigation, the languages (beside
+ * the contact button) and the contact button (behind a menu button on phones), the
  * page's content, and the footer.
  */
 export function Page({
@@ -195,14 +206,29 @@ export function Page({
   const { locale, path, alternates } = meta;
   const t = translators[locale];
   const others = locales.filter((other) => other !== locale);
-  const contact = mailto(t.text("consulting_subject"));
+  const contact = href(locale, "contact");
   const links = nav.map(({ route, label }) => {
     const target = href(locale, route);
-    return { target, current: currentness(path, target), label: t.text(label) };
+    return { route, target, current: currentness(path, target), label: t.text(label) };
+  });
+  // The products menu (`islands/products.tsx`): each shelf's overview, then its pages.
+  const productGroups = menuShelves.map((shelf) => {
+    const overview = href(locale, shelf);
+    return {
+      title: {
+        href: overview,
+        label: t.text(shelf === "products" ? "products_title" : "research_title"),
+        current: path === overview,
+      },
+      links: shelved(shelf).map((product) => {
+        const target = href(locale, product.shelf, product.slug);
+        return { href: target, label: t.text(product.name), current: path === target };
+      }),
+    };
   });
   const page = schemeToken(assets.css, colors.bg);
   return (
-    <html lang={locale} dir={localeInfo[locale].dir} {...stylex.props(styles.html)}>
+    <html lang={locale} dir={localeInfo[locale].dir} {...stylex.props(ui.sans, styles.html)}>
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -267,74 +293,72 @@ export function Page({
         )}
         <script type="speculationrules" dangerouslySetInnerHTML={{ __html: speculationRules }} />
         <style dangerouslySetInnerHTML={{ __html: `${globalCss}\n${assets.css}` }} />
-        {/* Preact's typings lack `fetchpriority` on <script>, hence the spread. */}
-        <script type="module" src={assets.script} {...{ fetchpriority: "low" }} />
+        {/* `async`: it runs as soon as it arrives, while the page may still be streaming in, so a
+            drawn machine starts as soon as its figure is in (see `client.ts`). */}
+        <script type="module" src={assets.script} async />
         {meta.jsonLd !== undefined && <JsonLd value={meta.jsonLd} />}
         {meta.head}
       </head>
-      <body {...stylex.props(ui.sans, styles.body)}>
+      <body {...stylex.props(styles.body)}>
         <a {...stylex.props(ui.text, ui.focusRing, styles.skip)} href="#content">
           {t.text("skip_to_content")}
         </a>
         <header {...stylex.props(styles.header)}>
           <div {...stylex.props(ui.container, styles.bar)}>
-            <a
-              {...stylex.props(ui.focusRing, styles.home)}
-              href={href(locale, "home")}
-              aria-current={currentness(path, href(locale, "home")) === "page" ? "page" : undefined}
-              data-logo-menu="logo-menu"
-            >
-              <Logo style={styles.logo} />
-              <span {...stylex.props(ui.srOnly)} {...untranslated}>
-                {company.name}
-              </span>
-            </a>
-            <div
-              {...stylex.props(styles.logoMenu)}
-              id="logo-menu"
-              popover="auto"
-              role="menu"
-              tabIndex={-1}
-              aria-label={t.text("logo_menu_label")}
-            >
-              <button
-                {...stylex.props(ui.text, ui.control, styles.logoMenuItem)}
-                type="button"
-                role="menuitem"
-                data-copy-logo=""
-              >
-                {t.text("logo_menu_copy")}
-              </button>
-              <a
-                {...stylex.props(ui.text, ui.control, styles.logoMenuItem)}
-                role="menuitem"
-                href={brandAssetsUrl}
-                download="introspectum-brand.zip"
-              >
-                {t.text("logo_menu_download")}
-              </a>
-            </div>
+            <Island
+              name="logo"
+              component={LogoMenu}
+              props={{
+                home: href(locale, "home"),
+                current: currentness(path, href(locale, "home")) === "page",
+                name: company.name,
+                mark: { viewBox: mark.viewBox, path: mark.path },
+                brandAssets: brandAssetsUrl,
+                text: {
+                  label: t.text("logo_menu_label"),
+                  copy: t.text("logo_menu_copy"),
+                  download: t.text("logo_menu_download"),
+                },
+              }}
+            />
             <nav {...stylex.props(styles.nav)} aria-label={t.text("nav_label")}>
-              {links.map(({ target, current, label }) => (
-                <a
-                  {...stylex.props(
-                    ui.text,
-                    ui.entry,
-                    ui.control,
-                    ui.focusRing,
-                    styles.navLink,
-                    current !== undefined && ui.current,
-                  )}
-                  href={target}
-                  aria-current={current}
-                >
-                  {label}
-                </a>
-              ))}
+              {links.map(({ route, target, current, label }) =>
+                route === "products" ? (
+                  <Island
+                    key={route}
+                    name="products"
+                    component={ProductsMenu}
+                    props={{
+                      label,
+                      current:
+                        current !== undefined ||
+                        currentness(path, href(locale, "research")) !== undefined,
+                      overview: target,
+                      groups: productGroups,
+                    }}
+                  />
+                ) : (
+                  <a
+                    key={route}
+                    {...stylex.props(
+                      ui.small,
+                      ui.quiet,
+                      ui.control,
+                      ui.focusRing,
+                      ui.navLink,
+                      current !== undefined && styles.navCurrent,
+                    )}
+                    href={target}
+                    aria-current={current}
+                  >
+                    {label}
+                  </a>
+                ),
+              )}
             </nav>
             <div {...stylex.props(styles.actions)}>
-              <Globe meta={meta} />
-              <a {...stylex.props(ui.button, ui.secondary, ui.focusRing)} href={contact}>
+              <LanguageSwitch meta={meta} size={ui.small} />
+              <a {...stylex.props(ui.button, ui.compact, ui.primary, ui.focusRing)} href={contact}>
                 {t.text("nav_contact")}
               </a>
             </div>
@@ -361,9 +385,9 @@ export function Page({
                   ))}
                 </nav>
                 <div {...stylex.props(styles.panelFoot)}>
-                  <Globe meta={meta} />
+                  <LanguageSwitch meta={meta} size={ui.text} />
                   <a
-                    {...stylex.props(ui.button, ui.secondary, ui.focusRing, styles.panelContact)}
+                    {...stylex.props(ui.button, ui.primary, ui.focusRing, styles.panelContact)}
                     href={contact}
                   >
                     {t.text("nav_contact")}
@@ -374,7 +398,7 @@ export function Page({
           </div>
         </header>
         <main {...stylex.props(styles.main)} id="content" tabIndex={-1}>
-          {children}
+          <PageAssets.Provider value={assets}>{children}</PageAssets.Provider>
         </main>
         <Footer meta={meta} />
       </body>
@@ -404,44 +428,53 @@ function Languages({ meta, style }: { meta: Meta; style: Style }) {
   );
 }
 
-/** Links to this page in the other languages, each a globe named for the language it leads to. */
-function Globe({ meta }: { meta: Meta }) {
+/**
+ * Every language by its code, `EN DE`, at `size`: the page's own in the header's gray & not a
+ * link, each other one a quieter link to this page in that language, in full ink only under the
+ * pointer or the keyboard, named in full for screen readers.
+ */
+function LanguageSwitch({ meta, size }: { meta: Meta; size: Style }) {
   const t = translators[meta.locale];
   return (
-    <>
-      {locales
-        .filter((other) => other !== meta.locale)
-        .map((other) => (
-          <a
-            {...stylex.props(ui.control, ui.focusRing, styles.globe)}
-            href={meta.alternates?.[other] ?? href(other, "home")}
-            hreflang={other}
-            aria-label={t.text("language_switch", { language: t.language(other) })}
+    <span {...stylex.props(size, styles.switch)}>
+      {locales.map((code) =>
+        code === meta.locale ? (
+          <span
+            key={code}
+            {...stylex.props(styles.code, styles.codeCurrent)}
+            lang={code}
+            title={t.language(code)}
           >
-            {/* Lines as heavy as the nav's text, so the meridian and the equator stay apart. */}
-            <svg {...stylex.props(styles.globeIcon)} viewBox="0 0 20 20" aria-hidden="true">
-              <g fill="none" stroke="currentColor" stroke-width={1.25}>
-                <circle cx={10} cy={10} r={8.375} />
-                <ellipse cx={10} cy={10} rx={3.75} ry={8.375} />
-                <path d="M1.625 10h16.75" />
-              </g>
-            </svg>
+            {code.toUpperCase()}
+          </span>
+        ) : (
+          <a
+            key={code}
+            {...stylex.props(ui.quiet, ui.control, ui.focusRing, styles.code, styles.codeOther)}
+            href={meta.alternates?.[code] ?? href(code, "home")}
+            hreflang={code}
+            lang={code}
+            // Starts with the code it shows, so voice control finds it by what it says.
+            aria-label={t.text("language_code_switch", {
+              code: code.toUpperCase(),
+              language: t.language(code),
+            })}
+          >
+            {code.toUpperCase()}
           </a>
-        ))}
-    </>
+        ),
+      )}
+    </span>
   );
 }
 
-/**
- * The logo in outline, drawn in chalk, as a mask (see `styles.emblem`). Inlined in each page, a
- * few kilobytes, so the footer paints whole with the page instead of the emblem arriving after it.
- */
-const emblemUrl = `data:image/webp;base64,${readFileSync("src/emblem.webp").toString("base64")}`;
-
-/** The logo in black & white in every format, for the logo's menu (see `styles.logoMenu`). */
+/** The logo in black & white in every format, for the logo's menu (`islands/logo.tsx`). */
 const brandAssetsUrl = versioned("/brand/introspectum-brand.zip");
 
-/** The name and address, every page by group, the legal pages, and the other languages. */
+/**
+ * The name and address, every page by group, the legal pages, and the other languages, on the
+ * page's own ground & in its quieter grays, so the footer stays behind the page's content.
+ */
 function Footer({ meta }: { meta: Meta }) {
   const { locale, path } = meta;
   const t = translators[locale];
@@ -450,8 +483,10 @@ function Footer({ meta }: { meta: Meta }) {
     {
       title: t.text("nav_products"),
       place: styles.groupFirst,
-      links: products.map((product) => ({
-        target: href(locale, "products", product.slug),
+      // Everything we build: the products we sell, then the research we publish (the Trading
+      // Platform), each on its own page.
+      links: [...shelved("products"), ...shelved("research")].map((product) => ({
+        target: href(locale, product.shelf, product.slug),
         label: t.text(product.name),
       })),
     },
@@ -460,6 +495,7 @@ function Footer({ meta }: { meta: Meta }) {
       place: styles.groupSecond,
       links: [
         page("about", t.text("nav_about")),
+        page("research", t.text("research_title")),
         page("join", t.text("nav_join")),
         page("blog", t.text("nav_blog")),
       ],
@@ -471,20 +507,19 @@ function Footer({ meta }: { meta: Meta }) {
     },
   ];
   return (
-    <footer {...stylex.props(styles.footer)}>
-      <div {...stylex.props(styles.emblemArea)} aria-hidden="true">
-        <div {...stylex.props(ui.container)}>
-          <div
-            {...stylex.props(styles.emblem)}
-            style={{ maskImage: `url("${emblemUrl}")`, WebkitMaskImage: `url("${emblemUrl}")` }}
-          />
-        </div>
-      </div>
-      <div {...stylex.props(styles.footerTop)}>
-        <div {...stylex.props(ui.container, styles.footerColumns, styles.footerGrid)}>
+    // The footer is a block of its own: the body is a flex column, where the container's auto
+    // margins would shrink the container to its content.
+    <footer>
+      <div {...stylex.props(ui.container)}>
+        <div {...stylex.props(styles.footerColumns, styles.footerGrid)}>
           <div {...stylex.props(styles.footerBrand)}>
-            <p {...stylex.props(ui.serif, styles.wordmark)} {...untranslated}>
-              {company.name}
+            <p>
+              <svg {...stylex.props(styles.footerMark)} viewBox={mark.viewBox} aria-hidden="true">
+                <path d={mark.path} fill="currentColor" fill-rule="evenodd" />
+              </svg>
+              <span {...stylex.props(ui.srOnly)} {...untranslated}>
+                {company.name}
+              </span>
             </p>
             <p {...stylex.props(ui.small, ui.label)}>{t.text("tagline")}</p>
             <a
@@ -521,10 +556,8 @@ function Footer({ meta }: { meta: Meta }) {
             </div>
           ))}
         </div>
-      </div>
-      {/* The other language sits on the column line of the first group of links, Products. */}
-      <div {...stylex.props(styles.footerBottom)}>
-        <div {...stylex.props(ui.container, styles.footerColumns, styles.footerBase)}>
+        {/* The other language sits on the column line of the first group of links, Products. */}
+        <div {...stylex.props(styles.footerColumns, styles.footerBase)}>
           <p {...stylex.props(ui.small, ui.note, styles.copyright)}>
             {t.text("footer_copyright", {
               year: String(new Date().getUTCFullYear()),
@@ -541,11 +574,12 @@ function Footer({ meta }: { meta: Meta }) {
 }
 
 const styles = stylex.create({
+  /** In Inter, so the header's height in caps (`caps.bar`) is the same here as on the bar. */
   html: {
     backgroundColor: colors.bg,
     colorScheme: "light dark",
     // Anchored sections stop below the sticky header, not under it.
-    scrollPaddingTop: space.bar,
+    scrollPaddingTop: caps.bar,
   },
   body: {
     display: "flex",
@@ -574,6 +608,7 @@ const styles = stylex.create({
     backgroundColor: colors.bg,
     clipPath: { default: "inset(50%)", ":focus-visible": "none" },
   },
+  /** Sticky over the page, on the page's own ground. */
   header: {
     position: "sticky",
     top: 0,
@@ -584,61 +619,18 @@ const styles = stylex.create({
     display: "flex",
     alignItems: "center",
     columnGap: space.x4,
-    height: space.bar,
+    height: caps.bar,
   },
-  /** The footer's name, set as the wordmark. */
-  wordmark: {
-    flexShrink: 0,
-    fontSize: type.title,
-    fontWeight: weights.semibold,
-    lineHeight: leading.x4,
-    letterSpacing: tracking.tight,
-    color: colors.primary,
-    textDecoration: "none",
-  },
-  /** The header's link home: the mark alone, in the color of the text. */
-  home: { display: "flex", flexShrink: 0, color: colors.primary },
-  /** Four and a half units tall; its width follows from the mark's own proportions (its viewBox). */
-  logo: { display: "block", height: `calc(${space.x4} + ${space.half})`, width: "auto" },
   /**
-   * The logo's own menu, opened by a right click or a long press on it (`src/logo-menu.ts`),
-   * always just under the logo, its left edge on the logo's, one unit below it. A card over the
-   * page, edged & raised like the phone menu; it sits over everything else.
+   * The footer's mark, as tall as the header's (`islands/logo.tsx`), in a quieter gray, one unit
+   * further from the tagline than the tagline from the address.
    */
-  logoMenu: {
-    inset: "auto",
-    margin: 0,
-    marginTop: space.x1,
-    // Focus rests on the menu only until an item takes it; the items show their own.
-    outline: "none",
-    minWidth: `calc(${space.x20} + ${space.x12})`,
-    padding: space.x1,
-    borderWidth: stroke.width,
-    borderStyle: "solid",
-    borderColor: colors.hairline,
-    borderRadius: space.x1,
-    boxShadow: shadows.raised,
-    backgroundColor: colors.surface,
-    color: colors.primary,
-  },
-  /** One line of the menu: the whole width answers the pointer, in the page's own ground. */
-  logoMenuItem: {
+  footerMark: {
     display: "block",
-    width: "100%",
-    paddingInline: space.x2,
-    paddingBlock: space.x1,
-    borderWidth: 0,
-    borderRadius: space.half,
-    outline: "none",
-    backgroundColor: {
-      default: "transparent",
-      ":hover": { [media.hover]: colors.bg },
-      ":focus-visible": colors.bg,
-    },
-    color: colors.primary,
-    textAlign: "start",
-    textDecoration: "none",
-    cursor: "pointer",
+    height: caps.x3,
+    width: "auto",
+    color: colors.tertiary,
+    marginBottom: space.x1,
   },
   /**
    * Desktop: the links sit on the left, next to the logo. Each link's padding fills the gap between
@@ -647,10 +639,11 @@ const styles = stylex.create({
    */
   nav: {
     display: { default: "none", [media.desktop]: "flex" },
-    marginInlineStart: `calc(-1 * ${space.x2})`,
+    marginInlineStart: `calc(-1 * (${space.x1} + ${space.half}))`,
   },
-  navLink: { paddingInline: space.x2, paddingBlock: space.x1 },
-  /** Desktop: the language globe & the contact button, on the right. */
+  /** The page it is on: underlined, in the same gray; full ink is for the pointer alone. */
+  navCurrent: { textDecorationLine: "underline" },
+  /** Desktop: the languages & the contact button, on the right. */
   actions: {
     display: { default: "none", [media.desktop]: "flex" },
     alignItems: "center",
@@ -662,30 +655,27 @@ const styles = stylex.create({
     display: { default: "block", [media.desktop]: "none" },
     marginInlineStart: "auto",
   },
-  toggle: { height: space.x5 },
+  toggle: { height: caps.x3_5 },
   panel: {
     position: "absolute",
     top: "100%",
     insetInline: 0,
-    maxHeight: `calc(100dvh - ${space.bar})`,
+    maxHeight: `calc(100dvh - ${caps.bar})`,
     overflowY: "auto",
     paddingBlock: space.x2,
     paddingInline: space.x3,
     backgroundColor: colors.bg,
-    borderBottomWidth: stroke.width,
-    borderBottomStyle: "solid",
-    borderBottomColor: colors.hairline,
     boxShadow: shadows.raised,
   },
   panelNav: { display: "flex", flexDirection: "column" },
   panelLink: {
     display: "flex",
     alignItems: "center",
-    height: space.x6,
+    height: caps.x3_25,
     fontSize: type.menu,
     lineHeight: leading.x3_5,
   },
-  /** The globe, then the contact button across the rest of the row. */
+  /** The languages, then the contact button across the rest of the row. */
   panelFoot: {
     display: "flex",
     alignItems: "center",
@@ -694,67 +684,32 @@ const styles = stylex.create({
   },
   panelContact: { flexGrow: 1 },
   /**
-   * A square as tall as the button beside it, all of it answering the pointer. In the text's ink,
-   * fading to secondary under the pointer as the button does.
+   * The language codes side by side, each four caps tall: as tall as the full button beside them
+   * in the phone menu (48px at 1rem), 40px in the header's small text.
    */
-  globe: {
+  switch: { display: "inline-flex", flexShrink: 0, alignItems: "center" },
+  code: {
     display: "inline-flex",
-    flexShrink: 0,
     alignItems: "center",
     justifyContent: "center",
-    width: { default: space.x6, [media.desktop]: space.x5 },
-    height: { default: space.x6, [media.desktop]: space.x5 },
-    borderRadius: space.x1,
-    color: { default: colors.primary, ":hover": { [media.hover]: colors.secondary } },
+    minWidth: caps.x4,
+    height: caps.x4,
+    fontWeight: weights.medium,
+    letterSpacing: "0.02em",
     touchAction: "manipulation",
   },
-  globeIcon: {
-    display: "block",
-    width: `calc(${space.x2} + ${space.half})`,
-    height: `calc(${space.x2} + ${space.half})`,
+  codeCurrent: { color: colors.secondary },
+  codeOther: {
+    color: {
+      default: colors.tertiary,
+      ":hover": { [media.hover]: colors.primary },
+      ":focus-visible": colors.primary,
+    },
   },
   main: {
     flexGrow: 1,
     paddingBottom: { default: space.x12, [media.desktop]: space.x20 },
     outline: "none",
-  },
-  /**
-   * A layer of its own, so the emblem sits behind the footer's text. One column of rows: the
-   * links on top, the copyright line at the bottom, and the emblem across both. Where the emblem
-   * is taller than the text, the room goes between the links and the copyright line.
-   */
-  footer: {
-    display: "grid",
-    gridTemplateColumns: "minmax(0, 1fr)",
-    gridTemplateRows: "1fr auto",
-    isolation: "isolate",
-  },
-  footerTop: { gridArea: "1 / 1" },
-  footerBottom: { gridArea: "2 / 1" },
-  /** Across the footer's rows, behind the text, on its lower edge. */
-  emblemArea: {
-    gridArea: "1 / 1 / 3 / 2",
-    alignSelf: "end",
-    zIndex: layer.behind,
-    pointerEvents: "none",
-  },
-  /**
-   * The logo in outline behind the footer's links: exactly its upper half, the chevron and the
-   * eye down to its middle, drawn in chalk on rough paper. From the eye's top down, the chalk
-   * crumbles into grain (see `scripts/emblem.py`). Eight columns wide from tablets up, centred,
-   * so two columns stay free on each side (about 925px at the page's widest); the whole width on
-   * phones. The color is one solid tone, `colors.chalk`, with no opacity.
-   */
-  emblem: {
-    width: { default: "100%", [media.desktop]: grid.span8 },
-    marginInline: "auto",
-    // `src/emblem.webp` is 1500 × 839 px.
-    aspectRatio: "1500 / 839",
-    backgroundColor: colors.chalk,
-    maskSize: "100% 100%",
-    maskRepeat: "no-repeat",
-    WebkitMaskSize: "100% 100%",
-    WebkitMaskRepeat: "no-repeat",
   },
   /**
    * The footer on the page grid: on wide screens the name over six columns and each group of
@@ -769,9 +724,10 @@ const styles = stylex.create({
     },
     columnGap: grid.gutter,
   },
+  /** The main's bottom padding already parts the footer from the page; no card edge to clear. */
   footerGrid: {
     rowGap: space.x5,
-    paddingBlock: { default: space.x6, [media.desktop]: space.x8 },
+    paddingBottom: { default: space.x6, [media.desktop]: space.x8 },
   },
   footerBrand: {
     display: "flex",
@@ -797,11 +753,9 @@ const styles = stylex.create({
     listStyle: "none",
   },
   footerLink: { display: "block", width: "fit-content", paddingBlock: `calc(${space.x1} / 2)` },
-  /** Some room above the copyright line on wide screens, where the emblem's eye shows. */
   footerBase: {
     rowGap: space.x2,
-    paddingTop: { default: null, [media.desktop]: space.x16 },
-    paddingBottom: space.x4,
+    paddingBottom: { default: space.x4, [media.desktop]: space.x6 },
   },
   copyright: { gridColumn: { default: "1 / -1", [media.wide]: "1 / span 6" } },
   otherLanguage: {

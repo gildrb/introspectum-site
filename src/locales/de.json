@@ -3,6 +3,178 @@
     "source": "{page} | {brand}",
     "message": "{page} | {brand}"
   },
+  "research_title": {
+    "source": "Research",
+    "message": "Forschung"
+  },
+  "research_intro": {
+    "source": "Research we publish but do not sell. None of it is a product or investment advice.",
+    "message": "Forschung, die wir veröffentlichen, aber nicht verkaufen. Nichts davon ist ein Produkt oder eine Anlageberatung."
+  },
+  "home_cta_erp": {
+    "source": "See the product",
+    "message": "Produkt sehen"
+  },
+  "home_trading_lead": {
+    "source": "Trend-following strategies on many stocks, tested on paper before anyone trusts them. Research, not investment advice.",
+    "message": "Trendfolgende Strategien für viele Aktien, simuliert getestet, bevor ihnen jemand vertraut. Forschung, keine Anlageberatung."
+  },
+  "home_cta_trading": {
+    "source": "Read the research",
+    "message": "Zur Forschung"
+  },
+  "home_trading_title": {
+    "source": "How it tests a strategy",
+    "message": "So testet sie eine Strategie"
+  },
+  "home_trading_parallel_title": {
+    "source": "Many stocks at once",
+    "message": "Viele Aktien zugleich"
+  },
+  "home_trading_parallel_text": {
+    "source": "The <turtle>Turtle rules</turtle> & other trend-following strategies run on every stock.",
+    "message": "Die <turtle>Turtle-Regeln</turtle> und andere trendfolgende Strategien laufen für jede Aktie."
+  },
+  "home_trading_scale_title": {
+    "source": "A time scale per stock",
+    "message": "Eine Zeitskala je Aktie"
+  },
+  "home_trading_scale_text": {
+    "source": "Reinforcement learning tunes each stock to the time scale where its signals hold best.",
+    "message": "Reinforcement Learning stimmt jede Aktie auf die Zeitskala ab, auf der ihre Signale am besten halten."
+  },
+  "home_trading_prototype_title": {
+    "source": "Rebuilt from a prototype",
+    "message": "Neu gebaut aus einem Prototyp"
+  },
+  "home_trading_prototype_text": {
+    "source": "What a first prototype taught us shapes the rebuild.",
+    "message": "Was uns ein erster Prototyp gezeigt hat, prägt den Neubau."
+  },
+  "home_cta_factory": {
+    "source": "See how it works",
+    "message": "So funktioniert es"
+  },
+  "home_measured_title": {
+    "source": "Measured, not promised",
+    "message": "Gemessen, nicht versprochen"
+  },
+  "home_measured_intro": {
+    "source": "What the Software Factory did in our own runs, last measured on {date, date, long}.",
+    "message": "Was die Software Factory in unseren eigenen Läufen geleistet hat, zuletzt gemessen am {date, date, long}."
+  },
+  "stat_ratio": {
+    "source": "{passed, number} of {runs, number}",
+    "message": "{passed, number} von {runs, number}"
+  },
+  "stat_own_label": {
+    "source": "graph nodes from its own {files, number} Rust files, built in {seconds, number} seconds",
+    "message": "Graphknoten aus den eigenen {files, number} Rust-Dateien, erstellt in {seconds, number} Sekunden"
+  },
+  "stat_other_label": {
+    "source": "graph nodes from the {files, number} files of <ripgrep>ripgrep</ripgrep>, built in {seconds, number} seconds",
+    "message": "Graphknoten aus den {files, number} Dateien von <ripgrep>ripgrep</ripgrep>, erstellt in {seconds, number} Sekunden"
+  },
+  "stat_repeat_label": {
+    "source": "repeated runs on the same code gave byte-identical graphs",
+    "message": "wiederholte Läufe auf demselben Code ergaben bytegleiche Graphen"
+  },
+  "stat_proof_label": {
+    "source": "consecutive runs proved the alarm logic of a smoke detector with Prusti",
+    "message": "Läufe in Folge bewiesen die Alarmlogik eines Rauchmelders mit Prusti"
+  },
+  "offer_audit_title": {
+    "source": "AI development assessment",
+    "message": "Bestandsaufnahme KI-Entwicklung"
+  },
+  "offer_audit_text": {
+    "source": "We map where AI-written code enters your codebase, what is not tested or traced to a requirement, & where a proof would pay off.",
+    "message": "Wir zeigen, wo von KI geschriebener Code in Ihre Codebasis gelangt, was weder getestet noch auf eine Anforderung zurückgeführt ist und wo sich ein Beweis lohnt."
+  },
+  "offer_audit_result": {
+    "source": "You get a written report & a plan in order of priority.",
+    "message": "Sie erhalten einen schriftlichen Bericht und einen nach Priorität geordneten Plan."
+  },
+  "offer_erp_title": {
+    "source": "ERP & CRM setup",
+    "message": "Einrichtung von ERP & CRM"
+  },
+  "offer_erp_text": {
+    "source": "For businesses without an ERP or CRM: we install the ERP & CRM on a server of your own, fit it to how you work & train your team.",
+    "message": "Für Betriebe ohne ERP oder CRM: Wir installieren ERP & CRM auf einem eigenen Server, passen es an Ihre Abläufe an und schulen Ihr Team."
+  },
+  "offer_erp_result": {
+    "source": "You get one system for customers, sales & accounting, with your data in open formats.",
+    "message": "Sie erhalten ein System für Kunden, Vertrieb und Buchhaltung, mit Ihren Daten in offenen Formaten."
+  },
+  "offer_duration_label": {
+    "source": "Duration",
+    "message": "Dauer"
+  },
+  "offer_duration": {
+    "source": "{weeks, plural, one {# week} other {# weeks}}",
+    "message": "{weeks, plural, one {# Woche} other {# Wochen}}"
+  },
+  "offer_price_label": {
+    "source": "Price",
+    "message": "Preis"
+  },
+  "offer_price": {
+    "source": "From {price, number, ::currency/EUR precision-integer}, before VAT",
+    "message": "Ab {price, number, ::currency/EUR precision-integer} zzgl. USt."
+  },
+  "offer_ask": {
+    "source": "Ask about this",
+    "message": "Dazu anfragen"
+  },
+  "trust_title": {
+    "source": "Trust & data",
+    "message": "Vertrauen und Daten"
+  },
+  "trust_intro": {
+    "source": "Where your data lives, under which agreement, & who answers for it.",
+    "message": "Wo Ihre Daten liegen, unter welchem Vertrag und wer dafür einsteht."
+  },
+  "trust_installation": {
+    "source": "Your own installation",
+    "message": "Ihre eigene Installation"
+  },
+  "trust_installation_text": {
+    "source": "Each ERP & CRM customer gets an installation of its own, on a server of its own. No customer shares a system with another.",
+    "message": "Jeder Kunde von ERP & CRM erhält eine eigene Installation auf einem eigenen Server. Kein Kunde teilt ein System mit einem anderen."
+  },
+  "trust_contact": {
+    "source": "Who answers",
+    "message": "Ansprechpartner"
+  },
+  "trust_contact_text": {
+    "source": "Fabian Klopfer, our managing director. Write to {email} or use the <link>contact form</link>.",
+    "message": "Fabian Klopfer, unser Geschäftsführer. Schreiben Sie an {email} oder nutzen Sie das <link>Kontaktformular</link>."
+  },
+  "waitlist_next_title": {
+    "source": "What happens next",
+    "message": "Wie es weitergeht"
+  },
+  "waitlist_next_reply": {
+    "source": "We write to you before testing opens, & only about this product.",
+    "message": "Wir schreiben Ihnen, bevor der Test beginnt, und nur zu diesem Produkt."
+  },
+  "waitlist_next_spots": {
+    "source": "{spots, plural, one {# pilot place} other {# pilot places}}, filled in the order people joined.",
+    "message": "{spots, plural, one {# Pilotplatz} other {# Pilotplätze}}, vergeben in der Reihenfolge der Eintragung."
+  },
+  "waitlist_next_spots_open": {
+    "source": "— pilot places",
+    "message": "— Pilotplätze"
+  },
+  "waitlist_next_opens": {
+    "source": "Pilots start on {opens, date, long}.",
+    "message": "Die Pilotphase beginnt am {opens, date, long}."
+  },
+  "waitlist_next_opens_open": {
+    "source": "Pilots start: —",
+    "message": "Beginn der Pilotphase: —"
+  },
   "skip_to_content": {
     "source": "Skip to content",
     "message": "Zum Inhalt springen"
@@ -44,7 +216,7 @@
     "message": "Markenmaterial herunterladen"
   },
   "nav_contact": {
-    "source": "Email us",
+    "source": "Get in touch",
     "message": "Anfragen"
   },
   "footer_company": {
@@ -66,6 +238,10 @@
   "language_switch": {
     "source": "This page in {language}",
     "message": "Diese Seite auf {language}"
+  },
+  "language_code_switch": {
+    "source": "{code}: this page in {language}",
+    "message": "{code}: diese Seite auf {language}"
   },
   "cite_label": {
     "source": "Source {number}",
@@ -104,16 +280,20 @@
     "message": "Software, die man prüft, statt ihr zu vertrauen"
   },
   "home_description": {
-    "source": "Introspectum builds software you can check: a verified software factory, an open-data ERP & CRM, & research in systematic trading.",
-    "message": "Introspectum entwickelt prüfbare Software: eine verifizierte Software Factory, ein ERP & CRM mit offenen Daten und Forschung zum systematischen Börsenhandel."
+    "source": "Introspectum builds an open-data ERP & CRM for small businesses, & a Software Factory that proves AI-written code against its specification.",
+    "message": "Introspectum entwickelt ERP & CRM mit offenen Daten für kleine Unternehmen und die Software Factory, die KI-Code gegen seine Spezifikation beweist."
+  },
+  "home_erp_title": {
+    "source": "Customers, sales & accounting in one system, on your own server",
+    "message": "Kunden, Vertrieb und Buchhaltung in einem System, auf Ihrem eigenen Server"
+  },
+  "home_erp_lead": {
+    "source": "The ERP & CRM keeps all your data, HR included, in open formats. Its AI assistant reads the books but can never post to them.",
+    "message": "ERP & CRM hält alle Ihre Daten, auch das Personalwesen, in offenen Formaten. Der KI-Assistent liest die Bücher, kann aber nie darin buchen."
   },
   "home_lead": {
-    "source": "We build tools that trace code to its requirements & prove it correct where it matters, so teams can write code with AI & still stand behind it.",
-    "message": "Wir bauen Werkzeuge, die Code bis zu seinen Anforderungen zurückverfolgen und seine Korrektheit beweisen, wo es darauf ankommt. So können Teams Code mit KI schreiben und trotzdem dafür geradestehen."
-  },
-  "home_cta_products": {
-    "source": "See the products",
-    "message": "Produkte sehen"
+    "source": "The Software Factory lets AI write the function bodies & checks each one against a specification people approved. A failed proof goes back to the model until it passes; then you get a certificate for the audit.",
+    "message": "In der Software Factory schreibt KI die Funktionsrümpfe; jeder wird gegen eine freigegebene Spezifikation geprüft. Scheitert ein Beweis, geht der Fehler an das Modell zurück, bis der Beweis gelingt. Dann folgt ein Zertifikat."
   },
   "home_why_title": {
     "source": "AI writes code faster than anyone can review it",
@@ -131,10 +311,6 @@
     "source": "We build software that is checked instead of trusted: traced from requirement to code, proven where it matters, & open to the people who answer for it.",
     "message": "Wir bauen Software, die man prüft, statt ihr zu vertrauen: von der Anforderung bis zum Code nachvollziehbar, bewiesen, wo es darauf ankommt, und offen für die Menschen, die für sie geradestehen."
   },
-  "home_what_label": {
-    "source": "What we build",
-    "message": "Was wir bauen"
-  },
   "home_how_label": {
     "source": "How we work",
     "message": "Wie wir arbeiten"
@@ -148,8 +324,8 @@
     "message": "Wer wir sind"
   },
   "home_who_text": {
-    "source": "Introspectum Limited is registered in the Isle of Man & led by Fabian Klopfer, a computer scientist & former software engineer at IBM Germany Research & Development.",
-    "message": "Introspectum Limited ist auf der Isle of Man registriert und wird von Fabian Klopfer geleitet, einem Informatiker und früheren Softwareentwickler bei IBM Deutschland Research & Development."
+    "source": "Introspectum Limited is registered in the Isle of Man & led by Fabian Klopfer, a computer scientist who worked on database engines with codebases of 10 to 20 million lines at IBM Germany Research & Development.",
+    "message": "Introspectum Limited ist auf der Isle of Man registriert und wird von Fabian Klopfer geleitet, einem Informatiker, der bei IBM Deutschland Research & Development an Datenbank-Engines mit Codebasen von 10 bis 20 Millionen Zeilen gearbeitet hat."
   },
   "home_who_more": {
     "source": "Read about us",
@@ -176,11 +352,11 @@
     "message": "Erzählen Sie uns, woran Sie arbeiten"
   },
   "cta_text": {
-    "source": "Send a consulting inquiry to work with us now, or join a waiting list to test a product before its release.",
-    "message": "Senden Sie eine Beratungsanfrage, um schon jetzt mit uns zusammenzuarbeiten, oder tragen Sie sich in eine Warteliste ein, um ein Produkt vor dem Start zu testen."
+    "source": "Ask for a consulting offer to work with us now, or join the ERP & CRM’s waiting list to test it before its release.",
+    "message": "Fragen Sie ein Beratungsangebot an, um schon jetzt mit uns zu arbeiten, oder tragen Sie sich in die Warteliste von ERP & CRM ein, um es vor dem Start zu testen."
   },
   "cta_waitlist": {
-    "source": "Join a waitlist",
+    "source": "Join the waitlist",
     "message": "Eintragen"
   },
   "method_formal_methods": {
@@ -240,44 +416,20 @@
     "message": "Arbeiten Sie schon jetzt mit uns zusammen"
   },
   "consulting_what": {
-    "source": "Until our products ship, we help companies bring AI into their software development & set up CRM & ERP.",
-    "message": "Bis unsere Produkte erscheinen, helfen wir Unternehmen, KI in ihre Softwareentwicklung einzuführen und CRM & ERP einzurichten."
+    "source": "Until our products ship, we offer two fixed-scope engagements, each with a clear result.",
+    "message": "Bis unsere Produkte erscheinen, bieten wir zwei klar umrissene Aufträge an, jeder mit einem festen Ergebnis."
   },
   "consulting_audience": {
     "source": "For companies that want to use AI without losing control of their code or their data.",
     "message": "Für Unternehmen, die KI nutzen wollen, ohne die Kontrolle über ihren Code oder ihre Daten zu verlieren."
-  },
-  "consulting_ai_title": {
-    "source": "AI in software development",
-    "message": "KI in der Softwareentwicklung"
-  },
-  "consulting_ai_text": {
-    "source": "We help teams bring AI into their software development without losing control of their code.",
-    "message": "Wir helfen Teams, KI in ihre Softwareentwicklung einzuführen, ohne die Kontrolle über ihren Code zu verlieren."
-  },
-  "consulting_erp_title": {
-    "source": "CRM & ERP",
-    "message": "CRM & ERP"
-  },
-  "consulting_erp_text": {
-    "source": "We set up CRM & ERP systems that keep your data in open formats, in one place.",
-    "message": "Wir richten CRM & ERP so ein, dass Ihre Daten in offenen Formaten an einem Ort liegen."
-  },
-  "consulting_subject": {
-    "source": "Consulting inquiry",
-    "message": "Beratungsanfrage"
-  },
-  "consulting_subject_product": {
-    "source": "Consulting inquiry: {product}",
-    "message": "Beratungsanfrage: {product}"
   },
   "products_title": {
     "source": "Products",
     "message": "Produkte"
   },
   "products_intro": {
-    "source": "Three products, all before release. Join a waiting list to test one first.",
-    "message": "Drei Produkte, alle noch vor dem Start. Tragen Sie sich in eine Warteliste ein, um eines vorab zu testen."
+    "source": "Two products, both before release. Join a waiting list to test one first.",
+    "message": "Zwei Produkte, beide noch vor dem Start. Tragen Sie sich in eine Warteliste ein, um eines vorab zu testen."
   },
   "product_how_label": {
     "source": "How it works",
@@ -291,13 +443,17 @@
     "source": "The press is the model, the sealed weight the specification, the balance the proof.",
     "message": "Die Presse ist das Modell, das versiegelte Gewicht die Spezifikation, die Waage der Beweis."
   },
+  "trace_caption": {
+    "source": "A real trace in Frege’s strokes: one requirement, its spec, its code, three tests & three proofs.",
+    "message": "Eine echte Spur in Freges Strichen: eine Anforderung, ihre Spezifikation, ihr Code, drei Tests und drei Beweise."
+  },
   "bookwheel_caption": {
     "source": "One reader, every source in turn: we read before we built.",
     "message": "Ein Leser, jede Quelle der Reihe nach: erst gelesen, dann gebaut."
   },
-  "balance_caption": {
-    "source": "Each piece is weighed against what it must be, under glass.",
-    "message": "Jedes Stück wird unter Glas gegen das gewogen, was es sein muss."
+  "proof_caption": {
+    "source": "The typewriter is the model, the copy holder the specification, the cabinet the proof.",
+    "message": "Die Schreibmaschine ist das Modell, der Konzepthalter die Spezifikation, das Prüfgerät der Beweis."
   },
   "pantograph_caption": {
     "source": "Every line of the copy traces back to a line of the original.",
@@ -365,7 +521,7 @@
   },
   "product_software_factory_state_4": {
     "source": "It reads & writes requirements in the form of <ieee-830>IEEE 830</ieee-830> & design descriptions in the form of <ieee-1016>IEEE 1016</ieee-1016>, & draws UML, SysML & Mermaid diagrams from the code.",
-    "message": "Sie liest und schreibt Anforderungen nach <ieee-830>IEEE 830</ieee-830> und Entwurfsbeschreibungen nach <ieee-1016>IEEE 1016</ieee-1016> und erzeugt aus dem Code UML-, SysML- und Mermaid-Diagramme."
+    "message": "Sie liest und schreibt Anforderungen nach <ieee-830>IEEE 830</ieee-830> sowie Entwurfsbeschreibungen nach <ieee-1016>IEEE 1016</ieee-1016> und erzeugt aus dem Code UML-, SysML- und Mermaid-Diagramme."
   },
   "product_software_factory_state_5": {
     "source": "Next, we build the agent process on top of it.",
@@ -502,6 +658,26 @@
   "api_error_consent": {
     "source": "Please agree that we may store your address for this waiting list.",
     "message": "Bitte stimmen Sie zu, dass wir Ihre Adresse für diese Warteliste speichern dürfen."
+  },
+  "api_not_sent": {
+    "source": "Not sent",
+    "message": "Nicht gesendet"
+  },
+  "api_error_name": {
+    "source": "Please enter your name, in at most {max, number} characters.",
+    "message": "Bitte geben Sie Ihren Namen an, in höchstens {max, number} Zeichen."
+  },
+  "api_error_team": {
+    "source": "Please choose the size of your team.",
+    "message": "Bitte wählen Sie die Größe Ihres Teams."
+  },
+  "api_error_building": {
+    "source": "Please say what you are building with AI, in at most {max, number} characters.",
+    "message": "Bitte beschreiben Sie, was Sie mit KI entwickeln, in höchstens {max, number} Zeichen."
+  },
+  "api_error_topic": {
+    "source": "Please choose a topic.",
+    "message": "Bitte wählen Sie ein Thema."
   },
   "back_to_products": {
     "source": "See the products",
@@ -653,7 +829,7 @@
   },
   "privacy_description": {
     "source": "What the Introspectum site stores, why, & your rights.",
-    "message": "Was die Website von Introspectum speichert, warum, und welche Rechte Sie haben."
+    "message": "Was die Website von Introspectum speichert, warum und welche Rechte Sie haben."
   },
   "privacy_share_title": {
     "source": "What this site stores & why",
@@ -672,12 +848,96 @@
     "message": "Kontakt"
   },
   "contact_description": {
-    "source": "How to reach Introspectum: one email address for consulting, products, applications & your data.",
-    "message": "So erreichen Sie Introspectum: eine E-Mail-Adresse für Beratung, Produkte, Bewerbungen und Ihre Daten."
+    "source": "Write to Introspectum with the contact form or by email: consulting, products, applications & your data.",
+    "message": "Schreiben Sie Introspectum über das Kontaktformular oder per E-Mail: Beratung, Produkte, Bewerbungen und Ihre Daten."
   },
   "contact_share_title": {
-    "source": "One address for every message",
-    "message": "Eine Adresse für jede Nachricht"
+    "source": "Tell us what you are building with AI",
+    "message": "Erzählen Sie uns, was Sie mit KI entwickeln"
+  },
+  "contact_form_intro": {
+    "source": "Tell us what you are building with AI & where you want help. We answer by email.",
+    "message": "Erzählen Sie uns, was Sie mit KI entwickeln und wobei Sie Hilfe suchen. Wir antworten per E-Mail."
+  },
+  "contact_form_name_label": {
+    "source": "Your name",
+    "message": "Ihr Name"
+  },
+  "contact_form_email_label": {
+    "source": "Email",
+    "message": "E-Mail"
+  },
+  "contact_form_company_label": {
+    "source": "Company (optional)",
+    "message": "Unternehmen (optional)"
+  },
+  "contact_form_team_label": {
+    "source": "Team size",
+    "message": "Teamgröße"
+  },
+  "contact_form_topic_label": {
+    "source": "Topic",
+    "message": "Thema"
+  },
+  "contact_form_building_label": {
+    "source": "What are you building with AI?",
+    "message": "Was entwickeln Sie mit KI?"
+  },
+  "contact_form_choose": {
+    "source": "Choose…",
+    "message": "Bitte wählen …"
+  },
+  "contact_form_topic_ai_code_audit": {
+    "source": "AI code audit",
+    "message": "Prüfung von KI-Code"
+  },
+  "contact_form_topic_erp_setup": {
+    "source": "CRM & ERP setup",
+    "message": "Einrichtung von CRM & ERP"
+  },
+  "contact_form_topic_general": {
+    "source": "Something else",
+    "message": "Etwas anderes"
+  },
+  "contact_form_honeypot_label": {
+    "source": "Leave empty",
+    "message": "Leer lassen"
+  },
+  "contact_form_submit": {
+    "source": "Send",
+    "message": "Senden"
+  },
+  "contact_form_sending": {
+    "source": "Sending…",
+    "message": "Wird gesendet …"
+  },
+  "contact_form_sent": {
+    "source": "Thank you. We have your message & will answer by email.",
+    "message": "Danke. Ihre Nachricht ist bei uns angekommen; wir antworten per E-Mail."
+  },
+  "contact_form_sent_title": {
+    "source": "Message sent",
+    "message": "Nachricht gesendet"
+  },
+  "contact_form_home": {
+    "source": "Go to the homepage",
+    "message": "Zur Startseite"
+  },
+  "contact_form_back": {
+    "source": "Back to the contact form",
+    "message": "Zurück zum Kontaktformular"
+  },
+  "contact_form_failed_connection": {
+    "source": "The connection failed. Try again, or write to {email}.",
+    "message": "Die Verbindung ist fehlgeschlagen. Versuchen Sie es erneut oder schreiben Sie an {email}."
+  },
+  "contact_form_failed_server": {
+    "source": "We could not send your message. Try again, or write to {email}.",
+    "message": "Ihre Nachricht konnte nicht gesendet werden. Versuchen Sie es erneut oder schreiben Sie an {email}."
+  },
+  "contact_form_privacy": {
+    "source": "Read what we store & why in the <link>privacy policy</link>.",
+    "message": "Was wir speichern und warum, steht in der <link>Datenschutzerklärung</link>."
   },
   "not_found_title": {
     "source": "Page not found",

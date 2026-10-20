@@ -1,8 +1,8 @@
 # About
 
-Introspectum Limited is a software company registered in the Isle of Man. We build tools that make software, & the businesses that run on it, checkable: a verified [Software Factory](/products/software-factory), an open-data [ERP & CRM](/products/erp-crm), & research on a [Trading Platform](/products/trading-platform).
+Introspectum Limited is a software company registered in the Isle of Man. We build tools that make software, & the businesses that run on it, checkable: an open-data [ERP & CRM](/products/erp-crm), a verified [Software Factory](/products/software-factory), & research on a [Trading Platform](/research/trading-platform).
 
-We are our own first customer: our development is the first to run on the Software Factory, & our business the first to run on the ERP & CRM.
+We are our own first customer: our business is the first to run on the ERP & CRM, & our development the first to run on the Software Factory.
 
 The name comes from the Latin *introspicere*: to look inside.
 
@@ -21,7 +21,7 @@ The idea goes back to Fabian Klopfer’s work on graph databases at the Universi
 
 **Fabian Klopfer**, Managing Director. Computer scientist (M.Sc., University of Konstanz) & neuroscientist (M.Sc., University of Tübingen). Previously a software engineer in Db2 development at IBM Germany Research & Development. Earlier research at the University of Konstanz, the Max Planck Institute for Biological Cybernetics, OpenCog & Hanson Robotics.
 
-**Marc Gsell**, ERP & CRM, infrastructure. Previously head of engineering for a team of 70.
+**Marc Gsell**, ERP & CRM, infrastructure. Previously head of engineering for a team of 70. Experienced technology leader with expertise in AI, digital transformation & enterprise software. Turns innovation into measurable business impact & believes AI only creates lasting value when it is reliable & trustworthy. Stands for solid foundations, clear processes & teams that deliver.
 
 **Gil Rodrigues**, Founding Designer. Designed the local AI plugin for Omarchy; his posts about it reached more than a million impressions on X within a month. Previously worked for EXO Labs. He also designed the brand & website of Local Studio, which runs AI privately on your Mac, & has designed logos, identities & typefaces since 2018: [gildrb.com](https://gildrb.com).
 

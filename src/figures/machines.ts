@@ -1,20 +1,19 @@
-import { balance } from "./balance.ts";
-import { bookwheel } from "./bookwheel.ts";
-import { ledger } from "./ledger.ts";
 import type { Machine } from "./live.ts";
-import { mint } from "./mint.ts";
-import { pantograph } from "./pantograph.ts";
-import { recorder } from "./recorder.ts";
 
-/** Every drawn machine's motion, by name; `machine.tsx` holds their drawings under the same names. */
+/**
+ * Every drawn machine's motion, by name, each loaded on its own: a page downloads the code of the
+ * machines it has and no other, so the imports are dynamic. `machine.tsx` holds their drawings
+ * under the same names.
+ */
 export const machines = {
-  balance,
-  bookwheel,
-  ledger,
-  mint,
-  pantograph,
-  recorder,
-} satisfies Record<string, Machine>;
+  bookwheel: async () => (await import("./bookwheel.ts")).bookwheel,
+  ledger: async () => (await import("./ledger.ts")).ledger,
+  mint: async () => (await import("./mint.ts")).mint,
+  pantograph: async () => (await import("./pantograph.ts")).pantograph,
+  proof: async () => (await import("./proof.ts")).proof,
+  recorder: async () => (await import("./recorder.ts")).recorder,
+  trace: async () => (await import("./trace.ts")).trace,
+} satisfies Record<string, () => Promise<Machine>>;
 
 export type MachineName = keyof typeof machines;
 

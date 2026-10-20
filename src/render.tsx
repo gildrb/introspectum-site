@@ -16,7 +16,8 @@ import {
 import type { ShareCard } from "./og.tsx";
 import { BlogPage, PostPage } from "./pages/blog.tsx";
 import { AboutPage } from "./pages/about.tsx";
-import { DocPage, JoinedPage, NotFoundPage } from "./pages/doc.tsx";
+import { ContactPage } from "./pages/contact.tsx";
+import { DocPage, JoinedPage, NotFoundPage, SentPage } from "./pages/doc.tsx";
 import { Home } from "./pages/home.tsx";
 import { JoinPage } from "./pages/join.tsx";
 import { ProductPage, ProductsPage } from "./pages/products.tsx";
@@ -84,10 +85,17 @@ const routes: readonly Route[] = [
       kicker: translators[locale].text("products_title"),
       title: translators[locale].text("products_intro"),
     }),
-    build: (props) => <ProductsPage {...props} />,
+    build: (props) => <ProductsPage {...props} shelf="products" />,
+  }),
+  ...translated("research", [], {
+    share: (locale) => ({
+      kicker: translators[locale].text("research_title"),
+      title: translators[locale].text("research_intro"),
+    }),
+    build: (props) => <ProductsPage {...props} shelf="research" />,
   }),
   ...products.flatMap((product) =>
-    translated("products", [product.slug], {
+    translated(product.shelf, [product.slug], {
       share: (locale) => ({
         kicker: translators[locale].text(product.name),
         title: translators[locale].text(product.what),
@@ -176,13 +184,7 @@ const routes: readonly Route[] = [
       kicker: translators[locale].text("contact_title"),
       title: translators[locale].text("contact_share_title"),
     }),
-    build: (props) => (
-      <DocPage
-        {...props}
-        doc={docs[props.locale].contact}
-        description={translators[props.locale].text("contact_description")}
-      />
-    ),
+    build: (props) => <ContactPage {...props} doc={docs[props.locale].contact} />,
   }),
   ...translated("joined", [], {
     index: false,
@@ -191,6 +193,14 @@ const routes: readonly Route[] = [
       title: translators[locale].text("joined_title"),
     }),
     build: (props) => <JoinedPage {...props} />,
+  }),
+  ...translated("sent", [], {
+    index: false,
+    share: (locale) => ({
+      kicker: translators[locale].text("contact_title"),
+      title: translators[locale].text("contact_form_sent_title"),
+    }),
+    build: (props) => <SentPage {...props} />,
   }),
   // Each locale's folder gets a `404.html`; the server answers unknown paths below it with it.
   ...locales.map((locale): Route => ({
@@ -233,10 +243,14 @@ const homeWordLimit = 3 * 200;
 function visibleWords(html: string): number {
   const main = html.match(/<main[^>]*>([\s\S]*)<\/main>/)?.[1];
   if (main === undefined) throw new Error("A page has no <main>.");
-  return main
-    .replace(/<[^>]+>/g, " ")
-    .split(/\s+/)
-    .filter((word) => /\p{L}/u.test(word)).length;
+  return (
+    main
+      // A figure's stylesheet & a script are never read.
+      .replace(/<(style|script)\b[^>]*>[\s\S]*?<\/\1>/g, " ")
+      .replace(/<[^>]+>/g, " ")
+      .split(/\s+/)
+      .filter((word) => /\p{L}/u.test(word)).length
+  );
 }
 
 /** Every link to a page of this site must reach one: a moved or misspelt path fails the build. */

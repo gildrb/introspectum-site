@@ -525,7 +525,7 @@ function strongbox() {
       { tone: "faint" },
     ),
   );
-  out.push(`<g data-part="tally">${tallyDigits("0000")}</g>`);
+  out.push(`<g data-part="tally">${tallyDigits(M.tallyOf(moment, 0))}</g>`);
   // The hasp, on the front edge of the lid.
   out.push(
     S(k.slabOf({ x: BOX.x + BOX.w - 9, y: face - 0.2, w: 5, d: 1, r: 0.3 }, BOX_H - 6, 10, P, 2), {

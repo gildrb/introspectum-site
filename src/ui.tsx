@@ -1,11 +1,14 @@
 import * as stylex from "@stylexjs/stylex";
 import type { VNode } from "preact";
 import {
+  caps,
   colors,
   fontFeatures,
   grid,
   leading,
+  lens,
   media,
+  rings,
   space,
   stroke,
   tracking,
@@ -19,13 +22,24 @@ export type Style = stylex.StyleXArray<stylex.CompiledStyles | boolean | null | 
 /**
  * Keeps names out of browser translation. Preact types `translate` as a boolean and drops `false`
  * from the server HTML; the HTML attribute is the string "no", so it is spread as a plain attribute.
+ * Written in capitals, which HTML reads the same (its keywords ignore case): preact/compat, which
+ * Radix needs, turns the exact string "no" into `false`, which the server would drop again.
  */
-export const untranslated: Readonly<Record<string, string>> = { translate: "no" };
+export const untranslated: Readonly<Record<string, string>> = { translate: "NO" };
 
 /** Interface: navigation, buttons, labels, forms and the footer. */
 const sans = 'Inter, "Inter Fallback", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
 /** Headings and running text. Both fallbacks are scaled to Newsreader's metrics (`layout.tsx`). */
 const serif = 'Newsreader, "Newsreader Fallback", "Newsreader Fallback Serif", Georgia, serif';
+
+/**
+ * The lens's rings sink one step into the bore: each takes the next one's place (`rings`). Only
+ * the rings' layer shrinks; the fade over them (`ui.primary`) stays put.
+ */
+const sink = stylex.keyframes({
+  from: { maskSize: "100% 100%, 100% 100%" },
+  to: { maskSize: "85% 85%, 100% 100%" },
+});
 
 export const ui = stylex.create({
   sans: { fontFamily: sans, fontFeatureSettings: fontFeatures.interface },
@@ -35,8 +49,6 @@ export const ui = stylex.create({
     outline: { default: null, ":focus-visible": `${stroke.width} solid ${colors.primary}` },
     outlineOffset: space.half,
   },
-  /** The edge of a filled block, the form or code: a hairline inside it, taking no room. */
-  edge: { boxShadow: `inset 0 0 0 ${stroke.width} ${colors.hairline}` },
   /** An image's edge, drawn over its outer pixels, so it shows on light & dark pictures alike. */
   imageEdge: {
     outline: `${stroke.width} solid ${colors.hairline}`,
@@ -139,6 +151,7 @@ export const ui = stylex.create({
     fontSize: "clamp(1.25rem, 1.17rem + 0.36vw, 1.5rem)",
     fontWeight: weights.regular,
     lineHeight: stylex.firstThatWorks(`round(nearest, 1.45em, ${space.half})`, "1.45"),
+    letterSpacing: tracking.tight,
     color: colors.primary,
     textWrap: "balance",
   },
@@ -208,16 +221,24 @@ export const ui = stylex.create({
   /** The link to the page it is on. */
   current: { color: colors.primary, textDecorationLine: "underline" },
   /**
+   * A link in the header's row, in small text: a unit and a half each side, so the words stand
+   * three units apart, as wide as the small text needs, with no dead space between them.
+   */
+  navLink: { paddingInline: `calc(${space.x1} + ${space.half})`, paddingBlock: space.x1 },
+  /**
    * A link that works as a control, in a menu or a list of links: a stray double-click or long
    * press selects nothing. Links in running text stay selectable, to be copied with it.
    */
   control: { userSelect: "none", WebkitUserSelect: "none" },
-  /** A link or a control shaped as a button. Six units tall on phones, for a finger; five above. */
+  /**
+   * A link or a control shaped as a button, as tall as its text's capitals allow: four caps on
+   * phones, for a finger (48px at 1rem); three and a half above (40px).
+   */
   button: {
     display: "inline-flex",
     alignItems: "center",
     justifyContent: "center",
-    height: { default: space.x6, [media.desktop]: space.x5 },
+    height: { default: caps.x4, [media.desktop]: caps.x3_5 },
     paddingInline: space.x3,
     borderWidth: stroke.width,
     borderStyle: "solid",
@@ -234,11 +255,79 @@ export const ui = stylex.create({
     userSelect: "none",
     WebkitUserSelect: "none",
   },
-  /** The main action: a button in the text color, like the text it sits among. */
+  /**
+   * A button in the header: three caps of small text tall (32px at 0.875rem), so the page's own
+   * call to action, full size below it, leads & the header's stays at hand without competing (as
+   * on vercel.com).
+   */
+  compact: {
+    height: caps.x3,
+    paddingInline: `calc(${space.x1} + ${space.half})`,
+    borderRadius: `calc(${space.x1} * 3 / 4)`,
+    fontSize: type.small,
+    lineHeight: leading.x2_5,
+  },
+  /**
+   * The main action: a button in the text color, like the text it sits among. Under the pointer,
+   * or the keyboard, its fill clears to its edge & opens on a lens: rings down a bore, sinking
+   * into the button's middle for as long as it is held there, as if seeing into it. Without
+   * motion, the rings stand still.
+   */
   primary: {
-    color: colors.bg,
-    backgroundColor: { default: colors.primary, ":hover": { [media.hover]: colors.secondary } },
-    borderColor: { default: colors.primary, ":hover": { [media.hover]: colors.secondary } },
+    position: "relative",
+    isolation: "isolate",
+    overflow: "clip",
+    color: {
+      default: colors.bg,
+      ":hover": { [media.hover]: colors.primary },
+      ":focus-visible": colors.primary,
+    },
+    backgroundColor: {
+      default: colors.primary,
+      ":hover": { [media.hover]: "transparent" },
+      ":focus-visible": "transparent",
+    },
+    borderColor: colors.primary,
+    transitionProperty: "color, background-color",
+    transitionDuration: "150ms",
+    transitionTimingFunction: "ease-out",
+    // No default here: the variables' own (`lens`) holds at rest. StyleX writes a default set on
+    // the element outside its layers, where it would outweigh the hover's, which is inside them.
+    [lens.play]: {
+      default: null,
+      ":hover": { [media.hover]: "running" },
+      ":focus-visible": "running",
+    },
+    [lens.show]: { default: null, ":hover": { [media.hover]: "1" }, ":focus-visible": "1" },
+    "::before": {
+      content: '""',
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      zIndex: -1,
+      // Two and a half times the button's width, so the outer ring, at 0.85 its size, still
+      // reaches past the corners of a button four times as wide as it is tall.
+      width: "250%",
+      aspectRatio: "1",
+      translate: "-50% -50%",
+      backgroundColor: colors.tertiary,
+      // The rings, fading out toward the middle: the far end of the bore, behind the label.
+      maskImage: `${rings.image}, radial-gradient(closest-side, transparent 6%, black 24%)`,
+      maskSize: "100% 100%, 100% 100%",
+      maskPosition: "center",
+      maskRepeat: "no-repeat",
+      maskComposite: "intersect",
+      opacity: lens.show,
+      transitionProperty: "opacity",
+      transitionDuration: "150ms",
+      transitionTimingFunction: "ease-out",
+      animationName: { default: null, "@media (prefers-reduced-motion: no-preference)": sink },
+      animationDuration: "2s",
+      animationTimingFunction: "linear",
+      animationIterationCount: "infinite",
+      animationPlayState: lens.play,
+      pointerEvents: "none",
+    },
   },
   /** The other action beside it: the same edge, without the fill. */
   secondary: {

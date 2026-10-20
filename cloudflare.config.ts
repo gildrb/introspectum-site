@@ -19,7 +19,8 @@ export default defineConfig({
     },
     env: {
       ASSETS: bindings.assets(),
-      // The waiting lists. The first `cf deploy` creates the namespace; later deploys keep it.
+      // The waiting lists & the contact form's inquiries (`worker/index.ts`). The first
+      // `cf deploy` creates the namespace; later deploys keep it.
       WAITLIST: bindings.kv(),
     },
     observability: { enabled: true },
