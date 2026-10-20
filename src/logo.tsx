@@ -28,18 +28,14 @@ function readMark(): { viewBox: string; width: number; height: number; path: str
 export const mark = readMark();
 
 /**
- * The favicon: the mark almost as large as the square, a twentieth of it free on each side, on a
- * ground of the other scheme than the browser's, so it stands out from the tab around it: paper on
- * umber where the browser is light, ink on paper where it is dark (`colors.bg` & `colors.primary`,
- * read from the built CSS `css`). The light browser's pair is also set on the shapes themselves, so
- * a browser that ignores the icon's stylesheet or its media query still shows the mark on its own
- * ground.
+ * The favicon: the mark filling the square on a transparent ground, in the ink of the text where
+ * the browser is light and in its paper where it is dark: `colors.primary`, read from the built
+ * CSS `css`.
  */
 export function favicon(css: string): string {
-  const ground = schemeToken(css, colors.bg);
   const ink = schemeToken(css, colors.primary);
-  const side = (Math.max(mark.width, mark.height) * 10) / 9;
+  const side = Math.max(mark.width, mark.height);
   const x = (mark.width - side) / 2;
   const y = (mark.height - side) / 2;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x} ${y} ${side} ${side}"><style>@media (prefers-color-scheme:dark){rect{fill:${ground.light}}path{fill:${ink.light}}}</style><rect x="${x}" y="${y}" width="${side}" height="${side}" fill="${ground.dark}"/><path fill="${ink.dark}" fill-rule="evenodd" d="${mark.path}"/></svg>\n`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x} ${y} ${side} ${side}"><style>path{fill:${ink.light}}@media (prefers-color-scheme:dark){path{fill:${ink.dark}}}</style><path fill-rule="evenodd" d="${mark.path}"/></svg>\n`;
 }
