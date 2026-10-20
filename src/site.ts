@@ -112,19 +112,14 @@ export const offers: readonly Offer[] = [
 export const pilot: { spots: number | null; opens: Date | null } = { spots: null, opens: null };
 
 /**
- * What a buyer asks before handing over data, one term each. `open` is a fact not settled yet:
- * the page shows a visible gap, never a guess. `contact` links the contact page and names `email`.
+ * What a buyer asks before handing over data, one term each. `contact` links the contact page
+ * and names `email`.
  */
-export type TrustFact =
-  | { $: "fact"; text: MessageId }
-  | { $: "contact"; text: MessageId }
-  | { $: "open" };
+export type TrustFact = { $: "fact"; text: MessageId } | { $: "contact"; text: MessageId };
 
 export const trust: readonly { term: MessageId; fact: TrustFact }[] = [
   // The ERP & CRM's specification (twenty-erp-srs.md): one VM per customer, no multi-tenancy.
   { term: "trust_installation", fact: { $: "fact", text: "trust_installation_text" } },
-  { term: "trust_hosting", fact: { $: "open" } },
-  { term: "trust_agreement", fact: { $: "open" } },
   { term: "trust_contact", fact: { $: "contact", text: "trust_contact_text" } },
 ];
 

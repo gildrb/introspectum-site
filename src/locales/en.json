@@ -182,16 +182,6 @@
     "description": "Fact under 'Your own installation'.",
     "maxLength": 160
   },
-  "trust_hosting": {
-    "message": "Where it is hosted",
-    "description": "Term in 'Trust & data': the country or region where installations and data are hosted.",
-    "maxLength": 40
-  },
-  "trust_agreement": {
-    "message": "Data processing agreement",
-    "description": "Term in 'Trust & data': a GDPR data processing agreement (Art. 28 GDPR; in German: AVV).",
-    "maxLength": 40
-  },
   "trust_contact": {
     "message": "Who answers",
     "description": "Term in 'Trust & data': the person to contact about data.",
@@ -200,11 +190,6 @@
   "trust_contact_text": {
     "message": "Fabian Klopfer, our managing director. Write to {email} or use the <link>contact form</link>.",
     "description": "Fact under 'Who answers'. {email} is the company address; <link> wraps the words that lead to the contact page."
-  },
-  "trust_open": {
-    "message": "—",
-    "description": "Shown while a trust fact is not settled yet: a visible gap, to be filled before release.",
-    "translate": false
   },
   "waitlist_next_title": {
     "message": "What happens next",

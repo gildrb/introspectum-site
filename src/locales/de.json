@@ -143,14 +143,6 @@
     "source": "Each ERP & CRM customer gets an installation of its own, on a server of its own. No customer shares a system with another.",
     "message": "Jeder Kunde von ERP & CRM erhält eine eigene Installation auf einem eigenen Server. Kein Kunde teilt ein System mit einem anderen."
   },
-  "trust_hosting": {
-    "source": "Where it is hosted",
-    "message": "Wo es gehostet wird"
-  },
-  "trust_agreement": {
-    "source": "Data processing agreement",
-    "message": "Auftragsverarbeitungsvertrag (AVV)"
-  },
   "trust_contact": {
     "source": "Who answers",
     "message": "Ansprechpartner"

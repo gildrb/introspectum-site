@@ -354,15 +354,13 @@ export function Closing({ locale }: { locale: Locale }) {
   );
 }
 
-/** A trust fact as the page writes it; an open one as a visible gap. */
+/** A trust fact as the page writes it. */
 function trustText(t: Translator, locale: Locale, fact: TrustFact): ComponentChildren {
   switch (fact.$) {
     case "fact":
       return t.text(fact.text);
     case "contact":
       return t.rich(fact.text, { link: richLink(href(locale, "contact")) }, { email });
-    case "open":
-      return t.text("trust_open");
     default: {
       const _: never = fact;
       return _;
