@@ -146,16 +146,13 @@ const styles = stylex.create({
     WebkitTouchCallout: "none",
   },
   /**
-   * Three caps tall (36px at 1rem); its width follows from the mark's own proportions (its
-   * viewBox). It only holds the link's place: the mark shows through the header's ground
-   * (`src/layout.tsx`), the page inverted. A browser that cannot cut that hole draws it here, in
-   * the text's color.
+   * Three caps tall (36px at 1rem), in the text's color; its width follows from the mark's own
+   * proportions (its viewBox).
    */
   logo: {
     display: "block",
     height: caps.x3,
     width: "auto",
-    visibility: { default: "hidden", "@supports not (mask-composite: exclude)": "visible" },
   },
   /**
    * A card on the page's own ground with a hairline edge & no shadow, as vercel.com's logo menu,

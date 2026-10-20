@@ -7,7 +7,7 @@ import { href, type Locale, localeInfo, locales, type Route, sourceLocale } from
 import { Island } from "./island.tsx";
 import { LogoMenu } from "./islands/logo.tsx";
 import { ProductsMenu } from "./islands/products.tsx";
-import { mark, markImage } from "./logo.tsx";
+import { mark } from "./logo.tsx";
 import { shareFrame } from "./og.tsx";
 import { company, email, origin, type Shelf, shelved } from "./site.ts";
 import {
@@ -304,9 +304,6 @@ export function Page({
           {t.text("skip_to_content")}
         </a>
         <header {...stylex.props(styles.header)}>
-          {/* The page inverted, under the ground; the ground's mark-shaped hole shows it. */}
-          <div {...stylex.props(styles.inverted)} />
-          <div {...stylex.props(styles.ground(markImage))} />
           <div {...stylex.props(ui.container, styles.bar)}>
             <Island
               name="logo"
@@ -611,54 +608,13 @@ const styles = stylex.create({
     backgroundColor: colors.bg,
     clipPath: { default: "inset(50%)", ":focus-visible": "none" },
   },
-  /** Sticky over the page; its ground is `ground`, under the bar. */
+  /** Sticky over the page, on the page's own ground. */
   header: {
     position: "sticky",
     top: 0,
     zIndex: layer.header,
-  },
-  /**
-   * The page under the logo, inverted, like palantir.com's logo: what passes under it shows in
-   * negative. Only the ground's hole shows it, so one mask (`ground`) splits each pixel at the
-   * mark's edge between this & the ground: no sliver of the page, or of a blend of the two, rings
-   * the mark. Past the plain inversion, the filter turns the umber ground into the dark scheme's
-   * paper text & the paper ground into the light scheme's ink (within 6 of 255 in each channel),
-   * so the mark at rest keeps the palette. Clipped to the logo's box & a unit round it, so the
-   * browser inverts no more than that.
-   */
-  inverted: {
-    position: "absolute",
-    inset: 0,
-    zIndex: -2,
-    backdropFilter: "invert(1) contrast(0.8) sepia(0.125) brightness(1.11)",
-    WebkitBackdropFilter: "invert(1) contrast(0.8) sepia(0.125) brightness(1.11)",
-    clipPath: {
-      default: `inset(0 calc(100% - max(${space.x3}, (100% - ${space.page}) / 2) - ${space.x5}) 0 calc(max(${space.x3}, (100% - ${space.page}) / 2) - ${space.x1}))`,
-      [media.desktop]: `inset(0 calc(100% - max(${grid.margin}, (100% - ${space.page}) / 2) - ${space.x5}) 0 calc(max(${grid.margin}, (100% - ${space.page}) / 2) - ${space.x1}))`,
-    },
-  },
-  /**
-   * The page's ground, solid, except under the logo: there it leaves a hole of the mark's own
-   * shape, which shows the inverted page (`inverted`). Its start padding is the container's
-   * (`ui.container`), so the hole's content-box origin is where the logo starts.
-   */
-  ground: (hole: string) => ({
-    position: "absolute",
-    inset: 0,
-    zIndex: -1,
-    paddingInlineStart: {
-      default: `max(${space.x3}, (100% - ${space.page}) / 2)`,
-      [media.desktop]: `max(${grid.margin}, (100% - ${space.page}) / 2)`,
-    },
     backgroundColor: colors.bg,
-    maskImage: `${hole}, linear-gradient(#000 0 0)`,
-    maskOrigin: "content-box, border-box",
-    maskClip: "border-box",
-    maskPosition: "left center, 0 0",
-    maskSize: `auto ${caps.x3}, 100% 100%`,
-    maskRepeat: "no-repeat",
-    maskComposite: "exclude",
-  }),
+  },
   bar: {
     display: "flex",
     alignItems: "center",

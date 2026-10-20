@@ -28,14 +28,6 @@ function readMark(): { viewBox: string; width: number; height: number; path: str
 export const mark = readMark();
 
 /**
- * The mark as a CSS image, for the hole the header's ground leaves under the header logo, which
- * shows the page inverted there (`src/layout.tsx`).
- */
-export const markImage = `url("data:image/svg+xml,${encodeURIComponent(
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${mark.viewBox}"><path fill-rule="evenodd" d="${mark.path}"/></svg>`,
-)}")`;
-
-/**
  * The favicon: the mark almost as large as the square, a twentieth of it free on each side, on a
  * ground of the other scheme than the browser's, so it stands out from the tab around it: paper on
  * umber where the browser is light, ink on paper where it is dark (`colors.bg` & `colors.primary`,
