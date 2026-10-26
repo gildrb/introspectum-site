@@ -66,6 +66,7 @@ const tradingCards: readonly { id: string; title: MessageId; text: MessageId }[]
 
 const team: readonly { name: PersonName; role: MessageId }[] = [
   { name: "Marc Gsell", role: "team_role_marc" },
+  { name: "Gil Rodrigues", role: "team_role_gil" },
 ];
 
 /**

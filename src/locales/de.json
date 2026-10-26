@@ -339,6 +339,10 @@
     "source": "ERP & CRM, infrastructure",
     "message": "ERP & CRM, Infrastruktur"
   },
+  "team_role_gil": {
+    "source": "Founding Designer",
+    "message": "Founding Designer"
+  },
   "team_linkedin": {
     "source": "{name} on LinkedIn",
     "message": "{name} auf LinkedIn"

@@ -41,6 +41,11 @@
     "note": "Job title. Kept in English, as usual in German start-ups."
   },
   {
+    "en": "Founding Designer",
+    "de": "Founding Designer",
+    "note": "Job title. Kept in English, like Founding Engineer."
+  },
+  {
     "en": "CRM & ERP",
     "de": "CRM & ERP",
     "note": "The consulting offer. Same abbreviations in German."

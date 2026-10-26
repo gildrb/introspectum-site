@@ -23,6 +23,8 @@ The idea goes back to Fabian Klopfer’s work on graph databases at the Universi
 
 **Marc Gsell**, ERP & CRM, infrastructure. Previously head of engineering for a team of 70. Experienced technology leader with expertise in AI, digital transformation & enterprise software. Turns innovation into measurable business impact & believes AI only creates lasting value when it is reliable & trustworthy. Stands for solid foundations, clear processes & teams that deliver.
 
+**Gil Rodrigues**, Founding Designer. Designed the local AI plugin for Omarchy; his posts about it reached more than a million impressions on X within a month. Previously worked for EXO Labs. He also designed the brand & website of Local Studio, which runs AI privately on your Mac, & has designed logos, identities & typefaces since 2018: [gildrb.com](https://gildrb.com).
+
 ## Contact
 
 Write to [{email}](mailto:{email}).

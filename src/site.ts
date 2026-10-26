@@ -23,6 +23,7 @@ export type Person = { linkedin: `https://www.linkedin.com/in/${string}/` };
 export const people = {
   "Fabian Klopfer": { linkedin: "https://www.linkedin.com/in/someusername1/" },
   "Marc Gsell": { linkedin: "https://www.linkedin.com/in/marc-gsell/" },
+  "Gil Rodrigues": { linkedin: "https://www.linkedin.com/in/gildrb/" },
 } as const satisfies Record<string, Person>;
 
 export type PersonName = keyof typeof people;
